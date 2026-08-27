@@ -1,0 +1,23 @@
+{
+  "name": "com.inkle.ink-unity-integration",
+  "version": "1.2.2",
+  "displayName": "Ink",
+  "description": "Unity integration for the open source ink narrative scripting language.",
+  "unity": "2018.4",
+  "keywords": [
+    "ink",
+    "inky",
+    "inkle",
+    "story",
+    "narrative"
+  ],
+  "author": {
+    "name": "Inkle",
+    "email": "info@inklestudios.com",
+    "url": "https://www.inklestudios.com/"
+  },
+  "publishConfig": {
+    "registry": "https://package.openupm.com"
+  },
+  "_fingerprint": "2a0b9c659b04af23f65eee04a572be9e7bb17732"
+}
