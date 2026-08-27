@@ -692,9 +692,9 @@ namespace DemocracyWay.Setup
             audioGO.transform.SetParent(root.transform, false);
             var audio = audioGO.GetComponent<AudioService>();
 
-            var settingsGO = new GameObject("SettingsService", typeof(SettingsService));
+            var settingsGO = new GameObject("SettingsService", typeof(DemocracyWay.Services.SettingsService));
             settingsGO.transform.SetParent(root.transform, false);
-            var settings = settingsGO.GetComponent<SettingsService>();
+            var settings = settingsGO.GetComponent<DemocracyWay.Services.SettingsService>();
 
             var sessionGO = new GameObject("SessionService", typeof(SessionService));
             sessionGO.transform.SetParent(root.transform, false);

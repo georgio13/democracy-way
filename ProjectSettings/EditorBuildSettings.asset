@@ -6,18 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Bootstrap.unity
-    guid: 4b645478207e97543a8bae61e7827ff7
+    path: Assets/Scenes/Boot.unity
+    guid: a271f02430b85e4418912a22b44d7a81
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
-    guid: e46050cb3fe08574eb20d0a1982de81c
+    guid: 1bdaa793ed4696848a3516208fe768c4
   - enabled: 1
     path: Assets/Scenes/CharacterCreation.unity
-    guid: 97c4187e9e29480429bffa2c0cd50ff0
+    guid: 62dd94f688a3ab64f8bc9a3b794f5032
   - enabled: 1
     path: Assets/Scenes/ComicIntro.unity
-    guid: bdf5cab0fdb78a84e8c9592a0a818ca3
+    guid: c35f589c83de35544af305ba513ec9a7
   - enabled: 1
-    path: Assets/Scenes/Game.unity
-    guid: 1dc10dd78beb28b4f855ed850b5ea7a6
+    path: Assets/Scenes/Chapter01.unity
+    guid: 998a3d3e693d61149bcd20868b734ad0
   m_configObjects: {}

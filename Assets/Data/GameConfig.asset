@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cddcb26c74c6b0142bd080ebaad6944c, type: 3}
+  m_Name: GameConfig
+  m_EditorClassIdentifier: DemocracyWay.Data::DemocracyWay.Data.GameConfig
+  weeksPerPrytany: 5
+  startingIndicators:
+    eunomia: 50
+    demofilia: 50
+    ethos: 50
+    kachypopsia: 50
+    oikos: 50
+  cursorTexture: {fileID: 2800000, guid: e77d83949fd477a4581969e980478693, type: 3}
+  cursorHotspot: {x: 0, y: 0}
+  creationDatabase: {fileID: 11400000, guid: 632f9018dbec57140ab870f6c26039f7, type: 2}
+  indicatorCatalog: {fileID: 11400000, guid: 0a44834c88ef3ce489f25ab64c6bae63, type: 2}
+  introComic: {fileID: 11400000, guid: 638af462187b8824790947568d3e736e, type: 2}
+  firstChapter: {fileID: 11400000, guid: 13d5ca3a1db49fc44b41d1af7eea09e3, type: 2}
+  mainMenuMusic: {fileID: 8300000, guid: 8c3289869bd6102468dec440a3d3071f, type: 3}
+  uiHoverSfx: {fileID: 8300000, guid: 680fb23eddc873f4eb34becb36a1c588, type: 3}
+  uiClickSfx: {fileID: 8300000, guid: 89146beaed6daa44ca7b29e64f598903, type: 3}
+  fadeDuration: 0.6
+  chapterTitleHold: 1.8
+  minLoadingTime: 0.4

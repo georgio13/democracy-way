@@ -1,147 +1,102 @@
 # Οδός Δημοκρατίας — Unity Project
 
-Παιχνίδι για τη δημοκρατία της κλασικής Αθήνας. Ο παίκτης φτιάχνει έναν πολίτη
+Παιχνίδι για τη δημοκρατία της κλασικής Αθήνας. Ο παίκτης πλάθει έναν πολίτη
 (φύλο, φυλή, τριττύα, οικονομική τάξη, περίοδο, επάγγελμα) και ζει ένα αθηναϊκό
-έτος — δέκα πρυτανείες, μια ανά γύρο, με την πρυτανεύουσα φυλή να ορίζεται με
-κλήρωση.
+έτος: δέκα πρυτανείες, με την πρυτανεύουσα φυλή να ορίζεται με κλήρωση, και τις
+αποφάσεις του να κινούν πέντε δείκτες.
 
-**Unity 6000.4.1f1** · 2D · Input System · TextMeshPro
+**Unity 6000.4.1f1** · 2D · uGUI + TextMeshPro · Input System
 
 ---
 
-## Quick start
+## Πρώτο τρέξιμο (μία φορά μόνο)
 
 1. Άνοιξε το project στο Unity Hub.
-2. Τρέξε **`Tools ▸ DemocracyWay ▸ Init`**.
-3. Τρέξε **`Tools ▸ DemocracyWay ▸ Verify`** — 22 έλεγχοι στην Κονσόλα, όλοι PASS.
-4. Άνοιξε τη σκηνή `Assets/Scenes/Bootstrap.unity` και πάτα **Play**.
+2. Τρέξε **Tools ▸ DemocracyWay ▸ Setup (μία φορά)** — φτιάχνει τα Data assets,
+   τα prefabs και τις 5 σκηνές, και **αρνείται** να πειράξει ό,τι ήδη υπάρχει.
+3. Πάτα **Play** από οπουδήποτε — το ▶ μπαίνει πάντα από τη σκηνή Boot
+   (`Assets/Scripts/Editor/PlayFromBoot.cs`).
 
-Το Init ξαναχτίζει όλα τα prefabs, τα content assets και τις πέντε σκηνές από
-τον κώδικα. Δεν χρειάζεται καμία χειροκίνητη σύνδεση references.
+Μετά το πρώτο Setup, **οι σκηνές/prefabs/assets σού ανήκουν**: ό,τι αλλάξεις
+στον editor μένει. Όταν είσαι ικανοποιημένος, μπορείς να διαγράψεις ολόκληρο
+τον φάκελο `Assets/Setup/` — τίποτα δεν τον χρειάζεται στο runtime.
 
-Το Verify ανοίγει τις σκηνές πού παρήχθησαν και ελέγχει ότι κάθε reference και
-κάθε λίστα ήρθε πράγματι — ένα editor script μπορεί να αποτύχει σιωπηλά σε μια
-ανάθεση, και το σύμπτωμα (άδεια λίστα επιλογών) δεν δείχνει πουθενά κοντά στην
-αιτία. Και τα δύο τρέχουν και headless:
+Headless (για CI ή έλεγχο):
 
 ```bash
-Unity.exe -batchmode -quit -nographics -projectPath . -executeMethod DemocracyWay.EditorTools.DemocracyWayInit.Run
+"C:\Program Files\Unity\Hub\Editor\6000.4.1f1\Editor\Unity.exe" -batchmode -quit -nographics -projectPath . -executeMethod DemocracyWay.Setup.OneShotSetup.Run
 ```
 
 ---
 
-## Ροή του παιχνιδιού
+## Πού βάζεις το περιεχόμενό σου
 
-```
-Bootstrap ──► MainMenu ──┬─► Νέο Παιχνίδι ─► επιλογή θέσης (1 από 4)
-                         │                    └─► CharacterCreation (6 βήματα)
-                         │                          └─► ComicIntro ─► Game
-                         ├─► Φόρτωση ─► επιλογή θέσης ─────────────► Game
-                         ├─► Ρυθμίσεις
-                         └─► Έξοδος
-```
+Όλο το περιεχόμενο ζει σε assets που επεξεργάζεσαι στον Inspector — ποτέ σε
+κώδικα, και κανένα εργαλείο δεν τα ξαναγράφει:
 
-### Δημιουργία χαρακτήρα
+| Θέλεις να αλλάξεις… | Άνοιξε… |
+|---|---|
+| Επιλογές δημιουργίας (φύλα, φυλές, τριττύες, τάξεις, περιόδους, επαγγέλματα) | `Assets/Data/CreationDatabase` |
+| Ονόματα/περιγραφές δεικτών (tooltips) | `Assets/Data/IndicatorCatalog` |
+| Διαλόγους, επιλογές, effects, ποια επιλογή περνάει βδομάδα | `Assets/Data/Dialogues/…` |
+| Τίτλο κεφαλαίου, background, μουσική, επόμενο κεφάλαιο | `Assets/Data/Chapters/…` |
+| Καρέ/χρονισμό/ήχους του intro comic | `Assets/Data/IntroComic` |
+| Βδομάδες ανά πρυτανεία, cursor, αρχικούς δείκτες, μουσική μενού, UI SFX | `Assets/Data/GameConfig` |
 
-Έξι βήματα, με τη λίστα επιλογών **δεξιά** (η μια κάτω από την άλλη) και το
-γραφικό με την περιγραφή του **αριστερά**. Το hover κάνει preview· το κλικ
-επιλέγει.
+Οι επιλογές με πρόθεμα **«ΠΑΡΑΔΕΙΓΜΑ:»** είναι δείγματα — αντικατέστησέ τες.
 
-| # | Βήμα | Επιλογές |
-|---|------|----------|
-| 1 | Φύλο | Ανήρ / Γυνή |
-| 2 | Φυλή | Οι 10 Κλεισθένειες φυλές |
-| 3 | Τριττύα | 3 ανά φυλή — **φιλτράρονται από τη φυλή πού διάλεξες** |
-| 4 | Οικονομική κατάστασις | Οι 4 Σολώνειες τάξεις |
-| 5 | Περίοδος | 5 περίοδοι, 508–338 π.Χ. |
-| 6 | Επάγγελμα | 10 επαγγέλματα |
+**Εικόνες/ήχοι**: κάθε αρχείο στα `Assets/Art/` και `Assets/Audio/` είναι
+placeholder. Ρίξε το δικό σου αρχείο **με το ίδιο όνομα** στη θέση του (ή
+πρόσθεσε νέα αρχεία και σύρε τα στα αντίστοιχα πεδία των assets).
 
-### Δείκτες
-
-Πέντε τιμές 0–100, με **τυχαίες αρχικές τιμές** στην τρέχουσα έκδοση
-(`IndicatorSet.Randomise`):
-
-- **Ευνομία** — η τάξη και η νομιμότητα της πόλεως
-- **Δήμος / Δημοφιλία** — η στήριξη του πλήθους
-- **Ήθος & Ακεραιότητα** — η φήμη για δικαιοσύνη
-- **Καχυποψία** — η υποψία των άλλων (ο μόνος δείκτης όπου το υψηλό είναι κακό)
-- **Οίκος & Συντήρησις** — η ευημερία της περιουσίας
-
-### Πρυτανείες
-
-Δέκα γύροι, ένας ανά πρυτανεία. Η σειρά των φυλών κληρώνεται στην αρχή κάθε
-παιχνιδιού (Fisher–Yates) και καμμία φυλή δεν πρυτανεύει δύο φορές — όπως και
-ιστορικά.
+**Νέο κεφάλαιο**: δες τον οδηγό [Docs/NEA_SKINI.md](Docs/NEA_SKINI.md) (~10 λεπτά).
 
 ---
 
-## Γλώσσα κειμένου
+## Αρχιτεκτονική
 
-Όλο το κείμενο είναι **μονοτονικό**. Το `IFKargoSans` δεν έχει κανένα glyph στο
-Greek Extended block (U+1F00–U+1FFF), οπότε κάθε πολυτονικός χαρακτήρας
-εμφανιζόταν ως κενό. Το `Verify` ελέγχει πλέον ότι κάθε χαρακτήρας του
-περιεχομένου υπάρχει στα fonts του `Assets/Fonts/` — αν προσθέσεις κείμενο με
-χαρακτήρα που λείπει, θα σου το πει πριν το δεις στην οθόνη.
-
----
-
-## Δομή κώδικα
+Αναλυτικά στο [Docs/ARCHITECTURE.md](Docs/ARCHITECTURE.md). Σύνοψη:
 
 ```
 Assets/Scripts/
-  Core/
-    CitizenProfile.cs     — τα 6 βήματα + οι επιλογές τους
-    CreationDatabase.cs   — ScriptableObject με όλες τις επιλογές
-    Indicators.cs         — οι 5 δείκτες, τιμές και μεταβολές
-    PrytanySchedule.cs    — η κλήρωση των 10 πρυτανειών
-    GameSession.cs        — ό,τι σώζεται σε ένα save
-    SaveSystem.cs         — 4 θέσεις αποθήκευσης (JSON)
-    GameStateService.cs   — persistent singleton, ο ιδιοκτήτης του run
-  Dialogue/
-    DialogueModels.cs     — γραμμές, επιλογές, αποτελέσματα
-    DialogueDatabase.cs   — ScriptableObject + τυχαία επιλογή διαλόγου
-  UI/                     — τα panels και τα HUD
-  Menu/                   — main menu, pause, settings
-  Framework/              — audio, cursor, settings, scene transitions
-
-Assets/Editor/
-  DemocracyWayInit.cs            — Run() + prefab builders
-  DemocracyWayInit.Scenes.cs     — οι 5 scene builders
-  DemocracyWayInit.Content.cs    — φυλές, τριττύες, τάξεις, περίοδοι, επαγγέλματα
-  DemocracyWayInit.Dialogues.cs  — οι αρχικοί διάλογοι + το comic
-  DemocracyWayInit.AssetFallback.cs — procedural placeholder art
-
-Assets/Content/            — τα generated ScriptableObjects (επεξεργάσιμα)
+  Core/      καθαρή λογική: session, δείκτες, πρυτανείες, saves, analytics
+  Data/      οι ορισμοί των ScriptableObjects (τα instances ζουν στο Assets/Data/)
+  Services/  persistent συστήματα (Boot ▸ Systems prefab): ServicesRoot.Audio/
+             .Settings/.Session/.Flow/.Cursor/.Pause/.Config
+  UI/        κουμπιά, panels, μενού
+  Gameplay/  δημιουργία χαρακτήρα, comic, story σκηνές, διάλογοι, HUD
+  Editor/    PlayFromBoot (μόνιμο εργαλείο editor)
+Assets/Setup/  one-shot scaffolder — διαγράψιμος μετά το πρώτο τρέξιμο
+Assets/Tests/  EditMode tests για Core + Data
 ```
+
+Ροή: `Boot → MainMenu → (Νέο) επιλογή slot → CharacterCreation → ComicIntro →
+Chapter01 → …` και `(Φόρτωση) → κατευθείαν στο κεφάλαιο του save`.
+
+- **Autosave** σε κάθε βδομάδα πρυτανείας (και checkpoint σε κάθε νέο κεφάλαιο)·
+  το save θυμάται και τον κόμβο διαλόγου, ώστε η φόρτωση να συνεχίζει από εκεί.
+- **Pause (ESC)** μόνο μέσα σε story σκηνές — το δηλώνει ο StorySceneController.
+- Η **Καχυποψία** εμφανίζεται μόνο όταν η επιλογή φύλου την ενεργοποιεί
+  (ρύθμιση `enablesSuspicion` στη CreationDatabase).
 
 ---
 
-## Πώς προσθέτεις περιεχόμενο
+## Saves & Analytics
 
-**Χωρίς κώδικα** — επεξεργάσου τα assets στο `Assets/Content/`:
+`%USERPROFILE%\AppData\LocalLow\<Company>\<Product>\`
 
-- `DialogueDatabase.asset` — νεοι διάλογοι για το κουμπί «Τυχαίος διάλογος»
-- `CreationDatabase.asset` — κείμενα, γραφικά, νέες επιλογές σε κάθε βήμα
-- `IntroComic.asset` — καρέ, λεζάντες, χρονισμός του intro
-
-⚠️ Το **Init τα ξαναγράφει**. Αν θέλεις οι αλλαγές σου να επιβιώνουν, ή μην
-ξανατρέξεις το Init, ή βάλε τις αλλαγές στα `DemocracyWayInit.Content.cs` /
-`.Dialogues.cs`.
-
-**Γραφικά**: ρίξε ένα PNG στο `Assets/Art/Backgrounds/` ή
-`Assets/Art/Characters/` με το όνομα πού ζητά το content (`BG_…`, `CH_…`) και
-αντικαθιστά αυτόματα το procedural placeholder στο επόμενο Init.
+- `saves\slot0..3.json` — 4 θέσεις, versioned JSON, atomic write· κατεστραμμένο
+  αρχείο εμφανίζεται ως «Κατεστραμμένη αποθήκευση» και διαγράφεται από το μενού.
+- `analytics\events.jsonl` — μία γραμμή JSON ανά γεγονός (game_started,
+  chapter_started, choice_made, week_advanced, game_loaded), με flat πεδία.
+  Ανοίγει απευθείας σε pandas/Excel για ανάλυση των επιλογών των παικτών.
 
 ---
 
-## Saves
+## Έλεγχος
 
-Τέσσερις ανεξάρτητες θέσεις, ως JSON στο `Application.persistentDataPath`:
+EditMode tests (ημερολόγιο, saves, φίλτρα βάσης, δείκτες, analytics):
 
+```bash
+"C:\Program Files\Unity\Hub\Editor\6000.4.1f1\Editor\Unity.exe" -batchmode -nographics -projectPath . -runTests -testPlatform EditMode -testResults Logs/test-results.xml
 ```
-demokratia_slot0.json … demokratia_slot3.json
-```
-
-Windows: `%USERPROFILE%\AppData\LocalLow\<Company>\<Product>\`
-
-Κατεστραμμένο ή κενό αρχείο διαβάζεται ως άδεια θέση — δεν μπλοκάρει το μενού.
