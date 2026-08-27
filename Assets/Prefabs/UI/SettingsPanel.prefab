@@ -1715,7 +1715,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u25B8"
+  m_text: "\00BB"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d6d9061ab0b09d04e9d01d5dc518aeb0, type: 2}
   m_sharedMaterial: {fileID: 3465912651277721568, guid: d6d9061ab0b09d04e9d01d5dc518aeb0, type: 2}

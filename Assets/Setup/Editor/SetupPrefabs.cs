@@ -571,7 +571,7 @@ namespace DemocracyWay.Setup
             var choices = SetupCommon.CreateVerticalColumn(panelRoot.transform, "ChoicesContainer",
                 new Vector2(0.36f, 0.03f), new Vector2(0.97f, 0.40f), 6f, TextAnchor.LowerCenter);
 
-            var hint = SetupCommon.CreateLabel(panelRoot.transform, "AdvanceHint", "συνέχεια ▸", 20,
+            var hint = SetupCommon.CreateLabel(panelRoot.transform, "AdvanceHint", "συνέχεια »", 20,
                 new Vector2(0.70f, 0.02f), new Vector2(0.97f, 0.13f),
                 TextAlignmentOptions.MidlineRight, SetupCommon.Muted);
 

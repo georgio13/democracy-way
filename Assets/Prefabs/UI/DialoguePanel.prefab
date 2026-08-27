@@ -282,7 +282,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u03C3\u03C5\u03BD\u03AD\u03C7\u03B5\u03B9\u03B1 \u25B8"
+  m_text: "\u03C3\u03C5\u03BD\u03AD\u03C7\u03B5\u03B9\u03B1 \00BB"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d6d9061ab0b09d04e9d01d5dc518aeb0, type: 2}
   m_sharedMaterial: {fileID: 3465912651277721568, guid: d6d9061ab0b09d04e9d01d5dc518aeb0, type: 2}
@@ -485,7 +485,7 @@ MonoBehaviour:
   choicesContainer: {fileID: 1912042507935722215}
   choiceButtonPrefab: {fileID: 7772631344629249998, guid: 1812742f3e6e14a4c97b027512615817, type: 3}
   advanceHintText: {fileID: 5841057463281079394}
-  advanceHint: "\u03C3\u03C5\u03BD\u03AD\u03C7\u03B5\u03B9\u03B1 \u25B8"
+  advanceHint: "\u03C3\u03C5\u03BD\u03AD\u03C7\u03B5\u03B9\u03B1 \00BB"
 --- !u!1 &6844139925011551103
 GameObject:
   m_ObjectHideFlags: 0

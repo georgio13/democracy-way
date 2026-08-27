@@ -501,9 +501,9 @@ namespace DemocracyWay.Setup
                 new Vector2(0.04f, 0f), new Vector2(0.86f, 1f),
                 TextAlignmentOptions.MidlineLeft, White);
 
-            // "▸" is the one glyph the project already assumes the font has
+            // "»" is the one glyph the project already assumes the font has
             // (DialogueRunner's advance hint) — reused so nothing new can be missing.
-            CreateLabel(go.transform, "Arrow", "▸", 22,
+            CreateLabel(go.transform, "Arrow", "»", 22,
                 new Vector2(0.88f, 0f), new Vector2(0.98f, 1f),
                 TextAlignmentOptions.Midline, Muted);
 

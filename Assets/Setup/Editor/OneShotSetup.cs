@@ -12,7 +12,7 @@ namespace DemocracyWay.Setup
     /// already exists, and is then deleted together with the whole
     /// Assets/Setup/ folder — nothing at runtime may ever reference it.
     ///
-    /// Interactive:  Tools ▸ DemocracyWay ▸ Setup (μία φορά)
+    /// Interactive:  Tools » DemocracyWay » Setup (μία φορά)
     /// Headless:     Unity -batchmode -executeMethod DemocracyWay.Setup.OneShotSetup.Run
     /// </summary>
     public static class OneShotSetup

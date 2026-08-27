@@ -46,7 +46,7 @@ namespace DemocracyWay.Gameplay
         [SerializeField] private TMP_Text advanceHintText;
 
         [Tooltip("Το κείμενο της υπόδειξης προώθησης.")]
-        [SerializeField] private string advanceHint = "συνέχεια ▸";
+        [SerializeField] private string advanceHint = "συνέχεια »";
 
         private ChapterDefinition chapter;
         private DialogueTree tree;
