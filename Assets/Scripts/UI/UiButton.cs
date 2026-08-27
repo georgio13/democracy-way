@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -25,6 +26,9 @@ namespace DemocracyWay.UI
         [Tooltip("Το border Image παιδί που εμφανίζεται στο hover. Κενό = ψάχνει παιδί με όνομα 'Border'.")]
         [SerializeField] private Image border;
 
+        [Tooltip("Προαιρετικά γραφικά που εμφανίζονται μαζί με το border στο hover (π.χ. διακοσμητικά dividers). Κενό = ψάχνει παιδιά 'LeftDivider' και 'RightDivider'.")]
+        [SerializeField] private Graphic[] hoverDecorations;
+
         [Tooltip("Το TMP label παιδί με το κείμενο του κουμπιού. Κενό = πρώτο TMP_Text στα παιδιά.")]
         [SerializeField] private TMP_Text label;
 
@@ -51,11 +55,12 @@ namespace DemocracyWay.UI
         [Header("Συμβάντα")]
         public UnityEvent onClick = new UnityEvent();
 
-        // Border alpha is animated manually in Update (not via coroutine) so a
-        // disable/enable mid-fade can never leave the border half-visible.
+        // Hover alpha is animated manually in Update (not via coroutine) so a
+        // disable/enable mid-fade can never leave the visuals half-visible.
+        // One value drives the border AND every decoration together.
         private bool isHovering;
-        private float borderAlpha;
-        private float borderTargetAlpha;
+        private float hoverAlpha;
+        private float hoverTargetAlpha;
 
         /// <summary>Dimmed and deaf to input when off — used by the main menu
         /// to lock Νέο Παιχνίδι / Φόρτωση and by rows for non-pickable slots.</summary>
@@ -68,11 +73,11 @@ namespace DemocracyWay.UI
                 if (!value)
                 {
                     // A button can be disabled while hovered (e.g. after a slot
-                    // delete) — drop the hover state so the border isn't frozen on.
+                    // delete) — drop the hover state so the visuals aren't frozen on.
                     isHovering = false;
-                    borderTargetAlpha = 0f;
-                    borderAlpha = 0f;
-                    ApplyBorderAlpha();
+                    hoverTargetAlpha = 0f;
+                    hoverAlpha = 0f;
+                    ApplyHoverAlpha();
                 }
                 ApplyLabelState();
             }
@@ -92,6 +97,17 @@ namespace DemocracyWay.UI
                 var borderTransform = transform.Find("Border");
                 if (borderTransform != null) border = borderTransform.GetComponent<Image>();
             }
+            if (hoverDecorations == null || hoverDecorations.Length == 0)
+            {
+                var found = new List<Graphic>(2);
+                foreach (var childName in new[] { "LeftDivider", "RightDivider" })
+                {
+                    var child = transform.Find(childName);
+                    if (child != null && child.TryGetComponent(out Graphic graphic))
+                        found.Add(graphic);
+                }
+                hoverDecorations = found.ToArray();
+            }
             if (label == null) label = GetComponentInChildren<TMP_Text>(true);
 
             // The button has no visible background, but uGUI needs SOME
@@ -107,9 +123,9 @@ namespace DemocracyWay.UI
             }
             hitTarget.raycastTarget = true;
 
-            borderAlpha = 0f;
-            borderTargetAlpha = 0f;
-            ApplyBorderAlpha();
+            hoverAlpha = 0f;
+            hoverTargetAlpha = 0f;
+            ApplyHoverAlpha();
             // Respect whatever `interactable` already is — a controller's Awake
             // may have disabled the button before ours ran.
             ApplyLabelState();
@@ -120,28 +136,38 @@ namespace DemocracyWay.UI
             // Panels hide with SetActive(false) — never keep a stale hover
             // when the panel comes back.
             isHovering = false;
-            borderAlpha = 0f;
-            borderTargetAlpha = 0f;
-            ApplyBorderAlpha();
+            hoverAlpha = 0f;
+            hoverTargetAlpha = 0f;
+            ApplyHoverAlpha();
             ApplyLabelState();
         }
 
         void Update()
         {
-            if (border == null || Mathf.Approximately(borderAlpha, borderTargetAlpha)) return;
+            bool hasVisuals = border != null || (hoverDecorations != null && hoverDecorations.Length > 0);
+            if (!hasVisuals || Mathf.Approximately(hoverAlpha, hoverTargetAlpha)) return;
 
             // Unscaled so the hover fade works while the game is paused.
             float step = hoverFadeDuration <= 0f ? 1f : Time.unscaledDeltaTime / hoverFadeDuration;
-            borderAlpha = Mathf.MoveTowards(borderAlpha, borderTargetAlpha, step);
-            ApplyBorderAlpha();
+            hoverAlpha = Mathf.MoveTowards(hoverAlpha, hoverTargetAlpha, step);
+            ApplyHoverAlpha();
         }
 
-        private void ApplyBorderAlpha()
+        private void ApplyHoverAlpha()
         {
-            if (border == null) return;
-            var c = border.color;
-            c.a = borderAlpha;
-            border.color = c;
+            // Null-tolerant: a controller's Awake may toggle Interactable
+            // before this button's own Awake has filled the references.
+            if (border != null) SetAlpha(border, hoverAlpha);
+            if (hoverDecorations == null) return;
+            foreach (var decoration in hoverDecorations)
+                if (decoration != null) SetAlpha(decoration, hoverAlpha);
+        }
+
+        private static void SetAlpha(Graphic graphic, float alpha)
+        {
+            var c = graphic.color;
+            c.a = alpha;
+            graphic.color = c;
         }
 
         private void ApplyLabelState()
@@ -165,7 +191,7 @@ namespace DemocracyWay.UI
         {
             if (!interactable) return;
             isHovering = hovered;
-            borderTargetAlpha = hovered ? 1f : 0f;
+            hoverTargetAlpha = hovered ? 1f : 0f;
             ApplyLabelState();
         }
 
