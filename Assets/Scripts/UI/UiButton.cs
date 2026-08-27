@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -10,11 +9,13 @@ namespace DemocracyWay.UI
 {
     /// <summary>
     /// The one button style of every menu (main menu, pause, settings, slots):
-    /// transparent background, a TMP label and a border Image child that fades
-    /// in on hover. Uses its own tiny fade instead of uGUI's Button so the
-    /// animation runs on unscaled time — the pause menu must still respond
-    /// while timeScale is 0. Hover/click SFX go through ServicesRoot.Audio,
-    /// with null-checks so the button also works in scenes opened without Boot.
+    /// transparent background with a TMP label. Hovering plays a sound and
+    /// fades in the optional decoration graphics, which are positioned right
+    /// next to the label's actual text width — nothing else changes visually.
+    /// The fade runs on its own tiny animation instead of uGUI's Button so it
+    /// works on unscaled time — the pause menu must respond while timeScale
+    /// is 0. SFX go through ServicesRoot.Audio with null-checks so the button
+    /// also works in scenes opened without Boot.
     /// </summary>
     [AddComponentMenu("DemocracyWay/UI Button")]
     [DisallowMultipleComponent]
@@ -23,11 +24,11 @@ namespace DemocracyWay.UI
         ISelectHandler, IDeselectHandler
     {
         [Header("Αναφορές")]
-        [Tooltip("Το border Image παιδί που εμφανίζεται στο hover. Κενό = ψάχνει παιδί με όνομα 'Border'.")]
-        [SerializeField] private Image border;
+        [Tooltip("Διακοσμητικό που εμφανίζεται αριστερά της λέξης στο hover. Κενό = ψάχνει παιδί 'LeftDivider'.")]
+        [SerializeField] private Graphic leftDecoration;
 
-        [Tooltip("Προαιρετικά γραφικά που εμφανίζονται μαζί με το border στο hover (π.χ. διακοσμητικά dividers). Κενό = ψάχνει παιδιά 'LeftDivider' και 'RightDivider'.")]
-        [SerializeField] private Graphic[] hoverDecorations;
+        [Tooltip("Διακοσμητικό που εμφανίζεται δεξιά της λέξης στο hover. Κενό = ψάχνει παιδί 'RightDivider'.")]
+        [SerializeField] private Graphic rightDecoration;
 
         [Tooltip("Το TMP label παιδί με το κείμενο του κουμπιού. Κενό = πρώτο TMP_Text στα παιδιά.")]
         [SerializeField] private TMP_Text label;
@@ -36,14 +37,14 @@ namespace DemocracyWay.UI
         [SerializeField] private Image hitTarget;
 
         [Header("Hover")]
-        [Tooltip("Δευτερόλεπτα για το fade in/out του border στο hover (unscaled).")]
+        [Tooltip("Δευτερόλεπτα για το fade in/out των διακοσμητικών στο hover (unscaled).")]
         [SerializeField] private float hoverFadeDuration = 0.12f;
 
-        [Tooltip("Χρώμα του label σε ηρεμία.")]
-        [SerializeField] private Color labelIdleColor = Color.white;
+        [Tooltip("Απόσταση σε pixels ανάμεσα στην άκρη της λέξης και το διακοσμητικό.")]
+        [SerializeField] private float decorationGap = 12f;
 
-        [Tooltip("Χρώμα του label στο hover ή όταν είναι επιλεγμένο με πληκτρολόγιο.")]
-        [SerializeField] private Color labelHoverColor = new Color(1f, 0.92f, 0.65f, 1f);
+        [Tooltip("Χρώμα του label (δεν αλλάζει στο hover).")]
+        [SerializeField] private Color labelIdleColor = Color.white;
 
         [Tooltip("Χρώμα του label όταν το κουμπί είναι απενεργοποιημένο.")]
         [SerializeField] private Color labelDisabledColor = new Color(0.32f, 0.30f, 0.26f, 1f);
@@ -56,8 +57,7 @@ namespace DemocracyWay.UI
         public UnityEvent onClick = new UnityEvent();
 
         // Hover alpha is animated manually in Update (not via coroutine) so a
-        // disable/enable mid-fade can never leave the visuals half-visible.
-        // One value drives the border AND every decoration together.
+        // disable/enable mid-fade can never leave the decorations half-visible.
         private bool isHovering;
         private float hoverAlpha;
         private float hoverTargetAlpha;
@@ -73,7 +73,7 @@ namespace DemocracyWay.UI
                 if (!value)
                 {
                     // A button can be disabled while hovered (e.g. after a slot
-                    // delete) — drop the hover state so the visuals aren't frozen on.
+                    // delete) — drop the hover state so the decorations aren't frozen on.
                     isHovering = false;
                     hoverTargetAlpha = 0f;
                     hoverAlpha = 0f;
@@ -87,27 +87,19 @@ namespace DemocracyWay.UI
         public string Text
         {
             get => label != null ? label.text : string.Empty;
-            set { if (label != null) label.text = value; }
+            set
+            {
+                if (label == null) return;
+                label.text = value;
+                // The word changed width — the decorations must hug it again.
+                PositionDecorations();
+            }
         }
 
         void Awake()
         {
-            if (border == null)
-            {
-                var borderTransform = transform.Find("Border");
-                if (borderTransform != null) border = borderTransform.GetComponent<Image>();
-            }
-            if (hoverDecorations == null || hoverDecorations.Length == 0)
-            {
-                var found = new List<Graphic>(2);
-                foreach (var childName in new[] { "LeftDivider", "RightDivider" })
-                {
-                    var child = transform.Find(childName);
-                    if (child != null && child.TryGetComponent(out Graphic graphic))
-                        found.Add(graphic);
-                }
-                hoverDecorations = found.ToArray();
-            }
+            if (leftDecoration == null) leftDecoration = FindDecoration("LeftDivider");
+            if (rightDecoration == null) rightDecoration = FindDecoration("RightDivider");
             if (label == null) label = GetComponentInChildren<TMP_Text>(true);
 
             // The button has no visible background, but uGUI needs SOME
@@ -131,6 +123,12 @@ namespace DemocracyWay.UI
             ApplyLabelState();
         }
 
+        private Graphic FindDecoration(string childName)
+        {
+            var child = transform.Find(childName);
+            return child != null ? child.GetComponent<Graphic>() : null;
+        }
+
         void OnDisable()
         {
             // Panels hide with SetActive(false) — never keep a stale hover
@@ -144,7 +142,7 @@ namespace DemocracyWay.UI
 
         void Update()
         {
-            bool hasVisuals = border != null || (hoverDecorations != null && hoverDecorations.Length > 0);
+            bool hasVisuals = leftDecoration != null || rightDecoration != null;
             if (!hasVisuals || Mathf.Approximately(hoverAlpha, hoverTargetAlpha)) return;
 
             // Unscaled so the hover fade works while the game is paused.
@@ -153,14 +151,31 @@ namespace DemocracyWay.UI
             ApplyHoverAlpha();
         }
 
+        /// <summary>
+        /// Puts each decoration right next to the label's rendered text — the
+        /// button is wider than the word, so a fixed offset can't hug labels
+        /// of different lengths («Ρυθμίσεις» vs «Φόρτωση Παιχνιδιού»).
+        /// </summary>
+        private void PositionDecorations()
+        {
+            if (label == null) return;
+            float halfWord = label.preferredWidth * 0.5f;
+            Place(leftDecoration, -1f);
+            Place(rightDecoration, 1f);
+
+            void Place(Graphic decoration, float side)
+            {
+                if (decoration == null) return;
+                var rt = decoration.rectTransform;
+                float x = side * (halfWord + decorationGap + rt.rect.width * 0.5f);
+                rt.anchoredPosition = new Vector2(x, rt.anchoredPosition.y);
+            }
+        }
+
         private void ApplyHoverAlpha()
         {
-            // Null-tolerant: a controller's Awake may toggle Interactable
-            // before this button's own Awake has filled the references.
-            if (border != null) SetAlpha(border, hoverAlpha);
-            if (hoverDecorations == null) return;
-            foreach (var decoration in hoverDecorations)
-                if (decoration != null) SetAlpha(decoration, hoverAlpha);
+            if (leftDecoration != null) SetAlpha(leftDecoration, hoverAlpha);
+            if (rightDecoration != null) SetAlpha(rightDecoration, hoverAlpha);
         }
 
         private static void SetAlpha(Graphic graphic, float alpha)
@@ -182,7 +197,7 @@ namespace DemocracyWay.UI
             }
             else
             {
-                label.color = isHovering ? labelHoverColor : labelIdleColor;
+                label.color = labelIdleColor;
                 label.alpha = 1f;
             }
         }
@@ -191,8 +206,8 @@ namespace DemocracyWay.UI
         {
             if (!interactable) return;
             isHovering = hovered;
+            if (hovered) PositionDecorations(); // the text is final by now
             hoverTargetAlpha = hovered ? 1f : 0f;
-            ApplyLabelState();
         }
 
         // ════════ Pointer ════════
@@ -215,7 +230,7 @@ namespace DemocracyWay.UI
         }
 
         // ════════ Keyboard navigation ════════
-        // Selection mirrors hover visually so keyboard users see where they are.
+        // Selection mirrors hover so keyboard users see where they are.
 
         public void OnSelect(BaseEventData eventData) => SetHovered(true);
         public void OnDeselect(BaseEventData eventData) => SetHovered(false);
