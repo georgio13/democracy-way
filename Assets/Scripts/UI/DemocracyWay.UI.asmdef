@@ -5,6 +5,7 @@
         "DemocracyWay.Core",
         "DemocracyWay.Data",
         "DemocracyWay.Services",
+        "UnityEngine.UI",
         "Unity.TextMeshPro",
         "Unity.InputSystem"
     ],

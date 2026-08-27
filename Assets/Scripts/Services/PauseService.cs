@@ -34,6 +34,11 @@ namespace DemocracyWay.Services
 
         public bool IsPaused { get; private set; }
 
+        /// <summary>Frame in which the last Resume/ForceResume ran. Input
+        /// pollers (DialogueRunner) skip this frame, so the click that pressed
+        /// «Συνέχεια» can't also advance the dialogue behind the menu.</summary>
+        public int LastResumeFrame { get; private set; } = -1;
+
         private IPauseMenuPanel panel;
 
         void Update()
@@ -70,6 +75,7 @@ namespace DemocracyWay.Services
             if (!IsPaused) return;
 
             IsPaused = false;
+            LastResumeFrame = Time.frameCount;
             Time.timeScale = 1f;
             AudioListener.pause = false;
             ServicesRoot.Audio?.SetPauseDucking(false);
@@ -81,6 +87,7 @@ namespace DemocracyWay.Services
         public void ForceResume()
         {
             IsPaused = false;
+            LastResumeFrame = Time.frameCount;
             Time.timeScale = 1f;
             AudioListener.pause = false;
             ServicesRoot.Audio?.SetPauseDucking(false);

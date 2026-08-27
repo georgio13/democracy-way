@@ -103,18 +103,29 @@ namespace DemocracyWay.Services
         /// last autosave stands, as the confirm dialog warned.</summary>
         public void EndToMainMenu()
         {
+            // The voice source is persistent; without this, a dialogue line
+            // cut off mid-sentence keeps talking over the main menu.
+            ServicesRoot.Audio?.StopVoice();
             Current = null;
             CurrentSlot = -1;
         }
 
         // ════════ Story progress ════════
 
-        /// <summary>Marks the chapter the player is entering; checkpoint-saves.</summary>
+        /// <summary>
+        /// Marks the chapter the player is entering; checkpoint-saves. A no-op
+        /// when the session is already in this chapter — that's the load-game
+        /// path re-entering the scene, and resetting the dialogue position (or
+        /// double-logging chapter_started) would corrupt the resume.
+        /// </summary>
         public void SetChapter(ChapterDefinition chapter)
         {
             if (!HasActiveRun || chapter == null) return;
+            if (Current.currentChapterId == chapter.chapterId) return;
+
             Current.currentChapterId = chapter.chapterId;
             Current.currentChapterTitle = chapter.title;
+            Current.currentDialogueNodeId = "";   // fresh chapter starts at its first node
 
             AnalyticsLog.Log(new AnalyticsEvent
             {
@@ -127,6 +138,17 @@ namespace DemocracyWay.Services
             });
 
             SaveNow();
+        }
+
+        /// <summary>
+        /// Called by the DialogueRunner every time a node is shown, so any
+        /// save taken mid-chapter (the weekly autosave) knows where to resume.
+        /// In-memory only — it hits disk with whichever save happens next.
+        /// </summary>
+        public void SetDialoguePosition(string nodeId)
+        {
+            if (HasActiveRun)
+                Current.currentDialogueNodeId = nodeId ?? "";
         }
 
         /// <summary>

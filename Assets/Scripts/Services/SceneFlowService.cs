@@ -55,8 +55,14 @@ namespace DemocracyWay.Services
             if (!IsBusy && fadeGroup != null && fadeGroup.alpha >= 1f &&
                 SceneManager.GetActiveScene().name != "Boot")
             {
-                StartCoroutine(Fade(1f, 0f, FadeDuration));
+                StartCoroutine(RevealDefensively());
             }
+        }
+
+        private IEnumerator RevealDefensively()
+        {
+            yield return Fade(1f, 0f, FadeDuration);
+            fadeGroup.blocksRaycasts = false;   // Awake set it true (alpha was 1)
         }
 
         private float FadeDuration => ServicesRoot.Config != null ? ServicesRoot.Config.fadeDuration : 0.6f;
@@ -92,6 +98,18 @@ namespace DemocracyWay.Services
             float loadStarted = Time.unscaledTime;
 
             var op = SceneManager.LoadSceneAsync(sceneName);
+            if (op == null)
+            {
+                // Mistyped sceneName / scene missing from Build Settings — the
+                // authoring mistake a chapter asset can make. Recover instead
+                // of soft-locking behind a black overlay forever.
+                Debug.LogError($"[SceneFlow] Η σκηνή '{sceneName}' δεν υπάρχει στα Build Settings — ακυρώνεται η μετάβαση.");
+                if (loadingGroup != null) loadingGroup.SetActive(false);
+                yield return Fade(1f, 0f, FadeDuration);
+                fadeGroup.blocksRaycasts = false;
+                IsBusy = false;
+                yield break;
+            }
             op.allowSceneActivation = false;
             while (op.progress < 0.9f) yield return null;
 
@@ -105,11 +123,14 @@ namespace DemocracyWay.Services
 
             if (loadingGroup != null) loadingGroup.SetActive(false);
 
-            // 3. Chapter title on black.
+            // 3. Chapter title on black — the title itself fades in, holds,
+            //    and fades out (spec: «με fade in/out εξαφανίζεται»).
             if (!string.IsNullOrEmpty(chapterTitle) && chapterTitleText != null)
             {
                 chapterTitleText.text = chapterTitle;
+                yield return FadeTitle(0f, 1f, 0.4f);
                 yield return new WaitForSecondsRealtime(TitleHold);
+                yield return FadeTitle(1f, 0f, 0.4f);
                 chapterTitleText.text = string.Empty;
             }
 
@@ -118,6 +139,18 @@ namespace DemocracyWay.Services
 
             fadeGroup.blocksRaycasts = false;
             IsBusy = false;
+        }
+
+        private IEnumerator FadeTitle(float from, float to, float duration)
+        {
+            float t = 0f;
+            while (t < duration)
+            {
+                t += Time.unscaledDeltaTime;
+                chapterTitleText.alpha = Mathf.Lerp(from, to, Mathf.Clamp01(t / duration));
+                yield return null;
+            }
+            chapterTitleText.alpha = to;
         }
 
         private IEnumerator Fade(float from, float to, float duration)

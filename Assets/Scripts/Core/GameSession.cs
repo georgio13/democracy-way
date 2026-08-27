@@ -33,6 +33,13 @@ namespace DemocracyWay.Core
         public string currentChapterId = "";
         public string currentChapterTitle = "";
 
+        /// <summary>Dialogue node the player is at inside the current chapter,
+        /// updated as the dialogue runs. A mid-chapter autosave (week advance)
+        /// captures it, so loading resumes at that node instead of replaying
+        /// the chapter — replaying would re-apply every choice's effects.
+        /// Empty = the chapter starts from its first node.</summary>
+        public string currentDialogueNodeId = "";
+
         /// <summary>Story flags set by dialogue choices ("met_socrates", …).</summary>
         public List<string> flags = new List<string>();
 
