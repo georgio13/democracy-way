@@ -1,0 +1,22 @@
+{
+    "name": "DemocracyWay.EditorTools",
+    "rootNamespace": "DemocracyWay.EditorTools",
+    "references": [
+        "DemocracyWay.Core",
+        "DemocracyWay.Data",
+        "DemocracyWay.Services",
+        "DemocracyWay.UI",
+        "DemocracyWay.Gameplay"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

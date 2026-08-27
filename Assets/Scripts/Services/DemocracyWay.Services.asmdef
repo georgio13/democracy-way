@@ -1,0 +1,19 @@
+{
+    "name": "DemocracyWay.Services",
+    "rootNamespace": "DemocracyWay.Services",
+    "references": [
+        "DemocracyWay.Core",
+        "DemocracyWay.Data",
+        "Unity.TextMeshPro",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

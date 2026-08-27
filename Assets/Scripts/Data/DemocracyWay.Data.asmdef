@@ -1,0 +1,16 @@
+{
+    "name": "DemocracyWay.Data",
+    "rootNamespace": "DemocracyWay.Data",
+    "references": [
+        "DemocracyWay.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
