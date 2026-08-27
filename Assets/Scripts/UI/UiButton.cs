@@ -9,9 +9,9 @@ namespace DemocracyWay.UI
 {
     /// <summary>
     /// The one button style of every menu (main menu, pause, settings, slots):
-    /// transparent background with a TMP label. Hovering plays a sound and
-    /// fades in the optional decoration graphics, which are positioned right
-    /// next to the label's actual text width — nothing else changes visually.
+    /// transparent background with a TMP label. Hovering plays a sound,
+    /// tints the label gold (#D2A656) and fades in the optional decoration
+    /// graphics, which are positioned right next to the label's actual width.
     /// The fade runs on its own tiny animation instead of uGUI's Button so it
     /// works on unscaled time — the pause menu must respond while timeScale
     /// is 0. SFX go through ServicesRoot.Audio with null-checks so the button
@@ -41,10 +41,13 @@ namespace DemocracyWay.UI
         [SerializeField] private float hoverFadeDuration = 0.12f;
 
         [Tooltip("Απόσταση σε pixels ανάμεσα στην άκρη της λέξης και το διακοσμητικό.")]
-        [SerializeField] private float decorationGap = 12f;
+        [SerializeField] private float decorationGap = 6f;
 
-        [Tooltip("Χρώμα του label (δεν αλλάζει στο hover).")]
+        [Tooltip("Χρώμα του label σε ηρεμία.")]
         [SerializeField] private Color labelIdleColor = Color.white;
+
+        [Tooltip("Χρώμα του label στο hover ή στην επιλογή με πληκτρολόγιο (#D2A656).")]
+        [SerializeField] private Color labelHoverColor = new Color(0.8235294f, 0.6509804f, 0.3372549f, 1f);
 
         [Tooltip("Χρώμα του label όταν το κουμπί είναι απενεργοποιημένο.")]
         [SerializeField] private Color labelDisabledColor = new Color(0.32f, 0.30f, 0.26f, 1f);
@@ -197,7 +200,7 @@ namespace DemocracyWay.UI
             }
             else
             {
-                label.color = labelIdleColor;
+                label.color = isHovering ? labelHoverColor : labelIdleColor;
                 label.alpha = 1f;
             }
         }
@@ -208,6 +211,7 @@ namespace DemocracyWay.UI
             isHovering = hovered;
             if (hovered) PositionDecorations(); // the text is final by now
             hoverTargetAlpha = hovered ? 1f : 0f;
+            ApplyLabelState();
         }
 
         // ════════ Pointer ════════
