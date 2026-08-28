@@ -33,6 +33,9 @@ namespace DemocracyWay.UI
         [Tooltip("Το TMP label παιδί με το κείμενο του κουμπιού. Κενό = πρώτο TMP_Text στα παιδιά.")]
         [SerializeField] private TMP_Text label;
 
+        [Tooltip("Προαιρετικά επιπλέον TMP κείμενα με τον ίδιο χρωματισμό idle/hover/disabled (π.χ. τίτλος και ημερομηνία μιας θέσης αποθήκευσης).")]
+        [SerializeField] private TMP_Text[] extraLabels;
+
         [Tooltip("Image για hit detection — και background του κουμπιού όταν έχει sprite. Κενό = προστίθεται διάφανο αυτόματα.")]
         [SerializeField] private Image hitTarget;
 
@@ -203,18 +206,23 @@ namespace DemocracyWay.UI
 
         private void ApplyLabelState()
         {
-            if (label == null) return;
-            if (!interactable)
+            // Recolor AND dim when disabled, so "off" reads even on backgrounds
+            // where the disabled colour alone would blend in.
+            Color color = !interactable ? labelDisabledColor
+                : isHovering ? labelHoverColor
+                : labelIdleColor;
+            float alpha = interactable ? 1f : 0.75f;
+
+            Tint(label);
+            if (extraLabels != null)
+                foreach (var extra in extraLabels)
+                    Tint(extra);
+
+            void Tint(TMP_Text text)
             {
-                // Recolor AND dim, so "off" reads even on backgrounds where the
-                // dark disabled colour alone would blend in.
-                label.color = labelDisabledColor;
-                label.alpha = 0.75f;
-            }
-            else
-            {
-                label.color = isHovering ? labelHoverColor : labelIdleColor;
-                label.alpha = 1f;
+                if (text == null) return;
+                text.color = color;
+                text.alpha = alpha;
             }
         }
 

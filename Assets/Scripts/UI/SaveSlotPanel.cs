@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using DemocracyWay.Core;
 
@@ -28,11 +29,20 @@ namespace DemocracyWay.UI
         [Tooltip("Κουμπί «Πίσω» — κλείνει το panel και ειδοποιεί όποιον το άνοιξε.")]
         [SerializeField] private UiButton backButton;
 
+        [Tooltip("Ο τίτλος του panel — παίρνει διαφορετικό κείμενο ανά λειτουργία (φόρτωση/νέο παιχνίδι).")]
+        [SerializeField] private TMP_Text titleText;
+
         [Tooltip("Ο κοινός διάλογος επιβεβαίωσης για τη Διαγραφή.")]
         [SerializeField] private ConfirmDialog confirmDialog;
 
         [Tooltip("Μήνυμα επιβεβαίωσης πριν τη διαγραφή μιας αποθήκευσης.")]
         [SerializeField] private string deleteConfirmMessage = "Να διαγραφεί οριστικά αυτή η αποθήκευση;";
+
+        [Tooltip("Τίτλος του panel σε λειτουργία φόρτωσης.")]
+        [SerializeField] private string loadTitle = "Φόρτωση Παιχνιδιού";
+
+        [Tooltip("Τίτλος του panel σε λειτουργία νέου παιχνιδιού.")]
+        [SerializeField] private string newGameTitle = "Νέο Παιχνίδι";
 
         private Mode mode;
         private Action<int> onPicked;
@@ -68,6 +78,8 @@ namespace DemocracyWay.UI
             this.mode = mode;
             this.onPicked = onPicked;
             this.onBack = onBack;
+            if (titleText != null)
+                titleText.text = mode == Mode.Load ? loadTitle : newGameTitle;
             gameObject.SetActive(true);
             RebuildRows();
         }
