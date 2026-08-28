@@ -846,6 +846,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: DemocracyWay.UI::DemocracyWay.UI.MainMenuController
   mainColumn: {fileID: 1185887608}
+  titleObject: {fileID: 322155878}
   newGameButton: {fileID: 319519405}
   loadButton: {fileID: 1319404164}
   settingsButton: {fileID: 639376957}
@@ -1614,6 +1615,10 @@ PrefabInstance:
     - target: {fileID: 820446914336825430, guid: 7123b0804bff35547af41ce6cffbecaf, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0.94
+      objectReference: {fileID: 0}
+    - target: {fileID: 2983408707111183910, guid: 7123b0804bff35547af41ce6cffbecaf, type: 3}
+      propertyPath: m_Color.a
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

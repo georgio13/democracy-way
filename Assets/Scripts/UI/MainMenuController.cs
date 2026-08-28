@@ -22,6 +22,9 @@ namespace DemocracyWay.UI
         [Tooltip("Ο γονέας των τεσσάρων κουμπιών — κρύβεται όσο ένα υπο-panel είναι ανοιχτό.")]
         [SerializeField] private GameObject mainColumn;
 
+        [Tooltip("Ο τίτλος του παιχνιδιού — κρύβεται μαζί με τη στήλη όσο ένα υπο-panel είναι ανοιχτό.")]
+        [SerializeField] private GameObject titleObject;
+
         [Tooltip("Κουμπί «Νέο Παιχνίδι» — κλειδώνει όταν και οι 4 θέσεις είναι γεμάτες.")]
         [SerializeField] private UiButton newGameButton;
 
@@ -94,12 +97,14 @@ namespace DemocracyWay.UI
         private void ShowMainColumn()
         {
             if (mainColumn != null) mainColumn.SetActive(true);
+            if (titleObject != null) titleObject.SetActive(true);
             RefreshButtons();
         }
 
         private void HideMainColumn()
         {
             if (mainColumn != null) mainColumn.SetActive(false);
+            if (titleObject != null) titleObject.SetActive(false);
         }
 
         // ════════ Buttons ════════
@@ -152,7 +157,9 @@ namespace DemocracyWay.UI
 
         private void HandleQuit()
         {
-            confirmDialog?.Show(quitConfirmMessage, onYes: Application.Quit);
+            // AppExit: Application.Quit is a no-op in the editor — this also
+            // stops Play mode, so «Έξοδος» is testable without a build.
+            confirmDialog?.Show(quitConfirmMessage, onYes: AppExit.Quit);
         }
     }
 }

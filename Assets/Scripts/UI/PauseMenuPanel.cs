@@ -1,4 +1,5 @@
 using UnityEngine;
+using DemocracyWay.Core;
 using DemocracyWay.Services;
 
 namespace DemocracyWay.UI
@@ -115,7 +116,7 @@ namespace DemocracyWay.UI
 
         private void HandleQuit()
         {
-            confirmDialog?.Show(quitConfirmMessage, onYes: Application.Quit);
+            confirmDialog?.Show(quitConfirmMessage, onYes: AppExit.Quit);
         }
     }
 }
