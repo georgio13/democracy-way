@@ -8,11 +8,10 @@ using DemocracyWay.Services;
 namespace DemocracyWay.Gameplay
 {
     /// <summary>
-    /// One entry in the character-creation option list on the right. It is
-    /// not a UiButton because it reports two distinct gestures: hovering
-    /// *previews* the option on the left panel without committing to it,
-    /// while clicking *selects* it (tick + gold label, same language as the
-    /// save-slot rows). Advancing is the controller's job via «Επόμενο».
+    /// One entry in the character-creation option list on the right.
+    /// Hovering only highlights the row (gold label + sound); clicking
+    /// *selects* it (tick, same language as the save-slot rows) and fills
+    /// the preview panel. Advancing is the controller's job via «Επόμενο».
     /// </summary>
     [AddComponentMenu("DemocracyWay/Creation Option Button")]
     [DisallowMultipleComponent]
@@ -32,7 +31,6 @@ namespace DemocracyWay.Gameplay
         [SerializeField] private Color labelHighlightColor = new Color(0.8235294f, 0.6509804f, 0.3372549f, 1f);
 
         private CreationOption option;
-        private Action<CreationOption> onHover;
         private Action<CreationOption> onClick;
         private bool selected;
 
@@ -45,10 +43,9 @@ namespace DemocracyWay.Gameplay
         /// instead of UnityEvents because the controller spawns these at
         /// runtime — there is nothing to wire in the Inspector.
         /// </summary>
-        public void Init(CreationOption option, Action<CreationOption> onHover, Action<CreationOption> onClick)
+        public void Init(CreationOption option, Action<CreationOption> onClick)
         {
             this.option = option;
-            this.onHover = onHover;
             this.onClick = onClick;
 
             if (label != null) label.text = option != null ? option.title : string.Empty;
@@ -73,7 +70,6 @@ namespace DemocracyWay.Gameplay
         {
             ApplyLabelColor(true);
             ServicesRoot.Audio?.PlayUiHover();
-            onHover?.Invoke(option);
         }
 
         public void OnPointerExit(PointerEventData eventData) => ApplyLabelColor(selected);

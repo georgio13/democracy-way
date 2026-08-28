@@ -16,10 +16,11 @@ namespace DemocracyWay.Gameplay
     /// sequences the steps, so adding or editing options never touches code.
     ///
     /// Layout contract: options list on the RIGHT (spawned rows), preview of
-    /// the hovered option (image + title + description) on the LEFT. Clicking
-    /// ticks an option without advancing — «Επόμενο» commits it. Πίσω
-    /// re-opens the previous step with its pick cleared, so the player
-    /// always re-decides consciously.
+    /// the TICKED option (image + title + description) on the LEFT — hovering
+    /// only highlights a row, it never touches the preview. Clicking ticks an
+    /// option without advancing — «Επόμενο» commits it. Πίσω re-opens the
+    /// previous step with its pick cleared, so the player always re-decides
+    /// consciously.
     /// </summary>
     [AddComponentMenu("DemocracyWay/Character Creation Controller")]
     [DisallowMultipleComponent]
@@ -35,14 +36,17 @@ namespace DemocracyWay.Gameplay
         [SerializeField] private CreationOptionButton optionButtonPrefab;
 
         [Header("Προεπισκόπηση (αριστερά)")]
-        [Tooltip("Η εικόνα της επιλογής που έχει hover ο παίκτης.")]
+        [Tooltip("Η εικόνα της επιλογής που έχει τικάρει ο παίκτης.")]
         [SerializeField] private Image previewImage;
 
-        [Tooltip("Ο τίτλος της επιλογής που έχει hover ο παίκτης.")]
+        [Tooltip("Ο τίτλος της επιλογής που έχει τικάρει ο παίκτης.")]
         [SerializeField] private TMP_Text previewTitleText;
 
-        [Tooltip("Η περιγραφή της επιλογής που έχει hover ο παίκτης.")]
+        [Tooltip("Η περιγραφή της επιλογής που έχει τικάρει ο παίκτης.")]
         [SerializeField] private TMP_Text previewDescriptionText;
+
+        [Tooltip("Ο διακοσμητικός divider κάτω από τον τίτλο της προεπισκόπησης — ορατός μόνο όταν υπάρχει επιλεγμένη επιλογή.")]
+        [SerializeField] private GameObject previewDivider;
 
         [Header("Πλοήγηση")]
         [Tooltip("Ο τίτλος του βήματος, π.χ. 'Βήμα 2/6 — Φυλή'.")]
@@ -161,7 +165,7 @@ namespace DemocracyWay.Gameplay
             foreach (var option in OptionsForStep(currentStep))
             {
                 var button = Instantiate(optionButtonPrefab, optionsContainer);
-                button.Init(option, OnOptionHovered, OnOptionClicked);
+                button.Init(option, OnOptionClicked);
                 spawnedButtons.Add(button);
                 spawned++;
             }
@@ -211,7 +215,7 @@ namespace DemocracyWay.Gameplay
 
         // ════════ Option callbacks ════════
 
-        private void OnOptionHovered(CreationOption option)
+        private void ShowPreview(CreationOption option)
         {
             if (option == null) return;
             if (previewImage != null)
@@ -221,6 +225,7 @@ namespace DemocracyWay.Gameplay
             }
             if (previewTitleText != null) previewTitleText.text = option.title;
             if (previewDescriptionText != null) previewDescriptionText.text = option.description;
+            if (previewDivider != null) previewDivider.SetActive(true);
         }
 
         private void OnOptionClicked(CreationOption option)
@@ -232,7 +237,7 @@ namespace DemocracyWay.Gameplay
             foreach (var button in spawnedButtons)
                 if (button != null) button.SetSelected(button.Option == option);
             if (nextButton != null) nextButton.Interactable = true;
-            OnOptionHovered(option);
+            ShowPreview(option);
         }
 
         private void OnNextPressed()
@@ -336,6 +341,7 @@ namespace DemocracyWay.Gameplay
             if (previewImage != null) previewImage.enabled = false;
             if (previewTitleText != null) previewTitleText.text = string.Empty;
             if (previewDescriptionText != null) previewDescriptionText.text = string.Empty;
+            if (previewDivider != null) previewDivider.SetActive(false);
         }
     }
 }

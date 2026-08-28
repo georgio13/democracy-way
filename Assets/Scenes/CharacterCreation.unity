@@ -431,6 +431,7 @@ MonoBehaviour:
   previewImage: {fileID: 2010403766}
   previewTitleText: {fileID: 319519406}
   previewDescriptionText: {fileID: 1319404165}
+  previewDivider: {fileID: 641000011}
   headerText: {fileID: 639376958}
   backButton: {fileID: 1653688356}
   startButton: {fileID: 921527279}
@@ -634,6 +635,7 @@ RectTransform:
   - {fileID: 2010403764}
   - {fileID: 319519404}
   - {fileID: 1319404163}
+  - {fileID: 641000012}
   m_Father: {fileID: 1185887609}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.03, y: 0.1}
@@ -891,7 +893,6 @@ RectTransform:
   - {fileID: 641000002}
   - {fileID: 830437045}
   - {fileID: 639376956}
-  - {fileID: 641000012}
   - {fileID: 322155879}
   - {fileID: 1653688355}
   - {fileID: 921527280}
@@ -1001,7 +1002,7 @@ RectTransform:
   m_Father: {fileID: 830437045}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.1, y: 0.08}
-  m_AnchorMax: {x: 0.9, y: 0.29}
+  m_AnchorMax: {x: 0.9, y: 0.27}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1067,7 +1068,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -1618,7 +1619,7 @@ GameObject:
   - component: {fileID: 641000013}
   - component: {fileID: 641000014}
   m_Layer: 0
-  m_Name: HeaderDivider
+  m_Name: TitleDivider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1636,10 +1637,10 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1185887609}
+  m_Father: {fileID: 830437045}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.53, y: 0.85}
-  m_AnchorMax: {x: 0.53, y: 0.85}
+  m_AnchorMin: {x: 0.5, y: 0.295}
+  m_AnchorMax: {x: 0.5, y: 0.295}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 118, y: 38}
   m_Pivot: {x: 0.5, y: 0.5}
