@@ -62,16 +62,16 @@ namespace DemocracyWay.Data
         [Header("Βήμα 2 — Φυλή")]
         public List<CreationOption> tribes = new List<CreationOption>();
 
-        [Header("Βήμα 3 — Τριττύα (φιλτράρεται από τη Φυλή)")]
+        [Header("Βήμα 3 — Τριττύα")]
         public List<TrittysOption> trittyes = new List<TrittysOption>();
 
-        [Header("Βήμα 4 — Οικονομική Κατάστασις")]
+        [Header("Βήμα 4 — Οικονομική Κατάσταση")]
         public List<CreationOption> wealthClasses = new List<CreationOption>();
 
         [Header("Βήμα 5 — Περίοδος")]
         public List<CreationOption> periods = new List<CreationOption>();
 
-        [Header("Βήμα 6 — Επάγγελμα (φιλτράρεται από την Τριττύα)")]
+        [Header("Βήμα 6 — Επάγγελμα")]
         public List<ProfessionOption> professions = new List<ProfessionOption>();
 
         public List<TrittysOption> TrittyesFor(string tribeId) =>
