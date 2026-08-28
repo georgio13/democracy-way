@@ -1054,6 +1054,7 @@ GameObject:
   - component: {fileID: 1529172620}
   - component: {fileID: 1529172622}
   - component: {fileID: 1529172621}
+  - component: {fileID: 1529172623}
   m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
@@ -1089,27 +1090,38 @@ MonoBehaviour:
   m_GameObject: {fileID: 1529172619}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RawImage
   m_Material: {fileID: 0}
-  m_Color: {r: 0.04, g: 0.05, b: 0.08, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_Texture: {fileID: 2800000, guid: 370555ac94dc2d74ab077f9fe96af18d, type: 3}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!114 &1529172623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1529172619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
+  m_AspectMode: 4
+  m_AspectRatio: 1.776833
 --- !u!222 &1529172622
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1140,27 +1152,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1190345443931890649, guid: f29805cfb2476d446a611f91f03dfeb4, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.66
+      value: 0.58
       objectReference: {fileID: 0}
     - target: {fileID: 1190345443931890649, guid: f29805cfb2476d446a611f91f03dfeb4, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.135
+      value: 0.0975
       objectReference: {fileID: 0}
     - target: {fileID: 1190345443931890649, guid: f29805cfb2476d446a611f91f03dfeb4, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0.58
       objectReference: {fileID: 0}
     - target: {fileID: 1190345443931890649, guid: f29805cfb2476d446a611f91f03dfeb4, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.06
+      value: 0.0975
       objectReference: {fileID: 0}
     - target: {fileID: 1190345443931890649, guid: f29805cfb2476d446a611f91f03dfeb4, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 240
       objectReference: {fileID: 0}
     - target: {fileID: 1190345443931890649, guid: f29805cfb2476d446a611f91f03dfeb4, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 72
       objectReference: {fileID: 0}
     - target: {fileID: 1190345443931890649, guid: f29805cfb2476d446a611f91f03dfeb4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1213,6 +1225,62 @@ PrefabInstance:
     - target: {fileID: 4767105747989380879, guid: f29805cfb2476d446a611f91f03dfeb4, type: 3}
       propertyPath: m_text
       value: "\u03A0\u03AF\u03C3\u03C9"
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202992125994605160, guid: f29805cfb2476d446a611f91f03dfeb4, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 3ad8ad0972f8b65469c50d47aef4c2a2, type: 3}
+    - target: {fileID: 8202992125994605160, guid: f29805cfb2476d446a611f91f03dfeb4, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202992125994605160, guid: f29805cfb2476d446a611f91f03dfeb4, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202992125994605160, guid: f29805cfb2476d446a611f91f03dfeb4, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202992125994605160, guid: f29805cfb2476d446a611f91f03dfeb4, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528299822695547000, guid: f29805cfb2476d446a611f91f03dfeb4, type: 3}
+      propertyPath: hoverBackgroundSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d032cf9fc44f3064e9ddfd97951d761f, type: 3}
+    - target: {fileID: 6528299822695547000, guid: f29805cfb2476d446a611f91f03dfeb4, type: 3}
+      propertyPath: labelIdleColor.r
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528299822695547000, guid: f29805cfb2476d446a611f91f03dfeb4, type: 3}
+      propertyPath: labelIdleColor.g
+      value: 0.11372549
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528299822695547000, guid: f29805cfb2476d446a611f91f03dfeb4, type: 3}
+      propertyPath: labelIdleColor.b
+      value: 0.050980393
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528299822695547000, guid: f29805cfb2476d446a611f91f03dfeb4, type: 3}
+      propertyPath: labelIdleColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528299822695547000, guid: f29805cfb2476d446a611f91f03dfeb4, type: 3}
+      propertyPath: labelHoverColor.r
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528299822695547000, guid: f29805cfb2476d446a611f91f03dfeb4, type: 3}
+      propertyPath: labelHoverColor.g
+      value: 0.11372549
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528299822695547000, guid: f29805cfb2476d446a611f91f03dfeb4, type: 3}
+      propertyPath: labelHoverColor.b
+      value: 0.050980393
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528299822695547000, guid: f29805cfb2476d446a611f91f03dfeb4, type: 3}
+      propertyPath: labelHoverColor.a
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
