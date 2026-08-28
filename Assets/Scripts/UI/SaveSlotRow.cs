@@ -19,19 +19,13 @@ namespace DemocracyWay.UI
     public class SaveSlotRow : MonoBehaviour
     {
         [Header("Αναφορές")]
-        [Tooltip("Ο τίτλος της θέσης, π.χ. «Θέση 1».")]
-        [SerializeField] private TMP_Text slotTitleText;
-
         [Tooltip("Κείμενο «Κενή Θέση» — ορατό μόνο όταν η θέση είναι άδεια.")]
         [SerializeField] private TMP_Text emptyLabelText;
 
-        [Tooltip("Γονέας των στοιχείων γεμάτης θέσης (profile, κεφάλαιο, ημερομηνία).")]
+        [Tooltip("Γονέας των στοιχείων γεμάτης θέσης (κεφάλαιο, ημερομηνία).")]
         [SerializeField] private GameObject occupiedGroup;
 
-        [Tooltip("Γραμμή προφίλ, π.χ. «Γυνή · Ερεχθηίς · Κεραμεικός».")]
-        [SerializeField] private TMP_Text profileText;
-
-        [Tooltip("Τίτλος του τρέχοντος κεφαλαίου του save.")]
+        [Tooltip("Τίτλος της γραμμής: το κεφάλαιο του save.")]
         [SerializeField] private TMP_Text chapterText;
 
         [Tooltip("Τοπική ημερομηνία/ώρα αποθήκευσης, π.χ. «27/08/2026 16:30».")]
@@ -44,9 +38,6 @@ namespace DemocracyWay.UI
         [SerializeField] private UiButton deleteButton;
 
         [Header("Κείμενα")]
-        [Tooltip("Μορφή τίτλου θέσης· {0} = αριθμός θέσης (1-βάσης).")]
-        [SerializeField] private string slotTitleFormat = "Θέση {0}";
-
         [Tooltip("Κείμενο άδειας θέσης.")]
         [SerializeField] private string emptyLabel = "Κενή Θέση";
 
@@ -59,9 +50,6 @@ namespace DemocracyWay.UI
         {
             bool occupied = summary != null && summary.exists;
 
-            if (slotTitleText != null)
-                slotTitleText.text = string.Format(slotTitleFormat, (summary != null ? summary.slot : 0) + 1);
-
             if (emptyLabelText != null)
             {
                 emptyLabelText.text = emptyLabel;
@@ -73,7 +61,6 @@ namespace DemocracyWay.UI
 
             if (occupied)
             {
-                if (profileText != null) profileText.text = summary.profileLine;
                 if (chapterText != null) chapterText.text = summary.chapterTitle;
                 if (savedAtText != null) savedAtText.text = FormatSavedAt(summary.savedAtIso);
             }

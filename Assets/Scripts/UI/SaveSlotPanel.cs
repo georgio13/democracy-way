@@ -114,7 +114,7 @@ namespace DemocracyWay.UI
                 if (corrupt)
                 {
                     summary.exists = true;
-                    summary.profileLine = "Κατεστραμμένη αποθήκευση";
+                    summary.chapterTitle = "Κατεστραμμένη αποθήκευση";
                 }
 
                 bool clickable = mode == Mode.Load ? summary.exists && !corrupt : !fileExists;
