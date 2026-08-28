@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: CreationDatabase
   m_EditorClassIdentifier: DemocracyWay.Data::DemocracyWay.Data.CreationDatabase
   genders:
-  - id: aner
-    title: "\u0391\u03BD\u03AE\u03C1"
+  - id: male
+    title: "\u0386\u03BD\u03B4\u03C1\u03B1\u03C2"
     description: "\u0395\u03BB\u03B5\u03CD\u03B8\u03B5\u03C1\u03BF\u03C2 \u0391\u03B8\u03B7\u03BD\u03B1\u03AF\u03BF\u03C2
       \u03C0\u03BF\u03BB\u03AF\u03C4\u03B7\u03C2 \u03BC\u03B5 \u03C0\u03BB\u03AE\u03C1\u03B7
       \u03C0\u03BF\u03BB\u03B9\u03C4\u03B9\u03BA\u03AC \u03B4\u03B9\u03BA\u03B1\u03B9\u03CE\u03BC\u03B1\u03C4\u03B1:
@@ -25,10 +25,10 @@ MonoBehaviour:
       \u039F \u03B4\u03C1\u03CC\u03BC\u03BF\u03C2 \u03C3\u03BF\u03C5 \u03B5\u03AF\u03BD\u03B1\u03B9
       \u03B1\u03BD\u03BF\u03B9\u03C7\u03C4\u03CC\u03C2 \u2014 \u03B1\u03BB\u03BB\u03AC
       \u03BA\u03B1\u03B9 \u03B3\u03B5\u03BC\u03AC\u03C4\u03BF\u03C2 \u03B1\u03BD\u03C4\u03B1\u03B3\u03C9\u03BD\u03B9\u03C3\u03C4\u03AD\u03C2."
-    image: {fileID: 21300000, guid: 776c3fcfb9aebf24d8c9023dc8359d02, type: 3}
+    image: {fileID: 21300000, guid: 4ef58413e67daca41b03c4de667218a3, type: 3}
     enablesSuspicion: 0
-  - id: gyne
-    title: "\u0393\u03C5\u03BD\u03AE"
+  - id: female
+    title: "\u0393\u03C5\u03BD\u03B1\u03AF\u03BA\u03B1"
     description: "\u03A3\u03C4\u03B7\u03BD \u03BA\u03BB\u03B1\u03C3\u03B9\u03BA\u03AE
       \u0391\u03B8\u03AE\u03BD\u03B1 \u03BF\u03B9 \u03B3\u03C5\u03BD\u03B1\u03AF\u03BA\u03B5\u03C2
       \u03B4\u03B5\u03BD \u03B5\u03AF\u03C7\u03B1\u03BD \u03C0\u03BF\u03BB\u03B9\u03C4\u03B9\u03BA\u03AC
@@ -41,7 +41,7 @@ MonoBehaviour:
       \u039A\u03B1\u03C7\u03C5\u03C0\u03BF\u03C8\u03AF\u03B1 \u03B8\u03B1 \u03BC\u03B5\u03C4\u03C1\u03AC
       \u03B4\u03B9\u03B1\u03C1\u03BA\u03CE\u03C2 \u03C0\u03CC\u03C3\u03BF \u03BA\u03BF\u03BD\u03C4\u03AC
       \u03B5\u03AF\u03C3\u03B1\u03B9 \u03C3\u03C4\u03B7\u03BD \u03B1\u03C0\u03BF\u03BA\u03AC\u03BB\u03C5\u03C8\u03B7."
-    image: {fileID: 21300000, guid: 776c3fcfb9aebf24d8c9023dc8359d02, type: 3}
+    image: {fileID: 21300000, guid: ce805985e0dbcde4abd3c9499cb506c2, type: 3}
     enablesSuspicion: 1
   tribes:
   - id: erechtheis
