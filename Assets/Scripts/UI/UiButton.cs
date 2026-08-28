@@ -33,8 +33,11 @@ namespace DemocracyWay.UI
         [Tooltip("Το TMP label παιδί με το κείμενο του κουμπιού. Κενό = πρώτο TMP_Text στα παιδιά.")]
         [SerializeField] private TMP_Text label;
 
-        [Tooltip("Image για hit detection (μπορεί να είναι πλήρως διάφανο). Κενό = προστίθεται διάφανο αυτόματα.")]
+        [Tooltip("Image για hit detection — και background του κουμπιού όταν έχει sprite. Κενό = προστίθεται διάφανο αυτόματα.")]
         [SerializeField] private Image hitTarget;
+
+        [Tooltip("Προαιρετικό sprite που αντικαθιστά το background (hitTarget) στο hover. Κενό = το background δεν αλλάζει.")]
+        [SerializeField] private Sprite hoverBackgroundSprite;
 
         [Header("Hover")]
         [Tooltip("Δευτερόλεπτα για το fade in/out των διακοσμητικών στο hover (unscaled).")]
@@ -64,6 +67,7 @@ namespace DemocracyWay.UI
         private bool isHovering;
         private float hoverAlpha;
         private float hoverTargetAlpha;
+        private Sprite idleBackgroundSprite;   // what hitTarget showed before hover
 
         /// <summary>Dimmed and deaf to input when off — used by the main menu
         /// to lock Νέο Παιχνίδι / Φόρτωση and by rows for non-pickable slots.</summary>
@@ -81,6 +85,7 @@ namespace DemocracyWay.UI
                     hoverTargetAlpha = 0f;
                     hoverAlpha = 0f;
                     ApplyHoverAlpha();
+                    ApplyBackground();
                 }
                 ApplyLabelState();
             }
@@ -117,6 +122,7 @@ namespace DemocracyWay.UI
                 }
             }
             hitTarget.raycastTarget = true;
+            idleBackgroundSprite = hitTarget.sprite;
 
             hoverAlpha = 0f;
             hoverTargetAlpha = 0f;
@@ -140,6 +146,7 @@ namespace DemocracyWay.UI
             hoverAlpha = 0f;
             hoverTargetAlpha = 0f;
             ApplyHoverAlpha();
+            ApplyBackground();
             ApplyLabelState();
         }
 
@@ -188,6 +195,12 @@ namespace DemocracyWay.UI
             graphic.color = c;
         }
 
+        private void ApplyBackground()
+        {
+            if (hoverBackgroundSprite == null || hitTarget == null) return;
+            hitTarget.sprite = isHovering && interactable ? hoverBackgroundSprite : idleBackgroundSprite;
+        }
+
         private void ApplyLabelState()
         {
             if (label == null) return;
@@ -211,6 +224,7 @@ namespace DemocracyWay.UI
             isHovering = hovered;
             if (hovered) PositionDecorations(); // the text is final by now
             hoverTargetAlpha = hovered ? 1f : 0f;
+            ApplyBackground();
             ApplyLabelState();
         }
 

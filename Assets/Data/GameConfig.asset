@@ -19,7 +19,7 @@ MonoBehaviour:
     ethos: 50
     kachypopsia: 50
     oikos: 50
-  cursorTexture: {fileID: 2800000, guid: e77d83949fd477a4581969e980478693, type: 3}
+  cursorTexture: {fileID: 2800000, guid: 3d463cce118b7a441a3d49edb06e1582, type: 3}
   cursorHotspot: {x: 0, y: 0}
   creationDatabase: {fileID: 11400000, guid: 632f9018dbec57140ab870f6c26039f7, type: 2}
   indicatorCatalog: {fileID: 11400000, guid: 0a44834c88ef3ce489f25ab64c6bae63, type: 2}
