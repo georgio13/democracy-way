@@ -25,7 +25,7 @@ namespace DemocracyWay.UI
         [Tooltip("Κείμενο «Κενή Θέση» — ορατό μόνο όταν η θέση είναι άδεια.")]
         [SerializeField] private TMP_Text emptyLabelText;
 
-        [Tooltip("Γονέας των στοιχείων γεμάτης θέσης (profile, κεφάλαιο, ημερολόγιο, χρόνος, ημερομηνία).")]
+        [Tooltip("Γονέας των στοιχείων γεμάτης θέσης (profile, κεφάλαιο, ημερομηνία).")]
         [SerializeField] private GameObject occupiedGroup;
 
         [Tooltip("Γραμμή προφίλ, π.χ. «Γυνή · Ερεχθηίς · Κεραμεικός».")]
@@ -33,12 +33,6 @@ namespace DemocracyWay.UI
 
         [Tooltip("Τίτλος του τρέχοντος κεφαλαίου του save.")]
         [SerializeField] private TMP_Text chapterText;
-
-        [Tooltip("Θέση στο ημερολόγιο, π.χ. «Πρυτανεία 3 · Βδομάδα 2».")]
-        [SerializeField] private TMP_Text calendarText;
-
-        [Tooltip("Συνολικός χρόνος παιχνιδιού, π.χ. «02ω 15λ».")]
-        [SerializeField] private TMP_Text playtimeText;
 
         [Tooltip("Τοπική ημερομηνία/ώρα αποθήκευσης, π.χ. «27/08/2026 16:30».")]
         [SerializeField] private TMP_Text savedAtText;
@@ -55,12 +49,6 @@ namespace DemocracyWay.UI
 
         [Tooltip("Κείμενο άδειας θέσης.")]
         [SerializeField] private string emptyLabel = "Κενή Θέση";
-
-        [Tooltip("Μορφή ημερολογίου· {0} = πρυτανεία, {1} = βδομάδα.")]
-        [SerializeField] private string calendarFormat = "Πρυτανεία {0} · Βδομάδα {1}";
-
-        [Tooltip("Μορφή χρόνου παιχνιδιού· {0} = ώρες, {1} = λεπτά.")]
-        [SerializeField] private string playtimeFormat = "{0:00}ω {1:00}λ";
 
         /// <summary>
         /// Fills the row from a summary. <paramref name="clickable"/> is
@@ -87,9 +75,6 @@ namespace DemocracyWay.UI
             {
                 if (profileText != null) profileText.text = summary.profileLine;
                 if (chapterText != null) chapterText.text = summary.chapterTitle;
-                if (calendarText != null)
-                    calendarText.text = string.Format(calendarFormat, summary.prytany, summary.week);
-                if (playtimeText != null) playtimeText.text = FormatPlaytime(summary.playtimeSeconds);
                 if (savedAtText != null) savedAtText.text = FormatSavedAt(summary.savedAtIso);
             }
 
@@ -106,14 +91,6 @@ namespace DemocracyWay.UI
                 deleteButton.onClick.RemoveAllListeners();
                 if (onDelete != null) deleteButton.onClick.AddListener(() => onDelete());
             }
-        }
-
-        private string FormatPlaytime(double totalSeconds)
-        {
-            if (totalSeconds < 0) totalSeconds = 0;
-            int hours = (int)(totalSeconds / 3600.0);
-            int minutes = (int)(totalSeconds % 3600.0 / 60.0);
-            return string.Format(playtimeFormat, hours, minutes);
         }
 
         private string FormatSavedAt(string savedAtIso)
