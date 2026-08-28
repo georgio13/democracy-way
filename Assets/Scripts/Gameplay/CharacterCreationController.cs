@@ -17,8 +17,9 @@ namespace DemocracyWay.Gameplay
     ///
     /// Layout contract: options list on the RIGHT (spawned rows), preview of
     /// the hovered option (image + title + description) on the LEFT. Clicking
-    /// selects and auto-advances; Πίσω re-opens the previous step with its
-    /// pick cleared, so the player always re-decides consciously.
+    /// ticks an option without advancing — «Επόμενο» commits it. Πίσω
+    /// re-opens the previous step with its pick cleared, so the player
+    /// always re-decides consciously.
     /// </summary>
     [AddComponentMenu("DemocracyWay/Character Creation Controller")]
     [DisallowMultipleComponent]
@@ -53,6 +54,12 @@ namespace DemocracyWay.Gameplay
         [Tooltip("Κουμπί έναρξης — εμφανίζεται μόνο όταν ολοκληρωθούν και τα 6 βήματα.")]
         [SerializeField] private UiButton startButton;
 
+        [Tooltip("Κουμπί «Επόμενο» — κλειδωμένο μέχρι να τικαριστεί επιλογή στο τρέχον βήμα.")]
+        [SerializeField] private UiButton nextButton;
+
+        [Tooltip("Κουμπί επιστροφής στο κύριο μενού — εγκαταλείπει τη δημιουργία.")]
+        [SerializeField] private UiButton menuButton;
+
         [Header("Κείμενα")]
         [Tooltip("Μορφή του τίτλου βήματος: {0}=αριθμός, {1}=σύνολο, {2}=όνομα βήματος.")]
         [SerializeField] private string headerFormat = "Βήμα {0}/{1} — {2}";
@@ -72,9 +79,18 @@ namespace DemocracyWay.Gameplay
         [Tooltip("Ετικέτα του κουμπιού έναρξης.")]
         [SerializeField] private string startLabel = "Έναρξη";
 
+        [Tooltip("Ετικέτα του κουμπιού προχωρήματος στο επόμενο βήμα.")]
+        [SerializeField] private string nextLabel = "Επόμενο";
+
+        [Tooltip("Ετικέτα του κουμπιού επιστροφής στο κύριο μενού.")]
+        [SerializeField] private string menuLabel = "Αρχικό Μενού";
+
         [Header("Ροή")]
         [Tooltip("Η σκηνή που φορτώνει μετά την έναρξη (το intro comic).")]
         [SerializeField] private string comicSceneName = "ComicIntro";
+
+        [Tooltip("Η σκηνή του κύριου μενού (κουμπί εγκατάλειψης).")]
+        [SerializeField] private string menuSceneName = "MainMenu";
 
         private CreationDatabase database;
         private readonly CitizenProfile profile = new CitizenProfile();
@@ -83,10 +99,18 @@ namespace DemocracyWay.Gameplay
         /// <summary>0..5 while picking; == StepCount when all six are picked.</summary>
         private int currentStep;
 
+        /// <summary>Η τικαρισμένη επιλογή του τρέχοντος βήματος — γράφεται στο
+        /// profile μόνο όταν πατηθεί «Επόμενο».</summary>
+        private CreationOption pendingPick;
+
         void Awake()
         {
             if (backButton != null)
                 backButton.onClick.AddListener(OnBackPressed);
+            if (nextButton != null)
+                nextButton.onClick.AddListener(OnNextPressed);
+            if (menuButton != null)
+                menuButton.onClick.AddListener(OnMenuPressed);
             if (startButton != null)
             {
                 startButton.onClick.AddListener(OnStartPressed);
@@ -101,6 +125,8 @@ namespace DemocracyWay.Gameplay
             // guaranteed.
             if (backButton != null) backButton.Text = backLabel;
             if (startButton != null) startButton.Text = startLabel;
+            if (nextButton != null) nextButton.Text = nextLabel;
+            if (menuButton != null) menuButton.Text = menuLabel;
 
             database = ServicesRoot.Config != null ? ServicesRoot.Config.creationDatabase : null;
             if (database == null)
@@ -117,7 +143,13 @@ namespace DemocracyWay.Gameplay
         /// <summary>Rebuilds the right-hand list for <see cref="currentStep"/>.</summary>
         private void BuildStep()
         {
+            pendingPick = null;
             if (startButton != null) startButton.gameObject.SetActive(false);
+            if (nextButton != null)
+            {
+                nextButton.gameObject.SetActive(true);
+                nextButton.Interactable = false;   // ξεκλειδώνει με το πρώτο τικ
+            }
             if (backButton != null) backButton.gameObject.SetActive(currentStep > 0);
             if (headerText != null)
                 headerText.text = string.Format(headerFormat, currentStep + 1, StepCount, StepName(currentStep));
@@ -145,6 +177,7 @@ namespace DemocracyWay.Gameplay
         private void ShowReadyState()
         {
             ClearOptionButtons();
+            if (nextButton != null) nextButton.gameObject.SetActive(false);
             if (headerText != null) headerText.text = readyHeader;
             if (backButton != null) backButton.gameObject.SetActive(true);
             if (startButton != null)
@@ -193,10 +226,27 @@ namespace DemocracyWay.Gameplay
         private void OnOptionClicked(CreationOption option)
         {
             if (option == null) return;
-            RecordPick(option);
+            // Το κλικ μόνο τικάρει — δεν προχωρά. Ένα τικ ανά βήμα: κάθε άλλη
+            // γραμμή ξε-τικάρεται, και το preview ακολουθεί τη διαλεγμένη.
+            pendingPick = option;
+            foreach (var button in spawnedButtons)
+                if (button != null) button.SetSelected(button.Option == option);
+            if (nextButton != null) nextButton.Interactable = true;
+            OnOptionHovered(option);
+        }
+
+        private void OnNextPressed()
+        {
+            if (pendingPick == null) return;
+            RecordPick(pendingPick);
             currentStep++;
             if (currentStep >= StepCount) ShowReadyState();
             else BuildStep();
+        }
+
+        private void OnMenuPressed()
+        {
+            ServicesRoot.Flow?.GoToScene(menuSceneName);
         }
 
         private void OnBackPressed()
