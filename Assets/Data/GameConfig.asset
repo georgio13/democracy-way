@@ -25,7 +25,7 @@ MonoBehaviour:
   indicatorCatalog: {fileID: 11400000, guid: 0a44834c88ef3ce489f25ab64c6bae63, type: 2}
   introComic: {fileID: 11400000, guid: 638af462187b8824790947568d3e736e, type: 2}
   firstChapter: {fileID: 11400000, guid: 13d5ca3a1db49fc44b41d1af7eea09e3, type: 2}
-  mainMenuMusic: {fileID: 8300000, guid: 8c3289869bd6102468dec440a3d3071f, type: 3}
+  mainMenuMusic: {fileID: 8300000, guid: 9852c86ad5df18f4ca322307bb045392, type: 3}
   uiHoverSfx: {fileID: 8300000, guid: 680fb23eddc873f4eb34becb36a1c588, type: 3}
   uiClickSfx: {fileID: 8300000, guid: 89146beaed6daa44ca7b29e64f598903, type: 3}
   fadeDuration: 0.6
