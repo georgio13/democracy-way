@@ -44,8 +44,11 @@ namespace DemocracyWay.Data
     [Serializable]
     public class ProfessionOption : CreationOption
     {
-        [Tooltip("Το id της τριττύας στην οποία υπάρχει αυτό το επάγγελμα — φιλτράρει τη λίστα στο βήμα 6.")]
-        public string trittysId = "";
+        [Tooltip("Η ζώνη τριττύος του επαγγέλματος (asty, paralia ή mesogeia) — μαζί με την τάξη φιλτράρει τη λίστα στο βήμα 6.")]
+        public string zoneId = "";
+
+        [Tooltip("Το id της οικονομικής τάξης στην οποία ανήκει το επάγγελμα — μαζί με τη ζώνη φιλτράρει τη λίστα στο βήμα 6.")]
+        public string wealthId = "";
     }
 
     /// <summary>
@@ -77,8 +80,18 @@ namespace DemocracyWay.Data
         public List<TrittysOption> TrittyesFor(string tribeId) =>
             trittyes.Where(t => t.tribeId == tribeId).ToList();
 
-        public List<ProfessionOption> ProfessionsFor(string trittysId) =>
-            professions.Where(p => p.trittysId == trittysId).ToList();
+        /// <summary>
+        /// Professions are authored per trittys ZONE and wealth class, not per
+        /// individual trittys. The zone is the last segment of the trittys id
+        /// (e.g. "erechtheis_asty" → "asty") — a naming convention the trittys
+        /// list follows for all ten tribes.
+        /// </summary>
+        public List<ProfessionOption> ProfessionsFor(string trittysId, string wealthId)
+        {
+            int cut = trittysId != null ? trittysId.LastIndexOf('_') : -1;
+            string zone = cut >= 0 ? trittysId.Substring(cut + 1) : trittysId;
+            return professions.Where(p => p.zoneId == zone && p.wealthId == wealthId).ToList();
+        }
 
         public IEnumerable<string> TribeIds => tribes.Select(t => t.id);
     }

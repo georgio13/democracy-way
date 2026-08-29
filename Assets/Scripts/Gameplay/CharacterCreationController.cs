@@ -208,7 +208,7 @@ namespace DemocracyWay.Gameplay
                 case 2: return database.TrittyesFor(profile.tribeId);
                 case 3: return database.wealthClasses;
                 case 4: return database.periods;
-                case 5: return database.ProfessionsFor(profile.trittysId);
+                case 5: return database.ProfessionsFor(profile.trittysId, profile.wealthId);
                 default: return Array.Empty<CreationOption>();
             }
         }

@@ -24,13 +24,16 @@ namespace DemocracyWay.Tests
             _db.tribes.Add(new CreationOption { id = "aigeis", title = "Αιγηίς" });
             _db.tribes.Add(new CreationOption { id = "pandionis", title = "Πανδιονίς" });
 
-            _db.trittyes.Add(new TrittysOption { id = "asty1", title = "Άστυ", tribeId = "erechtheis" });
-            _db.trittyes.Add(new TrittysOption { id = "paralia1", title = "Παραλία", tribeId = "aigeis" });
-            _db.trittyes.Add(new TrittysOption { id = "mesogeia1", title = "Μεσογεία", tribeId = "erechtheis" });
+            // Trittys ids follow the real convention {tribe}_{zone} — the
+            // profession filter derives the zone from the last segment.
+            _db.trittyes.Add(new TrittysOption { id = "erechtheis_asty", title = "Άστυ", tribeId = "erechtheis" });
+            _db.trittyes.Add(new TrittysOption { id = "aigeis_paralia", title = "Παραλία", tribeId = "aigeis" });
+            _db.trittyes.Add(new TrittysOption { id = "erechtheis_mesogeia", title = "Μεσογεία", tribeId = "erechtheis" });
 
-            _db.professions.Add(new ProfessionOption { id = "kerameus", title = "Κεραμεύς", trittysId = "asty1" });
-            _db.professions.Add(new ProfessionOption { id = "halieus", title = "Αλιεύς", trittysId = "paralia1" });
-            _db.professions.Add(new ProfessionOption { id = "georgos", title = "Γεωργός", trittysId = "mesogeia1" });
+            _db.professions.Add(new ProfessionOption { id = "kerameus", title = "Κεραμεύς", zoneId = "asty", wealthId = "thetis" });
+            _db.professions.Add(new ProfessionOption { id = "emporos", title = "Έμπορος", zoneId = "asty", wealthId = "pentakosiomedimnos" });
+            _db.professions.Add(new ProfessionOption { id = "halieus", title = "Αλιεύς", zoneId = "paralia", wealthId = "thetis" });
+            _db.professions.Add(new ProfessionOption { id = "georgos", title = "Γεωργός", zoneId = "mesogeia", wealthId = "zeugitis" });
         }
 
         [TearDown]
@@ -46,7 +49,7 @@ namespace DemocracyWay.Tests
         {
             var result = _db.TrittyesFor("erechtheis");
 
-            CollectionAssert.AreEqual(new[] { "asty1", "mesogeia1" },
+            CollectionAssert.AreEqual(new[] { "erechtheis_asty", "erechtheis_mesogeia" },
                 result.Select(t => t.id).ToList(),
                 "Filter must keep only matching trittyes, in authored order.");
         }
@@ -61,9 +64,21 @@ namespace DemocracyWay.Tests
         }
 
         [Test]
-        public void ProfessionsFor_ReturnsOnlyTheTrittysOwnProfessions()
+        public void ProfessionsFor_FiltersByZoneAndWealthClass()
         {
-            var result = _db.ProfessionsFor("asty1");
+            var result = _db.ProfessionsFor("erechtheis_asty", "thetis");
+
+            // Not emporos (same zone, other class), not halieus (other zone).
+            CollectionAssert.AreEqual(new[] { "kerameus" },
+                result.Select(p => p.id).ToList());
+        }
+
+        [Test]
+        public void ProfessionsFor_SameZoneOfAnyTribe_SharesTheProfessions()
+        {
+            // Professions are authored once per zone; every tribe's trittys of
+            // that zone must resolve to the same list.
+            var result = _db.ProfessionsFor("aigeis_asty", "thetis");
 
             CollectionAssert.AreEqual(new[] { "kerameus" },
                 result.Select(p => p.id).ToList());
@@ -72,7 +87,7 @@ namespace DemocracyWay.Tests
         [Test]
         public void ProfessionsFor_UnknownTrittys_ReturnsEmptyNotNull()
         {
-            var result = _db.ProfessionsFor("no_such_trittys");
+            var result = _db.ProfessionsFor("no_such_trittys", "thetis");
 
             Assert.IsNotNull(result, "The UI iterates the result directly — null would throw.");
             Assert.AreEqual(0, result.Count);
