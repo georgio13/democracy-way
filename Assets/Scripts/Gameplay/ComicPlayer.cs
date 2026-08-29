@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -32,6 +33,9 @@ namespace DemocracyWay.Gameplay
         [Tooltip("Κουμπί παράλειψης — εμφανίζεται μόνο όταν το ComicSequence επιτρέπει skip.")]
         [SerializeField] private UiButton skipButton;
 
+        [Tooltip("Κείμενο αφήγησης στο κάτω μέρος της οθόνης — δείχνει το caption του καρέ που αποκαλύπτεται.")]
+        [SerializeField] private TMP_Text captionText;
+
         [Tooltip("Ετικέτα του κουμπιού παράλειψης.")]
         [SerializeField] private string skipLabel = "Παράλειψη";
 
@@ -41,6 +45,12 @@ namespace DemocracyWay.Gameplay
 
         void Start()
         {
+            // Το κόμικ παίζει χωρίς μουσική: το μενού την είχε αφήσει να
+            // παίζει, και το πρώτο κεφάλαιο θα ξεκινήσει το δικό του ambient.
+            ServicesRoot.Audio?.StopMusic();
+
+            if (captionText != null) captionText.text = string.Empty;
+
             sequence = ServicesRoot.Config != null ? ServicesRoot.Config.introComic : null;
 
             if (skipButton != null)
@@ -83,6 +93,7 @@ namespace DemocracyWay.Gameplay
                     if (panel.delayBeforeShow > 0f)
                         yield return new WaitForSecondsRealtime(panel.delayBeforeShow);
 
+                    if (captionText != null) captionText.text = panel.caption;
                     ServicesRoot.Audio?.PlaySfx(panel.sound);
                     yield return FadeIn(groups[i], panel.fadeInDuration);
                 }

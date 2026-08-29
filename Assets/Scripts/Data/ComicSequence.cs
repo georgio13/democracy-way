@@ -17,6 +17,10 @@ namespace DemocracyWay.Data
             [Tooltip("Η εικόνα του καρέ.")]
             public Sprite image;
 
+            [Tooltip("Κείμενο αφήγησης του καρέ — εμφανίζεται στο κάτω μέρος της οθόνης όταν αποκαλύπτεται το καρέ.")]
+            [TextArea(2, 4)]
+            public string caption = "";
+
             [Tooltip("Δευτερόλεπτα αναμονής ΠΡΙΝ εμφανιστεί αυτό το καρέ.")]
             [Range(0f, 10f)]
             public float delayBeforeShow = 1f;
