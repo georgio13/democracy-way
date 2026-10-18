@@ -1,0 +1,8 @@
+Articy.Api.ArticyApiException: Facility:  0x0000
+Error#:    0x002E
+ErrorName: InvalidParentForCreate
+Message:
+Exception of type 'Articy.Api.ArticyApiException' was thrown.
+   at Articy.Api.ApiSession.ValidateParent(ObjectProxy aParent, Type aType)
+   at Articy.Api.ApiSession.CreateEntity(ObjectProxy aParent, String aDisplayName, String aTemplateTechName)
+   at Narrative.Migration.Plugin.Import(MacroCommandDescriptor command, List`1 selected) in C:\Users\giorg\Documents\Codex\2026-10-10\task-3-4-docx-pdf-word\work\articy-integration\plugin\Plugin.cs:line 68

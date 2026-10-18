@@ -1,0 +1,7 @@
+<linker>
+  <!-- Native articy models and instructions are instantiated through the vendor database. -->
+  <assembly fullname="ArticyRuntime" preserve="all" />
+  <assembly fullname="Assembly-CSharp">
+    <type fullname="Articy.Odjos_DjimokraTias.*" preserve="all" />
+  </assembly>
+</linker>

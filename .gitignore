@@ -25,3 +25,17 @@ firebase-adminsdk*.json
 # Install the official articy importer locally from the vendor
 /Assets/ArticyImporter/
 /Assets/ArticyImporter.meta
+
+# Local articy workspace sessions
+/Narrative/Articy/Sessions/
+
+# The authoring bridge is a source project, unlike generated Unity projects
+!/Narrative/Tools/AuthoringBridge/AuthoringBridge.csproj
+/Narrative/Tools/**/bin/
+/Narrative/Tools/**/obj/
+/Narrative/Migration/Backups/
+
+
+# Articy Plugin
+# =====================================
+Assets/ArticyImporter/Content/Generated/

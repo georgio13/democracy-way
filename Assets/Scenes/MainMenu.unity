@@ -1164,7 +1164,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWShape
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 0
@@ -1524,7 +1524,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWShape
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 0
@@ -2473,7 +2473,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWShape
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 0
@@ -2543,7 +2543,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWShape
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
@@ -2655,7 +2655,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab2302d02008ec9468f08a47b1858de3, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWGradient
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.GradientGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
@@ -3736,7 +3736,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWShape
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 0
@@ -4010,7 +4010,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWShape
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 0
@@ -4221,7 +4221,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6cc2a5a1017747e4eaef7bb0ee14854c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWHoverShift
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.HoverShift
   label: {fileID: 696174309}
   distance: 12
 --- !u!114 &468270999
@@ -4491,7 +4491,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab2302d02008ec9468f08a47b1858de3, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWGradient
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.GradientGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
@@ -5001,7 +5001,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88b0bd410a676934fa86ee9aec5f6813, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWEllipse
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.EllipseGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
@@ -5800,7 +5800,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWShape
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0.88235295, g: 0.8392157, b: 0.7254902, a: 1}
   m_RaycastTarget: 1
@@ -6109,7 +6109,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWShape
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0.88235295, g: 0.8352941, b: 0.72156864, a: 1}
   m_RaycastTarget: 1
@@ -6858,7 +6858,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWShape
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 0
@@ -7414,7 +7414,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWShape
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0.88235295, g: 0.8392157, b: 0.7254902, a: 1}
   m_RaycastTarget: 1
@@ -7528,7 +7528,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWShape
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0.88235295, g: 0.8392157, b: 0.7254902, a: 1}
   m_RaycastTarget: 1
@@ -8756,7 +8756,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWShape
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
@@ -9411,7 +9411,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6cc2a5a1017747e4eaef7bb0ee14854c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWHoverShift
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.HoverShift
   label: {fileID: 177414752}
   distance: 12
 --- !u!114 &1130623102
@@ -9837,7 +9837,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6cc2a5a1017747e4eaef7bb0ee14854c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWHoverShift
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.HoverShift
   label: {fileID: 1558011634}
   distance: 12
 --- !u!114 &1184759145
@@ -10985,7 +10985,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88b0bd410a676934fa86ee9aec5f6813, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWEllipse
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.EllipseGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
@@ -11051,7 +11051,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWShape
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 0
@@ -11754,7 +11754,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88b0bd410a676934fa86ee9aec5f6813, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWEllipse
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.EllipseGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
   m_RaycastTarget: 0
@@ -11821,7 +11821,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWShape
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0.7254902, g: 0.627451, b: 0.4, a: 1}
   m_RaycastTarget: 1
@@ -11933,7 +11933,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 39ef63cd1f2341840857e705b868fa43, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWCheckmark
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.CheckmarkGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0.14117648, g: 0.23529412, b: 0.23921569, a: 1}
   m_RaycastTarget: 0
@@ -12213,7 +12213,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWShape
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
@@ -12505,7 +12505,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6cc2a5a1017747e4eaef7bb0ee14854c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWHoverShift
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.HoverShift
   label: {fileID: 2056435502}
   distance: 12
 --- !u!114 &1566069599
@@ -13094,7 +13094,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWShape
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 0
@@ -13164,7 +13164,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWShape
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
@@ -13416,7 +13416,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88b0bd410a676934fa86ee9aec5f6813, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWEllipse
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.EllipseGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
   m_RaycastTarget: 0
@@ -13482,7 +13482,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88b0bd410a676934fa86ee9aec5f6813, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWEllipse
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.EllipseGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
   m_RaycastTarget: 0
@@ -13741,7 +13741,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 40dbcf9d6b64eaf42953ddcff1985a7b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWApp
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.GameFlowController
   config: {fileID: 11400000, guid: 1bb51eaec60f1af48a2f660ded7211ba, type: 2}
   screens:
   - id: main-menu
@@ -14063,7 +14063,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWShape
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0.88235295, g: 0.8352941, b: 0.72156864, a: 1}
   m_RaycastTarget: 1
@@ -14339,7 +14339,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88b0bd410a676934fa86ee9aec5f6813, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWEllipse
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.EllipseGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
@@ -14630,7 +14630,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88b0bd410a676934fa86ee9aec5f6813, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWEllipse
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.EllipseGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
@@ -15054,7 +15054,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWShape
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0.88235295, g: 0.8352941, b: 0.72156864, a: 1}
   m_RaycastTarget: 1
@@ -15570,7 +15570,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88b0bd410a676934fa86ee9aec5f6813, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWEllipse
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.EllipseGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
   m_RaycastTarget: 0
@@ -16047,7 +16047,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWShape
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0.7254902, g: 0.627451, b: 0.4, a: 1}
   m_RaycastTarget: 1
@@ -16669,7 +16669,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWShape
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0.88235295, g: 0.8352941, b: 0.72156864, a: 1}
   m_RaycastTarget: 1
@@ -16870,7 +16870,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.DWShape
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
   m_Material: {fileID: 0}
   m_Color: {r: 0.57254905, g: 0.30588236, b: 0.21176471, a: 1}
   m_RaycastTarget: 1

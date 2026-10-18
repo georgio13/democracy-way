@@ -1,0 +1,3531 @@
+{
+  "variables": {
+    "Side": 0,
+    "Speech": 0,
+    "Bonus": 0,
+    "Influence": 0,
+    "Turn": 0,
+    "Support": 0,
+    "CostA": 0,
+    "CostB": 0,
+    "WarInput": 0,
+    "CityFunds": 0,
+    "War": 0,
+    "Readiness": 0,
+    "Legitimacy": 0,
+    "Corruption": 0,
+    "PublicVotes": 0,
+    "Integrity": 0,
+    "Threshold": 0,
+    "Week": 0,
+    "Prytany": 0,
+    "Majority": 0,
+    "CityDelta": 0,
+    "PersonalDelta": 0,
+    "WarDelta": 0,
+    "ReadinessDelta": 0,
+    "LegitimacyDelta": 0,
+    "ConsistencyDelta": 0,
+    "AuthorityDelta": 0,
+    "ParrhesiaDelta": 0,
+    "RecognitionDelta": 0,
+    "RiskDelta": 0,
+    "Observation": false,
+    "Bribe": false,
+    "Supported": false,
+    "InitialComplete": false,
+    "CityEnding": "",
+    "PersonalEnding": "",
+    "NextPhase": "",
+    "CaseId": "",
+    "BribePrice": 30,
+    "SpeechUses": 2,
+    "Score": 0
+  },
+  "groups": [
+    {
+      "name": "Rule_Speech",
+      "label": "Δημόσια τοποθέτηση",
+      "entry": "Rule_Speech_1",
+      "result": "Rule_Speech_17"
+    },
+    {
+      "name": "Rule_Vote",
+      "label": "Συλλογική ψηφοφορία",
+      "entry": "Rule_Vote_1",
+      "result": "Rule_Vote_27"
+    },
+    {
+      "name": "Rule_Endings",
+      "label": "Καταλήξεις πόλης και πολίτη",
+      "entry": "Rule_Endings_1",
+      "result": "Rule_Endings_29"
+    },
+    {
+      "name": "Rule_Official",
+      "label": "Προσέγγιση αξιωματούχου",
+      "entry": "Rule_Official_1",
+      "result": "Rule_Official_11"
+    },
+    {
+      "name": "Rule_AdvanceWeek",
+      "label": "Μετάβαση εβδομάδας",
+      "entry": "Rule_AdvanceWeek_1",
+      "result": "Rule_AdvanceWeek_5"
+    },
+    {
+      "name": "Rule_AdvancePrytany",
+      "label": "Μετάβαση πρυτανείας",
+      "entry": "Rule_AdvancePrytany_1",
+      "result": "Rule_AdvancePrytany_5"
+    },
+    {
+      "name": "Route_KnowledgeContinue",
+      "label": "KnowledgeContinue",
+      "entry": "Route_KnowledgeContinue_1",
+      "result": "Route_KnowledgeContinue_2"
+    },
+    {
+      "name": "Route_AppealContinue",
+      "label": "AppealContinue",
+      "entry": "Route_AppealContinue_1",
+      "result": "Route_AppealContinue_2"
+    },
+    {
+      "name": "Route_DeliberationSpeech",
+      "label": "DeliberationSpeech",
+      "entry": "Route_DeliberationSpeech_1",
+      "result": "Route_DeliberationSpeech_2"
+    },
+    {
+      "name": "Route_DeliberationVote",
+      "label": "DeliberationVote",
+      "entry": "Route_DeliberationVote_1",
+      "result": "Route_DeliberationVote_2"
+    },
+    {
+      "name": "Route_SpeechContinue",
+      "label": "SpeechContinue",
+      "entry": "Route_SpeechContinue_1",
+      "result": "Route_SpeechContinue_2"
+    },
+    {
+      "name": "Route_VoteContinue",
+      "label": "VoteContinue",
+      "entry": "Route_VoteContinue_1",
+      "result": "Route_VoteContinue_2"
+    },
+    {
+      "name": "Route_WeekContinue",
+      "label": "WeekContinue",
+      "entry": "Route_WeekContinue_1",
+      "result": "Route_WeekContinue_2"
+    },
+    {
+      "name": "Route_CityEndingContinue",
+      "label": "CityEndingContinue",
+      "entry": "Route_CityEndingContinue_1",
+      "result": "Route_CityEndingContinue_2"
+    },
+    {
+      "name": "Route_PersonalEndingContinue",
+      "label": "PersonalEndingContinue",
+      "entry": "Route_PersonalEndingContinue_1",
+      "result": "Route_PersonalEndingContinue_2"
+    },
+    {
+      "name": "Route_BiographyComplete",
+      "label": "BiographyComplete",
+      "entry": "Route_BiographyComplete_1",
+      "result": "Route_BiographyComplete_2"
+    },
+    {
+      "name": "Route_FinalSurveyComplete",
+      "label": "FinalSurveyComplete",
+      "entry": "Route_FinalSurveyComplete_1",
+      "result": "Route_FinalSurveyComplete_2"
+    },
+    {
+      "name": "Route_PrytanyTitleContinue",
+      "label": "PrytanyTitleContinue",
+      "entry": "Route_PrytanyTitleContinue_1",
+      "result": "Route_PrytanyTitleContinue_2"
+    },
+    {
+      "name": "Route_BriefingContinue",
+      "label": "Αρμοδιότητα και έφεση",
+      "entry": "Route_BriefingContinue_1",
+      "result": "Route_BriefingContinue_5"
+    },
+    {
+      "name": "Route_LotteryContinue",
+      "label": "Αρχική γνώση και χάρτης",
+      "entry": "Route_LotteryContinue_1",
+      "result": "Route_LotteryContinue_5"
+    },
+    {
+      "name": "Route_VoteResult",
+      "label": "Ψήφος και αποχή",
+      "entry": "Route_VoteResult_1",
+      "result": "Route_VoteResult_5"
+    }
+  ],
+  "nodes": [
+    {
+      "name": "Rule_Speech_1",
+      "parent": "Rule_Speech",
+      "type": "instruction",
+      "label": "Αρχική επιρροή",
+      "script": "Story.Influence = Character.Persuasion / 10 + Story.Bonus; Story.ParrhesiaDelta = 0; Story.RecognitionDelta = 0; Story.AuthorityDelta = 0;",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Rule_Speech_2",
+      "parent": "Rule_Speech",
+      "type": "condition",
+      "label": "Ανώτατη επιρροή;",
+      "script": "Story.Influence > 22",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Rule_Speech_3",
+      "parent": "Rule_Speech",
+      "type": "instruction",
+      "label": "Ανώτατη επιρροή",
+      "script": "Story.Influence = 22;",
+      "x": 990,
+      "y": 0
+    },
+    {
+      "name": "Rule_Speech_4",
+      "parent": "Rule_Speech",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 1320,
+      "y": 0
+    },
+    {
+      "name": "Rule_Speech_5",
+      "parent": "Rule_Speech",
+      "type": "condition",
+      "label": "Κατώτατη επιρροή;",
+      "script": "Story.Influence < 0",
+      "x": 1650,
+      "y": 0
+    },
+    {
+      "name": "Rule_Speech_6",
+      "parent": "Rule_Speech",
+      "type": "instruction",
+      "label": "Κατώτατη επιρροή",
+      "script": "Story.Influence = 0;",
+      "x": 1980,
+      "y": 0
+    },
+    {
+      "name": "Rule_Speech_7",
+      "parent": "Rule_Speech",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 2310,
+      "y": 0
+    },
+    {
+      "name": "Rule_Speech_8",
+      "parent": "Rule_Speech",
+      "type": "condition",
+      "label": "Σιωπή;",
+      "script": "Story.Side == 2",
+      "x": 2640,
+      "y": 0
+    },
+    {
+      "name": "Rule_Speech_9",
+      "parent": "Rule_Speech",
+      "type": "instruction",
+      "label": "Σιωπή",
+      "script": "Story.Influence = 0;",
+      "x": 2970,
+      "y": 0
+    },
+    {
+      "name": "Rule_Speech_10",
+      "parent": "Rule_Speech",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 3300,
+      "y": 0
+    },
+    {
+      "name": "Rule_Speech_11",
+      "parent": "Rule_Speech",
+      "type": "condition",
+      "label": "Δημόσια έκθεση;",
+      "script": "Story.Side != 2",
+      "x": 3630,
+      "y": 0
+    },
+    {
+      "name": "Rule_Speech_12",
+      "parent": "Rule_Speech",
+      "type": "instruction",
+      "label": "Δημόσια έκθεση",
+      "script": "Story.ParrhesiaDelta = 3; Story.RecognitionDelta = 2;",
+      "x": 3960,
+      "y": 0
+    },
+    {
+      "name": "Rule_Speech_13",
+      "parent": "Rule_Speech",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 4290,
+      "y": 0
+    },
+    {
+      "name": "Rule_Speech_14",
+      "parent": "Rule_Speech",
+      "type": "condition",
+      "label": "Περιορισμένη ανάθεση;",
+      "script": "Story.Side == 1",
+      "x": 4620,
+      "y": 0
+    },
+    {
+      "name": "Rule_Speech_15",
+      "parent": "Rule_Speech",
+      "type": "instruction",
+      "label": "Περιορισμένη ανάθεση",
+      "script": "Story.AuthorityDelta = 2;",
+      "x": 4950,
+      "y": 0
+    },
+    {
+      "name": "Rule_Speech_16",
+      "parent": "Rule_Speech",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 5280,
+      "y": 0
+    },
+    {
+      "name": "Rule_Speech_17",
+      "parent": "Rule_Speech",
+      "type": "result",
+      "label": "Ολοκλήρωση Rule_Speech",
+      "script": "",
+      "x": 5610,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_1",
+      "parent": "Rule_Vote",
+      "type": "instruction",
+      "label": "Αφετηρία συζήτησης",
+      "script": "Story.Score = 48 + (Story.Turn % 5 - 2) * 5;",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_2",
+      "parent": "Rule_Vote",
+      "type": "condition",
+      "label": "Λόγος δημόσιας λογοδοσίας;",
+      "script": "Story.Speech == 0",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_3",
+      "parent": "Rule_Vote",
+      "type": "instruction",
+      "label": "Λόγος δημόσιας λογοδοσίας",
+      "script": "Story.Score += Story.Influence;",
+      "x": 990,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_4",
+      "parent": "Rule_Vote",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 1320,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_5",
+      "parent": "Rule_Vote",
+      "type": "condition",
+      "label": "Λόγος περιορισμένης ανάθεσης;",
+      "script": "Story.Speech == 1",
+      "x": 1650,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_6",
+      "parent": "Rule_Vote",
+      "type": "instruction",
+      "label": "Λόγος περιορισμένης ανάθεσης",
+      "script": "Story.Score -= Story.Influence;",
+      "x": 1980,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_7",
+      "parent": "Rule_Vote",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 2310,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_8",
+      "parent": "Rule_Vote",
+      "type": "condition",
+      "label": "Πρώτη ψήφος;",
+      "script": "Story.Side == 0",
+      "x": 2640,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_9",
+      "parent": "Rule_Vote",
+      "type": "instruction",
+      "label": "Πρώτη ψήφος",
+      "script": "Story.Score += 6 + Story.Support * 2;",
+      "x": 2970,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_10",
+      "parent": "Rule_Vote",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 3300,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_11",
+      "parent": "Rule_Vote",
+      "type": "condition",
+      "label": "Δεύτερη ψήφος;",
+      "script": "Story.Side == 1",
+      "x": 3630,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_12",
+      "parent": "Rule_Vote",
+      "type": "instruction",
+      "label": "Δεύτερη ψήφος",
+      "script": "Story.Score -= 6 + Story.Support * 2;",
+      "x": 3960,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_13",
+      "parent": "Rule_Vote",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 4290,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_14",
+      "parent": "Rule_Vote",
+      "type": "instruction",
+      "label": "Αποτέλεσμα δεύτερης πρότασης",
+      "script": "Story.Majority = 1; Story.CityDelta = Story.CostB; Story.WarDelta = 0 - Story.WarInput; Story.ReadinessDelta = 1; Story.LegitimacyDelta = -1; Story.ConsistencyDelta = 0;",
+      "x": 4620,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_15",
+      "parent": "Rule_Vote",
+      "type": "condition",
+      "label": "Αποτέλεσμα πρώτης πρότασης;",
+      "script": "Story.Score >= 50",
+      "x": 4950,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_16",
+      "parent": "Rule_Vote",
+      "type": "instruction",
+      "label": "Αποτέλεσμα πρώτης πρότασης",
+      "script": "Story.Majority = 0; Story.CityDelta = Story.CostA; Story.WarDelta = Story.WarInput; Story.ReadinessDelta = 2; Story.LegitimacyDelta = 1;",
+      "x": 5280,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_17",
+      "parent": "Rule_Vote",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 5610,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_18",
+      "parent": "Rule_Vote",
+      "type": "condition",
+      "label": "Παρακολούθηση χωρίς δικαστική αρμοδιότητα;",
+      "script": "Story.Observation",
+      "x": 5940,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_19",
+      "parent": "Rule_Vote",
+      "type": "instruction",
+      "label": "Παρακολούθηση χωρίς δικαστική αρμοδιότητα",
+      "script": "Story.CityDelta = 0; Story.WarDelta = 0; Story.ReadinessDelta = 0; Story.LegitimacyDelta = 0;",
+      "x": 6270,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_20",
+      "parent": "Rule_Vote",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 6600,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_21",
+      "parent": "Rule_Vote",
+      "type": "condition",
+      "label": "Έλεγχος διαθέσιμου ταμείου;",
+      "script": "Story.CityDelta < 0 - Story.CityFunds",
+      "x": 6930,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_22",
+      "parent": "Rule_Vote",
+      "type": "instruction",
+      "label": "Έλεγχος διαθέσιμου ταμείου",
+      "script": "Story.CityDelta = 0 - Story.CityFunds;",
+      "x": 7260,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_23",
+      "parent": "Rule_Vote",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 7590,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_24",
+      "parent": "Rule_Vote",
+      "type": "condition",
+      "label": "Συνέπεια λόγου και ψήφου;",
+      "script": "Story.Side == Story.Speech && Story.Side != 2",
+      "x": 7920,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_25",
+      "parent": "Rule_Vote",
+      "type": "instruction",
+      "label": "Συνέπεια λόγου και ψήφου",
+      "script": "Story.ConsistencyDelta = 1;",
+      "x": 8250,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_26",
+      "parent": "Rule_Vote",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 8580,
+      "y": 0
+    },
+    {
+      "name": "Rule_Vote_27",
+      "parent": "Rule_Vote",
+      "type": "result",
+      "label": "Ολοκλήρωση Rule_Vote",
+      "script": "",
+      "x": 8910,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_1",
+      "parent": "Rule_Endings",
+      "type": "instruction",
+      "label": "Αφετηρία καταλήξεων",
+      "script": "Story.CityEnding = \"agreement\"; Story.PersonalEnding = \"citizen\";",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_2",
+      "parent": "Rule_Endings",
+      "type": "condition",
+      "label": "Πολεμική σύγκρουση;",
+      "script": "Story.War >= 8",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_3",
+      "parent": "Rule_Endings",
+      "type": "instruction",
+      "label": "Πολεμική σύγκρουση",
+      "script": "Story.CityEnding = \"defeat\";",
+      "x": 990,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_4",
+      "parent": "Rule_Endings",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 1320,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_5",
+      "parent": "Rule_Endings",
+      "type": "condition",
+      "label": "Επαρκής πολεμική προετοιμασία;",
+      "script": "Story.War >= 8 && Story.Readiness >= 65 && Story.CityFunds >= 60",
+      "x": 1650,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_6",
+      "parent": "Rule_Endings",
+      "type": "instruction",
+      "label": "Επαρκής πολεμική προετοιμασία",
+      "script": "Story.CityEnding = \"victory\";",
+      "x": 1980,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_7",
+      "parent": "Rule_Endings",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 2310,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_8",
+      "parent": "Rule_Endings",
+      "type": "condition",
+      "label": "Περιορισμός αυτονομίας;",
+      "script": "Story.War <= -8 && Story.Legitimacy <= -20",
+      "x": 2640,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_9",
+      "parent": "Rule_Endings",
+      "type": "instruction",
+      "label": "Περιορισμός αυτονομίας",
+      "script": "Story.CityEnding = \"subjection\";",
+      "x": 2970,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_10",
+      "parent": "Rule_Endings",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 3300,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_11",
+      "parent": "Rule_Endings",
+      "type": "condition",
+      "label": "Διατήρηση αυτονομίας;",
+      "script": "Story.War > -8 && Story.War < 8 && Story.Legitimacy >= 0",
+      "x": 3630,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_12",
+      "parent": "Rule_Endings",
+      "type": "instruction",
+      "label": "Διατήρηση αυτονομίας",
+      "script": "Story.CityEnding = \"sovereignty\";",
+      "x": 3960,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_13",
+      "parent": "Rule_Endings",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 4290,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_14",
+      "parent": "Rule_Endings",
+      "type": "condition",
+      "label": "Ιδιωτική ζωή;",
+      "script": "Story.CityEnding == \"subjection\"",
+      "x": 4620,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_15",
+      "parent": "Rule_Endings",
+      "type": "instruction",
+      "label": "Ιδιωτική ζωή",
+      "script": "Story.PersonalEnding = \"home\";",
+      "x": 4950,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_16",
+      "parent": "Rule_Endings",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 5280,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_17",
+      "parent": "Rule_Endings",
+      "type": "condition",
+      "label": "Διπλωματική διαδρομή;",
+      "script": "Story.CityEnding == \"agreement\" && Character.Persuasion >= 45",
+      "x": 5610,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_18",
+      "parent": "Rule_Endings",
+      "type": "instruction",
+      "label": "Διπλωματική διαδρομή",
+      "script": "Story.PersonalEnding = \"envoy\";",
+      "x": 5940,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_19",
+      "parent": "Rule_Endings",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 6270,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_20",
+      "parent": "Rule_Endings",
+      "type": "condition",
+      "label": "Δημόσια αναγνώριση;",
+      "script": "Story.CityEnding == \"victory\" && Character.Recognition >= 55",
+      "x": 6600,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_21",
+      "parent": "Rule_Endings",
+      "type": "instruction",
+      "label": "Δημόσια αναγνώριση",
+      "script": "Story.PersonalEnding = \"honour\";",
+      "x": 6930,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_22",
+      "parent": "Rule_Endings",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 7260,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_23",
+      "parent": "Rule_Endings",
+      "type": "condition",
+      "label": "Προσωπική εξορία;",
+      "script": "Story.CityEnding == \"defeat\" && Story.PublicVotes > 20",
+      "x": 7590,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_24",
+      "parent": "Rule_Endings",
+      "type": "instruction",
+      "label": "Προσωπική εξορία",
+      "script": "Story.PersonalEnding = \"exile\";",
+      "x": 7920,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_25",
+      "parent": "Rule_Endings",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 8250,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_26",
+      "parent": "Rule_Endings",
+      "type": "condition",
+      "label": "Προτεραιότητα λογοδοσίας;",
+      "script": "Story.Corruption >= 4",
+      "x": 8580,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_27",
+      "parent": "Rule_Endings",
+      "type": "instruction",
+      "label": "Προτεραιότητα λογοδοσίας",
+      "script": "Story.PersonalEnding = \"trial\";",
+      "x": 8910,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_28",
+      "parent": "Rule_Endings",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 9240,
+      "y": 0
+    },
+    {
+      "name": "Rule_Endings_29",
+      "parent": "Rule_Endings",
+      "type": "result",
+      "label": "Ολοκλήρωση Rule_Endings",
+      "script": "",
+      "x": 9570,
+      "y": 0
+    },
+    {
+      "name": "Rule_Official_1",
+      "parent": "Rule_Official",
+      "type": "instruction",
+      "label": "Αφετηρία συνάντησης",
+      "script": "Story.Supported = false; Story.PersonalDelta = 0; Story.RiskDelta = 0;",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Rule_Official_2",
+      "parent": "Rule_Official",
+      "type": "condition",
+      "label": "Δημόσια πειθώ;",
+      "script": "!Story.Bribe && Character.Persuasion + Character.Authority >= Story.Threshold",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Rule_Official_3",
+      "parent": "Rule_Official",
+      "type": "instruction",
+      "label": "Δημόσια πειθώ",
+      "script": "Story.Supported = true;",
+      "x": 990,
+      "y": 0
+    },
+    {
+      "name": "Rule_Official_4",
+      "parent": "Rule_Official",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 1320,
+      "y": 0
+    },
+    {
+      "name": "Rule_Official_5",
+      "parent": "Rule_Official",
+      "type": "condition",
+      "label": "Ιδιωτική προσφορά;",
+      "script": "Story.Bribe",
+      "x": 1650,
+      "y": 0
+    },
+    {
+      "name": "Rule_Official_6",
+      "parent": "Rule_Official",
+      "type": "instruction",
+      "label": "Ιδιωτική προσφορά",
+      "script": "Story.PersonalDelta = 0 - Story.BribePrice; Story.RiskDelta = 2;",
+      "x": 1980,
+      "y": 0
+    },
+    {
+      "name": "Rule_Official_7",
+      "parent": "Rule_Official",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 2310,
+      "y": 0
+    },
+    {
+      "name": "Rule_Official_8",
+      "parent": "Rule_Official",
+      "type": "condition",
+      "label": "Αποδοχή ιδιωτικής προσφοράς;",
+      "script": "Story.Bribe && Story.Integrity < 55",
+      "x": 2640,
+      "y": 0
+    },
+    {
+      "name": "Rule_Official_9",
+      "parent": "Rule_Official",
+      "type": "instruction",
+      "label": "Αποδοχή ιδιωτικής προσφοράς",
+      "script": "Story.Supported = true; Story.RiskDelta = 1;",
+      "x": 2970,
+      "y": 0
+    },
+    {
+      "name": "Rule_Official_10",
+      "parent": "Rule_Official",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 3300,
+      "y": 0
+    },
+    {
+      "name": "Rule_Official_11",
+      "parent": "Rule_Official",
+      "type": "result",
+      "label": "Ολοκλήρωση Rule_Official",
+      "script": "",
+      "x": 3630,
+      "y": 0
+    },
+    {
+      "name": "Rule_AdvanceWeek_1",
+      "parent": "Rule_AdvanceWeek",
+      "type": "instruction",
+      "label": "Ολοκλήρωση πρυτανείας",
+      "script": "Story.NextPhase = \"prytany-transition\";",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Rule_AdvanceWeek_2",
+      "parent": "Rule_AdvanceWeek",
+      "type": "condition",
+      "label": "Επόμενη εβδομάδα;",
+      "script": "Story.Week < 5",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Rule_AdvanceWeek_3",
+      "parent": "Rule_AdvanceWeek",
+      "type": "instruction",
+      "label": "Επόμενη εβδομάδα",
+      "script": "Story.Week += 1; Story.NextPhase = \"week-transition\";",
+      "x": 990,
+      "y": 0
+    },
+    {
+      "name": "Rule_AdvanceWeek_4",
+      "parent": "Rule_AdvanceWeek",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 1320,
+      "y": 0
+    },
+    {
+      "name": "Rule_AdvanceWeek_5",
+      "parent": "Rule_AdvanceWeek",
+      "type": "result",
+      "label": "Ολοκλήρωση Rule_AdvanceWeek",
+      "script": "",
+      "x": 1650,
+      "y": 0
+    },
+    {
+      "name": "Rule_AdvancePrytany_1",
+      "parent": "Rule_AdvancePrytany",
+      "type": "instruction",
+      "label": "Τέλος εκστρατείας",
+      "script": "Story.NextPhase = \"ending-city\";",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Rule_AdvancePrytany_2",
+      "parent": "Rule_AdvancePrytany",
+      "type": "condition",
+      "label": "Νέα πρυτανεία;",
+      "script": "Story.Prytany < 10",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Rule_AdvancePrytany_3",
+      "parent": "Rule_AdvancePrytany",
+      "type": "instruction",
+      "label": "Νέα πρυτανεία",
+      "script": "Story.Prytany += 1; Story.Week = 1; Story.NextPhase = \"prytany-title\";",
+      "x": 990,
+      "y": 0
+    },
+    {
+      "name": "Rule_AdvancePrytany_4",
+      "parent": "Rule_AdvancePrytany",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 1320,
+      "y": 0
+    },
+    {
+      "name": "Rule_AdvancePrytany_5",
+      "parent": "Rule_AdvancePrytany",
+      "type": "result",
+      "label": "Ολοκλήρωση Rule_AdvancePrytany",
+      "script": "",
+      "x": 1650,
+      "y": 0
+    },
+    {
+      "name": "Route_KnowledgeContinue_1",
+      "parent": "Route_KnowledgeContinue",
+      "type": "instruction",
+      "label": "Προορισμός οθόνης",
+      "script": "Story.NextPhase = \"procedure-briefing\";",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Route_KnowledgeContinue_2",
+      "parent": "Route_KnowledgeContinue",
+      "type": "result",
+      "label": "Ολοκλήρωση Route_KnowledgeContinue",
+      "script": "",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Route_AppealContinue_1",
+      "parent": "Route_AppealContinue",
+      "type": "instruction",
+      "label": "Προορισμός οθόνης",
+      "script": "Story.NextPhase = \"deliberation\";",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Route_AppealContinue_2",
+      "parent": "Route_AppealContinue",
+      "type": "result",
+      "label": "Ολοκλήρωση Route_AppealContinue",
+      "script": "",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Route_DeliberationSpeech_1",
+      "parent": "Route_DeliberationSpeech",
+      "type": "instruction",
+      "label": "Προορισμός οθόνης",
+      "script": "Story.NextPhase = \"speech\";",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Route_DeliberationSpeech_2",
+      "parent": "Route_DeliberationSpeech",
+      "type": "result",
+      "label": "Ολοκλήρωση Route_DeliberationSpeech",
+      "script": "",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Route_DeliberationVote_1",
+      "parent": "Route_DeliberationVote",
+      "type": "instruction",
+      "label": "Προορισμός οθόνης",
+      "script": "Story.NextPhase = \"vote\";",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Route_DeliberationVote_2",
+      "parent": "Route_DeliberationVote",
+      "type": "result",
+      "label": "Ολοκλήρωση Route_DeliberationVote",
+      "script": "",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Route_SpeechContinue_1",
+      "parent": "Route_SpeechContinue",
+      "type": "instruction",
+      "label": "Προορισμός οθόνης",
+      "script": "Story.NextPhase = \"vote\";",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Route_SpeechContinue_2",
+      "parent": "Route_SpeechContinue",
+      "type": "result",
+      "label": "Ολοκλήρωση Route_SpeechContinue",
+      "script": "",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Route_VoteContinue_1",
+      "parent": "Route_VoteContinue",
+      "type": "instruction",
+      "label": "Προορισμός οθόνης",
+      "script": "Story.NextPhase = \"week-report\";",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Route_VoteContinue_2",
+      "parent": "Route_VoteContinue",
+      "type": "result",
+      "label": "Ολοκλήρωση Route_VoteContinue",
+      "script": "",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Route_WeekContinue_1",
+      "parent": "Route_WeekContinue",
+      "type": "instruction",
+      "label": "Προορισμός οθόνης",
+      "script": "Story.NextPhase = \"map-stela\";",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Route_WeekContinue_2",
+      "parent": "Route_WeekContinue",
+      "type": "result",
+      "label": "Ολοκλήρωση Route_WeekContinue",
+      "script": "",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Route_CityEndingContinue_1",
+      "parent": "Route_CityEndingContinue",
+      "type": "instruction",
+      "label": "Προορισμός οθόνης",
+      "script": "Story.NextPhase = \"ending-personal\";",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Route_CityEndingContinue_2",
+      "parent": "Route_CityEndingContinue",
+      "type": "result",
+      "label": "Ολοκλήρωση Route_CityEndingContinue",
+      "script": "",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Route_PersonalEndingContinue_1",
+      "parent": "Route_PersonalEndingContinue",
+      "type": "instruction",
+      "label": "Προορισμός οθόνης",
+      "script": "Story.NextPhase = \"final-knowledge\";",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Route_PersonalEndingContinue_2",
+      "parent": "Route_PersonalEndingContinue",
+      "type": "result",
+      "label": "Ολοκλήρωση Route_PersonalEndingContinue",
+      "script": "",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Route_BiographyComplete_1",
+      "parent": "Route_BiographyComplete",
+      "type": "instruction",
+      "label": "Προορισμός οθόνης",
+      "script": "Story.NextPhase = \"prytany-title\";",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Route_BiographyComplete_2",
+      "parent": "Route_BiographyComplete",
+      "type": "result",
+      "label": "Ολοκλήρωση Route_BiographyComplete",
+      "script": "",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Route_FinalSurveyComplete_1",
+      "parent": "Route_FinalSurveyComplete",
+      "type": "instruction",
+      "label": "Προορισμός οθόνης",
+      "script": "Story.NextPhase = \"complete\";",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Route_FinalSurveyComplete_2",
+      "parent": "Route_FinalSurveyComplete",
+      "type": "result",
+      "label": "Ολοκλήρωση Route_FinalSurveyComplete",
+      "script": "",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Route_PrytanyTitleContinue_1",
+      "parent": "Route_PrytanyTitleContinue",
+      "type": "instruction",
+      "label": "Προορισμός οθόνης",
+      "script": "Story.NextPhase = \"lottery\";",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Route_PrytanyTitleContinue_2",
+      "parent": "Route_PrytanyTitleContinue",
+      "type": "result",
+      "label": "Ολοκλήρωση Route_PrytanyTitleContinue",
+      "script": "",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Route_BriefingContinue_1",
+      "parent": "Route_BriefingContinue",
+      "type": "instruction",
+      "label": "Διαβούλευση",
+      "script": "Story.NextPhase = \"deliberation\";",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Route_BriefingContinue_2",
+      "parent": "Route_BriefingContinue",
+      "type": "condition",
+      "label": "Έλεγχος υπόθεσης έφεσης;",
+      "script": "Story.CaseId == \"appeal\"",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Route_BriefingContinue_3",
+      "parent": "Route_BriefingContinue",
+      "type": "instruction",
+      "label": "Έλεγχος υπόθεσης έφεσης",
+      "script": "Story.NextPhase = \"appeal\";",
+      "x": 990,
+      "y": 0
+    },
+    {
+      "name": "Route_BriefingContinue_4",
+      "parent": "Route_BriefingContinue",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 1320,
+      "y": 0
+    },
+    {
+      "name": "Route_BriefingContinue_5",
+      "parent": "Route_BriefingContinue",
+      "type": "result",
+      "label": "Ολοκλήρωση Route_BriefingContinue",
+      "script": "",
+      "x": 1650,
+      "y": 0
+    },
+    {
+      "name": "Route_LotteryContinue_1",
+      "parent": "Route_LotteryContinue",
+      "type": "instruction",
+      "label": "Αρχικός έλεγχος",
+      "script": "Story.NextPhase = \"initial-knowledge\";",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Route_LotteryContinue_2",
+      "parent": "Route_LotteryContinue",
+      "type": "condition",
+      "label": "Επιστροφή στην πόλη;",
+      "script": "Story.InitialComplete",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Route_LotteryContinue_3",
+      "parent": "Route_LotteryContinue",
+      "type": "instruction",
+      "label": "Επιστροφή στην πόλη",
+      "script": "Story.NextPhase = \"map-stela\";",
+      "x": 990,
+      "y": 0
+    },
+    {
+      "name": "Route_LotteryContinue_4",
+      "parent": "Route_LotteryContinue",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 1320,
+      "y": 0
+    },
+    {
+      "name": "Route_LotteryContinue_5",
+      "parent": "Route_LotteryContinue",
+      "type": "result",
+      "label": "Ολοκλήρωση Route_LotteryContinue",
+      "script": "",
+      "x": 1650,
+      "y": 0
+    },
+    {
+      "name": "Route_VoteResult_1",
+      "parent": "Route_VoteResult",
+      "type": "instruction",
+      "label": "Αποτέλεσμα ψηφοφορίας",
+      "script": "Story.NextPhase = \"vote-result\";",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Route_VoteResult_2",
+      "parent": "Route_VoteResult",
+      "type": "condition",
+      "label": "Καταγεγραμμένη αποχή;",
+      "script": "Story.Side == 2",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Route_VoteResult_3",
+      "parent": "Route_VoteResult",
+      "type": "instruction",
+      "label": "Καταγεγραμμένη αποχή",
+      "script": "Story.NextPhase = \"vote-abstention\";",
+      "x": 990,
+      "y": 0
+    },
+    {
+      "name": "Route_VoteResult_4",
+      "parent": "Route_VoteResult",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 1320,
+      "y": 0
+    },
+    {
+      "name": "Route_VoteResult_5",
+      "parent": "Route_VoteResult",
+      "type": "result",
+      "label": "Ολοκλήρωση Route_VoteResult",
+      "script": "",
+      "x": 1650,
+      "y": 0
+    }
+  ],
+  "edges": [
+    {
+      "from": "Rule_Speech_1",
+      "to": "Rule_Speech_2",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Speech_2",
+      "to": "Rule_Speech_3",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Speech_2",
+      "to": "Rule_Speech_4",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Speech_3",
+      "to": "Rule_Speech_4",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Speech_4",
+      "to": "Rule_Speech_5",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Speech_5",
+      "to": "Rule_Speech_6",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Speech_5",
+      "to": "Rule_Speech_7",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Speech_6",
+      "to": "Rule_Speech_7",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Speech_7",
+      "to": "Rule_Speech_8",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Speech_8",
+      "to": "Rule_Speech_9",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Speech_8",
+      "to": "Rule_Speech_10",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Speech_9",
+      "to": "Rule_Speech_10",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Speech_10",
+      "to": "Rule_Speech_11",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Speech_11",
+      "to": "Rule_Speech_12",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Speech_11",
+      "to": "Rule_Speech_13",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Speech_12",
+      "to": "Rule_Speech_13",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Speech_13",
+      "to": "Rule_Speech_14",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Speech_14",
+      "to": "Rule_Speech_15",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Speech_14",
+      "to": "Rule_Speech_16",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Speech_15",
+      "to": "Rule_Speech_16",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Speech_16",
+      "to": "Rule_Speech_17",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_1",
+      "to": "Rule_Vote_2",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_2",
+      "to": "Rule_Vote_3",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_2",
+      "to": "Rule_Vote_4",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Vote_3",
+      "to": "Rule_Vote_4",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_4",
+      "to": "Rule_Vote_5",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_5",
+      "to": "Rule_Vote_6",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_5",
+      "to": "Rule_Vote_7",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Vote_6",
+      "to": "Rule_Vote_7",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_7",
+      "to": "Rule_Vote_8",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_8",
+      "to": "Rule_Vote_9",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_8",
+      "to": "Rule_Vote_10",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Vote_9",
+      "to": "Rule_Vote_10",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_10",
+      "to": "Rule_Vote_11",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_11",
+      "to": "Rule_Vote_12",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_11",
+      "to": "Rule_Vote_13",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Vote_12",
+      "to": "Rule_Vote_13",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_13",
+      "to": "Rule_Vote_14",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_14",
+      "to": "Rule_Vote_15",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_15",
+      "to": "Rule_Vote_16",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_15",
+      "to": "Rule_Vote_17",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Vote_16",
+      "to": "Rule_Vote_17",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_17",
+      "to": "Rule_Vote_18",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_18",
+      "to": "Rule_Vote_19",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_18",
+      "to": "Rule_Vote_20",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Vote_19",
+      "to": "Rule_Vote_20",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_20",
+      "to": "Rule_Vote_21",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_21",
+      "to": "Rule_Vote_22",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_21",
+      "to": "Rule_Vote_23",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Vote_22",
+      "to": "Rule_Vote_23",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_23",
+      "to": "Rule_Vote_24",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_24",
+      "to": "Rule_Vote_25",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_24",
+      "to": "Rule_Vote_26",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Vote_25",
+      "to": "Rule_Vote_26",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Vote_26",
+      "to": "Rule_Vote_27",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_1",
+      "to": "Rule_Endings_2",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_2",
+      "to": "Rule_Endings_3",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_2",
+      "to": "Rule_Endings_4",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Endings_3",
+      "to": "Rule_Endings_4",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_4",
+      "to": "Rule_Endings_5",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_5",
+      "to": "Rule_Endings_6",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_5",
+      "to": "Rule_Endings_7",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Endings_6",
+      "to": "Rule_Endings_7",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_7",
+      "to": "Rule_Endings_8",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_8",
+      "to": "Rule_Endings_9",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_8",
+      "to": "Rule_Endings_10",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Endings_9",
+      "to": "Rule_Endings_10",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_10",
+      "to": "Rule_Endings_11",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_11",
+      "to": "Rule_Endings_12",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_11",
+      "to": "Rule_Endings_13",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Endings_12",
+      "to": "Rule_Endings_13",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_13",
+      "to": "Rule_Endings_14",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_14",
+      "to": "Rule_Endings_15",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_14",
+      "to": "Rule_Endings_16",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Endings_15",
+      "to": "Rule_Endings_16",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_16",
+      "to": "Rule_Endings_17",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_17",
+      "to": "Rule_Endings_18",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_17",
+      "to": "Rule_Endings_19",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Endings_18",
+      "to": "Rule_Endings_19",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_19",
+      "to": "Rule_Endings_20",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_20",
+      "to": "Rule_Endings_21",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_20",
+      "to": "Rule_Endings_22",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Endings_21",
+      "to": "Rule_Endings_22",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_22",
+      "to": "Rule_Endings_23",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_23",
+      "to": "Rule_Endings_24",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_23",
+      "to": "Rule_Endings_25",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Endings_24",
+      "to": "Rule_Endings_25",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_25",
+      "to": "Rule_Endings_26",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_26",
+      "to": "Rule_Endings_27",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_26",
+      "to": "Rule_Endings_28",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Endings_27",
+      "to": "Rule_Endings_28",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Endings_28",
+      "to": "Rule_Endings_29",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Official_1",
+      "to": "Rule_Official_2",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Official_2",
+      "to": "Rule_Official_3",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Official_2",
+      "to": "Rule_Official_4",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Official_3",
+      "to": "Rule_Official_4",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Official_4",
+      "to": "Rule_Official_5",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Official_5",
+      "to": "Rule_Official_6",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Official_5",
+      "to": "Rule_Official_7",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Official_6",
+      "to": "Rule_Official_7",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Official_7",
+      "to": "Rule_Official_8",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Official_8",
+      "to": "Rule_Official_9",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Official_8",
+      "to": "Rule_Official_10",
+      "pin": 1
+    },
+    {
+      "from": "Rule_Official_9",
+      "to": "Rule_Official_10",
+      "pin": 0
+    },
+    {
+      "from": "Rule_Official_10",
+      "to": "Rule_Official_11",
+      "pin": 0
+    },
+    {
+      "from": "Rule_AdvanceWeek_1",
+      "to": "Rule_AdvanceWeek_2",
+      "pin": 0
+    },
+    {
+      "from": "Rule_AdvanceWeek_2",
+      "to": "Rule_AdvanceWeek_3",
+      "pin": 0
+    },
+    {
+      "from": "Rule_AdvanceWeek_2",
+      "to": "Rule_AdvanceWeek_4",
+      "pin": 1
+    },
+    {
+      "from": "Rule_AdvanceWeek_3",
+      "to": "Rule_AdvanceWeek_4",
+      "pin": 0
+    },
+    {
+      "from": "Rule_AdvanceWeek_4",
+      "to": "Rule_AdvanceWeek_5",
+      "pin": 0
+    },
+    {
+      "from": "Rule_AdvancePrytany_1",
+      "to": "Rule_AdvancePrytany_2",
+      "pin": 0
+    },
+    {
+      "from": "Rule_AdvancePrytany_2",
+      "to": "Rule_AdvancePrytany_3",
+      "pin": 0
+    },
+    {
+      "from": "Rule_AdvancePrytany_2",
+      "to": "Rule_AdvancePrytany_4",
+      "pin": 1
+    },
+    {
+      "from": "Rule_AdvancePrytany_3",
+      "to": "Rule_AdvancePrytany_4",
+      "pin": 0
+    },
+    {
+      "from": "Rule_AdvancePrytany_4",
+      "to": "Rule_AdvancePrytany_5",
+      "pin": 0
+    },
+    {
+      "from": "Route_KnowledgeContinue_1",
+      "to": "Route_KnowledgeContinue_2",
+      "pin": 0
+    },
+    {
+      "from": "Route_AppealContinue_1",
+      "to": "Route_AppealContinue_2",
+      "pin": 0
+    },
+    {
+      "from": "Route_DeliberationSpeech_1",
+      "to": "Route_DeliberationSpeech_2",
+      "pin": 0
+    },
+    {
+      "from": "Route_DeliberationVote_1",
+      "to": "Route_DeliberationVote_2",
+      "pin": 0
+    },
+    {
+      "from": "Route_SpeechContinue_1",
+      "to": "Route_SpeechContinue_2",
+      "pin": 0
+    },
+    {
+      "from": "Route_VoteContinue_1",
+      "to": "Route_VoteContinue_2",
+      "pin": 0
+    },
+    {
+      "from": "Route_WeekContinue_1",
+      "to": "Route_WeekContinue_2",
+      "pin": 0
+    },
+    {
+      "from": "Route_CityEndingContinue_1",
+      "to": "Route_CityEndingContinue_2",
+      "pin": 0
+    },
+    {
+      "from": "Route_PersonalEndingContinue_1",
+      "to": "Route_PersonalEndingContinue_2",
+      "pin": 0
+    },
+    {
+      "from": "Route_BiographyComplete_1",
+      "to": "Route_BiographyComplete_2",
+      "pin": 0
+    },
+    {
+      "from": "Route_FinalSurveyComplete_1",
+      "to": "Route_FinalSurveyComplete_2",
+      "pin": 0
+    },
+    {
+      "from": "Route_PrytanyTitleContinue_1",
+      "to": "Route_PrytanyTitleContinue_2",
+      "pin": 0
+    },
+    {
+      "from": "Route_BriefingContinue_1",
+      "to": "Route_BriefingContinue_2",
+      "pin": 0
+    },
+    {
+      "from": "Route_BriefingContinue_2",
+      "to": "Route_BriefingContinue_3",
+      "pin": 0
+    },
+    {
+      "from": "Route_BriefingContinue_2",
+      "to": "Route_BriefingContinue_4",
+      "pin": 1
+    },
+    {
+      "from": "Route_BriefingContinue_3",
+      "to": "Route_BriefingContinue_4",
+      "pin": 0
+    },
+    {
+      "from": "Route_BriefingContinue_4",
+      "to": "Route_BriefingContinue_5",
+      "pin": 0
+    },
+    {
+      "from": "Route_LotteryContinue_1",
+      "to": "Route_LotteryContinue_2",
+      "pin": 0
+    },
+    {
+      "from": "Route_LotteryContinue_2",
+      "to": "Route_LotteryContinue_3",
+      "pin": 0
+    },
+    {
+      "from": "Route_LotteryContinue_2",
+      "to": "Route_LotteryContinue_4",
+      "pin": 1
+    },
+    {
+      "from": "Route_LotteryContinue_3",
+      "to": "Route_LotteryContinue_4",
+      "pin": 0
+    },
+    {
+      "from": "Route_LotteryContinue_4",
+      "to": "Route_LotteryContinue_5",
+      "pin": 0
+    },
+    {
+      "from": "Route_VoteResult_1",
+      "to": "Route_VoteResult_2",
+      "pin": 0
+    },
+    {
+      "from": "Route_VoteResult_2",
+      "to": "Route_VoteResult_3",
+      "pin": 0
+    },
+    {
+      "from": "Route_VoteResult_2",
+      "to": "Route_VoteResult_4",
+      "pin": 1
+    },
+    {
+      "from": "Route_VoteResult_3",
+      "to": "Route_VoteResult_4",
+      "pin": 0
+    },
+    {
+      "from": "Route_VoteResult_4",
+      "to": "Route_VoteResult_5",
+      "pin": 0
+    }
+  ],
+  "copy": [
+    {
+      "name": "Copy_63be43133176a9a4",
+      "label": "Επίλεξε πρώτα τη στάση του χαρακτήρα σου.",
+      "text": "Επίλεξε πρώτα τη στάση του χαρακτήρα σου."
+    },
+    {
+      "name": "Copy_d1473beeba186906",
+      "label": "Συμπλήρωσε το όνομα του χαρακτήρα σου.",
+      "text": "Συμπλήρωσε το όνομα του χαρακτήρα σου."
+    },
+    {
+      "name": "Copy_7ec44327191f5131",
+      "label": "Ολοκλήρωσε αυτό το βήμα πριν ξεκινήσει η πρυτανεία.",
+      "text": "Ολοκλήρωσε αυτό το βήμα πριν ξεκινήσει η πρυτανεία."
+    },
+    {
+      "name": "Copy_1bdbf5eab98ae2e2",
+      "label": "Δεν βρέθηκε το βιογραφικό βήμα.",
+      "text": "Δεν βρέθηκε το βιογραφικό βήμα."
+    },
+    {
+      "name": "Copy_d843d43a4d9723ef",
+      "label": "Εκκλησία του Δήμου",
+      "text": "Εκκλησία του Δήμου"
+    },
+    {
+      "name": "Copy_86071228fc28d521",
+      "label": "Βουλή των Πεντακοσίων",
+      "text": "Βουλή των Πεντακοσίων"
+    },
+    {
+      "name": "Copy_2fbc1a362586a8ce",
+      "label": "Άρειος Πάγος",
+      "text": "Άρειος Πάγος"
+    },
+    {
+      "name": "Copy_f56b01a1d22b0c31",
+      "label": "Ηλιαία · λαϊκά δικαστήρια",
+      "text": "Ηλιαία · λαϊκά δικαστήρια"
+    },
+    {
+      "name": "Copy_b56a13349a0ea9d6",
+      "label": "Συνέλευση του δήμου",
+      "text": "Συνέλευση του δήμου"
+    },
+    {
+      "name": "Copy_2afaa10a70e5cf45",
+      "label": "Στην παρούσα υπόθεση καταγράφεις τη δική σου ερμηνεία, χωρίς να παρεμβαί",
+      "text": "Στην παρούσα υπόθεση καταγράφεις τη δική σου ερμηνεία, χωρίς να παρεμβαίνεις στο δικαστήριο."
+    },
+    {
+      "name": "Copy_b383cd29aada7bc7",
+      "label": "Η υπόθεση ολοκληρώθηκε · Απολογισμός εβδομάδας",
+      "text": "Η υπόθεση ολοκληρώθηκε · Απολογισμός εβδομάδας"
+    },
+    {
+      "name": "Copy_9fd25730f3bc1ab9",
+      "label": "Πόλη  ",
+      "text": "Πόλη  "
+    },
+    {
+      "name": "Copy_f9278043e324c0bc",
+      "label": "    |    Προσωπικό  ",
+      "text": "    |    Προσωπικό  "
+    },
+    {
+      "name": "Copy_6cbc6fd72c7bdc12",
+      "label": " δρ.",
+      "text": " δρ."
+    },
+    {
+      "name": "Copy_3fbbd6062db820e6",
+      "label": "ΑΡΧΙΚΟΣ",
+      "text": "ΑΡΧΙΚΟΣ"
+    },
+    {
+      "name": "Copy_ed29f6b542d3a7ad",
+      "label": "ΤΕΛΙΚΟΣ",
+      "text": "ΤΕΛΙΚΟΣ"
+    },
+    {
+      "name": "Copy_7497f4359296eb12",
+      "label": " ΕΛΕΓΧΟΣ · ΕΡΩΤΗΣΗ ",
+      "text": " ΕΛΕΓΧΟΣ · ΕΡΩΤΗΣΗ "
+    },
+    {
+      "name": "Copy_53405a8145bf2dfe",
+      "label": "ΠΡΙΝ ΑΠΟ ΤΗ ΣΥΝΕΔΡΙΑΣΗ",
+      "text": "ΠΡΙΝ ΑΠΟ ΤΗ ΣΥΝΕΔΡΙΑΣΗ"
+    },
+    {
+      "name": "Copy_c5878ab2fda6586b",
+      "label": "Πόσοι βουλευτές από κάθε φυλή συγκροτούν τη Βουλή των Πεντακοσίων;",
+      "text": "Πόσοι βουλευτές από κάθε φυλή συγκροτούν τη Βουλή των Πεντακοσίων;"
+    },
+    {
+      "name": "Copy_f2552600441f7137",
+      "label": "Η ερώτηση εξετάζει γνώση θεσμών. Η πολιτική σου στάση καταγράφεται χωρισ",
+      "text": "Η ερώτηση εξετάζει γνώση θεσμών. Η πολιτική σου στάση καταγράφεται χωριστά."
+    },
+    {
+      "name": "Copy_9f974b6ae4ac0b34",
+      "label": "Σήμερα: ",
+      "text": "Σήμερα: "
+    },
+    {
+      "name": "Copy_c20dc950f5982180",
+      "label": ". Πριν ακούσεις τα επιχειρήματα, θυμήσου το θεσμικό πλαίσιο.",
+      "text": ". Πριν ακούσεις τα επιχειρήματα, θυμήσου το θεσμικό πλαίσιο."
+    },
+    {
+      "name": "Copy_1631e8d5409bcdb6",
+      "label": "Δέκα πολίτες από κάθε φυλή",
+      "text": "Δέκα πολίτες από κάθε φυλή"
+    },
+    {
+      "name": "Copy_26b0375e5ed1a510",
+      "label": "Πενήντα πολίτες από κάθε φυλή",
+      "text": "Πενήντα πολίτες από κάθε φυλή"
+    },
+    {
+      "name": "Copy_215939b847d2e67c",
+      "label": "Εκατό πολίτες από κάθε φυλή",
+      "text": "Εκατό πολίτες από κάθε φυλή"
+    },
+    {
+      "name": "Copy_1d57091a46f50302",
+      "label": "Οι απαντήσεις και η πρόοδος αποθηκεύονται με τη διαδρομή σου. Η γνώση εξ",
+      "text": "Οι απαντήσεις και η πρόοδος αποθηκεύονται με τη διαδρομή σου. Η γνώση εξετάζεται χωριστά από τις πολιτικές επιλογές."
+    },
+    {
+      "name": "Copy_3cc3c8bead627006",
+      "label": "Η απάντηση γνώσης καταγράφεται χωριστά από την πολιτική επιλογή της υπόθ",
+      "text": "Η απάντηση γνώσης καταγράφεται χωριστά από την πολιτική επιλογή της υπόθεσης."
+    },
+    {
+      "name": "Copy_bb8a0b2b2732efb1",
+      "label": "Πρώτα η προετοιμασία. Έπειτα η απόφαση.",
+      "text": "Πρώτα η προετοιμασία.\nΈπειτα η απόφαση."
+    },
+    {
+      "name": "Copy_efc30c471c9d9686",
+      "label": "Η απάντηση είναι σωστή. Ας δούμε τη διαδικασία.",
+      "text": "Η απάντηση είναι σωστή.\nΑς δούμε τη διαδικασία."
+    },
+    {
+      "name": "Copy_e3f63fadc3624d22",
+      "label": "Ας ξεκαθαρίσουμε την αρμοδιότητα.",
+      "text": "Ας ξεκαθαρίσουμε την αρμοδιότητα."
+    },
+    {
+      "name": "Copy_c17ca86d5c33684a",
+      "label": "Πηγή: ",
+      "text": "Πηγή: "
+    },
+    {
+      "name": "Copy_105a6ddb13eadf83",
+      "label": ". Η υπόθεση είναι εκπαιδευτική αφηγηματική σύνθεση.",
+      "text": ". Η υπόθεση είναι εκπαιδευτική αφηγηματική σύνθεση."
+    },
+    {
+      "name": "Copy_3027ad69a3db1d67",
+      "label": "Ποιος λογίζεται πολίτης;",
+      "text": "Ποιος λογίζεται πολίτης;"
+    },
+    {
+      "name": "Copy_e5e29d2e7d06934f",
+      "label": "Ο κήρυκας καλεί τους πολίτες.",
+      "text": "Ο κήρυκας καλεί τους πολίτες."
+    },
+    {
+      "name": "Copy_f85bd31fc92ebd77",
+      "label": "ΠΑΡΑΚΟΛΟΥΘΗΣΗ Δεν είσαι δικαστής σε αυτή την υπόθεση. Η επόμενη επιλογή ",
+      "text": "ΠΑΡΑΚΟΛΟΥΘΗΣΗ\nΔεν είσαι δικαστής σε αυτή την υπόθεση. Η επόμενη επιλογή καταγράφει την ερμηνεία σου, χωρίς ψήφο ή λόγο μέσα στο δικαστήριο."
+    },
+    {
+      "name": "Copy_1d174bf1ab96eb21",
+      "label": "Η ΣΥΜΜΕΤΟΧΗ ΣΟΥ Ακούς τα δύο επιχειρήματα. Μπορείς να πάρεις τον λόγο, ν",
+      "text": "Η ΣΥΜΜΕΤΟΧΗ ΣΟΥ\nΑκούς τα δύο επιχειρήματα. Μπορείς να πάρεις τον λόγο, να επιλέξεις πρόταση ή να απέχεις. Η προσωπική ψήφος διακρίνεται από τη συλλογική έκβαση."
+    },
+    {
+      "name": "Copy_d639284ef6ba7c02",
+      "label": " · Οι πέντε εβδομάδες ανά πρυτανεία είναι εκπαιδευτική συμπύκνωση.",
+      "text": " · Οι πέντε εβδομάδες ανά πρυτανεία είναι εκπαιδευτική συμπύκνωση."
+    },
+    {
+      "name": "Copy_3f00a343e8208107",
+      "label": " · ΠΑΡΑΚΟΛΟΥΘΗΣΗ",
+      "text": " · ΠΑΡΑΚΟΛΟΥΘΗΣΗ"
+    },
+    {
+      "name": "Copy_7c3f56f6a142be8b",
+      "label": " · ΣΥΝΕΔΡΙΑΣΗ",
+      "text": " · ΣΥΝΕΔΡΙΑΣΗ"
+    },
+    {
+      "name": "Copy_0b9ceeb7aeb4b781",
+      "label": "Με πείθει το πρώτο επιχείρημα",
+      "text": "Με πείθει το πρώτο επιχείρημα"
+    },
+    {
+      "name": "Copy_c2ad6d98110ae3a1",
+      "label": "Δημόσια απόφαση και λογοδοσία",
+      "text": "Δημόσια απόφαση και λογοδοσία"
+    },
+    {
+      "name": "Copy_c9cf02439a132666",
+      "label": "Με πείθει το δεύτερο επιχείρημα",
+      "text": "Με πείθει το δεύτερο επιχείρημα"
+    },
+    {
+      "name": "Copy_edefc3af0366ead3",
+      "label": "Ανάθεση σε περιορισμένο κύκλο",
+      "text": "Ανάθεση σε περιορισμένο κύκλο"
+    },
+    {
+      "name": "Copy_47f45e8efd2ad58d",
+      "label": "Δεν επιλέγω ερμηνεία",
+      "text": "Δεν επιλέγω ερμηνεία"
+    },
+    {
+      "name": "Copy_cb6ec07aff936e23",
+      "label": "Δεν ψηφίζω · καταγράφεται αποχή",
+      "text": "Δεν ψηφίζω · καταγράφεται αποχή"
+    },
+    {
+      "name": "Copy_e6397e79400ef6f5",
+      "label": " · Λόγοι και πρόσωπα μυθοπλαστικά. Η κλίση αφορά την κατανομή εξουσίας, ",
+      "text": " · Λόγοι και πρόσωπα μυθοπλαστικά. Η κλίση αφορά την κατανομή εξουσίας, όχι τη θέση υπέρ ή κατά του πολέμου."
+    },
+    {
+      "name": "Copy_fd2a025dfbcc5500",
+      "label": "Δεν αρκεί να ψηφίσεις. Μπορείς να εκτεθείς.",
+      "text": "Δεν αρκεί να ψηφίσεις. Μπορείς να εκτεθείς."
+    },
+    {
+      "name": "Copy_595a4262b7a284e3",
+      "label": "Ποια ερμηνεία σε πείθει;",
+      "text": "Ποια ερμηνεία σε πείθει;"
+    },
+    {
+      "name": "Copy_111d1a88d8ec5459",
+      "label": "Η δική σου ψήφος.",
+      "text": "Η δική σου ψήφος."
+    },
+    {
+      "name": "Copy_4ee6e91c465e068d",
+      "label": "Ο κήρυκας κοιτάζει τους συγκεντρωμένους. Ποια αρχή θα υπερασπιστείς δημό",
+      "text": "Ο κήρυκας κοιτάζει τους συγκεντρωμένους. Ποια αρχή θα υπερασπιστείς δημόσια;"
+    },
+    {
+      "name": "Copy_fba2d921d0335163",
+      "label": "Ο έλεγχος ανήκει σε ολόκληρη την πόλη. Παρρησία +3 · Αναγνωρισιμότητα +2",
+      "text": "Ο έλεγχος ανήκει σε ολόκληρη την πόλη.\nΠαρρησία +3 · Αναγνωρισιμότητα +2"
+    },
+    {
+      "name": "Copy_432df8f8f9826174",
+      "label": "Πρώτη πρόταση · Δημόσια λογοδοσία",
+      "text": "Πρώτη πρόταση · Δημόσια λογοδοσία"
+    },
+    {
+      "name": "Copy_7381b2d39a137766",
+      "label": "Ας αποφασίσουν όσοι εγγυώνται με την περιουσία τους. Αυθεντία +2 · Αναγν",
+      "text": "Ας αποφασίσουν όσοι εγγυώνται με την περιουσία τους.\nΑυθεντία +2 · Αναγνωρισιμότητα +2"
+    },
+    {
+      "name": "Copy_6b5411ff18007acd",
+      "label": "Δεύτερη πρόταση · Στενότερη διαχείριση",
+      "text": "Δεύτερη πρόταση · Στενότερη διαχείριση"
+    },
+    {
+      "name": "Copy_4e4312e35e52b30d",
+      "label": "Κατεβαίνω χωρίς να μιλήσω. Η ψήφος παραμένει διαθέσιμη.",
+      "text": "Κατεβαίνω χωρίς να μιλήσω. Η ψήφος παραμένει διαθέσιμη."
+    },
+    {
+      "name": "Copy_5dc4c89644ccd8a8",
+      "label": "Αποχή από την ψηφοφορία",
+      "text": "Αποχή από την ψηφοφορία"
+    },
+    {
+      "name": "Copy_3c1124cd8cf502aa",
+      "label": "ΕΤΟΙΜΟΣ ΛΟΓΟΣ Επιρροή +",
+      "text": "ΕΤΟΙΜΟΣ ΛΟΓΟΣ\nΕπιρροή +"
+    },
+    {
+      "name": "Copy_787af7ecf0bf6d10",
+      "label": " Απομένουν ",
+      "text": "\nΑπομένουν "
+    },
+    {
+      "name": "Copy_2f33270ac9233c06",
+      "label": " κατάλληλες τοποθετήσεις. Καταναλώνεται μόνο όταν μιλήσεις.",
+      "text": " κατάλληλες τοποθετήσεις.\nΚαταναλώνεται μόνο όταν μιλήσεις."
+    },
+    {
+      "name": "Copy_5480bcc4b4f204db",
+      "label": "ΔΙΚΗ ΣΟΥ ΦΩΝΗ Δεν έχεις ενεργή ανάθεση σε λογογράφο. Μπορείς να μιλήσεις",
+      "text": "ΔΙΚΗ ΣΟΥ ΦΩΝΗ\nΔεν έχεις ενεργή ανάθεση σε λογογράφο. Μπορείς να μιλήσεις με τις δικές σου δυνάμεις."
+    },
+    {
+      "name": "Copy_da46fff6a7f3d4d7",
+      "label": "ΣΥΛΛΟΓΙΚΗ ΑΠΟΦΑΣΗ Η επιλογή σου επηρεάζει τη συζήτηση. Δεν αντικαθιστά τ",
+      "text": "ΣΥΛΛΟΓΙΚΗ ΑΠΟΦΑΣΗ\nΗ επιλογή σου επηρεάζει τη συζήτηση. Δεν αντικαθιστά τις αποφάσεις των υπολοίπων.\nΗ αποχή καταγράφεται ξεχωριστά από τη σιωπή."
+    },
+    {
+      "name": "Copy_2e9392c7b6c8cc11",
+      "label": " · Οι αριθμητικές επιδράσεις είναι κανόνες του παιχνιδιού.",
+      "text": " · Οι αριθμητικές επιδράσεις είναι κανόνες του παιχνιδιού."
+    },
+    {
+      "name": "Copy_c4f590baea4f5c33",
+      "label": "Η υπόθεση αφήνει ερωτήματα.",
+      "text": "Η υπόθεση αφήνει ερωτήματα."
+    },
+    {
+      "name": "Copy_4740eb1101ce9ab5",
+      "label": "Εγκρίθηκε η δημόσια διαχείριση.",
+      "text": "Εγκρίθηκε η δημόσια διαχείριση."
+    },
+    {
+      "name": "Copy_d65c0e418f9160b4",
+      "label": "Επικράτησε η στενότερη ανάθεση.",
+      "text": "Επικράτησε η στενότερη ανάθεση."
+    },
+    {
+      "name": "Copy_5920ca96b1e612f6",
+      "label": "Καταγράφηκε η προσωπική σου ερμηνεία. Δεν ασκήθηκε δικαστική αρμοδιότητα",
+      "text": "Καταγράφηκε η προσωπική σου ερμηνεία. Δεν ασκήθηκε δικαστική αρμοδιότητα από τον παίκτη."
+    },
+    {
+      "name": "Copy_c7dfb3d48e356be3",
+      "label": "Το συλλογικό αποτέλεσμα υπολογίστηκε χωριστά από τη δική σου επιλογή. Τα",
+      "text": "Το συλλογικό αποτέλεσμα υπολογίστηκε χωριστά από τη δική σου επιλογή. Τα επιχειρήματα, η δημόσια έκθεση και η διαθέσιμη υποστήριξη επηρέασαν την έκβαση."
+    },
+    {
+      "name": "Copy_61dd64b4cf9142f7",
+      "label": "Πρώτο επιχείρημα",
+      "text": "Πρώτο επιχείρημα"
+    },
+    {
+      "name": "Copy_c60eadba92c53be3",
+      "label": "Υπέρ · πλειοψηφία",
+      "text": "Υπέρ · πλειοψηφία"
+    },
+    {
+      "name": "Copy_6eeafa245849c490",
+      "label": "Υπέρ · μειοψηφία",
+      "text": "Υπέρ · μειοψηφία"
+    },
+    {
+      "name": "Copy_a4b8d8086ffb7819",
+      "label": "Δεύτερο επιχείρημα",
+      "text": "Δεύτερο επιχείρημα"
+    },
+    {
+      "name": "Copy_36275f815286c1e4",
+      "label": "Κατά · πλειοψηφία",
+      "text": "Κατά · πλειοψηφία"
+    },
+    {
+      "name": "Copy_162f09f7a0be8bbc",
+      "label": "Κατά · μειοψηφία",
+      "text": "Κατά · μειοψηφία"
+    },
+    {
+      "name": "Copy_732101c50b7cbd87",
+      "label": " μονάδες",
+      "text": " μονάδες"
+    },
+    {
+      "name": "Copy_c9df44a5f28c34e3",
+      "label": "Καμία μεταβολή",
+      "text": "Καμία μεταβολή"
+    },
+    {
+      "name": "Copy_36ce9e21ee6c27e5",
+      "label": "Χωρίς επιλογή ερμηνείας",
+      "text": "Χωρίς επιλογή ερμηνείας"
+    },
+    {
+      "name": "Copy_6aa504d763ff2df3",
+      "label": "Ο λόγος σου ακούστηκε",
+      "text": "Ο λόγος σου ακούστηκε"
+    },
+    {
+      "name": "Copy_cfe1dc0915e117fb",
+      "label": "Επέλεξες χωρίς ομιλία",
+      "text": "Επέλεξες χωρίς ομιλία"
+    },
+    {
+      "name": "Copy_d89da5913a9fc4db",
+      "label": "Προσωπική ερμηνεία, χωρίς ψήφο δικαστή. ",
+      "text": "Προσωπική ερμηνεία, χωρίς ψήφο δικαστή. "
+    },
+    {
+      "name": "Copy_1067f4424df4677d",
+      "label": "Σχηματική πλειοψηφία, όχι υποτιθέμενη αρχαία καταμέτρηση. ",
+      "text": "Σχηματική πλειοψηφία, όχι υποτιθέμενη αρχαία καταμέτρηση. "
+    },
+    {
+      "name": "Copy_ac86789647c262c8",
+      "label": "Η εβδομάδα αφήνει το ίχνος της.",
+      "text": "Η εβδομάδα αφήνει το ίχνος της."
+    },
+    {
+      "name": "Copy_b7406bb31eaa7a39",
+      "label": "Παρακολούθησες και εξέτασες τα επιχειρήματα.",
+      "text": "Παρακολούθησες και εξέτασες τα επιχειρήματα."
+    },
+    {
+      "name": "Copy_cf1747a50e2679e1",
+      "label": "Εγκρίθηκε η πρόταση δημόσιου ελέγχου.",
+      "text": "Εγκρίθηκε η πρόταση δημόσιου ελέγχου."
+    },
+    {
+      "name": "Copy_783127c8f5fefcc5",
+      "label": "Επικράτησε η πρόταση στενότερης διαχείρισης.",
+      "text": "Επικράτησε η πρόταση στενότερης διαχείρισης."
+    },
+    {
+      "name": "Copy_7df158ede8a0ee70",
+      "label": "Δεν επέλεξες πλευρά.",
+      "text": "Δεν επέλεξες πλευρά."
+    },
+    {
+      "name": "Copy_a961867b82e71202",
+      "label": "Η δική σου επιλογή: ",
+      "text": "Η δική σου επιλογή: "
+    },
+    {
+      "name": "Copy_d4405127fbc9ae5e",
+      "label": "πρώτο",
+      "text": "πρώτο"
+    },
+    {
+      "name": "Copy_db0db6b241bed857",
+      "label": "δεύτερο",
+      "text": "δεύτερο"
+    },
+    {
+      "name": "Copy_eef2b137c134eb50",
+      "label": " επιχείρημα.",
+      "text": " επιχείρημα."
+    },
+    {
+      "name": "Copy_974969471a8f45d0",
+      "label": "Ο λόγος σου ακούστηκε. Η υποστήριξη λογογράφου έχει περιορισμένη διάρκει",
+      "text": "Ο λόγος σου ακούστηκε. Η υποστήριξη λογογράφου έχει περιορισμένη διάρκεια."
+    },
+    {
+      "name": "Copy_99282444044d7650",
+      "label": "Άκουσες χωρίς να πάρεις τον λόγο.",
+      "text": "Άκουσες χωρίς να πάρεις τον λόγο."
+    },
+    {
+      "name": "Copy_d964c26c06f56fa1",
+      "label": "  Η ερώτηση γνώσης απαντήθηκε ",
+      "text": "\n\nΗ ερώτηση γνώσης απαντήθηκε "
+    },
+    {
+      "name": "Copy_da91596b84166fad",
+      "label": "σωστά.",
+      "text": "σωστά."
+    },
+    {
+      "name": "Copy_240915e4424cb107",
+      "label": "με επεξήγηση του λάθους.",
+      "text": "με επεξήγηση του λάθους."
+    },
+    {
+      "name": "Copy_612f3cd86f799e4b",
+      "label": "Η ΠΟΛΗ ΚΑΙ ΕΣΥ  Ταμείο πόλης   ",
+      "text": "Η ΠΟΛΗ ΚΑΙ ΕΣΥ\n\nΤαμείο πόλης   "
+    },
+    {
+      "name": "Copy_d20b9c69e20b6771",
+      "label": " Προσωπικό ταμείο   ",
+      "text": "\nΠροσωπικό ταμείο   "
+    },
+    {
+      "name": "Copy_6c48c09043274272",
+      "label": " δρ. Παρρησία   ",
+      "text": " δρ.\nΠαρρησία   "
+    },
+    {
+      "name": "Copy_a5423f346f29050d",
+      "label": " Αναγνωρισιμότητα   ",
+      "text": "\nΑναγνωρισιμότητα   "
+    },
+    {
+      "name": "Copy_84eb35ee4d529996",
+      "label": "  Δαπάνη εβδομάδας   ",
+      "text": "\n\nΔαπάνη εβδομάδας   "
+    },
+    {
+      "name": "Copy_500b35659a4cd66c",
+      "label": " αναφορές αναμένουν εξέταση.",
+      "text": " αναφορές αναμένουν εξέταση."
+    },
+    {
+      "name": "Copy_910d46162f2a5574",
+      "label": "Ολοκλήρωση πρυτανείας",
+      "text": "Ολοκλήρωση πρυτανείας"
+    },
+    {
+      "name": "Copy_39b53c1534b55e68",
+      "label": "Στην επόμενη εβδομάδα",
+      "text": "Στην επόμενη εβδομάδα"
+    },
+    {
+      "name": "Copy_3e3295844f841450",
+      "label": "Η ",
+      "text": "Η "
+    },
+    {
+      "name": "Copy_c9ca01a1fb6fd52c",
+      "label": "η εβδομάδα αρχίζει.",
+      "text": "η εβδομάδα αρχίζει."
+    },
+    {
+      "name": "Copy_2ca1530bcc6160dd",
+      "label": " παραδίδει.",
+      "text": " παραδίδει."
+    },
+    {
+      "name": "Copy_1967453206a07b96",
+      "label": "Οι αποφάσεις έφυγαν από την Πνύκα. Τώρα θα συναντήσεις τις συνέπειές του",
+      "text": "Οι αποφάσεις έφυγαν από την Πνύκα.\nΤώρα θα συναντήσεις τις συνέπειές τους στην πόλη."
+    },
+    {
+      "name": "Copy_aff5a1cc5552abdf",
+      "label": "Πέντε εβδομάδες, πέντε θεσμικές δραστηριότητες. Άλλες έκλεισαν. Άλλες θα",
+      "text": "Πέντε εβδομάδες, πέντε θεσμικές δραστηριότητες.\nΆλλες έκλεισαν. Άλλες θα ακολουθήσουν τη νέα πρυτανεία."
+    },
+    {
+      "name": "Copy_72b41a8f13543b93",
+      "label": "Προεπισκόπηση Editor · Δεν γράφεται πραγματικό slot.",
+      "text": "Προεπισκόπηση Editor · Δεν γράφεται πραγματικό slot."
+    },
+    {
+      "name": "Copy_e15e406bba032b98",
+      "label": "Η τοπική εγγραφή του checkpoint ολοκληρώθηκε.",
+      "text": "Η τοπική εγγραφή του checkpoint ολοκληρώθηκε."
+    },
+    {
+      "name": "Copy_7825116e6db6a24f",
+      "label": "Επιστροφή στον χάρτη",
+      "text": "Επιστροφή στον χάρτη"
+    },
+    {
+      "name": "Copy_d654bb1a20dc6e0e",
+      "label": "Στον επίλογο",
+      "text": "Στον επίλογο"
+    },
+    {
+      "name": "Copy_df6d19377abefd11",
+      "label": "Στην επόμενη πρυτανεία",
+      "text": "Στην επόμενη πρυτανεία"
+    },
+    {
+      "name": "Copy_d470fb1758f2276b",
+      "label": "Γνώρισες θεσμούς, ανέλαβες ευθύνες και είδες πόσο δύσκολα συναντιούνται ",
+      "text": "Γνώρισες θεσμούς, ανέλαβες ευθύνες και είδες πόσο δύσκολα συναντιούνται οι ιδιωτικές ανάγκες με τις αποφάσεις της πόλης.\n\nΟ δικός σου τελικός έλεγχος: "
+    },
+    {
+      "name": "Copy_b813c0850f701357",
+      "label": " / 8. Οι απαντήσεις διατηρούνται στο τοπικό slot. Δεν παρουσιάζονται ως ",
+      "text": " / 8.\nΟι απαντήσεις διατηρούνται στο τοπικό slot. Δεν παρουσιάζονται ως αποτελέσματα έρευνας παικτών."
+    },
+    {
+      "name": "Copy_6cab354ce8aee2fb",
+      "label": "Τι κρατά από την πόλη ο θεσμός;",
+      "text": "Τι κρατά από την πόλη ο θεσμός;"
+    },
+    {
+      "name": "Copy_0008e0f7f5eda78f",
+      "label": "Πρυτανεία ",
+      "text": "Πρυτανεία "
+    },
+    {
+      "name": "Copy_238d1efb10f3eefa",
+      "label": " · Εβδομάδα ",
+      "text": " · Εβδομάδα "
+    },
+    {
+      "name": "Copy_2c47a95787d4bf1c",
+      "label": "Δημόσιος έλεγχος",
+      "text": "Δημόσιος έλεγχος"
+    },
+    {
+      "name": "Copy_04b7703dc771f57a",
+      "label": "Στενότερη ανάθεση",
+      "text": "Στενότερη ανάθεση"
+    },
+    {
+      "name": "Copy_d27923a55ff7c9e5",
+      "label": "Δεν έχεις ολοκληρώσει ακόμη δραστηριότητα σε αυτόν τον θεσμό.  Τρέχων απ",
+      "text": "Δεν έχεις ολοκληρώσει ακόμη δραστηριότητα σε αυτόν τον θεσμό.\n\nΤρέχων απόηχος: "
+    },
+    {
+      "name": "Copy_3f1339017bd7d6d8",
+      "label": "Στην Πνύκα συζητούν την ανάγκη προετοιμασίας της ημερήσιας διάταξης.",
+      "text": "Στην Πνύκα συζητούν την ανάγκη προετοιμασίας της ημερήσιας διάταξης."
+    },
+    {
+      "name": "Copy_4879bedd54e11446",
+      "label": "Στο βουλευτήριο ελέγχονται κατάλογοι και προετοιμάζονται εισηγήσεις.",
+      "text": "Στο βουλευτήριο ελέγχονται κατάλογοι και προετοιμάζονται εισηγήσεις."
+    },
+    {
+      "name": "Copy_4e0e93a7f0ecf5d7",
+      "label": "Η πόλη συζητά τα όρια της αρμοδιότητας των παλαιών αρχόντων.",
+      "text": "Η πόλη συζητά τα όρια της αρμοδιότητας των παλαιών αρχόντων."
+    },
+    {
+      "name": "Copy_bcab987b8a049de8",
+      "label": "Οι πολίτες συζητούν τη διαφορά ανάμεσα στη μαρτυρία και στην απόδειξη.",
+      "text": "Οι πολίτες συζητούν τη διαφορά ανάμεσα στη μαρτυρία και στην απόδειξη."
+    },
+    {
+      "name": "Copy_69e8ed290088041a",
+      "label": "  Ο απόηχος είναι αφηγηματική σύνθεση, όχι καταγεγραμμένο αρχαίο συμβάν.",
+      "text": "\n\nΟ απόηχος είναι αφηγηματική σύνθεση, όχι καταγεγραμμένο αρχαίο συμβάν."
+    },
+    {
+      "name": "Copy_4bb17ff7f55a6ef2",
+      "label": "Η πόλη κράτησε τη φωνή της.",
+      "text": "Η πόλη κράτησε τη φωνή της."
+    },
+    {
+      "name": "Copy_ededc4201921eb09",
+      "label": "Η ήττα έφτασε στην Αθήνα.",
+      "text": "Η ήττα έφτασε στην Αθήνα."
+    },
+    {
+      "name": "Copy_6c9f70467572af35",
+      "label": "Μια συμφωνία με τίμημα.",
+      "text": "Μια συμφωνία με τίμημα."
+    },
+    {
+      "name": "Copy_9cedc1e6d6109bde",
+      "label": "Η πόλη αποφασίζει λιγότερα.",
+      "text": "Η πόλη αποφασίζει λιγότερα."
+    },
+    {
+      "name": "Copy_77cffe238e1d3970",
+      "label": "Η αυτονομία διατηρήθηκε.",
+      "text": "Η αυτονομία διατηρήθηκε."
+    },
+    {
+      "name": "Copy_f9a484682b00cd64",
+      "label": "Το όνομά σου ακούγεται στην πόλη.",
+      "text": "Το όνομά σου ακούγεται στην πόλη."
+    },
+    {
+      "name": "Copy_f31d4b743113ee8f",
+      "label": "Ο δρόμος οδηγεί μακριά από την Αθήνα.",
+      "text": "Ο δρόμος οδηγεί μακριά από την Αθήνα."
+    },
+    {
+      "name": "Copy_a1f99dac5f4358cd",
+      "label": "Οι λογαριασμοί στρέφονται προς εσένα.",
+      "text": "Οι λογαριασμοί στρέφονται προς εσένα."
+    },
+    {
+      "name": "Copy_299e69bd3f08618f",
+      "label": "Ο λόγος σου ταξιδεύει έξω από τα τείχη.",
+      "text": "Ο λόγος σου ταξιδεύει έξω από τα τείχη."
+    },
+    {
+      "name": "Copy_3efc69aa69c4b713",
+      "label": "Ο οίκος μένει. Η πολιτική στενεύει.",
+      "text": "Ο οίκος μένει. Η πολιτική στενεύει."
+    },
+    {
+      "name": "Copy_df10e478d222cdde",
+      "label": "Αύριο θα χρειαστεί να πείσεις ξανά.",
+      "text": "Αύριο θα χρειαστεί να πείσεις ξανά."
+    },
+    {
+      "name": "Copy_33b7a28ec52295c8",
+      "label": "Οι δημόσιες δεσμεύσεις, η αναγνωρισιμότητα, η πειθώ και ο κίνδυνος διαφθ",
+      "text": "Οι δημόσιες δεσμεύσεις, η αναγνωρισιμότητα, η πειθώ και ο κίνδυνος διαφθοράς έδωσαν στην προσωπική διαδρομή σου αυτή την κατάληξη. Η αναγνώριση δεν σε κάνει κυρίαρχο της Αθήνας ούτε σου απονέμει αυθαίρετα αξίωμα."
+    },
+    {
+      "name": "Copy_3884b6b8d2592d35",
+      "label": "Η αντοχή της πόλης δεν στάθηκε αρκετή για τη σύγκρουση που επέλεξε. Οι δ",
+      "text": "Η αντοχή της πόλης δεν στάθηκε αρκετή για τη σύγκρουση που επέλεξε. Οι διαπραγματεύσεις γίνονται πια από ασθενέστερη θέση. Οι αποφάσεις των εβδομάδων συναντούν το κόστος τους."
+    },
+    {
+      "name": "Copy_7f145869c2ffedb0",
+      "label": "Οι δαπάνες της άμυνας, η προετοιμασία και οι συμμαχίες επέτρεψαν στην πό",
+      "text": "Οι δαπάνες της άμυνας, η προετοιμασία και οι συμμαχίες επέτρεψαν στην πόλη να αντέξει. Στην Πνύκα θα ξανακουστούν διαφωνίες. Κανείς δεν κέρδισε μια πόλη χωρίς αντιρρήσεις."
+    },
+    {
+      "name": "Copy_08afcc0898b77f9a",
+      "label": "Η συστηματική μεταφορά της διαχείρισης σε στενότερο κύκλο αποδυνάμωσε τη",
+      "text": "Η συστηματική μεταφορά της διαχείρισης σε στενότερο κύκλο αποδυνάμωσε τη δημόσια συμμετοχή. Η εξωτερική πίεση βρήκε την πόλη πρόθυμη να παραχωρήσει περισσότερα."
+    },
+    {
+      "name": "Copy_d642c49d605fe51d",
+      "label": "Οι πολίτες απέφυγαν την αποφασιστική πολεμική αναμέτρηση. Η συμφωνία και",
+      "text": "Οι πολίτες απέφυγαν την αποφασιστική πολεμική αναμέτρηση. Η συμφωνία και η αυτονομία εξαρτήθηκαν από τους πόρους, τη δημόσια νομιμοποίηση και τις δεσμεύσεις των προηγούμενων εβδομάδων."
+    },
+    {
+      "name": "Copy_f8aaad43f01d24f7",
+      "label": "Μυθοπλαστική προσωπική διαδρομή· η ανάδειξη σε αξιώματα ακολουθεί την πρ",
+      "text": "Μυθοπλαστική προσωπική διαδρομή· η ανάδειξη σε αξιώματα ακολουθεί την προβλεπόμενη διαδικασία."
+    },
+    {
+      "name": "Copy_71a1d2cf8794dcb9",
+      "label": "Ιστορική αντιπαραβολή: το 322 π.Χ. η Αθήνα ηττήθηκε στον Λαμιακό πόλεμο ",
+      "text": "Ιστορική αντιπαραβολή: το 322 π.Χ. η Αθήνα ηττήθηκε στον Λαμιακό πόλεμο και το πολίτευμα περιορίστηκε με περιουσιακό κριτήριο. Οι άλλες εκβάσεις είναι ρητά εναλλακτική ιστορία."
+    },
+    {
+      "name": "Copy_b60cde7705d54676",
+      "label": "Η έκβαση απορρέει από την αποθηκευμένη κατάσταση του παιχνιδιού.",
+      "text": "Η έκβαση απορρέει από την αποθηκευμένη κατάσταση του παιχνιδιού."
+    },
+    {
+      "name": "Copy_c678d22f35f6259d",
+      "label": "Ιστορικό σημείο αναφοράς: Διόδωρος 18.17–18 · Πλούταρχος, Φωκίων 27–28. ",
+      "text": "Ιστορικό σημείο αναφοράς: Διόδωρος 18.17–18 · Πλούταρχος, Φωκίων 27–28. Οι αριθμητικοί κανόνες είναι σχεδιαστικοί."
+    },
+    {
+      "name": "Copy_226a8ac686f3de22",
+      "label": "     |     Προσωπικό  ",
+      "text": "     |     Προσωπικό  "
+    },
+    {
+      "name": "Copy_7b64b1f0928447bd",
+      "label": "η ΠΡΥΤΑΝΕΙΑ · ΕΒΔΟΜΑΔΑ ",
+      "text": "η ΠΡΥΤΑΝΕΙΑ · ΕΒΔΟΜΑΔΑ "
+    },
+    {
+      "name": "Copy_8aabdbb554a8d426",
+      "label": " νέα",
+      "text": " νέα"
+    },
+    {
+      "name": "Copy_3350d9c87162d943",
+      "label": "ΕΒΔΟΜΑΔΑ ",
+      "text": "ΕΒΔΟΜΑΔΑ "
+    },
+    {
+      "name": "Copy_4fca06624535968d",
+      "label": "ΔΙΑΒΑΣΜΕΝΟ",
+      "text": "ΔΙΑΒΑΣΜΕΝΟ"
+    },
+    {
+      "name": "Copy_0ab2faa0e2fded67",
+      "label": "ΝΕΟ",
+      "text": "ΝΕΟ"
+    },
+    {
+      "name": "Copy_549e01fd9cc8fa66",
+      "label": "η πρυτανεία / ",
+      "text": "η πρυτανεία / "
+    },
+    {
+      "name": "Copy_8c2d2cc8b8586d1f",
+      "label": "η εβδομάδα",
+      "text": "η εβδομάδα"
+    },
+    {
+      "name": "Copy_fdfa0491ed3081aa",
+      "label": "Διαβάστηκε",
+      "text": "Διαβάστηκε"
+    },
+    {
+      "name": "Copy_907154af23cc95af",
+      "label": "Ενεργή ανάθεση",
+      "text": "Ενεργή ανάθεση"
+    },
+    {
+      "name": "Copy_27014bd19c0d887d",
+      "label": "Ανεπαρκές ταμείο",
+      "text": "Ανεπαρκές ταμείο"
+    },
+    {
+      "name": "Copy_b766598ece531f8c",
+      "label": "Ανάθεση · ",
+      "text": "Ανάθεση · "
+    },
+    {
+      "name": "Copy_74fa0a67608bb82a",
+      "label": "Ενεργός λόγος: ",
+      "text": "Ενεργός λόγος: "
+    },
+    {
+      "name": "Copy_3c3a2782a9f1924d",
+      "label": " · Επιρροή +",
+      "text": " · Επιρροή +"
+    },
+    {
+      "name": "Copy_e53ef65a97afbaff",
+      "label": " χρήσεις απομένουν.",
+      "text": " χρήσεις απομένουν."
+    },
+    {
+      "name": "Copy_71824ea340238d3d",
+      "label": "Διάρκεια: 2 επόμενες κατάλληλες συνεδριάσεις · Καταναλώνεται όταν επιλέξ",
+      "text": "Διάρκεια: 2 επόμενες κατάλληλες συνεδριάσεις · Καταναλώνεται όταν επιλέξεις να μιλήσεις. Η αμοιβή αφαιρείται από το προσωπικό ταμείο."
+    },
+    {
+      "name": "Copy_c77cdd99f9f7bd37",
+      "label": " ΑΝΑΦΟΡΕΣ ΠΡΟΣ ΕΞΕΤΑΣΗ",
+      "text": " ΑΝΑΦΟΡΕΣ ΠΡΟΣ ΕΞΕΤΑΣΗ"
+    },
+    {
+      "name": "Copy_b5bda75af0b99acf",
+      "label": "η πρυτανεία · Εβδομάδα ",
+      "text": "η πρυτανεία · Εβδομάδα "
+    },
+    {
+      "name": "Copy_e91b3eaa7987884f",
+      "label": "Η ξυλεία που χρεώθηκε διπλά",
+      "text": "Η ξυλεία που\nχρεώθηκε διπλά"
+    },
+    {
+      "name": "Copy_2d2067f76dad3c34",
+      "label": "Αναφορά ",
+      "text": "Αναφορά "
+    },
+    {
+      "name": "Copy_d799930f31ec453d",
+      "label": "Ανοιχτή · Χρειάζεται εισήγηση",
+      "text": "Ανοιχτή · Χρειάζεται εισήγηση"
+    },
+    {
+      "name": "Copy_f270d4df3385c44f",
+      "label": " Παραλαβή: ",
+      "text": "\nΠαραλαβή: "
+    },
+    {
+      "name": "Copy_d2207d27f6999a61",
+      "label": "η εβδομάδα  ",
+      "text": "η εβδομάδα\n\n"
+    },
+    {
+      "name": "Copy_642a95fab3b74c87",
+      "label": " δραχμές",
+      "text": " δραχμές"
+    },
+    {
+      "name": "Copy_40ba4a4d8a585b6a",
+      "label": "ΚΑΜΙΑ ΕΙΣΗΓΗΣΗ ΔΕΝ ΙΣΟΔΥΝΑΜΕΙ ΜΕ ΚΑΤΑΔΙΚΗ",
+      "text": "ΚΑΜΙΑ ΕΙΣΗΓΗΣΗ ΔΕΝ ΙΣΟΔΥΝΑΜΕΙ ΜΕ ΚΑΤΑΔΙΚΗ"
+    },
+    {
+      "name": "Copy_288257cd77248586",
+      "label": "Σε αναμονή · Ζητήθηκαν αποδείξεις",
+      "text": "Σε αναμονή · Ζητήθηκαν αποδείξεις"
+    },
+    {
+      "name": "Copy_d049ab86afc865a1",
+      "label": "Εισήγηση για εξέταση στη Βουλή",
+      "text": "Εισήγηση για εξέταση στη Βουλή"
+    },
+    {
+      "name": "Copy_0faeede5a911bca4",
+      "label": "Αίτημα ελέγχου δικαστικής παραπομπής",
+      "text": "Αίτημα ελέγχου δικαστικής παραπομπής"
+    },
+    {
+      "name": "Copy_97debce937837a2a",
+      "label": " πρόσωπα · Εκπαιδευτικοί, μυθοπλαστικοί χαρακτήρες",
+      "text": " πρόσωπα · Εκπαιδευτικοί, μυθοπλαστικοί χαρακτήρες"
+    },
+    {
+      "name": "Copy_ba2f3162cc86a84e",
+      "label": "Επιφυλακτικός",
+      "text": "Επιφυλακτικός"
+    },
+    {
+      "name": "Copy_63275b04f9ff9fb7",
+      "label": "Υποστηρικτικός",
+      "text": "Υποστηρικτικός"
+    },
+    {
+      "name": "Copy_7321982a1b882482",
+      "label": "Αρνητικός",
+      "text": "Αρνητικός"
+    },
+    {
+      "name": "Copy_9da88ba17913653a",
+      "label": " · Τριττύς ",
+      "text": " · Τριττύς "
+    },
+    {
+      "name": "Copy_82faa4beeeaf83cb",
+      "label": " Δήμος ",
+      "text": "\nΔήμος "
+    },
+    {
+      "name": "Copy_aaf8784979b7165d",
+      "label": "Μία συνάντηση",
+      "text": "Μία συνάντηση"
+    },
+    {
+      "name": "Copy_5d6a15042eef889c",
+      "label": "Η συνάντηση ολοκληρώθηκε",
+      "text": "Η συνάντηση ολοκληρώθηκε"
+    },
+    {
+      "name": "Copy_177af8892ab719cf",
+      "label": "Επιβεβαίωση · −30 δρ.",
+      "text": "Επιβεβαίωση · −30 δρ."
+    },
+    {
+      "name": "Copy_90510655f09b86a2",
+      "label": "Εξέτασε προσφορά · 30 δρ.",
+      "text": "Εξέτασε προσφορά · 30 δρ."
+    },
+    {
+      "name": "Copy_df0affe0d1e2f2df",
+      "label": "Πάτησε ξανά για να δώσεις 30 δρ. · Η προσφορά μπορεί να απορριφθεί και ν",
+      "text": "Πάτησε ξανά για να δώσεις 30 δρ. · Η προσφορά μπορεί να απορριφθεί και να αυξήσει τον κίνδυνο καταγγελίας."
+    },
+    {
+      "name": "Copy_1d3d53e5a1e5a7f2",
+      "label": "Η υποστήριξη ενός προσώπου δεν εξασφαλίζει την απόφαση του σώματος.",
+      "text": "Η υποστήριξη ενός προσώπου δεν εξασφαλίζει την απόφαση του σώματος."
+    },
+    {
+      "name": "Copy_f93c7d5843c765cc",
+      "label": "Δέχεται να στηρίξει τη συζήτηση. Η συλλογική απόφαση παραμένει ανοιχτή.",
+      "text": "Δέχεται να στηρίξει τη συζήτηση. Η συλλογική απόφαση παραμένει ανοιχτή."
+    },
+    {
+      "name": "Copy_2ffdcc0db1feecc7",
+      "label": "Δεν εξασφάλισες την υποστήριξή του.",
+      "text": "Δεν εξασφάλισες την υποστήριξή του."
+    },
+    {
+      "name": "Copy_a2ba254fd31afa60",
+      "label": "Δεν έχει συνδεθεί η οθόνη «",
+      "text": "Δεν έχει συνδεθεί η οθόνη «"
+    },
+    {
+      "name": "Copy_5c3117cb8ed2675b",
+      "label": "Συνέπεια",
+      "text": "Συνέπεια"
+    },
+    {
+      "name": "Copy_44cbf197ce871c19",
+      "label": "Ηθική",
+      "text": "Ηθική"
+    },
+    {
+      "name": "Copy_2b3515f2ecd7824a",
+      "label": "Αυθεντία",
+      "text": "Αυθεντία"
+    },
+    {
+      "name": "Copy_2c88568db2fddb62",
+      "label": "Πειθώ",
+      "text": "Πειθώ"
+    },
+    {
+      "name": "Copy_cc950e76fab76b7a",
+      "label": "Παρρησία",
+      "text": "Παρρησία"
+    },
+    {
+      "name": "Copy_c638883310aed0c3",
+      "label": "Αναγνωρισιμότητα",
+      "text": "Αναγνωρισιμότητα"
+    },
+    {
+      "name": "Copy_5a94a27ea56fd278",
+      "label": "Όλες οι φυλές έχουν ήδη κληρωθεί.",
+      "text": "Όλες οι φυλές έχουν ήδη κληρωθεί."
+    },
+    {
+      "name": "Copy_77a67d0477966069",
+      "label": "Οι κλήροι αλλάζουν θέση…",
+      "text": "Οι κλήροι αλλάζουν θέση…"
+    },
+    {
+      "name": "Copy_7d2123a2aa37e008",
+      "label": "Η θέση δεν είναι διαθέσιμη για αυτή την ενέργεια.",
+      "text": "Η θέση δεν είναι διαθέσιμη για αυτή την ενέργεια."
+    },
+    {
+      "name": "Copy_5f96ebff952a90d9",
+      "label": "Η αποθήκευση δεν αντιστοιχεί σε αυτή την έκδοση του περιεχομένου.",
+      "text": "Η αποθήκευση δεν αντιστοιχεί σε αυτή την έκδοση του περιεχομένου."
+    },
+    {
+      "name": "Copy_d89d468447c2ade2",
+      "label": "Η αποθήκευση «",
+      "text": "Η αποθήκευση «"
+    },
+    {
+      "name": "Copy_feb8809653ec7d20",
+      "label": "Θέση ",
+      "text": "Θέση "
+    },
+    {
+      "name": "Copy_b06541c79ca58aee",
+      "label": "» στη θέση ",
+      "text": "» στη θέση "
+    },
+    {
+      "name": "Copy_c99911bb15cc693a",
+      "label": " θα διαγραφεί οριστικά.",
+      "text": "\nθα διαγραφεί οριστικά."
+    },
+    {
+      "name": "Copy_c546d6ae1f2ab985",
+      "label": "Έξοδος: στο κανονικό desktop build η εφαρμογή θα κλείσει.",
+      "text": "Έξοδος: στο κανονικό desktop build η εφαρμογή θα κλείσει."
+    },
+    {
+      "name": "Copy_56fdc3548a43471e",
+      "label": "Η Θέση ",
+      "text": "Η Θέση "
+    },
+    {
+      "name": "Copy_08437fd7bef254cd",
+      "label": " διαγράφηκε.",
+      "text": " διαγράφηκε."
+    },
+    {
+      "name": "Copy_26d76bc8ac61da84",
+      "label": "Δεν έχει συνδεθεί το παράθυρο επιβεβαίωσης.",
+      "text": "Δεν έχει συνδεθεί το παράθυρο επιβεβαίωσης."
+    },
+    {
+      "name": "Copy_3b7d2b4c89341818",
+      "label": "Αφήνεις προς το παρόν την πόλη;",
+      "text": "Αφήνεις προς το παρόν την πόλη;"
+    },
+    {
+      "name": "Copy_3c425a1d54d29c48",
+      "label": "Έξοδος από το παιχνίδι;",
+      "text": "Έξοδος από το παιχνίδι;"
+    },
+    {
+      "name": "Copy_08e52a462c5e8087",
+      "label": "Να σβήσει αυτή η διαδρομή;",
+      "text": "Να σβήσει αυτή η διαδρομή;"
+    },
+    {
+      "name": "Copy_0fbdf139f32fbe03",
+      "label": "ΕΠΙΣΤΡΟΦΗ ΣΤΟ ΜΕΝΟΥ",
+      "text": "ΕΠΙΣΤΡΟΦΗ ΣΤΟ ΜΕΝΟΥ"
+    },
+    {
+      "name": "Copy_9e9d8f4e2e474fdd",
+      "label": "ΕΞΟΔΟΣ",
+      "text": "ΕΞΟΔΟΣ"
+    },
+    {
+      "name": "Copy_dfa7abed718a9679",
+      "label": "ΔΙΑΓΡΑΦΗ ΙΣΤΟΡΙΑΣ",
+      "text": "ΔΙΑΓΡΑΦΗ ΙΣΤΟΡΙΑΣ"
+    },
+    {
+      "name": "Copy_98fa5c1c9102ad29",
+      "label": "Παραμονή",
+      "text": "Παραμονή"
+    },
+    {
+      "name": "Copy_c094b97741b41a20",
+      "label": "Ακύρωση",
+      "text": "Ακύρωση"
+    },
+    {
+      "name": "Copy_24281287fc92ad20",
+      "label": "Διατήρηση",
+      "text": "Διατήρηση"
+    },
+    {
+      "name": "Copy_8394cf88f71e8118",
+      "label": "Κύριο μενού",
+      "text": "Κύριο μενού"
+    },
+    {
+      "name": "Copy_6a5920d4ffad7a42",
+      "label": "Έξοδος",
+      "text": "Έξοδος"
+    },
+    {
+      "name": "Copy_650a9a115575ccac",
+      "label": "Διαγραφή",
+      "text": "Διαγραφή"
+    },
+    {
+      "name": "Copy_9b8a2f9e7df301f6",
+      "label": "Να κλείσει η εφαρμογή;",
+      "text": "Να κλείσει η εφαρμογή;"
+    },
+    {
+      "name": "Copy_2abd78f173e97ef8",
+      "label": "Η πρόοδος έως το τελευταίο σημείο αυτόματης αποθήκευσης διατηρείται.",
+      "text": "Η πρόοδος έως το τελευταίο σημείο\nαυτόματης αποθήκευσης διατηρείται."
+    },
+    {
+      "name": "Copy_88432a37c69e06d6",
+      "label": "ΕΠΙΣΤΡΟΦΗ ΣΤΗΝ ΠΟΛΗ",
+      "text": "ΕΠΙΣΤΡΟΦΗ ΣΤΗΝ ΠΟΛΗ"
+    },
+    {
+      "name": "Copy_b193aad902079130",
+      "label": "ΜΙΑ ΝΕΑ ΑΡΧΗ",
+      "text": "ΜΙΑ ΝΕΑ ΑΡΧΗ"
+    },
+    {
+      "name": "Copy_0f6b2ffdfe795cf8",
+      "label": "Φόρτωση παιχνιδιού",
+      "text": "Φόρτωση παιχνιδιού"
+    },
+    {
+      "name": "Copy_370c113c787a399b",
+      "label": "Νέο παιχνίδι",
+      "text": "Νέο παιχνίδι"
+    },
+    {
+      "name": "Copy_027b0b558dd1e26a",
+      "label": "Συνέχεια ›",
+      "text": "Συνέχεια ›"
+    },
+    {
+      "name": "Copy_d4cf2992479f2dad",
+      "label": "Έναρξη ›",
+      "text": "Έναρξη ›"
+    },
+    {
+      "name": "Copy_ae8812cabfe6d28c",
+      "label": "Κενή θέση",
+      "text": "Κενή θέση"
+    },
+    {
+      "name": "Copy_aa1d0930e0ebc648",
+      "label": "Μη διαθέσιμη θέση",
+      "text": "Μη διαθέσιμη θέση"
+    },
+    {
+      "name": "Copy_202c21be0bed7103",
+      "label": "Δεν υπάρχει αποθηκευμένο παιχνίδι.",
+      "text": "Δεν υπάρχει αποθηκευμένο παιχνίδι."
+    },
+    {
+      "name": "Copy_e46a7e190a1a355d",
+      "label": "Μια νέα ιστορία περιμένει.",
+      "text": "Μια νέα ιστορία περιμένει."
+    },
+    {
+      "name": "Copy_b576f5addc0d5a4b",
+      "label": "Μη συμβατή ή κατεστραμμένη αποθήκευση",
+      "text": "Μη συμβατή ή κατεστραμμένη αποθήκευση"
+    },
+    {
+      "name": "Copy_cf2ea4c9b5150068",
+      "label": "Σήμερα",
+      "text": "Σήμερα"
+    },
+    {
+      "name": "Copy_f57c54b41ba935aa",
+      "label": "Χθες",
+      "text": "Χθες"
+    },
+    {
+      "name": "Copy_eaae7ae5917b8623",
+      "label": "Διάλεξε την ιστορία που θέλεις να συνεχίσεις.",
+      "text": "Διάλεξε την ιστορία που θέλεις να συνεχίσεις."
+    },
+    {
+      "name": "Copy_74e5162662e35f3f",
+      "label": "Επίλεξε μία κενή θέση για τη δική σου ιστορία.",
+      "text": "Επίλεξε μία κενή θέση για τη δική σου ιστορία."
+    },
+    {
+      "name": "Copy_f66c2696f5c74aff",
+      "label": "Όλες οι θέσεις είναι κατειλημμένες. Ελευθέρωσε μία από τη Φόρτωση.",
+      "text": "Όλες οι θέσεις είναι κατειλημμένες. Ελευθέρωσε μία από τη Φόρτωση."
+    },
+    {
+      "name": "Copy_25b0ef0e5008174d",
+      "label": "Πρόλογος",
+      "text": "Πρόλογος"
+    },
+    {
+      "name": "Copy_1ca3a318398adcc3",
+      "label": "Η ζωή σου · Βιογραφία",
+      "text": "Η ζωή σου · Βιογραφία"
+    },
+    {
+      "name": "Copy_89f9d2fb8432db42",
+      "label": "Α΄",
+      "text": "Α΄"
+    },
+    {
+      "name": "Copy_98b57fb1137b35bd",
+      "label": "Β΄",
+      "text": "Β΄"
+    },
+    {
+      "name": "Copy_f235b2d4e165b68e",
+      "label": "Γ΄",
+      "text": "Γ΄"
+    },
+    {
+      "name": "Copy_a8dd9dae37132b84",
+      "label": "Δ΄",
+      "text": "Δ΄"
+    },
+    {
+      "name": "Copy_5f826232605f221e",
+      "label": "Ε΄",
+      "text": "Ε΄"
+    },
+    {
+      "name": "Copy_3c102fabd92cfdea",
+      "label": "ΣΤ΄",
+      "text": "ΣΤ΄"
+    },
+    {
+      "name": "Copy_c7c43d61ccac1cb9",
+      "label": "Ζ΄",
+      "text": "Ζ΄"
+    },
+    {
+      "name": "Copy_7dd80f6afc4ed10b",
+      "label": "Η΄",
+      "text": "Η΄"
+    },
+    {
+      "name": "Copy_2dd5885ba989d7ee",
+      "label": "Θ΄",
+      "text": "Θ΄"
+    },
+    {
+      "name": "Copy_07b1f0f313750d22",
+      "label": "Ι΄",
+      "text": "Ι΄"
+    },
+    {
+      "name": "Copy_9573ff89eebfbd15",
+      "label": " πρυτανεία · Εβδομάδα ",
+      "text": " πρυτανεία · Εβδομάδα "
+    },
+    {
+      "name": "Copy_20ae1c5c5bf446f7",
+      "label": "Η καταγωγή σου ανοίγει διαφορετικές εμπειρίες. Η στάση σου απέναντί τους",
+      "text": "Η καταγωγή σου ανοίγει διαφορετικές εμπειρίες.\nΗ στάση σου απέναντί τους είναι δική σου επιλογή."
+    },
+    {
+      "name": "Copy_5977d01bbf4ff9fb",
+      "label": "Ο όρκος είναι μια αρχή που θα δοκιμάζεται στις πράξεις σου.",
+      "text": "Ο όρκος είναι μια αρχή που θα δοκιμάζεται στις πράξεις σου."
+    },
+    {
+      "name": "Copy_a9d04dc790674023",
+      "label": "Κάποιες αποφάσεις ακούγονται μόνο από έναν άνθρωπο. Κι όμως, αφήνουν το ",
+      "text": "Κάποιες αποφάσεις ακούγονται μόνο από έναν άνθρωπο.\nΚι όμως, αφήνουν το αποτύπωμά τους."
+    },
+    {
+      "name": "Copy_b0ff9eb7a58bf3d6",
+      "label": " ετών · ",
+      "text": " ετών · "
+    },
+    {
+      "name": "Copy_72b5e49b1563ea57",
+      "label": " Δήμος: ",
+      "text": "\nΔήμος: "
+    },
+    {
+      "name": "Copy_a90744770635bb27",
+      "label": " Τριττύς: ",
+      "text": "\nΤριττύς: "
+    },
+    {
+      "name": "Copy_d27fcffa71ab967e",
+      "label": "323/322 π.Χ. · ",
+      "text": "323/322 π.Χ. · "
+    },
+    {
+      "name": "Copy_750d677c988d9482",
+      "label": " ΕΤΩΝ",
+      "text": " ΕΤΩΝ"
+    },
+    {
+      "name": "Copy_5c46fb5ce3c0a458",
+      "label": "πρώτη",
+      "text": "πρώτη"
+    },
+    {
+      "name": "Copy_8509d0fc5943c94c",
+      "label": "δεύτερη",
+      "text": "δεύτερη"
+    },
+    {
+      "name": "Copy_d4f1082945860c05",
+      "label": "τρίτη",
+      "text": "τρίτη"
+    },
+    {
+      "name": "Copy_5f489244eac49453",
+      "label": "τέταρτη",
+      "text": "τέταρτη"
+    },
+    {
+      "name": "Copy_0b6a7606784364a7",
+      "label": "πέμπτη",
+      "text": "πέμπτη"
+    },
+    {
+      "name": "Copy_1adbd881e87894f4",
+      "label": "έκτη",
+      "text": "έκτη"
+    },
+    {
+      "name": "Copy_e05547ea8d704479",
+      "label": "έβδομη",
+      "text": "έβδομη"
+    },
+    {
+      "name": "Copy_d336b8d752196427",
+      "label": "όγδοη",
+      "text": "όγδοη"
+    },
+    {
+      "name": "Copy_84ed3f352e51672f",
+      "label": "ένατη",
+      "text": "ένατη"
+    },
+    {
+      "name": "Copy_ba8676935e1bf943",
+      "label": "δέκατη",
+      "text": "δέκατη"
+    },
+    {
+      "name": "Copy_8ba25509b337198d",
+      "label": " πρυτανεία",
+      "text": " πρυτανεία"
+    },
+    {
+      "name": "Copy_0318871c2b7b5380",
+      "label": " · ΠΡΥΤΑΝΕΥΟΥΣΑ ΦΥΛΗ",
+      "text": " · ΠΡΥΤΑΝΕΥΟΥΣΑ ΦΥΛΗ"
+    },
+    {
+      "name": "Copy_8b44729931e24eab",
+      "label": "Η ΣΕΙΡΑ ΤΩΝ ΦΥΛΩΝ ΘΑ ΚΡΙΘΕΙ ΜΕ ΚΛΗΡΩΣΗ",
+      "text": "Η ΣΕΙΡΑ ΤΩΝ ΦΥΛΩΝ ΘΑ ΚΡΙΘΕΙ ΜΕ ΚΛΗΡΩΣΗ"
+    },
+    {
+      "name": "Copy_228a792defd35fbf",
+      "label": "Εβδομάδα ",
+      "text": "Εβδομάδα "
+    },
+    {
+      "name": "Copy_8177807e48b3c5c3",
+      "label": " από 5 · Η διάρκεια σε εβδομάδες αποτελεί εκπαιδευτική συμπύκνωση του πο",
+      "text": " από 5 · Η διάρκεια σε εβδομάδες αποτελεί εκπαιδευτική συμπύκνωση του πολιτειακού έτους."
+    },
+    {
+      "name": "Copy_f98d9d533ac8b805",
+      "label": "Οι δέκα φυλές υπηρετούν διαδοχικά. Η φυλή που κληρώνεται αποσύρεται από ",
+      "text": "Οι δέκα φυλές υπηρετούν διαδοχικά. Η φυλή που κληρώνεται αποσύρεται από τις επόμενες κληρώσεις του έτους."
+    },
+    {
+      "name": "Copy_c1f733670aebd7d7",
+      "label": "Την πρυτανεία αναλαμβάνει η ",
+      "text": "Την πρυτανεία αναλαμβάνει η "
+    },
+    {
+      "name": "Copy_a21b664817565e8c",
+      "label": "Κληρώθηκε τώρα",
+      "text": "Κληρώθηκε τώρα"
+    },
+    {
+      "name": "Copy_7961be8330cfef48",
+      "label": "Διαθέσιμη",
+      "text": "Διαθέσιμη"
+    },
+    {
+      "name": "Copy_cebe6ca122c440f7",
+      "label": ". Οι πενήντα βουλευτές της αναλαμβάνουν την πρυτανεία.",
+      "text": ". Οι πενήντα βουλευτές της αναλαμβάνουν την πρυτανεία."
+    },
+    {
+      "name": "Copy_83229ddd6f5397d0",
+      "label": "Οι διαθέσιμες φυλές συμμετέχουν στην κλήρωση.",
+      "text": "Οι διαθέσιμες φυλές συμμετέχουν στην κλήρωση."
+    },
+    {
+      "name": "Copy_f3fc4caef743a68e",
+      "label": "Αρχίζει η πρυτανεία",
+      "text": "Αρχίζει η πρυτανεία"
+    },
+    {
+      "name": "Copy_7e810e5a6a10a819",
+      "label": "Κλήρωση της φυλής",
+      "text": "Κλήρωση της φυλής"
+    },
+    {
+      "name": "Copy_8ba8e7d0292e8747",
+      "label": " / 10 Εβδομάδα ",
+      "text": " / 10\nΕβδομάδα "
+    },
+    {
+      "name": "Copy_1a496ccd9c515628",
+      "label": "η πρυτανεία",
+      "text": "η πρυτανεία"
+    },
+    {
+      "name": "Copy_872213b24e79902d",
+      "label": "η πρυτανεία",
+      "text": "η\nπρυτανεία"
+    },
+    {
+      "name": "Copy_047651c755e3bfc4",
+      "label": "ΠΟΛΗ  ",
+      "text": "ΠΟΛΗ  "
+    },
+    {
+      "name": "Copy_a056bcffd38f7391",
+      "label": "     ΟΙΚΟΣ  ",
+      "text": "     ΟΙΚΟΣ  "
+    },
+    {
+      "name": "Copy_2aede956f376db8b",
+      "label": "Ολοκλήρωσε την ενεργή θεσμική δραστηριότητα πριν προχωρήσεις στην επόμεν",
+      "text": "Ολοκλήρωσε την ενεργή θεσμική δραστηριότητα πριν προχωρήσεις στην επόμενη εβδομάδα."
+    },
+    {
+      "name": "Copy_9bc90cc634c1c0ff",
+      "label": "     Προσωπικό  ",
+      "text": "     Προσωπικό  "
+    },
+    {
+      "name": "Copy_fff70e4dee042d43",
+      "label": "Δήμος: ",
+      "text": "Δήμος: "
+    },
+    {
+      "name": "Copy_21feabc3fc6eca22",
+      "label": "Η εικόνα προσαρμόζεται αυτόματα στο παράθυρο του browser. Δεν χρειάζεται",
+      "text": "Η εικόνα προσαρμόζεται αυτόματα στο παράθυρο του browser. Δεν χρειάζεται ξεχωριστή ρύθμιση ανάλυσης."
+    }
+  ]
+}
