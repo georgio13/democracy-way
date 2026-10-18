@@ -1,0 +1,24 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.cs]
+indent_style = space
+indent_size = 4
+
+[*.{json,js,jslib}]
+indent_style = space
+indent_size = 2
+
+[*.cs]
+csharp_new_line_before_open_brace = all
+csharp_style_namespace_declarations = block_scoped:suggestion
+dotnet_naming_rule.types_pascal_case.severity = suggestion
+dotnet_naming_rule.types_pascal_case.symbols = types
+dotnet_naming_rule.types_pascal_case.style = pascal_case
+dotnet_naming_symbols.types.applicable_kinds = class, struct, enum, interface
+dotnet_naming_style.pascal_case.capitalization = pascal_case

@@ -1,0 +1,27 @@
+# Unity-generated files
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Bb]uild/
+/[Bb]uilds/
+/.vs/
+*.csproj
+*.sln
+*.slnx
+*.user
+*.pidb
+*.booproj
+*.svd
+*.pdb
+# Local credentials must never enter source control
+.env
+.env.*
+!*.example
+*service-account*.json
+firebase-adminsdk*.json
+
+# Install the official articy importer locally from the vendor
+/Assets/ArticyImporter/
+/Assets/ArticyImporter.meta
