@@ -1,0 +1,1 @@
+Four independent prologue entities; preserved native text; removed old flow template and note/background properties.

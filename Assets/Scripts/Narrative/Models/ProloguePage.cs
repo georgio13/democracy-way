@@ -11,8 +11,5 @@ namespace DemocracyWay.NewUI
         public string title;
         [TextArea(4, 15)]
         public string body;
-        [TextArea(2, 8)]
-        public string sourceNote;
-        public Sprite background;
     }
 }

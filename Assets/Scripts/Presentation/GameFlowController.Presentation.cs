@@ -159,20 +159,22 @@ namespace DemocracyWay.NewUI
             ProloguePage page = config.prologue[State.prologueIndex];
             SetText("prologue.title", page.title);
             SetText("prologue.body", page.body);
-            SetText("prologue.source", page.sourceNote);
             SetText("prologue.step", (State.prologueIndex + 1) + " / " + config.prologue.Count);
             for (int i = 0; i < config.prologue.Count; i++)
                 SetActive("prologue.page." + i, i == State.prologueIndex);
             TMP_Text narrative = Get<TMP_Text>("prologue.body");
             if (narrative != null)
             {
+                // Each page fits inside the fixed reading area; no scrolling or clipping.
+                narrative.enableAutoSizing = true;
+                narrative.fontSizeMin = 26;
+                narrative.fontSizeMax = 36;
+                narrative.lineSpacing = 5;
+                narrative.paragraphSpacing = 12;
                 Canvas.ForceUpdateCanvases();
-                var scroll = narrative.GetComponentInParent<ScrollRect>();
-                if (scroll != null)
-                    scroll.verticalNormalizedPosition = 1;
+                narrative.ForceMeshUpdate();
             }
 
-            SetImage("prologue.background", page.background);
         }
 
         private void RenderBiography()

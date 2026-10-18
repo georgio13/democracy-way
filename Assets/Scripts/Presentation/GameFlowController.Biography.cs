@@ -39,19 +39,18 @@ namespace DemocracyWay.NewUI
                 yield return null;
             }
 
-            string nextNode=ArticyNarrative.Next("Prologue_"+config.prologue[State.prologueIndex].id.Replace('-','_'));
-            int nextPrologue=config.prologue.FindIndex(p=>"Prologue_"+p.id.Replace('-','_')==nextNode);
-            if (nextPrologue >= 0)
+            // The prologue is an ordered collection of pages, independent of biography flow.
+            int nextPage = State.prologueIndex + 1;
+            if (nextPage < config.prologue.Count)
             {
-                State.prologueIndex=nextPrologue;
+                State.prologueIndex = nextPage;
                 SaveCheckpoint();
                 RenderPrologue();
             }
             else
             {
                 State.phase = "biography";
-                State.biographyIndex = config.biography.FindIndex(b=>"Bio_"+b.id.Replace('-','_')==nextNode);
-                if(State.biographyIndex<0)throw new InvalidOperationException("Native prologue has no biography continuation.");
+                State.biographyIndex = 0;
                 SaveCheckpoint();
                 ShowBiography();
             }

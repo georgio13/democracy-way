@@ -19,6 +19,17 @@ public sealed class Plugin : MacroPlugin
     string ManifestFile => Path.Combine(Root,"..","Migration","NativeManifest.json");
     public override bool ProjectLoaded()
     {
+        string prologueRequest=Path.Combine(Root,"..","Migration","SimplifyPrologue.request");
+        if(File.Exists(prologueRequest))
+        {
+            System.Windows.Threading.Dispatcher.CurrentDispatcher.BeginInvoke(new Action(()=>
+            {
+                try { SimplifyPrologue(); Publish(null!,new()); File.Move(prologueRequest,prologueRequest+".done",true); }
+                catch(Exception error){File.WriteAllText(Path.Combine(Root,"..","Migration","SimplifyPrologueError.txt"),error.ToString());}
+            }));
+            return true;
+        }
+
         string publication=Path.Combine(Root,"..","Migration","Publish.request");
         if(File.Exists(publication))
         {
@@ -49,6 +60,48 @@ public sealed class Plugin : MacroPlugin
             new() { CaptionLid="Export official Unity package", ModifiesData=false, Execute=ExportUnity },
             new() { CaptionLid="Import native rules", ModifiesData=true, Execute=ImportRules }
         };
+    }
+    void SimplifyPrologue()
+    {
+        // Preserve the author's current native Text and DisplayName before replacing object types.
+        var records=(JArray)ReadManifest()["records"];
+        var pages=new List<(string name,string id,string title,string body)>();
+        foreach(var record in records.Where(r=>(string)r["schema"]=="ProloguePage"))
+        {
+            string name=(string)record["name"];
+            var old=Session.GetObjectByTechName(name);
+            if(old==null||!old.IsValid)throw new InvalidOperationException("Missing existing prologue page: "+name);
+            string feature=old.ObjectType==ObjectType.FlowFragment?"PrologueData":"ProloguePageData";
+            var raw=old[feature+".F_id"];
+            string id=raw is TextProxy text?text.Text:Convert.ToString(raw);
+            pages.Add((name,id,old.GetDisplayName(),old.GetText()));
+        }
+        string archive=Path.Combine(Root,"..","Migration","PrologueBeforeSimplification.json");
+        if(!File.Exists(archive))File.WriteAllText(archive,JsonConvert.SerializeObject(pages,Formatting.Indented));
+        if(!Session.TemplatePresent("ProloguePage"))
+        {
+            var blueprint=Session.BeginNewFeature();blueprint.TechnicalName="ProloguePageData";blueprint.DisplayName="Σελίδα προλόγου";
+            foreach(string key in new[]{"id","title","body"})
+            {
+                var property=blueprint.AddProperty<TextPropertyBlueprint>();property.TechnicalName="F_"+key;property.DisplayName=key;property.Size=TextPropertyBlueprint.TextPropertySizes.Large;
+            }
+            var feature=Session.EndFeature(blueprint);
+            var template=Session.BeginNewObjectTemplate(ObjectType.Entity);template.TechnicalName="ProloguePage";template.DisplayName="Σελίδα προλόγου";template.AddFeature(feature);Session.EndObjectTemplate(template);
+        }
+        var folder=Session.GetObjectByTechName("ProloguePages");
+        if(folder==null||!folder.IsValid){folder=Session.CreateFolder(Session.GetSystemFolder(SystemFolderNames.Entities),"Πρόλογος");folder.SetTechnicalName("ProloguePages");}
+        foreach(var page in pages)
+        {
+            var old=Session.GetObjectByTechName(page.name);
+            if(old.ObjectType==ObjectType.Entity){Session.MoveObject(old,folder);continue;}
+            old.SetTechnicalName("Retired_"+page.name+"_"+DateTime.UtcNow.Ticks);Session.DeleteObject(old);
+            var entity=Session.CreateEntity(folder,page.title,"ProloguePage");entity.SetTechnicalName(page.name);entity.SetText(page.body);
+            entity["ProloguePageData.F_id"]=page.id;entity["ProloguePageData.F_title"]=page.title;entity["ProloguePageData.F_body"]=page.body;
+        }
+        var obsolete=Session.GetTemplateByTechName("Prologue");if(obsolete!=null&&obsolete.IsValid)Session.DeleteObject(obsolete);
+        var obsoleteFeature=Session.GetFeatureByTechName("PrologueData");if(obsoleteFeature!=null&&obsoleteFeature.IsValid)Session.DeleteObject(obsoleteFeature);
+        Session.SaveProject();
+        File.WriteAllText(Path.Combine(Root,"..","Migration","SimplifyPrologueResult.txt"),"Four independent prologue entities; preserved native text; removed old flow template and note/background properties.");
     }
     JObject ReadManifest() => JObject.Parse(File.ReadAllText(ManifestFile,Encoding.UTF8));
     void Publish(MacroCommandDescriptor command,List<ObjectProxy> selected)
@@ -192,7 +245,13 @@ public sealed class Plugin : MacroPlugin
                 string tech=(string)record["name"],template=(string)record["schema"];
                 var obj=Session.GetObjectByTechName(tech);
                 if(obj!=null && obj.IsValid){kept++;continue;} // Never overwrite an author's subsequent edits.
-                obj=(string)record["type"]=="flow"?Session.CreateFlowFragment(flow,(string)record["label"],template):Session.CreateEntity(folder,(string)record["label"],template);
+                var parent=folder;
+                if((string)record["parent"]=="ProloguePages")
+                {
+                    parent=Session.GetObjectByTechName("ProloguePages");
+                    if(parent==null||!parent.IsValid){parent=Session.CreateFolder(Session.GetSystemFolder(SystemFolderNames.Entities),"Πρόλογος");parent.SetTechnicalName("ProloguePages");}
+                }
+                obj=(string)record["type"]=="flow"?Session.CreateFlowFragment(flow,(string)record["label"],template):Session.CreateEntity(parent,(string)record["label"],template);
                 obj.SetTechnicalName(tech);
                 if((string)record["type"]=="flow") obj.SetFlowPosition((double?)record["x"]??0,(double?)record["y"]??0);
                 if(record["text"]!=null)obj["Text"]=(string)record["text"];
