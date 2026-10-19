@@ -16,6 +16,7 @@ namespace DemocracyWay.NewUI
         GameObject evaluationSurveyPanel, evaluationDialog;
         Button evaluationAccessButton, evaluationSubmitButton, evaluationDialogConfirm, evaluationDialogCancel;
         TMP_Text evaluationSurveyProgress, evaluationDialogTitle, evaluationDialogBody;
+        CheckmarkGraphic evaluationCompletedMark;
         RectTransform evaluationSurveyContent;
         ScrollRect evaluationSurveyScroll;
         CanvasGroup evaluationBlockedGroup;
@@ -138,13 +139,13 @@ namespace DemocracyWay.NewUI
             var body = Get<TMP_Text>(currentScreen + ".body");
             if (heading != null)
             {
-                CivicUIFactory.Box(heading.rectTransform, 0, 24, 1058.4f, feedback ? 88 : 152);
+                CivicUIFactory.Box(heading.rectTransform, 0, 88, 1058.4f, feedback ? 80 : 124);
                 heading.enableAutoSizing = true; heading.fontSizeMin = 26; heading.fontSizeMax = 39;
                 heading.color = feedback && !correct ? new Color32(135, 64, 51, 255) : CivicUIFactory.Ink;
             }
             if (body != null)
             {
-                CivicUIFactory.Box(body.rectTransform, 0, feedback ? 130 : 190, 1058.4f, feedback ? 340 : 72);
+                CivicUIFactory.Box(body.rectTransform, 0, feedback ? 182 : 224, 1058.4f, feedback ? 330 : 64);
                 body.enableAutoSizing = true; body.fontSizeMin = 22; body.fontSizeMax = feedback ? 29 : 25;
             }
             for (int i = 0; i < 4; i++)
@@ -153,7 +154,7 @@ namespace DemocracyWay.NewUI
                 if (button == null) continue;
                 button.gameObject.SetActive(!feedback || i == 0); button.interactable = true;
                 var r = (RectTransform)button.transform;
-                CivicUIFactory.Box(r, feedback ? 239 : 0, feedback ? 540 : 280 + i * 88, feedback ? 580 : 1058.4f, feedback ? 84 : 78);
+                CivicUIFactory.Box(r, feedback ? 239 : 0, feedback ? 548 : 308 + i * 80, feedback ? 580 : 1058.4f, feedback ? 76 : 72);
                 var label = button.GetComponentInChildren<TMP_Text>(true);
                 if (label != null)
                 {
@@ -182,16 +183,16 @@ namespace DemocracyWay.NewUI
             CampaignText("body", "Το παιχνίδι ακολουθεί δέκα πρυτανείες. Στην αρχή καθεμιάς κληρώνεται η φυλή που θα πρυτανεύσει· όσες έχουν ήδη αναλάβει δεν κληρώνονται ξανά. Οι πέντε εβδομάδες κάθε πρυτανείας είναι εκπαιδευτική συμπύκνωση του ιστορικού χρόνου.\n\nΣτον χάρτη επίλεξε τον θεσμό με ενεργή υπόθεση. Απάντησε στην ερώτηση γνώσης, γνώρισε τη διαδικασία και άκουσε τους ομιλητές με το «Συνέχεια». Έπειτα μπορείς να ζητήσεις τον λόγο και να υποστηρίξεις μία πρόταση. Η προσωπική σου ψήφος δεν εξασφαλίζει την επικράτησή της.\n\nΣτην αγορά διαβάζεις τις εξελίξεις. Στο Ευρετήριο βρίσκεις εξηγήσεις, στους λογογράφους μπορείς να προμηθευτείς λόγο και στους αξιωματούχους να αναζητήσεις υποστήριξη. Παρακολούθησε τους προσωπικούς δείκτες, την κατάσταση της πόλης και τα δύο ταμεία: οι αποφάσεις αφήνουν συνέπειες στις επόμενες υποθέσεις.\n\nΑφού ολοκληρώσεις την εβδομάδα, προχωράς στην επόμενη· η πρόοδος αποθηκεύεται αυτόματα. Μετά την πρώτη πρυτανεία θα μπορείς να συμπληρώσεις την αξιολόγηση ή να συνεχίσεις και να την κάνεις αργότερα.");
             var heading = Get<TMP_Text>(currentScreen + ".heading");
             var body = Get<TMP_Text>(currentScreen + ".body");
-            CivicUIFactory.Box(heading.rectTransform, 0, 24, 1058.4f, 80);
+            CivicUIFactory.Box(heading.rectTransform, 0, 88, 1058.4f, 64);
             heading.color = CivicUIFactory.Ink;
-            CivicUIFactory.Box(body.rectTransform, 0, 124, 1058.4f, 446);
-            body.enableAutoSizing = true; body.fontSizeMin = 23; body.fontSizeMax = 27;
+            CivicUIFactory.Box(body.rectTransform, 0, 166, 1058.4f, 420);
+            body.enableAutoSizing = true; body.fontSizeMin = 21; body.fontSizeMax = 26;
             for (int i = 0; i < 4; i++)
             {
                 var button = Get<Button>(currentScreen + ".answer." + i);
                 button.gameObject.SetActive(i == 0);
                 if (i != 0) continue;
-                CivicUIFactory.Box((RectTransform)button.transform, 239, 590, 580, 76);
+                CivicUIFactory.Box((RectTransform)button.transform, 239, 610, 580, 70);
                 button.GetComponentInChildren<TMP_Text>(true).text = "Στην πρώτη πρυτανεία";
             }
         }
@@ -218,12 +219,20 @@ namespace DemocracyWay.NewUI
                 var font = Get<TMP_Text>("initial-knowledge.heading")?.font;
                 evaluationAccessButton = CivicUIFactory.Button(map.transform, "Evaluation access", "Αξιολόγηση", font, StartEvaluation, this);
                 var rect = (RectTransform)evaluationAccessButton.transform; rect.anchorMin = rect.anchorMax = new Vector2(.91f, .13f); rect.pivot = new Vector2(.5f, .5f); rect.anchoredPosition = Vector2.zero; rect.sizeDelta = new Vector2(330, 76);
+                var mark = CivicUIFactory.Rect(rect, "Completed evaluation checkmark");
+                mark.anchorMin = mark.anchorMax = mark.pivot = new Vector2(1, .5f);
+                mark.anchoredPosition = new Vector2(-20, 0); mark.sizeDelta = new Vector2(26, 26);
+                mark.gameObject.AddComponent<CanvasRenderer>();
+                evaluationCompletedMark = mark.gameObject.AddComponent<CheckmarkGraphic>();
+                evaluationCompletedMark.color = CivicUIFactory.Ink; evaluationCompletedMark.raycastTarget = false;
+                mark.gameObject.SetActive(false);
                 targets["map.evaluation"] = evaluationAccessButton;
             }
             bool available = EvaluationRules.Available(State, EvaluationData);
             evaluationAccessButton.gameObject.SetActive(available || Evaluation.completed);
             evaluationAccessButton.interactable = available && !Evaluation.completed;
-            evaluationAccessButton.GetComponentInChildren<TMP_Text>().text = Evaluation.completed ? "Αξιολόγηση ✓" : "Αξιολόγηση";
+            evaluationAccessButton.GetComponentInChildren<TMP_Text>().text = "Αξιολόγηση";
+            if (evaluationCompletedMark != null) evaluationCompletedMark.gameObject.SetActive(Evaluation.completed);
             if (!modalOpen && !gamePaused && EvaluationRules.Offer(State, EvaluationData, EvaluationPointNow()))
             {
                 SaveCheckpoint();
@@ -411,4 +420,5 @@ namespace DemocracyWay.NewUI
         }
     }
 }
+
 
