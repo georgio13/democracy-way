@@ -84,13 +84,13 @@ namespace DemocracyWay.NewUI
                 if (step.kind == BiographyStepKind.Identity)
                 {
                     identitySteps++;
-                    if (step.choices.Count != 0 && step.choices.Count != 10)
+                    if (string.IsNullOrEmpty(step.selectionKind) && step.choices.Count != 0 && step.choices.Count != 10)
                     {
                         error = "Το βήμα ταυτότητας δέχεται είτε καμία είτε δέκα επιλογές καταγωγής.";
                         return false;
                     }
                 }
-                else if (step.choices.Count < 1 || step.choices.Count > 4)
+                else if (step.choices.Count < 1 || (string.IsNullOrEmpty(step.selectionKind) && step.choices.Count > 4))
                 {
                     error = "Κάθε αφηγηματικό βήμα χρειάζεται μία έως τέσσερις επιλογές.";
                     return false;

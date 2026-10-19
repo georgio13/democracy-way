@@ -25,7 +25,11 @@ namespace DemocracyWay.NewUI
                 if (!string.IsNullOrEmpty(TestDirectory))
                     return TestDirectory;
 #endif
+#if UNITY_WEBGL || UNITY_EDITOR
+                return AccountBridge.LocalDirectory;
+#else
                 return Path.Combine(Application.persistentDataPath, "approved-ui-saves-v1");
+#endif
             }
         }
 
@@ -111,7 +115,7 @@ namespace DemocracyWay.NewUI
 
         private static bool ValidState(GameState state)
         {
-            if (state == null || !Guid.TryParse(state.runId, out _) || !CampaignRules.ValidCampaign(state.campaign) || state.metrics == null || state.baseline == null || state.choices == null || state.drawnTribes == null || state.prologueIndex < 0 || state.biographyIndex < 0 || state.tribeIndex < 0 || state.tribeIndex >= 10 || state.economicClassIndex < 0 || state.economicClassIndex >= 4 || state.prytany < 1 || state.prytany > 10 || state.week < 1 || state.week > 5 || state.currentTribe < -1 || state.currentTribe >= 10)
+            if (state == null || !Guid.TryParse(state.runId, out _) || !CampaignRules.ValidCampaign(state.campaign) || !EvaluationRules.Valid(state.evaluation) || state.metrics == null || state.baseline == null || state.choices == null || state.drawnTribes == null || state.prologueIndex < 0 || state.biographyIndex < 0 || state.tribeIndex < 0 || state.tribeIndex >= 10 || state.economicClassIndex < 0 || state.economicClassIndex >= 4 || state.prytany < 1 || state.prytany > 10 || state.week < 1 || state.week > 5 || state.currentTribe < -1 || state.currentTribe >= 10)
                 return false;
             if (state.phase != "prologue" && state.phase != "biography" && state.phase != "summary" && state.phase != "prytany-title" && state.phase != "lottery" && state.phase != "map-stela" && !CampaignRules.ValidPhase(state.phase))
                 return false;
@@ -175,6 +179,7 @@ namespace DemocracyWay.NewUI
                 if (File.Exists(path + ".tmp"))
                     File.Delete(path + ".tmp");
                 FlushWebStorage();
+                AccountBridge.UploadSlot(slot, json);
                 return true;
             }
             catch (Exception ex)when (StorageException(ex))
@@ -202,7 +207,9 @@ namespace DemocracyWay.NewUI
                     if (File.Exists(path + suffix))
                         File.Delete(path + suffix);
                 FlushWebStorage();
-                return !File.Exists(path);
+                bool deleted = !File.Exists(path);
+                if (deleted) AccountBridge.DeleteSlot(slot);
+                return deleted;
             }
             catch (Exception ex)when (StorageException(ex))
             {

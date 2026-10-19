@@ -38,6 +38,8 @@ namespace DemocracyWay.Editor
                 if(p==null||p.schemaVersion!=1||p.bundleSha256!=Hash(bundle)||p.unitySha256!=Hash(unity))throw new InvalidDataException("Incomplete articy publication; export again from Publish narrative to Unity.");
                 ArticyContentImport.Process(true);
                 File.WriteAllText(applied,json);
+                // The vendor must regenerate variables, models and script fragments as well as the content adapter.
+                EditorApplication.delayCall += () => EditorApplication.ExecuteMenuItem("Tools/articy:draft Importer/Import articy:draft export file");
                 Debug.Log("Native narrative publication applied: "+p.exportedUtc);
             }
             catch(Exception e){Debug.LogError("Native narrative publication was not applied: "+e.Message);if(force)throw;}

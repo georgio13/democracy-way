@@ -7,18 +7,23 @@ namespace DemocracyWay.NewUI
     [Serializable]
     public sealed class GameState
     {
+        public const string DefaultPlayerName = "Νικόμαχος";
         public string runId;
         public int contentVersion;
+        public float activeSeconds;
+        public EvaluationState evaluation = new EvaluationState();
         public string phase = "prologue";
         public int prologueIndex;
         public int biographyIndex;
-        public string playerName = "Αθηναίος";
+        public string playerName = DefaultPlayerName;
         public int tribeIndex;
         public int economicClassIndex = 2;
         public bool identityComplete;
         public bool biographyComplete;
         public int playerAge = 30;
         public string profession;
+        public string demeId, trittysId;
+        public CityMetricDelta biographyCityApplied = new CityMetricDelta();
         public string trittys = "Δεν έχει οριστεί";
         public string deme = "Δεν έχει οριστεί";
         public string offices = "Βουλευτής · Λογιστής της Βουλής";

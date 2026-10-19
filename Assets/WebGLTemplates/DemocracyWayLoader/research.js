@@ -1,57 +1,59 @@
-/* Anonymous, append-only Firestore transport. Schema matches the existing v5 rules.
- * Local gameplay remains available offline; queued events are retried on reconnect.
- * This is event collection, not a claim of completed research or learning efficacy.
- */
+/* Pseudonymous research; independent anonymous auth per consenting account context. */
 (() => {
   'use strict';
   const apiKey='AIzaSyBZS2LfhWldFXmhQnLzogz5KdinkxKfL4U',project='democracy-way';
-  const prefix='dw-research-release-20261018-',queueKey=prefix+'queue',authKey=prefix+'auth';
-  let queue=read(queueKey,[]),auth=read(authKey,null),busy=false,serial=Promise.resolve(),retry=0;
-  const status={pending:queue.length,sent:0,lastError:null};
-  function read(k,fallback){try{return JSON.parse(localStorage.getItem(k))||fallback;}catch{return fallback;}}
-  function store(k,v){localStorage.setItem(k,JSON.stringify(v));}
-  function persist(){status.pending=queue.length;try{store(queueKey,queue);}catch(e){status.lastError='local-storage-unavailable';console.error('[Research] Pending events could not be persisted',e);}}
-  async function hash(text){const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text));return Array.from(new Uint8Array(bytes)).map(v=>v.toString(16).padStart(2,'0')).join('').slice(0,32);}
-  async function token(){
-    if(auth&&auth.expires>Date.now()+60000)return auth;
-    let response;
-    if(auth?.refreshToken){response=await fetch('https://securetoken.googleapis.com/v1/token?key='+apiKey,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({grant_type:'refresh_token',refresh_token:auth.refreshToken})});if(response.ok){const j=await response.json();auth={uid:j.user_id,idToken:j.id_token,refreshToken:j.refresh_token,expires:Date.now()+Number(j.expires_in)*1000};store(authKey,auth);return auth;}}
-    response=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key='+apiKey,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({returnSecureToken:true})});
-    if(!response.ok)throw new Error('anonymous-auth-'+response.status);
-    const j=await response.json();auth={uid:j.localId,idToken:j.idToken,refreshToken:j.refreshToken,expires:Date.now()+Number(j.expiresIn)*1000};store(authKey,auth);return auth;
+  const prefix='dw-research-participant-v1-',contexts=new Map();let active=null,serial=Promise.resolve();
+  const status={pending:0,sent:0,lastError:null};
+  const read=(k,f)=>{try{return JSON.parse(localStorage.getItem(k))||f;}catch{return f;}};
+  const store=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+  function persist(c){store(c.key+'queue',c.queue);if(active===c)status.pending=c.queue.length;}
+  async function hash(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b),v=>v.toString(16).padStart(2,'0')).join('').slice(0,32);}
+  async function token(c){if(c.auth&&c.auth.expires>Date.now()+60000)return c.auth;
+    if(c.auth?.refreshToken){const r=await fetch('https://securetoken.googleapis.com/v1/token?key='+apiKey,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({grant_type:'refresh_token',refresh_token:c.auth.refreshToken})});if(r.ok){const j=await r.json();c.auth={uid:j.user_id,idToken:j.id_token,refreshToken:j.refresh_token,expires:Date.now()+Number(j.expires_in)*1000};store(c.key+'auth',c.auth);return c.auth;}}
+    const r=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key='+apiKey,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({returnSecureToken:true})});if(!r.ok)throw new Error('anonymous-auth-'+r.status);const j=await r.json();c.auth={uid:j.localId,idToken:j.idToken,refreshToken:j.refreshToken,expires:Date.now()+Number(j.expiresIn)*1000};store(c.key+'auth',c.auth);return c.auth;}
+  const fields=e=>Object.fromEntries(Object.entries(e).map(([k,v])=>[k,typeof v==='number'?(Number.isInteger(v)?{integerValue:String(v)}:{doubleValue:v}):{stringValue:String(v)}]));
+  async function pump(c){if(!c||c.busy||c.paused||!c.allowed||!c.queue.length||!navigator.onLine)return;c.busy=true;try{const identity=await token(c);while(c.queue.length&&c.allowed&&!c.paused){const event=c.queue[0],url='https://firestore.googleapis.com/v1/projects/'+project+'/databases/(default)/documents/participants/'+identity.uid+'/events?documentId='+event.eventId;const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+identity.idToken},body:JSON.stringify({fields:fields(event)})});if(!r.ok&&r.status!==409)throw new Error('firestore-'+r.status);if(c.queue[0]===event)c.queue.shift();c.sent++;persist(c);if(active===c){status.sent=c.sent;status.lastError=null;}}}catch(error){if(active===c)status.lastError=error.message;clearTimeout(c.retry);c.retry=setTimeout(()=>pump(c),15000);}finally{c.busy=false;}}
+  function setAccountContext(info){if(active)active.paused=true;active=null;if(!info||!/^[a-f0-9]{32}$/.test(info.researchParticipantId||'')){status.pending=0;return;}const id=info.researchParticipantId;let c=contexts.get(id);if(!c){const key=prefix+id+'-';c={id,key,queue:read(key+'queue',[]),auth:read(key+'auth',null),busy:false,paused:false,allowed:false,sent:0,retry:0};contexts.set(id,c);}c.allowed=info.allowed===true;c.paused=false;active=c;if(!c.allowed){c.queue=[];persist(c);}status.pending=c.queue.length;status.sent=c.sent;status.lastError=null;pump(c);}
+  function compact(source){let s=JSON.stringify(source);if(s.length>4000)s=JSON.stringify({...source,reference:String(source.reference||'').slice(0,1000),reason:String(source.reason||'').slice(0,300),question:String(source.question||'').slice(0,220),answers:undefined,metadataCompacted:true});if(s.length>4000)throw new Error('research-metadata-too-large');return s;}
+  const integer=(n,min,max)=>Math.max(min,Math.min(max,Math.round(Number(n)||0)));
+  // JsonUtility reconstructs null serializable fields as default objects.
+  // Only a real, internally consistent progress stamp starts an assessment.
+  const validPoint=p=>!!p&&typeof p.utc==='string'&&/(?:Z|\+00:00)$/.test(p.utc)&&Number.isFinite(Date.parse(p.utc))&&
+    typeof p.caseId==='string'&&p.caseId.trim().length>0&&typeof p.contentVersion==='string'&&p.contentVersion.trim().length>0&&
+    Number.isInteger(p.prytany)&&p.prytany>=1&&p.prytany<=10&&Number.isInteger(p.week)&&p.week>=1&&p.week<=5&&
+    p.turn===(p.prytany-1)*5+p.week-1&&Number.isInteger(p.completedCases)&&p.completedCases>=0&&p.completedCases<=p.turn+1;
+  async function capture(c,json){if(!c||!c.allowed||c.paused)return;const p=JSON.parse(json);if(!/^[a-f0-9]{32}$/.test(p.runId||''))return;
+    const ledgerKey=c.key+p.runId,ledger=read(ledgerKey,{sequence:0,signatures:{},states:{}});ledger.states=ledger.states||{};
+    const metrics=p.metrics||{},campaign=p.campaign||{},bankDocument=p.caseContent?JSON.parse(p.caseContent):{},bank=bankDocument.cases||[],bankVersion=bankDocument.contentVersion||'unknown',bankHash=await hash(p.caseContent||'');
+    const rawEvaluation=p.evaluation||{},e={...rawEvaluation,...Object.fromEntries(['baselinePoint','offerPoint','startPoint','submitPoint'].map(key=>[key,validPoint(rawEvaluation[key])?rawEvaluation[key]:null]))},instrument=p.evaluationContent?JSON.parse(p.evaluationContent):null,instrumentVersion=e.instrumentVersion||instrument?.instrumentVersion||'legacy',completed=(campaign.cases||[]).filter(x=>x.completed);
+    const common={researchParticipantId:c.id,researchConsent:true,instrumentVersion,exposure:e.exposure||'unknown',bank:bankVersion,bankHash};
+    const turn=Math.max(0,((p.prytany||1)-1)*5+(p.week||1)-1),pointNow={prytany:p.prytany,week:p.week,turn,completedCases:completed.length,caseId:bank[turn%Math.max(1,bank.length)]?.id||'',lastCompletedCaseId:completed.at(-1)?.caseId||'',contentVersion:bankVersion,activeSeconds:Number(p.activeSeconds)||0,phase:p.phase||'',utc:new Date().toISOString()};
+    const base={schemaVersion:5,contentVersion:'5.0.0',t:new Date().toISOString(),session:p.runId,type:'approved_ui_checkpoint',chapterId:p.phase||'',nodeId:'',choiceId:'',outcome:'bank-'+bankVersion+':'+bankHash,prytany:integer(p.prytany,0,11),week:integer(p.week,0,5),answer:-1,correct:-1,duration:integer(p.activeSeconds,0,86400),treasury:integer(p.cityFunds,0,1000000),personalTreasury:integer(p.personalFunds,-1000000,1000000),integrity:integer(metrics.ethics,0,100),trust:integer(metrics.consistency,0,100),participation:completed.filter(x=>x.vote!==2).length,abstentions:completed.filter(x=>x.vote===2).length,consistency:integer(metrics.consistency,0,100),ethics:integer(metrics.ethics,0,100),authority:integer(metrics.authority,0,100),persuasion:integer(metrics.persuasion,0,100),parrhesia:integer(metrics.parrhesia,0,100),recognition:integer(metrics.recognition,0,100),orientation:'unclassified',stance:'',sourceRef:compact(common)};
+    async function event(key,signature,change){if(ledger.signatures[key]===signature)return;++ledger.sequence;const eventId=await hash(p.runId+':'+instrumentVersion+':'+key+':'+signature);c.queue.push({...base,...change,eventId});ledger.signatures[key]=signature;}
+    const meta=(stage,point,extra={})=>compact({...common,assessmentId:p.runId+':'+stage,stage,point:point||pointNow,...extra});
+    await event('checkpoint',[p.phase,p.prytany,p.week,p.biographyIndex,p.prologueIndex,e.baselineIndex,e.postIndex,e.baselineFeedbackPending].join(':'),{});
+    const lean=v=>v==='democratic'||v==='democracy'?'democracy':v==='oligarchic'||v==='oligarchy'?'oligarchy':'mixed';
+    for(const choice of p.choices||[]){const match=/^case-(\d+)-(speech|vote)$/.exec(choice.stepId),record=match?(campaign.cases||[]).find(x=>x.turn===Number(match[1])):null,item=record?bank.find(x=>x.id===record.caseId):null,context=record?{prytany:Math.floor(record.turn/5)+1,week:record.turn%5+1}:{};
+      const choiceSource={...common,metricsDelta:choice.metrics,cityDelta:choice.cityFunds,personalDelta:choice.personalFunds,cityMetricsDelta:choice.cityMetrics};
+      // Collective outcomes are A=0 or B=1. Player-side 2 means abstention,
+      // never a third collective outcome; -1 means not yet known/invalid.
+      const collectiveOutcome=record?.completed&&Number.isInteger(record.majority)&&[0,1].includes(record.majority)?record.majority:-1;
+      const source=record?{...choiceSource,caseId:record.caseId,institution:item?.institution,observation:!!item?.observation,collectiveOutcome,reason:match[2]==='vote'?record.leanReason:'Public intervention; see authored argument',reference:item?.source,political:record.politicalVersion?{ruleVersion:record.politicalVersion,approach:record.speechApproachId,metricsBefore:record.speechMetricsBefore,base:record.baseComponent,foodContext:record.foodComponent,trustContext:record.trustComponent,fundsContext:record.fundsComponent,speaker:record.speakerComponent,writer:record.writerComponent,official:record.officialComponent,speechSide:record.speech,supportSide:record.supportSide,supportTotal:record.supportTotal,threshold:record.supportThreshold,foodBefore:record.foodBefore,foodDelta:record.foodDelta,trustBefore:record.trustBefore,trustDelta:record.trustDelta,fullyFunded:record.policyFullyFunded}:undefined}:choiceSource;
+      await event('choice:'+choice.stepId,JSON.stringify(choice),{...context,type:record?'case_choice':'choice',nodeId:record?record.caseId+':'+match[2]:choice.stepId,choiceId:record&&match[2]==='vote'?record.argumentId:choice.choiceId,stance:match?match[2]:choice.choiceId,answer:record?(match[2]==='vote'?record.vote:record.speech):-1,orientation:lean(choice.institutionalLean),sourceRef:compact(source)});}
+    for(const r of campaign.cases||[]){if(r.knowledge<0)continue;const q=bank.find(x=>x.id===r.caseId);if(!q)continue;const correct=r.questionCorrect>=0?r.questionCorrect:q.correct;await event('knowledge:'+r.turn,String(r.knowledge),{type:'case_knowledge',prytany:Math.floor(r.turn/5)+1,week:r.turn%5+1,nodeId:r.questionId||r.caseId+':knowledge',choiceId:r.caseId+':answer:'+r.knowledge,answer:r.knowledge,correct:r.knowledge===correct?1:0,sourceRef:compact({...common,caseId:r.caseId,question:q.question,correctIndex:correct,answers:q.answers,reference:q.source})});}
+    if(instrument&&e.instrumentVersion){
+      for(const stage of ['pre','post']){const answers=stage==='pre'?e.baselineAnswers:e.postAnswers,questions=stage==='pre'?instrument.onboarding:instrument.postTest,point=stage==='pre'?e.baselinePoint:e.startPoint;if(!point)continue;for(let i=0;i<questions.length;i++){const answer=answers?.[i];if(answer==null||answer<0)continue;const q=questions[i];await event(stage+':'+q.id,String(answer),{type:stage==='pre'?'initial_knowledge':'final_knowledge',nodeId:q.id,choiceId:q.id+':answer:'+answer,answer,correct:answer===q.correctIndex?1:0,sourceRef:meta(stage,point,{questionId:q.id,construct:q.construct,correctIndex:q.correctIndex,reference:q.sourceRef,responseActiveSeconds:Number(p.activeSeconds)||0})});}}
+      if(e.startPoint)for(const [key,answers,items,type] of [['experience',e.experienceAnswers,instrument.experience,'experience_rating'],['intention',e.intentionAnswers,instrument.participationIntention,'participation_intention']])for(let i=0;i<items.length;i++){const answer=answers?.[i];if(answer==null||answer<1)continue;const item=items[i];await event(key+':'+item.id,String(answer),{type,nodeId:item.id,answer,sourceRef:meta(key,e.startPoint,{itemId:item.id,construct:item.construct,scale:'1-5',status:'custom-unvalidated'})});}
+      if(e.baselinePoint)await event('assessment-start-pre','once',{type:'assessment_start',nodeId:'pre',sourceRef:meta('pre',e.baselinePoint)});
+      if(e.baselineComplete&&e.baselinePoint)await event('assessment-complete-pre','once',{type:'assessment_complete',nodeId:'pre',sourceRef:meta('pre',pointNow,{startPoint:e.baselinePoint})});
+      if(e.offered&&e.offerPoint)await event('evaluation-offer','once',{type:'evaluation_offer',nodeId:'evaluation-offer',sourceRef:meta('offer',e.offerPoint)});
+      if(e.deferred&&!ledger.states.deferred)await event('evaluation-deferred',String(ledger.sequence+1),{type:'evaluation_deferred',nodeId:'evaluation-deferred',sourceRef:meta('deferred',pointNow)});ledger.states.deferred=!!e.deferred;
+      if(e.startPoint)await event('assessment-start-post','once',{type:'assessment_start',nodeId:'post',sourceRef:meta('post',e.startPoint)});
+      if(e.postComplete&&e.startPoint)await event('assessment-complete-post','once',{type:'assessment_complete',nodeId:'post',sourceRef:meta('post',pointNow,{startPoint:e.startPoint})});
+      if(e.completed&&e.startPoint&&e.submitPoint)await event('evaluation-complete','once',{type:'evaluation_complete',nodeId:'evaluation-complete',sourceRef:meta('evaluation',e.submitPoint,{startPoint:e.startPoint,submitPoint:e.submitPoint})});
+    }else{const ids=bankDocument.assessmentIds||[];for(const stage of ['initial','final'])for(let i=0;i<8;i++){const answer=campaign[stage+'Answers']?.[i];if(answer==null||answer<0)continue;const q=bank.find(x=>x.id===ids[i]),right=i===0?1:q?.correct;if(right==null)continue;await event(stage+':'+i,String(answer),{type:stage+'_knowledge',nodeId:ids[i]+':knowledge',choiceId:ids[i]+':answer:'+answer,answer,correct:answer===right?1:0,sourceRef:compact({...common,instrument:'legacy-paired-8-v2',index:i,correctIndex:right})});}for(let i=0;i<2;i++){const answer=campaign.survey?.[i];if(answer>0)await event('survey:'+i,String(answer),{type:'experience_rating',nodeId:'experience-'+i,answer});}}
+    if(campaign.cityEnding&&campaign.personalEnding)await event('ending',campaign.cityEnding+':'+campaign.personalEnding,{type:'campaign_outcome',nodeId:'campaign-ending',outcome:campaign.cityEnding+':'+campaign.personalEnding});persist(c);store(ledgerKey,ledger);pump(c);
   }
-  function fields(event){return Object.fromEntries(Object.entries(event).map(([k,v])=>[k,typeof v==='number'?(Number.isInteger(v)?{integerValue:String(v)}:{doubleValue:v}):{stringValue:String(v)}]));}
-  async function pump(){
-    if(busy||!queue.length||!navigator.onLine)return;busy=true;
-    try{
-      const identity=await token();
-      while(queue.length){const event=queue[0];const url='https://firestore.googleapis.com/v1/projects/'+project+'/databases/(default)/documents/participants/'+identity.uid+'/events?documentId='+event.eventId;
-        const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+identity.idToken},body:JSON.stringify({fields:fields(event)})});
-        if(!r.ok&&r.status!==409)throw new Error('firestore-'+r.status);
-        queue.shift();status.sent++;status.lastError=null;retry=0;persist();
-      }
-    }catch(e){status.lastError=e.message;console.warn('[Research] Events remain queued:',e.message);clearTimeout(retry);retry=setTimeout(pump,15000);}
-    finally{busy=false;}
-  }
-  async function capture(json){
-    const p=JSON.parse(json);if(!/^[a-f0-9]{32}$/.test(p.runId))return;
-    const ledgerKey=prefix+p.runId,ledger=read(ledgerKey,{sequence:0,signatures:{}}),metrics=p.metrics||{},campaign=p.campaign||{},bank=p.caseContent?JSON.parse(p.caseContent).cases:[];
-    const base={schemaVersion:5,contentVersion:'5.0.0',t:new Date().toISOString(),session:p.runId,type:'approved_ui_checkpoint',chapterId:p.phase||'',nodeId:'',choiceId:'',outcome:'release-20261018',prytany:p.prytany,week:p.week,answer:-1,correct:-1,duration:0,treasury:p.cityFunds,personalTreasury:p.personalFunds,integrity:metrics.ethics||0,trust:metrics.consistency||0,participation:(campaign.cases||[]).filter(c=>c.completed&&c.vote!==2).length,abstentions:(campaign.cases||[]).filter(c=>c.completed&&c.vote===2).length,consistency:metrics.consistency||0,ethics:metrics.ethics||0,authority:metrics.authority||0,persuasion:metrics.persuasion||0,parrhesia:metrics.parrhesia||0,recognition:metrics.recognition||0,orientation:'unclassified',stance:'',sourceRef:'Οδός Δημοκρατίας · release 2026-10-18'};
-    async function event(key,signature,change){
-      if(ledger.signatures[key]===signature)return;
-      const eventId=await hash(p.runId+':'+(++ledger.sequence));queue.push({...base,...change,eventId});ledger.signatures[key]=signature;
-    }
-    await event('checkpoint',[p.phase,p.prytany,p.week,p.biographyIndex,p.prologueIndex].join(':'),{});
-    for(const c of p.choices||[]){await event('choice:'+c.stepId,JSON.stringify(c),{type:'choice',nodeId:c.stepId,choiceId:c.choiceId,stance:c.choiceId,orientation:c.institutionalLean==='democratic'?'democracy':c.institutionalLean==='oligarchic'?'oligarchy':'mixed'});}
-    for(const c of campaign.cases||[]){if(c.knowledge<0)continue;const question=bank.find(b=>b.id===c.caseId);if(!question)continue;
-      await event('knowledge:'+c.turn,String(c.knowledge),{type:'case_knowledge',nodeId:c.caseId,answer:c.knowledge,correct:c.knowledge===question.correct?1:0,sourceRef:question.source});
-    }
-    const quiz=[0,1,2,5,6,7,8,9];for(const kind of ['initial','final'])for(let i=0;i<8;i++){const answer=(campaign[kind+'Answers']||[])[i];if(answer==null||answer<0||!bank.length)continue;await event(kind+':'+i,String(answer),{type:kind+'_knowledge',nodeId:'question-'+i,answer,correct:answer===(i===0?1:bank[quiz[i]].correct)?1:0,sourceRef:i===0?'Αθηναίων Πολιτεία 43.2':bank[quiz[i]].source});}
-    for(let i=0;i<2;i++){const answer=(campaign.survey||[])[i];if(answer>0)await event('survey:'+i,String(answer),{type:'experience_rating',nodeId:'experience-'+i,answer});}
-    // The queue is durable before marking its entries as captured.
-    persist();try{store(ledgerKey,ledger);}catch(e){console.error('[Research] Replay ledger unavailable',e);}
-    pump();
-  }
-  window.DWResearch={capture(json){return serial=serial.then(()=>capture(json)).catch(e=>{status.lastError=e.message;console.error('[Research] Capture failed',e);});},status};
-  addEventListener('online',pump);pump();
+  window.DWResearch={setAccountContext,capture(json){const c=active;return serial=serial.then(()=>capture(c,json)).catch(error=>{status.lastError=error.message;});},status};
+  addEventListener('online',()=>{if(active)pump(active);});
 })();

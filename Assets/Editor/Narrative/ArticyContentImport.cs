@@ -90,7 +90,7 @@ namespace DemocracyWay.Editor
                 foreach (var step in baseline.biography)
                 {
                     var next = clone.biography.Find(s => s.id == step.id);
-                    if (next == null || step.choices.Any(c => !next.choices.Any(n => n.id == c.id)))
+                    if (clone.contentVersion <= baseline.contentVersion && (next == null || step.choices.Any(c => !next.choices.Any(n => n.id == c.id))))
                         throw new InvalidOperationException("Export removes a shipped biography/choice ID: " + step.id);
                 }
                 if (baseline.prologue.Any(p => !clone.prologue.Any(n => n.id == p.id))) throw new InvalidOperationException("Export removes a shipped prologue ID.");

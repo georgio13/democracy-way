@@ -28,6 +28,10 @@ namespace DemocracyWay.NewUI
             record.economicClassIndex = choice.economicClassIndex;
             record.tribeIndex = choice.tribeIndex;
             record.profession = choice.profession;
+            record.playerName = choice.playerName;
+            record.demeId = choice.demeId;
+            record.trittysId = choice.trittysId;
+            record.cityMetrics = choice.cityMetrics?.Copy() ?? new CityMetricDelta();
             record.deme = choice.deme;
             record.trittys = choice.trittys;
             Recalculate(state);
@@ -40,11 +44,17 @@ namespace DemocracyWay.NewUI
             state.metrics = state.baseline.Copy();
             state.personalFunds = state.basePersonalFunds;
             state.cityFunds = state.baseCityFunds;
+            var cityChanges = new CityMetricDelta();
             foreach (ChoiceRecord record in state.choices)
             {
                 state.metrics.Add(record.metrics);
+                state.metrics.Clamp();
                 state.personalFunds += record.personalFunds;
                 state.cityFunds += record.cityFunds;
+                if (record.cityMetrics != null) { cityChanges.food += record.cityMetrics.food; cityChanges.trust += record.cityMetrics.trust; cityChanges.readiness += record.cityMetrics.readiness; cityChanges.war += record.cityMetrics.war; }
+                if (!string.IsNullOrEmpty(record.playerName)) state.playerName = record.playerName;
+                if (!string.IsNullOrEmpty(record.demeId)) state.demeId = record.demeId;
+                if (!string.IsNullOrEmpty(record.trittysId)) state.trittysId = record.trittysId;
                 if (record.economicClassIndex >= 0)
                     state.economicClassIndex = record.economicClassIndex;
                 if (record.tribeIndex >= 0)
@@ -58,6 +68,13 @@ namespace DemocracyWay.NewUI
             }
 
             state.metrics.Clamp();
+            if (state.campaign == null) state.campaign = new CampaignState();
+            var previous = state.biographyCityApplied ?? new CityMetricDelta();
+            state.campaign.foodSecurity = PoliticalCaseRules.Clamp(state.campaign.foodSecurity + cityChanges.food - previous.food, 0, 100);
+            state.campaign.legitimacy += cityChanges.trust - previous.trust;
+            state.campaign.readiness += cityChanges.readiness - previous.readiness;
+            state.campaign.war += cityChanges.war - previous.war;
+            state.biographyCityApplied = cityChanges;
         }
 
         public static bool Compatible(GameState state, GameConfiguration config)
@@ -83,6 +100,12 @@ namespace DemocracyWay.NewUI
                         return false;
                     if (match.Groups[2].Value == "speech")
                     {
+                        if (entry.politicalVersion == PoliticalCaseRules.Version)
+                        {
+                            string expected = entry.speech == 2 ? "silent" : "speech-" + entry.speech + "-" + entry.speechApproachId;
+                            if (entry.speech < 0 || entry.speech > 2 || record.choiceId != expected) return false;
+                            continue;
+                        }
                         if (entry.speech < 0 || entry.speech > 2 || record.choiceId != new[]
                         {
                             "public-accountability",
@@ -98,7 +121,7 @@ namespace DemocracyWay.NewUI
 
                 if (System.Text.RegularExpressions.Regex.IsMatch(record.stepId, @"^city-logographer-\d+$"))
                     continue;
-                if (System.Text.RegularExpressions.Regex.IsMatch(record.stepId, @"^city-complaint-[0-2]-\d+$") && System.Text.RegularExpressions.Regex.IsMatch(record.choiceId, @"^recommendation-[0-2]$"))
+                if (System.Text.RegularExpressions.Regex.IsMatch(record.stepId, @"^city-complaint-[0-2]-\d+$") && (record.choiceId == "referred-to-boule" || System.Text.RegularExpressions.Regex.IsMatch(record.choiceId, @"^recommendation-[0-2]$")))
                     continue;
                 if (System.Text.RegularExpressions.Regex.IsMatch(record.stepId, @"^city-official-[0-5]-\d+$") && (record.choiceId == "public-argument" || record.choiceId == "private-offer"))
                     continue;

@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>{{{ PRODUCT_NAME }}}</title>
+  <link rel="stylesheet" href="LoaderAssets/account.css">
   <style>
     @font-face{font-family:Kargo;src:url('LoaderAssets/IFKargoSans-Regular.ttf') format('truetype');font-display:swap}
     *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#101f24;color:#e8dfcb;font-family:Kargo,sans-serif;cursor:url('LoaderAssets/Cursor.png') 3 2,default}
@@ -24,15 +25,16 @@
     <img class="loader-logo" src="LoaderAssets/Logo.png" alt="Οδός Δημοκρατίας">
     <div id="track" role="progressbar" aria-label="Φόρτωση παιχνιδιού" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="fill"></i></div>
     <div id="progress">Η ΠΟΛΗ ΞΥΠΝΑ <span id="percent">0%</span></div><p id="error" role="alert"></p>
-  </div><div class="foot">Φόρτωση εικόνων, ήχων και ιστορίας</div></div></div>
+  </div></div></div>
   <script src="LoaderAssets/research.js"></script>
+  <script src="LoaderAssets/account.js"></script>
   <script>
     const fit=()=>document.documentElement.style.setProperty('--fit',Math.min(innerWidth/1600,innerHeight/900));fit();addEventListener('resize',fit);
     const canvas=document.getElementById('unity-canvas'),loading=document.getElementById('loading');
     const config={dataUrl:'Build/{{{ DATA_FILENAME }}}',frameworkUrl:'Build/{{{ FRAMEWORK_FILENAME }}}',codeUrl:'Build/{{{ CODE_FILENAME }}}',streamingAssetsUrl:'StreamingAssets',companyName:'{{{ COMPANY_NAME }}}',productName:'{{{ PRODUCT_NAME }}}',productVersion:'{{{ PRODUCT_VERSION }}}',matchWebGLToCanvasSize:true,autoSyncPersistentDataPath:true};
     function fail(error){console.error(error);const box=document.getElementById('error');box.style.display='block';box.textContent='Δεν ολοκληρώθηκε η φόρτωση. Ανανέωσε τη σελίδα ή δοκίμασε ξανά σε ενημερωμένο browser.';document.getElementById('progress').textContent='ΑΠΟΤΥΧΙΑ ΦΟΡΤΩΣΗΣ';}
     const script=document.createElement('script');script.src='Build/{{{ LOADER_FILENAME }}}';
-    script.onload=()=>createUnityInstance(canvas,config,p=>{const n=Math.round(Math.max(0,Math.min(1,p))*100);document.getElementById('fill').style.width=n+'%';document.getElementById('percent').textContent=n+'%';document.getElementById('track').setAttribute('aria-valuenow',String(n));}).then(instance=>{window.democracyWayInstance=instance;loading.classList.add('done');setTimeout(()=>loading.remove(),380);canvas.focus();}).catch(fail);
+    script.onload=()=>createUnityInstance(canvas,config,p=>{const n=Math.round(Math.max(0,Math.min(1,p))*100);document.getElementById('fill').style.width=n+'%';document.getElementById('percent').textContent=n+'%';document.getElementById('track').setAttribute('aria-valuenow',String(n));}).then(instance=>{window.democracyWayInstance=instance;loading.classList.add('done');setTimeout(()=>loading.remove(),380);window.DWAccount.attach(instance);}).catch(fail);
     script.onerror=()=>fail('Δεν βρέθηκε το Unity loader script.');document.body.appendChild(script);
   </script>
 </body>

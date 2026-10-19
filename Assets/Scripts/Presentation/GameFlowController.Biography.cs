@@ -79,16 +79,18 @@ namespace DemocracyWay.NewUI
             if (modalOpen || State == null || State.phase != "biography")
                 return;
             BiographyStep step = CurrentBioStep();
-            if (step == null || step.kind == BiographyStepKind.Identity || step.choices == null || choiceIndex < 0 || choiceIndex >= step.choices.Count)
+            var visible = step == null ? null : VisibleBioChoices(step);
+            if (step == null || visible == null || choiceIndex < 0 || choiceIndex >= visible.Count)
                 return;
-            NarrativeChoice choice = step.choices[choiceIndex];
+            NarrativeChoice choice = visible[choiceIndex];
             if (choice == null || string.IsNullOrWhiteSpace(choice.id))
                 return;
             GameRules.ApplyChoice(State, step, choice);
+            if (step.kind == BiographyStepKind.Identity)
+                State.identityComplete = true;
             SaveCheckpoint();
             RenderBiography();
-            SetText("bio.feedback", choice.consequence);
-            SetText(currentScreen + ".feedback", choice.consequence);
+
         }
 
         public void AdvanceBio()
@@ -98,12 +100,6 @@ namespace DemocracyWay.NewUI
             BiographyStep step = CurrentBioStep();
             if (step == null)
                 return;
-            if (step.kind == BiographyStepKind.Identity)
-            {
-                FinishIdentity();
-                return;
-            }
-
             if (!State.choices.Exists(x => x.stepId == step.id))
             {
                 SetStatus(ArticyNarrative.Copy("Copy_63be43133176a9a4"));
@@ -136,47 +132,6 @@ namespace DemocracyWay.NewUI
             }
         }
 
-        public void SelectTribe(int index)
-        {
-            if (State == null || index < 0 || index >= config.tribes.Count)
-                return;
-            State.tribeIndex = index;
-            TMP_Dropdown tribe = Get<TMP_Dropdown>("identity.tribe");
-            if (tribe != null)
-                tribe.SetValueWithoutNotify(index);
-            UpdateIdentityDetails();
-        }
-
-        public void FinishIdentity()
-        {
-            if (modalOpen || State == null || State.phase != "biography")
-                return;
-            BiographyStep step = CurrentBioStep();
-            if (step == null || step.kind != BiographyStepKind.Identity)
-                return;
-            TMP_InputField name = Get<TMP_InputField>("identity.name");
-            string value = name != null ? name.text : State.playerName;
-            value = (value ?? "").Trim().Replace("<", "").Replace(">", "").Replace("\n", " ").Replace("\r", " ");
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                SetStatus(ArticyNarrative.Copy("Copy_d1473beeba186906"));
-                return;
-            }
-
-            State.playerName = value.Length > 40 ? value.Substring(0, 40) : value;
-            TMP_Dropdown tribe = Get<TMP_Dropdown>("identity.tribe");
-            TMP_Dropdown economicClass = Get<TMP_Dropdown>("identity.class");
-            State.tribeIndex = tribe != null ? Mathf.Clamp(tribe.value, 0, config.tribes.Count - 1) : State.tribeIndex;
-            State.economicClassIndex = step.editEconomicClass && economicClass != null ? Mathf.Clamp(economicClass.value, 0, config.economicClasses.Count - 1) : State.economicClassIndex;
-            TribeDefinition selectedTribe = config.tribes[State.tribeIndex];
-            State.deme = string.IsNullOrEmpty(selectedTribe.deme) ? State.deme : selectedTribe.deme;
-            State.trittys = string.IsNullOrEmpty(selectedTribe.trittys) ? State.trittys : selectedTribe.trittys;
-            if (step.choices != null && State.tribeIndex < step.choices.Count)
-                GameRules.ApplyChoice(State, step, step.choices[State.tribeIndex]);
-            State.identityComplete = true;
-            AdvanceBiographyIndex();
-        }
-
         public void FinishBio()
         {
             if (modalOpen || State == null || State.phase != "summary")
@@ -196,7 +151,7 @@ namespace DemocracyWay.NewUI
             }
 
             State.biographyComplete = true;
-            State.phase = ArticyNarrative.Route("BiographyComplete",State);
+            State.phase = "initial-knowledge";
             RecalculateMetrics();
             SaveCheckpoint();
             Show(State.phase);
@@ -218,7 +173,7 @@ namespace DemocracyWay.NewUI
             }
 
             State.phase = "biography";
-            string id = step.kind == BiographyStepKind.Family ? "bio-family" : step.kind == BiographyStepKind.Identity ? "bio-identity" : step.kind == BiographyStepKind.Oath ? "bio-oath" : "bio-choice";
+            string id = step.kind == BiographyStepKind.Family ? "bio-family" : step.kind == BiographyStepKind.Oath ? "bio-oath" : "bio-choice";
             Show(id);
         }
     }

@@ -21,6 +21,8 @@
 !*.example
 *service-account*.json
 firebase-adminsdk*.json
+/Tools/Research/raw/
+/Tools/Research/results/
 
 # Install the official articy importer locally from the vendor
 /Assets/ArticyImporter/

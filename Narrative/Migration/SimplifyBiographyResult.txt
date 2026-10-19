@@ -1,0 +1,1 @@
+Removed sourceNote and consequence; preserved author text, choice IDs, flow and metric values.

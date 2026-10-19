@@ -197,6 +197,7 @@ namespace DemocracyWay.NewUI
 
         public void Render()
         {
+            if (footer != null) footer.gameObject.SetActive(false);
             if (entries.Count == 0)
             {
                 body.text = "Δεν βρέθηκαν λήμματα.";
@@ -229,14 +230,14 @@ namespace DemocracyWay.NewUI
                 bool boule = Normalize(e.title).StartsWith("βουλη των");
                 if (boule)
                     title = "Βουλή των\nΠεντακοσίων";
-                b.Append("<size=34.8>" + title + "</size>\n<size=16.8><color=#758061>" + Safe(e.category) + "</color></size>\n\n<color=#AD9869>────────────────────────</color>\n\n");
+                b.Append("<size=34.8>" + title + "</size>\n\n<color=#AD9869>────────────────────────</color>\n\n");
                 if (fullEntry)
                     b.Append(Safe(e.text));
                 else if (boule)
                     b.Append("Η Βουλή αποτελείται από 500 πολίτες, πενήντα από κάθε φυλή, που υπηρετούν για ένα έτος.\n\nΠροετοιμάζει τα ζητήματα που θα συζητήσει η Εκκλησία του Δήμου και ασκεί αρμοδιότητες εποπτείας της διοίκησης.\n\n<size=16.8><color=#73815A>ΣΤΗ ΔΙΚΗ ΣΟΥ ΥΠΟΘΕΣΗ</color></size>\n\nΩς βουλευτής μπορείς να ζητήσεις στοιχεία, να μιλήσεις και να ψηφίσεις. Η απόφαση παραμένει συλλογική.\n\n");
                 else
                     b.Append(Safe(e.text.Split(new[] { "\n\n" }, StringSplitOptions.None)[0]));
-                b.Append("\n\n<size=19.2><color=#6B795E>ΠΗΓΕΣ</color></size>\n\n<size=18>" + Safe(string.Join("\n\n", e.sources ?? Array.Empty<string>())) + "</size>");
+                // Bibliographic provenance remains in the data and research audit, outside the reader UI.
                 footer.text = e.title.Substring(0, 1) + " · " + (category == 0 ? "Θεσμοί" : category == 1 ? "Αξιώματα" : "Διαδικασίες");
             }
 

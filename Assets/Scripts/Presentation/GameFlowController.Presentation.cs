@@ -37,6 +37,8 @@ namespace DemocracyWay.NewUI
                 RenderMap();
                 RenderCityBadges();
                 RenderCampaignMap();
+                RenderCityMetricsHUD();
+                RenderEvaluationAccess();
             }
             else if (IsCityScreen(currentScreen))
                 RenderCity();
@@ -179,6 +181,7 @@ namespace DemocracyWay.NewUI
 
         private void RenderBiography()
         {
+            if (!string.IsNullOrEmpty(CurrentBioStep()?.selectionKind)) { RenderAuthoredBiography(); return; }
             BiographyStep step = CurrentBioStep();
             if (step == null)
                 return;
@@ -207,6 +210,24 @@ namespace DemocracyWay.NewUI
             {
                 choices.anchoredPosition = new Vector2(886 * 1.2f, -(count >= 4 ? 526 : 550) * 1.2f);
                 choices.sizeDelta = new Vector2(636 * 1.2f, (count >= 4 ? 280 : 247) * 1.2f);
+                var scroll = choices.GetComponent<ScrollRect>();
+                if (scroll != null && scroll.content != null)
+                {
+                    const float rowHeight = 72f;
+                    const float spacing = 10f;
+                    for (int i = 0; i < 10; i++)
+                    {
+                        var option = Get<Button>(currentScreen + ".option." + i);
+                        if (option == null) continue;
+                        var row = option.GetComponent<RectTransform>();
+                        row.anchorMin = new Vector2(0, 1);
+                        row.anchorMax = Vector2.one;
+                        row.pivot = new Vector2(.5f, 1);
+                        row.anchoredPosition = new Vector2(0, -i * (rowHeight + spacing));
+                        row.sizeDelta = new Vector2(0, rowHeight);
+                    }
+                    scroll.content.sizeDelta = new Vector2(0, Mathf.Max(0, count * (rowHeight + spacing) - spacing));
+                }
             }
 
             foreach (string key in new[]
@@ -225,8 +246,6 @@ namespace DemocracyWay.NewUI
 
             )
                 SetText(key, step.body);
-            SetText("bio.source", step.sourceNote);
-            SetText(currentScreen + ".source", step.sourceNote);
             foreach (string key in new[]
             {
                 "bio.step",
@@ -246,9 +265,9 @@ namespace DemocracyWay.NewUI
             SetImage("bio.background", step.background);
             SetImage(currentScreen + ".background", step.background);
             ChoiceRecord selected = State.choices.Find(x => x.stepId == step.id);
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 10; i++)
             {
-                bool exists = step.kind != BiographyStepKind.Identity && step.choices != null && i < step.choices.Count;
+                bool exists = step.choices != null && i < step.choices.Count;
                 foreach (string key in new[]
                 {
                     "bio.option." + i,
@@ -274,7 +293,10 @@ namespace DemocracyWay.NewUI
                                 badgeShape.color = isSelected ? new Color32(104, 120, 87, 255) : Color.clear;
                             TMP_Text letter = badge.GetComponentInChildren<TMP_Text>();
                             if (letter != null)
+                            {
+                                letter.text = count > 4 ? (i + 1).ToString() : "ΑΒΓΔ"[i].ToString();
                                 letter.color = isSelected ? new Color32(232, 224, 199, 255) : new Color32(198, 175, 118, 255);
+                            }
                         }
 
                         if (optionLabel != null)
@@ -283,30 +305,7 @@ namespace DemocracyWay.NewUI
                 }
             }
 
-            SetInteractable(currentScreen + ".primary", step.kind == BiographyStepKind.Identity || selected != null);
-            if (step.kind == BiographyStepKind.Identity)
-            {
-                TMP_InputField input = Get<TMP_InputField>("identity.name");
-                if (input != null)
-                    input.SetTextWithoutNotify(State.playerName);
-                TMP_Dropdown tribe = Get<TMP_Dropdown>("identity.tribe");
-                if (tribe != null)
-                    tribe.SetValueWithoutNotify(State.tribeIndex);
-                TMP_Dropdown economicClass = Get<TMP_Dropdown>("identity.class");
-                if (economicClass != null)
-                {
-                    economicClass.SetValueWithoutNotify(State.economicClassIndex);
-                    economicClass.interactable = step.editEconomicClass;
-                }
-
-                SetActive("identity.classRow", step.editEconomicClass);
-                UpdateIdentityDetails();
-            }
-
-            NarrativeChoice selectedChoice = selected != null ? step.choices.Find(x => x.id == selected.choiceId) : null;
-            string caption = step.kind == BiographyStepKind.Family ? ArticyNarrative.Copy("Copy_20ae1c5c5bf446f7") : oath ? ArticyNarrative.Copy("Copy_5977d01bbf4ff9fb") : ArticyNarrative.Copy("Copy_a9d04dc790674023");
-            SetText("bio.feedback", selectedChoice != null ? selectedChoice.consequence : caption);
-            SetText(currentScreen + ".feedback", selectedChoice != null ? selectedChoice.consequence : caption);
+            SetInteractable(currentScreen + ".primary", selected != null);
             int[] metricValues =
             {
                 State.metrics.consistency,
@@ -320,11 +319,11 @@ namespace DemocracyWay.NewUI
                 SetText(currentScreen + ".metric." + i, metricValues[i].ToString());
             if (lastRenderedBioStep != step.id)
             {
-                SetActive(currentScreen + ".sourcesPanel", false);
                 Canvas.ForceUpdateCanvases();
                 if (roots.TryGetValue(currentScreen, out GameObject activeRoot))
                     foreach (var scroll in activeRoot.GetComponentsInChildren<ScrollRect>(true))
-                        scroll.verticalNormalizedPosition = 1;
+                        if (scroll.content != null)
+                            scroll.verticalNormalizedPosition = 1;
                 lastRenderedBioStep = step.id;
             }
         }
@@ -336,9 +335,19 @@ namespace DemocracyWay.NewUI
             SetText("summary.metrics", State.metrics.ToGreekLines());
             SetText("summary.name", State.playerName);
             SetText("summary.age", ArticyNarrative.Copy("Copy_d27fcffa71ab967e") + State.playerAge + ArticyNarrative.Copy("Copy_750d677c988d9482"));
-            SetText("summary.identity.0", TribeName(State.tribeIndex) + ArticyNarrative.Copy("Copy_82faa4beeeaf83cb") + State.deme);
+            SetText("summary.identity.0", "Φυλή: " + TribeName(State.tribeIndex) + "\nΔήμος: " + State.deme + "\nΤριττύα: " + State.trittys);
             SetText("summary.identity.1", State.profession + "\n" + config.economicClasses[Mathf.Clamp(State.economicClassIndex, 0, config.economicClasses.Count - 1)]);
             SetText("summary.identity.2", (State.offices ?? "").Replace(" · ", "\n"));
+            for (int i = 0; i < 3; i++)
+            {
+                var identity = Get<TMP_Text>("summary.identity." + i);
+                if (identity == null) continue;
+                identity.enableAutoSizing = true;
+                identity.fontSizeMin = 19;
+                identity.fontSizeMax = 21.6f;
+                identity.lineSpacing = 8;
+                identity.verticalAlignment = VerticalAlignmentOptions.Top;
+            }
             SetImage("summary.emblem", config.tribes[State.tribeIndex].emblem);
             int[] values =
             {
@@ -430,13 +439,13 @@ namespace DemocracyWay.NewUI
         {
             EnsureState();
             SetText("map.status", ArticyNarrative.Copy("Copy_0008e0f7f5eda78f") + State.prytany + ArticyNarrative.Copy("Copy_8ba8e7d0292e8747") + State.week + " / 5");
-            SetText("map.prytany", State.prytany + ArticyNarrative.Copy("Copy_1a496ccd9c515628"));
             SetText("map.week", State.week + " / 5");
             SetText("map.identity", State.playerName);
             SetText("map.office.label", State.offices);
-            SetText("map.city", State.cityFunds.ToString("N0"));
-            SetText("map.personal", State.personalFunds.ToString("N0"));
-            SetText("map.prytany", State.prytany + ArticyNarrative.Copy("Copy_872213b24e79902d"));
+            SetText("map.city", State.cityFunds.ToString("N0") + " οβ.");
+            SetText("map.personal", State.personalFunds.ToString("N0") + " οβ.");
+            string[] prytanyNumerals = { "Α΄", "Β΄", "Γ΄", "Δ΄", "Ε΄", "ΣΤ΄", "Ζ΄", "Η΄", "Θ΄", "Ι΄" };
+            SetText("map.prytany", prytanyNumerals[Mathf.Clamp(State.prytany - 1, 0, 9)] + "\nπρυτανεία");
             SetText("map.week", State.week + " / 5");
             for (int i = 0; i < 10; i++)
             {
@@ -452,7 +461,7 @@ namespace DemocracyWay.NewUI
                     tick.color = i == State.week - 1 ? new Color32(232, 223, 203, 255) : i < State.week - 1 ? new Color32(180, 154, 98, 255) : new Color32(66, 93, 83, 255);
             }
 
-            SetText("map.funds", ArticyNarrative.Copy("Copy_047651c755e3bfc4") + State.cityFunds.ToString("N0") + ArticyNarrative.Copy("Copy_a056bcffd38f7391") + State.personalFunds.ToString("N0"));
+            SetText("map.funds", ArticyNarrative.Copy("Copy_047651c755e3bfc4") + State.cityFunds.ToString("N0") + ArticyNarrative.Copy("Copy_a056bcffd38f7391") + State.personalFunds.ToString("N0") + " οβ.");
             SetText("map.tribe", TribeName(State.currentTribe));
             SetImage("map.tribe.emblem", State.currentTribe >= 0 ? config.tribes[State.currentTribe].emblem : null);
             SetImage("map.player.emblem", config.tribes[State.tribeIndex].emblem);
@@ -467,7 +476,7 @@ namespace DemocracyWay.NewUI
             SetText("profile.age", State.playerAge + ArticyNarrative.Copy("Copy_b0ff9eb7a58bf3d6") + State.profession);
             SetText("profile.origin", State.deme + " · " + TribeName(State.tribeIndex));
             SetImage("profile.emblem", config.tribes[State.tribeIndex].emblem);
-            SetText("profile.funds", ArticyNarrative.Copy("Copy_9fd25730f3bc1ab9") + State.cityFunds.ToString("N0") + ArticyNarrative.Copy("Copy_9bc90cc634c1c0ff") + State.personalFunds.ToString("N0"));
+            SetText("profile.funds", ArticyNarrative.Copy("Copy_9fd25730f3bc1ab9") + State.cityFunds.ToString("N0") + ArticyNarrative.Copy("Copy_9bc90cc634c1c0ff") + State.personalFunds.ToString("N0") + " οβ.");
             string[] identity =
             {
                 TribeName(State.tribeIndex),
@@ -503,44 +512,7 @@ namespace DemocracyWay.NewUI
             return index >= 0 && index < config.tribes.Count ? config.tribes[index].name : "—";
         }
 
-        private void SetupIdentity()
-        {
-            TMP_Dropdown tribe = Get<TMP_Dropdown>("identity.tribe");
-            if (tribe != null)
-            {
-                tribe.ClearOptions();
-                tribe.AddOptions(config.tribes.ConvertAll(x => x.name + (string.IsNullOrEmpty(x.deme) ? "" : " · " + x.deme)));
-                tribe.onValueChanged.AddListener(SelectTribe);
-            }
-
-            TMP_Dropdown economicClass = Get<TMP_Dropdown>("identity.class");
-            if (economicClass != null)
-            {
-                economicClass.ClearOptions();
-                economicClass.AddOptions(config.economicClasses);
-            }
-
-            TMP_InputField input = Get<TMP_InputField>("identity.name");
-            if (input != null)
-                input.characterLimit = 40;
-        }
-
-        private void UpdateIdentityDetails()
-        {
-            if (State == null)
-                return;
-            TribeDefinition tribe = config.tribes[State.tribeIndex];
-            SetText("identity.deme", ArticyNarrative.Copy("Copy_fff70e4dee042d43") + (tribe.deme ?? "—") + ArticyNarrative.Copy("Copy_a90744770635bb27") + (tribe.trittys ?? "—"));
-            SetText("identity.tribeName", tribe.name);
-            SetText("identity.trittys", tribe.trittys ?? "—");
-            SetText("identity.demeName", tribe.deme ?? "—");
-            for (int i = 0; i < config.tribes.Count; i++)
-            {
-                SetActive("identity.tribe." + i + ".selected", i == State.tribeIndex);
-                TMP_Text name = Get<TMP_Text>("identity.tribe." + i + ".label");
-                if (name != null)
-                    name.color = i == State.tribeIndex ? new Color32(236, 223, 188, 255) : new Color32(52, 73, 64, 255);
-            }
-        }
     }
 }
+
+

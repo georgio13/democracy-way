@@ -1,0 +1,314 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "aristotle-athpol",
+      "type": "primary-classical-text",
+      "work": "Αθηναίων Πολιτεία",
+      "locators": [
+        "7.3–4",
+        "21.3–5",
+        "42.1–5",
+        "43–62",
+        "63.1–3"
+      ],
+      "url": "https://classics.mit.edu/Aristotle/athenian_const.3.3.html",
+      "note": "Οι λειτουργικές αποδόσεις συντάχθηκαν με έλεγχο της τοπικής δίγλωσσης έκδοσης Μπάλλα· η γενική διαδικτυακή μετάφραση δεν αντικαθιστά τον έλεγχο κεφαλαίου/παραγράφου."
+    },
+    {
+      "id": "aristotle-balla-2015",
+      "type": "supplied-bilingual-edition",
+      "citation": "Αριστοτέλης. (2015). Αθηναίων Πολιτεία. Χ. Μπάλλα (μετάφραση, εισαγωγή, επιμέλεια), R. W. Wallace (πρόλογος, σχόλια). Νήσος.",
+      "file": "Αθηναίων Πολιτεία -- Μπάλλα.pdf",
+      "verifiedTitlePages": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "verifiedPdfPages": [
+        169,
+        170,
+        171,
+        172,
+        173,
+        174,
+        175,
+        176,
+        177,
+        178,
+        179,
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187,
+        188,
+        189,
+        190,
+        191,
+        192,
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199,
+        200,
+        201,
+        202,
+        203,
+        204,
+        205,
+        206,
+        207,
+        208,
+        209,
+        210,
+        211,
+        212,
+        213,
+        214,
+        215,
+        216,
+        217,
+        218,
+        219,
+        220,
+        221,
+        222,
+        223,
+        224,
+        225,
+        226,
+        227,
+        228,
+        229,
+        230,
+        231,
+        232,
+        233,
+        234,
+        235,
+        236,
+        237,
+        238,
+        239,
+        240,
+        241
+      ],
+      "isbn": "978-960-589-016-2",
+      "note": "Οι επί μέρους αριθμημένες παραπομπές καθορίζουν ακριβέστερα τι αντλείται από το πρωτογενές κείμενο και τι από το εκδοτικό σχόλιο.",
+      "absolutePath": "C:\\Users\\giorg\\Desktop\\Πτυχιακή\\Βιβλιογραφία\\Αθηναίων Πολιτεία -- Μπάλλα.pdf",
+      "sha256": "cd174d1dc7d306dd1a1d354d2650c019ef4373c5658ec335a25aec0d66a70fa1"
+    },
+    {
+      "id": "traill-1975",
+      "type": "supplied-scholarly-monograph",
+      "citation": "Traill, J. S. (1975). The Political Organization of Attica: A Study of the Demes, Trittyes, and Phylai, and Their Representation in the Athenian Council. Hesperia Supplement14. American School of Classical Studies at Athens.",
+      "file": "Traill-PoliticalOrganizationAttica-1975.pdf",
+      "doi": "10.2307/1353928",
+      "url": "https://www.ascsa.edu.gr/publications/book/?i=9780876615140",
+      "verifiedPrintedPages": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54
+      ],
+      "verifiedPdfPages": [
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71
+      ],
+      "visualSpotCheckPdfPages": [
+        55,
+        58,
+        61,
+        63,
+        69,
+        71
+      ],
+      "method": "Τα 139 ζεύγη δήμου/φυλής και περιφερειακής τριττύος αντιπαραβλήθηκαν με τους Τοπογραφικούς ΠίνακεςI–X. Ερωτηματικά και συζητούμενες εναλλακτικές δεν αφαιρέθηκαν.",
+      "absolutePath": "C:\\Users\\giorg\\Desktop\\Πτυχιακή\\Βιβλιογραφία\\Traill-PoliticalOrganizationAttica-1975.pdf",
+      "sha256": "63909970918031d46e33727a1425ce9a7a20f30f7ec5331bd4dff9de5cc982c1"
+    },
+    {
+      "id": "hansen-1991",
+      "type": "supplied-scholarly-monograph",
+      "citation": "Hansen, M. H. (1991). The Athenian Democracy in the Age of Demosthenes: Structure, Principles, and Ideology. J. A. Crook (trans.). Blackwell.",
+      "file": "Athenian Democracy in the age of Demosthenes -- Hansen.pdf",
+      "verifiedPrintedPages": [
+        97,
+        106,
+        108,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        249
+      ],
+      "verifiedPdfPages": [
+        115,
+        124,
+        126,
+        128,
+        129,
+        130,
+        131,
+        132,
+        133,
+        134,
+        267
+      ],
+      "notes": [
+        "σ.97: πολιτικά δικαιώματα, ηλικία 30, ιδιοκτησία, εμπόριο/βιοτεχνία και μεταλλευτικές μισθώσεις.",
+        "σ.106–108: τέσσερις σολώνειες τάξεις, διαφοροποίηση ονομαστικού καθεστώτος και πραγματικής πολιτικής συμμετοχής.",
+        "σ.249: εύρος κοινωνικής συμμετοχής στη Βουλή και ερμηνεία για συμμετοχή θητών.",
+        "σ.110–116: οικονομικές υποχρεώσεις, λειτουργίες, εισφορές και διάκριση αρχαίων κατηγοριών από απλές επαγγελματικές ταμπέλες."
+      ],
+      "absolutePath": "C:\\Users\\giorg\\Desktop\\Πτυχιακή\\Βιβλιογραφία\\Athenian Democracy in the age of Demosthenes -- Hansen.pdf",
+      "sha256": "47f52fd15c4aa6be7d3a1e4596a5bfab8a7459479953d0b1ba371953fd8998e9"
+    },
+    {
+      "id": "paga-2010",
+      "type": "scholarly-article",
+      "citation": "Paga, J. (2010). Deme Theaters in Attica and the Trittys System. Hesperia79(3),351–384.",
+      "url": "https://www.ascsa.edu.gr/uploads/media/hesperia/40981054.pdf",
+      "verifiedLocators": [
+        "σ.375–378",
+        "σημ.90,93,95–96",
+        "πίνακας 2,σ.377"
+      ],
+      "use": "Μεταγενέστερες διαφορετικές προτάσεις για Άνω Λαμπτρές, Ικάριον και Πλώθεια καταγράφηκαν ως αμφισβητήσεις, χωρίς να παρουσιαστεί μία από τις προτάσεις ως βέβαιη."
+    },
+    {
+      "id": "redmond-transcription",
+      "type": "secondary-open-dataset-used-for-transcription",
+      "citation": "Redmond, S. Attic Demes Data.",
+      "url": "https://github.com/seanredmond/attic-demes",
+      "rawUrl": "https://raw.githubusercontent.com/seanredmond/attic-demes/master/deme-data.tsv",
+      "license": "CC-BY-SA-4.0",
+      "use": "Ελληνική μεταγραφή ονομάτων και αριθμοίTraill· κάθε περιφερειακή ένταξη ελέγχθηκε ανεξάρτητα στο παρεχόμενο βιβλίοTraill. Δεν χρησιμοποιήθηκε το ανακριβές ιστορικό παράδειγμα τουREADME περί δικαστών."
+    },
+    {
+      "id": "xenophon-poroi",
+      "type": "primary-classical-text",
+      "citation": "Ξενοφών, Πόροι 4.14.",
+      "url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0210%3Atext%3DWays%3Achapter%3D4",
+      "use": "Παράδειγμα οικονομικής εκμετάλλευσης στο περιβάλλον των αργυρείων· δεν χρησιμοποιείται ως κανόνας αντιστοίχισης επαγγελμάτων σε τάξεις."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "10 φυλές,30 τριττύες,139 δήμοι στην ανακατασκευή που χρησιμοποιείται",
+      "evidence": [
+        "Αθηναίων Πολιτεία 21.3–5 για τη δομή",
+        "Traill 1975,ΠίνακεςI–X,σ.37–54 για τις επιμέρους αντιστοιχίσεις"
+      ],
+      "status": "reconstructed-with-uncertainty"
+    },
+    {
+      "claim": "Ο παίκτης μπορεί να έχει παρελθόν θήτη και να υπηρετεί στη Βουλή στο ύστερο 4 οαιώνα",
+      "evidence": [
+        "Hansen 1991,σ.108,249"
+      ],
+      "status": "scholarly-interpretation-of-practice-not-claim-that-formal-old-exclusion-never-existed"
+    },
+    {
+      "claim": "Δέκα λογιστές της Βουλής, ξεχωριστά από την τελική λογοδοσία",
+      "evidence": [
+        "Αθηναίων Πολιτεία 48.3",
+        "Αθηναίων Πολιτεία 54.2"
+      ],
+      "status": "explicit-primary-distinction"
+    },
+    {
+      "claim": "Τέσσερα επαγγέλματα ανά τάξη",
+      "evidence": [],
+      "status": "design-suggestions-not-historical-classification"
+    },
+    {
+      "claim": "51 εφέτες",
+      "evidence": [
+        "Μπάλλα/Wallace2015,εκδοτικόσχόλιοσ.221"
+      ],
+      "status": "secondary-editorial-number-not-explicit-in57.4"
+    }
+  ],
+  "uncertainties": [
+    {
+      "id": "trittys-reconstruction",
+      "count": 40,
+      "action": "retain flags and alternative regions; allow filtering for default identity choices"
+    },
+    {
+      "id": "pambotadai-tribe",
+      "count": 1,
+      "action": "tribal affiliation itself flagged as disputed in later literature"
+    },
+    {
+      "id": "proper-names-of-trittyes",
+      "action": "use descriptive regional labels; do not invent ancient proper names"
+    },
+    {
+      "id": "office-count-null",
+      "count": 16,
+      "action": "display unspecified, not zero; do not generate exact-size NPC boards from null"
+    },
+    {
+      "id": "occupation-wealth-class",
+      "action": "UI says suggested background; do not imply a legal exclusive profession"
+    },
+    {
+      "id": "player-court-vote",
+      "action": "councillorship does not itself authorize membership of Areopagos or every homicide court; preserve role checks"
+    },
+    {
+      "id": "wages-vs-week",
+      "action": "attendance pay is per participation/day; educational week does not itself trigger every historical payment"
+    }
+  ],
+  "scopeLimits": [
+    "Δεν περιλαμβάνονται πραγματικές ταυτότητες όλων των αξιωματούχων του 322 π.Χ.· πρόσωπα που θα δημιουργήσει το παιχνίδι πρέπει να επισημαίνονται ως μυθοπλασία.",
+    "Ο κατάλογος αφορά όσα κατονομάζονται στα 43–62 και διακριτά συμπληρώματα· δεν προβάλλεται ως πλήρης καταγραφή κάθε ιερωσύνης, τοπικού αξιώματος ή ελληνιστικής μεταρρύθμισης.",
+    "Η πλήρης γεωγραφία είναι ανακατασκευή με αβεβαιότητες, όχι εγγύηση ότι έχουν λυθεί όλες οι σχετικές επιγραφικές συζητήσεις."
+  ]
+}

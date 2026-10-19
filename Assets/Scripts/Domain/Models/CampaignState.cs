@@ -37,7 +37,8 @@ namespace DemocracyWay.NewUI
             -1
         };
         public bool initialComplete, finalComplete, surveyComplete;
-        public int war, readiness, legitimacy;
+        public int war, readiness, legitimacy, personalWar;
+        public int foodSecurity = 50;
         public string cityEnding, personalEnding;
     }
 }

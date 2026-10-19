@@ -29,10 +29,18 @@ namespace DemocracyWay.NewUI
                 ["Story.War"]=state.campaign.war,["Story.Readiness"]=state.campaign.readiness,
                 ["Story.Legitimacy"]=state.campaign.legitimacy,["Story.Corruption"]=state.city?.corruptionRisk ?? 0,
                 ["Story.InitialComplete"]=state.campaign.initialComplete,
-                ["Story.PublicVotes"]=state.campaign.cases.Count(x=>x.vote==0)
+                ["Story.PublicVotes"]=state.campaign.cases.Count(x=>x.vote==0),
+                ["Story.PersonalWar"]=state.campaign.personalWar
             };
             foreach(var p in parameters) inputs["Story."+p.name]=p.value;
             return new Result(ArticyRuleRunner.Execute(operation,inputs));
+        }
+        public static CharacterMetrics Effects(GameState state, int kind, int side, CharacterMetrics profile = null, int speech = 2, bool observation = false, bool success = false)
+        {
+            var m=profile ?? new CharacterMetrics();
+            using var result=Run("Rule_DecisionEffects",state,("Kind",kind),("Side",side),("Speech",speech),("Observation",observation),("Success",success),
+                ("DeltaConsistency",m.consistency),("DeltaEthics",m.ethics),("DeltaAuthority",m.authority),("DeltaPersuasion",m.persuasion),("DeltaParrhesia",m.parrhesia),("DeltaRecognition",m.recognition));
+            return new CharacterMetrics { consistency=result.Number("ConsistencyDelta"),ethics=result.Number("EthicsDelta"),authority=result.Number("AuthorityDelta"),persuasion=result.Number("PersuasionDelta"),parrhesia=result.Number("ParrhesiaDelta"),recognition=result.Number("RecognitionDelta") };
         }
         public static string Route(string name,GameState state,string caseId="",int side=-1)
         {

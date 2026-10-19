@@ -10,6 +10,7 @@ namespace DemocracyWay.NewUI
     public sealed class CampaignContent
     {
         public InstitutionCase[] cases;
-        public string notice;
+        public string notice, contentVersion;
+        public string[] assessmentIds;
     }
 }

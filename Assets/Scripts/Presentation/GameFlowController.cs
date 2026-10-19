@@ -99,7 +99,7 @@ namespace DemocracyWay.NewUI
             SetupAudio();
             WireButtons();
             SetupSettings();
-            SetupIdentity();
+            SetupEvaluationUI();
             SetActive("modal.root", false);
         }
 
@@ -141,9 +141,15 @@ namespace DemocracyWay.NewUI
 
         private void Update()
         {
+#if UNITY_EDITOR
+            if (!AccountBridge.IsReady && string.IsNullOrEmpty(SaveStore.TestDirectory)) return;
+#endif
+            if (State != null && Application.isFocused && !gamePaused && !modalOpen)
+                State.activeSeconds += Mathf.Min(Time.unscaledDeltaTime, 1f);
 #if ENABLE_INPUT_SYSTEM
             if(UnityEngine.InputSystem.Keyboard.current!=null&&UnityEngine.InputSystem.Keyboard.current.escapeKey.wasPressedThisFrame)
             {
+                if(HandleEvaluationEscape())return;
                 if(modalOpen)CancelModal();
                 else if(currentScreen=="profile")CloseProfile();
                 else if(currentScreen=="pause")ResumeGame();
@@ -204,11 +210,6 @@ namespace DemocracyWay.NewUI
                 "slots-load",
                 "settings",
                 "prologue",
-                "bio-family",
-                "bio-choice",
-                "bio-identity",
-                "bio-oath",
-                "bio-summary",
                 "prytany-title",
                 "lottery",
                 "map-stela"
@@ -228,27 +229,9 @@ namespace DemocracyWay.NewUI
             }
 
             Bind("prologue.primary", NextPrologue);
-            foreach (string screen in new[]
-            {
-                "bio-family",
-                "bio-choice"
-            }
-
-            )
-            {
-                string panelKey = screen + ".sourcesPanel";
-                Bind(screen + ".sourcesToggle", () =>
-                {
-                    GameObject panel = Get<GameObject>(panelKey);
-                    if (panel != null)
-                        panel.SetActive(!panel.activeSelf);
-                });
-            }
-
             Bind("bio-family.primary", AdvanceBio);
             Bind("bio-choice.primary", AdvanceBio);
             Bind("bio-oath.primary", AdvanceBio);
-            Bind("bio-identity.primary", FinishIdentity);
             Bind("bio-summary.primary", FinishBio);
             Bind("prytany-title.primary", NextPrytany);
             Bind("lottery.primary", () =>
@@ -261,7 +244,7 @@ namespace DemocracyWay.NewUI
             Bind("lottery.begin", BeginPrytany);
             Bind("modal.confirm", ConfirmDelete);
             Bind("modal.cancel", CancelModal);
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 10; i++)
             {
                 int choice = i;
                 Bind("bio.option." + choice, () => ChooseBio(choice));
@@ -274,12 +257,6 @@ namespace DemocracyWay.NewUI
 
                 )
                     Bind(id + ".option." + choice, () => ChooseBio(choice));
-            }
-
-            for (int i = 0; i < 10; i++)
-            {
-                int tribe = i;
-                Bind("identity.tribe." + i, () => SelectTribe(tribe));
             }
 
             var seen = new HashSet<Button>();
@@ -310,6 +287,7 @@ namespace DemocracyWay.NewUI
         {
             if (routing || string.IsNullOrEmpty(id))
                 return;
+            if (id == "final-knowledge" && State != null && State.evaluation != null && State.evaluation.completed && State.campaign != null && !string.IsNullOrEmpty(State.campaign.personalEnding)) id = "complete";
             if (id == "biography")
             {
                 ShowBiography();
@@ -343,6 +321,7 @@ namespace DemocracyWay.NewUI
             SetText("app.status", "");
             SetText(id + ".status", "");
             Render();
+            CleanPresentation();
             if (!string.IsNullOrEmpty(saveWarning))
                 SetStatus(saveWarning);
             FocusPrimary();
@@ -404,6 +383,9 @@ namespace DemocracyWay.NewUI
                 GameSession.State = NewState();
                 GameSession.Slot = -1;
             }
+            // Upgrade the old generic placeholder, preserving any existing custom name.
+            if (string.IsNullOrWhiteSpace(State.playerName) || State.playerName == "Αθηναίος")
+                State.playerName = GameState.DefaultPlayerName;
         }
 
         private bool SaveCheckpoint()

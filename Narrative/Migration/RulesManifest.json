@@ -40,7 +40,33 @@
     "CaseId": "",
     "BribePrice": 30,
     "SpeechUses": 2,
-    "Score": 0
+    "Score": 0,
+    "Kind": 0,
+    "DeltaConsistency": 0,
+    "DeltaEthics": 0,
+    "DeltaAuthority": 0,
+    "DeltaPersuasion": 0,
+    "DeltaParrhesia": 0,
+    "DeltaRecognition": 0,
+    "EthicsDelta": 0,
+    "PersuasionDelta": 0,
+    "PersonalWar": 0,
+    "Success": false,
+    "MaxInfluence": 8,
+    "ArgumentBonus": 0,
+    "SpeakerInfluence": 0,
+    "WriterInfluence": 0,
+    "SupportSide": 2,
+    "BaseSupport": 42,
+    "Context": 0,
+    "RequiredSupport": 50,
+    "FoodA": 0,
+    "FoodB": 0,
+    "TrustA": 0,
+    "TrustB": 0,
+    "ReadinessA": 0,
+    "ReadinessB": 0,
+    "FoodDelta": 0
   },
   "groups": [
     {
@@ -168,6 +194,24 @@
       "label": "Ψήφος και αποχή",
       "entry": "Route_VoteResult_1",
       "result": "Route_VoteResult_5"
+    },
+    {
+      "name": "Rule_DecisionEffects",
+      "label": "Συνέπειες επιλογών στους έξι δείκτες",
+      "entry": "Rule_DecisionEffects_1",
+      "result": "Rule_DecisionEffects_41"
+    },
+    {
+      "name": "Rule_PoliticalSpeech",
+      "label": "Πολιτική παρέμβαση · σχετικοί δείκτες και προετοιμασία",
+      "entry": "Rule_PoliticalSpeech_1",
+      "result": "Rule_PoliticalSpeech_9"
+    },
+    {
+      "name": "Rule_PoliticalVote",
+      "label": "Συλλογική απόφαση · πλαίσιο πόλης και αιτιολόγηση",
+      "entry": "Rule_PoliticalVote_1",
+      "result": "Rule_PoliticalVote_27"
     }
   ],
   "nodes": [
@@ -176,7 +220,7 @@
       "parent": "Rule_Speech",
       "type": "instruction",
       "label": "Αρχική επιρροή",
-      "script": "Story.Influence = Character.Persuasion / 10 + Story.Bonus; Story.ParrhesiaDelta = 0; Story.RecognitionDelta = 0; Story.AuthorityDelta = 0;",
+      "script": "Story.Influence = Character.Persuasion / 10 + Character.Authority / 25 + Character.Consistency / 25 + Character.Ethics / 25 + Character.Parrhesia / 25 + Character.Recognition / 25 + Story.Bonus; Story.ParrhesiaDelta = 0; Story.RecognitionDelta = 0; Story.AuthorityDelta = 0;",
       "x": 330,
       "y": 0
     },
@@ -608,7 +652,7 @@
       "parent": "Rule_Endings",
       "type": "condition",
       "label": "Επαρκής πολεμική προετοιμασία;",
-      "script": "Story.War >= 8 && Story.Readiness >= 65 && Story.CityFunds >= 60",
+      "script": "Story.War >= 8 && Story.Readiness >= 48 && Story.CityFunds >= 6500",
       "x": 1650,
       "y": 0
     },
@@ -635,7 +679,7 @@
       "parent": "Rule_Endings",
       "type": "condition",
       "label": "Περιορισμός αυτονομίας;",
-      "script": "Story.War <= -8 && Story.Legitimacy <= -20",
+      "script": "Story.War <= -8 && Story.Legitimacy <= -12",
       "x": 2640,
       "y": 0
     },
@@ -743,7 +787,7 @@
       "parent": "Rule_Endings",
       "type": "condition",
       "label": "Δημόσια αναγνώριση;",
-      "script": "Story.CityEnding == \"victory\" && Character.Recognition >= 55",
+      "script": "Story.CityEnding == \"victory\" && Character.Recognition >= 45 && Character.Ethics >= 40 && Character.Consistency >= 40",
       "x": 6600,
       "y": 0
     },
@@ -770,7 +814,7 @@
       "parent": "Rule_Endings",
       "type": "condition",
       "label": "Προσωπική εξορία;",
-      "script": "Story.CityEnding == \"defeat\" && Story.PublicVotes > 20",
+      "script": "Story.CityEnding == \"defeat\" && Story.PersonalWar >= 6",
       "x": 7590,
       "y": 0
     },
@@ -1366,6 +1410,699 @@
       "label": "Ολοκλήρωση Route_VoteResult",
       "script": "",
       "x": 1650,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_1",
+      "parent": "Rule_DecisionEffects",
+      "type": "instruction",
+      "label": "Έξι μεταβολές",
+      "script": "Story.ConsistencyDelta = 0; Story.EthicsDelta = 0; Story.AuthorityDelta = 0; Story.PersuasionDelta = 0; Story.ParrhesiaDelta = 0; Story.RecognitionDelta = 0;",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_2",
+      "parent": "Rule_DecisionEffects",
+      "type": "condition",
+      "label": "Εξάσκηση και δημόσια έκθεση",
+      "script": "Story.Kind == 0 && Story.Side != 2",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_3",
+      "parent": "Rule_DecisionEffects",
+      "type": "instruction",
+      "label": "Εξάσκηση και δημόσια έκθεση",
+      "script": "Story.PersuasionDelta = 1; Story.ParrhesiaDelta = 1; Story.RecognitionDelta = 1;",
+      "x": 990,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_4",
+      "parent": "Rule_DecisionEffects",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 1320,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_5",
+      "parent": "Rule_DecisionEffects",
+      "type": "condition",
+      "label": "Ανοικτή αμφισβήτηση της αυθεντίας",
+      "script": "Story.Kind == 0 && Story.Side == 0",
+      "x": 1650,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_6",
+      "parent": "Rule_DecisionEffects",
+      "type": "instruction",
+      "label": "Ανοικτή αμφισβήτηση της αυθεντίας",
+      "script": "Story.AuthorityDelta = 0;",
+      "x": 1980,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_7",
+      "parent": "Rule_DecisionEffects",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 2310,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_8",
+      "parent": "Rule_DecisionEffects",
+      "type": "condition",
+      "label": "Έμφαση στην ανάθεση",
+      "script": "Story.Kind == 0 && Story.Side == 1",
+      "x": 2640,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_9",
+      "parent": "Rule_DecisionEffects",
+      "type": "instruction",
+      "label": "Έμφαση στην ανάθεση",
+      "script": "Story.AuthorityDelta = 0;",
+      "x": 2970,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_10",
+      "parent": "Rule_DecisionEffects",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 3300,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_11",
+      "parent": "Rule_DecisionEffects",
+      "type": "condition",
+      "label": "Επιδράσεις συγκεκριμένου επιχειρήματος",
+      "script": "Story.Kind == 1",
+      "x": 3630,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_12",
+      "parent": "Rule_DecisionEffects",
+      "type": "instruction",
+      "label": "Επιδράσεις συγκεκριμένου επιχειρήματος",
+      "script": "Story.ConsistencyDelta = Story.DeltaConsistency; Story.EthicsDelta = Story.DeltaEthics; Story.AuthorityDelta = Story.DeltaAuthority; Story.PersuasionDelta = Story.DeltaPersuasion; Story.ParrhesiaDelta = Story.DeltaParrhesia; Story.RecognitionDelta = Story.DeltaRecognition;",
+      "x": 3960,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_13",
+      "parent": "Rule_DecisionEffects",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 4290,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_14",
+      "parent": "Rule_DecisionEffects",
+      "type": "condition",
+      "label": "Συμφωνία λόγου και ψήφου",
+      "script": "Story.Kind == 1 && Story.Side == Story.Speech && Story.Side != 2 && !Story.Observation",
+      "x": 4620,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_15",
+      "parent": "Rule_DecisionEffects",
+      "type": "instruction",
+      "label": "Συμφωνία λόγου και ψήφου",
+      "script": "Story.ConsistencyDelta += 1;",
+      "x": 4950,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_16",
+      "parent": "Rule_DecisionEffects",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 5280,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_17",
+      "parent": "Rule_DecisionEffects",
+      "type": "condition",
+      "label": "Μεταβολή δημόσιας στάσης",
+      "script": "Story.Kind == 1 && Story.Side != Story.Speech && Story.Speech != 2 && Story.Side != 2 && !Story.Observation",
+      "x": 5610,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_18",
+      "parent": "Rule_DecisionEffects",
+      "type": "instruction",
+      "label": "Μεταβολή δημόσιας στάσης",
+      "script": "Story.ConsistencyDelta -= 2;",
+      "x": 5940,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_19",
+      "parent": "Rule_DecisionEffects",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 6270,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_20",
+      "parent": "Rule_DecisionEffects",
+      "type": "condition",
+      "label": "Κόστος αποχής από τη συγκεκριμένη απόφαση",
+      "script": "Story.Kind == 1 && Story.Side == 2 && !Story.Observation",
+      "x": 6600,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_21",
+      "parent": "Rule_DecisionEffects",
+      "type": "instruction",
+      "label": "Κόστος αποχής από τη συγκεκριμένη απόφαση",
+      "script": "Story.ConsistencyDelta = -1; Story.ParrhesiaDelta = -1; Story.RecognitionDelta = -1;",
+      "x": 6930,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_22",
+      "parent": "Rule_DecisionEffects",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 7260,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_23",
+      "parent": "Rule_DecisionEffects",
+      "type": "condition",
+      "label": "Ιδιωτική εξαγορά και κίνδυνος λογοδοσίας",
+      "script": "Story.Kind == 2",
+      "x": 7590,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_24",
+      "parent": "Rule_DecisionEffects",
+      "type": "instruction",
+      "label": "Ιδιωτική εξαγορά και κίνδυνος λογοδοσίας",
+      "script": "Story.EthicsDelta = -6; Story.ConsistencyDelta = -3; Story.ParrhesiaDelta = -1; Story.AuthorityDelta = 1; Story.RecognitionDelta = -1;",
+      "x": 7920,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_25",
+      "parent": "Rule_DecisionEffects",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 8250,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_26",
+      "parent": "Rule_DecisionEffects",
+      "type": "condition",
+      "label": "Επιτυχής δημόσια επιχειρηματολογία",
+      "script": "Story.Kind == 3 && Story.Success",
+      "x": 8580,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_27",
+      "parent": "Rule_DecisionEffects",
+      "type": "instruction",
+      "label": "Επιτυχής δημόσια επιχειρηματολογία",
+      "script": "Story.ConsistencyDelta = 1; Story.PersuasionDelta = 1; Story.AuthorityDelta = 1;",
+      "x": 8910,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_28",
+      "parent": "Rule_DecisionEffects",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 9240,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_29",
+      "parent": "Rule_DecisionEffects",
+      "type": "condition",
+      "label": "Αποτυχημένη δημόσια προσέγγιση",
+      "script": "Story.Kind == 3 && !Story.Success",
+      "x": 9570,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_30",
+      "parent": "Rule_DecisionEffects",
+      "type": "instruction",
+      "label": "Αποτυχημένη δημόσια προσέγγιση",
+      "script": "Story.PersuasionDelta = 1; Story.AuthorityDelta = -1;",
+      "x": 9900,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_31",
+      "parent": "Rule_DecisionEffects",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 10230,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_32",
+      "parent": "Rule_DecisionEffects",
+      "type": "condition",
+      "label": "Καταγγελία στη Βουλή με θεσμικό κόστος",
+      "script": "Story.Kind == 4 && Story.Side == 0",
+      "x": 10560,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_33",
+      "parent": "Rule_DecisionEffects",
+      "type": "instruction",
+      "label": "Καταγγελία στη Βουλή με θεσμικό κόστος",
+      "script": "Story.ConsistencyDelta = 1; Story.EthicsDelta = 2; Story.AuthorityDelta = 1; Story.PersuasionDelta = -1;",
+      "x": 10890,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_34",
+      "parent": "Rule_DecisionEffects",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 11220,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_35",
+      "parent": "Rule_DecisionEffects",
+      "type": "condition",
+      "label": "Διαβίβαση για δικαστική εξέταση χωρίς προδικασμένη ενοχή",
+      "script": "Story.Kind == 4 && Story.Side == 1",
+      "x": 11550,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_36",
+      "parent": "Rule_DecisionEffects",
+      "type": "instruction",
+      "label": "Διαβίβαση για δικαστική εξέταση χωρίς προδικασμένη ενοχή",
+      "script": "Story.ConsistencyDelta = 1; Story.EthicsDelta = 1; Story.PersuasionDelta = 1; Story.AuthorityDelta = -1;",
+      "x": 11880,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_37",
+      "parent": "Rule_DecisionEffects",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 12210,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_38",
+      "parent": "Rule_DecisionEffects",
+      "type": "condition",
+      "label": "Αναβολή διερεύνησης",
+      "script": "Story.Kind == 4 && Story.Side == 2",
+      "x": 12540,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_39",
+      "parent": "Rule_DecisionEffects",
+      "type": "instruction",
+      "label": "Αναβολή διερεύνησης",
+      "script": "Story.EthicsDelta = -1; Story.RecognitionDelta = -1; Story.ParrhesiaDelta = -1;",
+      "x": 12870,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_40",
+      "parent": "Rule_DecisionEffects",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 13200,
+      "y": 0
+    },
+    {
+      "name": "Rule_DecisionEffects_41",
+      "parent": "Rule_DecisionEffects",
+      "type": "result",
+      "label": "Ολοκλήρωση επιδράσεων",
+      "script": "",
+      "x": 13530,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalSpeech_1",
+      "parent": "Rule_PoliticalSpeech",
+      "type": "instruction",
+      "label": "Προσωπική επιρροή σχετικού επιχειρήματος",
+      "script": "Story.SpeakerInfluence = (Character.Consistency * Story.DeltaConsistency + Character.Ethics * Story.DeltaEthics + Character.Authority * Story.DeltaAuthority + Character.Persuasion * Story.DeltaPersuasion + Character.Parrhesia * Story.DeltaParrhesia + Character.Recognition * Story.DeltaRecognition) / (Story.Threshold * 10) + Story.ArgumentBonus; Story.WriterInfluence = Story.Bonus;",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalSpeech_2",
+      "parent": "Rule_PoliticalSpeech",
+      "type": "condition",
+      "label": "Όριο προσωπικής επιρροής;",
+      "script": "Story.SpeakerInfluence > Story.MaxInfluence",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalSpeech_3",
+      "parent": "Rule_PoliticalSpeech",
+      "type": "instruction",
+      "label": "Όριο προσωπικής επιρροής",
+      "script": "Story.SpeakerInfluence = Story.MaxInfluence;",
+      "x": 990,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalSpeech_4",
+      "parent": "Rule_PoliticalSpeech",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 1320,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalSpeech_5",
+      "parent": "Rule_PoliticalSpeech",
+      "type": "condition",
+      "label": "Σιωπή;",
+      "script": "Story.Side == 2",
+      "x": 1650,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalSpeech_6",
+      "parent": "Rule_PoliticalSpeech",
+      "type": "instruction",
+      "label": "Σιωπή",
+      "script": "Story.SpeakerInfluence = 0; Story.WriterInfluence = 0;",
+      "x": 1980,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalSpeech_7",
+      "parent": "Rule_PoliticalSpeech",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 2310,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalSpeech_8",
+      "parent": "Rule_PoliticalSpeech",
+      "type": "instruction",
+      "label": "Σύνολο παρέμβασης",
+      "script": "Story.Influence = Story.SpeakerInfluence + Story.WriterInfluence;",
+      "x": 2640,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalSpeech_9",
+      "parent": "Rule_PoliticalSpeech",
+      "type": "result",
+      "label": "Ολοκλήρωση",
+      "script": "",
+      "x": 2970,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_1",
+      "parent": "Rule_PoliticalVote",
+      "type": "instruction",
+      "label": "Υπόθεση και πόλη",
+      "script": "Story.Score = Story.BaseSupport + Story.Context;",
+      "x": 330,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_2",
+      "parent": "Rule_PoliticalVote",
+      "type": "condition",
+      "label": "Δημόσια παρέμβαση υπέρ Α;",
+      "script": "Story.Speech == 0",
+      "x": 660,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_3",
+      "parent": "Rule_PoliticalVote",
+      "type": "instruction",
+      "label": "Δημόσια παρέμβαση υπέρ Α",
+      "script": "Story.Score += Story.Influence;",
+      "x": 990,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_4",
+      "parent": "Rule_PoliticalVote",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 1320,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_5",
+      "parent": "Rule_PoliticalVote",
+      "type": "condition",
+      "label": "Δημόσια παρέμβαση υπέρ Β;",
+      "script": "Story.Speech == 1",
+      "x": 1650,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_6",
+      "parent": "Rule_PoliticalVote",
+      "type": "instruction",
+      "label": "Δημόσια παρέμβαση υπέρ Β",
+      "script": "Story.Score -= Story.Influence;",
+      "x": 1980,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_7",
+      "parent": "Rule_PoliticalVote",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 2310,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_8",
+      "parent": "Rule_PoliticalVote",
+      "type": "condition",
+      "label": "Δίκτυο υπέρ Α;",
+      "script": "Story.SupportSide == 0",
+      "x": 2640,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_9",
+      "parent": "Rule_PoliticalVote",
+      "type": "instruction",
+      "label": "Δίκτυο υπέρ Α",
+      "script": "Story.Score += Story.Support;",
+      "x": 2970,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_10",
+      "parent": "Rule_PoliticalVote",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 3300,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_11",
+      "parent": "Rule_PoliticalVote",
+      "type": "condition",
+      "label": "Δίκτυο υπέρ Β;",
+      "script": "Story.SupportSide == 1",
+      "x": 3630,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_12",
+      "parent": "Rule_PoliticalVote",
+      "type": "instruction",
+      "label": "Δίκτυο υπέρ Β",
+      "script": "Story.Score -= Story.Support;",
+      "x": 3960,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_13",
+      "parent": "Rule_PoliticalVote",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 4290,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_14",
+      "parent": "Rule_PoliticalVote",
+      "type": "condition",
+      "label": "Κατώτατο όριο υποστήριξης;",
+      "script": "Story.Score < 0",
+      "x": 4620,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_15",
+      "parent": "Rule_PoliticalVote",
+      "type": "instruction",
+      "label": "Κατώτατο όριο υποστήριξης",
+      "script": "Story.Score = 0;",
+      "x": 4950,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_16",
+      "parent": "Rule_PoliticalVote",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 5280,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_17",
+      "parent": "Rule_PoliticalVote",
+      "type": "condition",
+      "label": "Ανώτατο όριο υποστήριξης;",
+      "script": "Story.Score > 100",
+      "x": 5610,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_18",
+      "parent": "Rule_PoliticalVote",
+      "type": "instruction",
+      "label": "Ανώτατο όριο υποστήριξης",
+      "script": "Story.Score = 100;",
+      "x": 5940,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_19",
+      "parent": "Rule_PoliticalVote",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 6270,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_20",
+      "parent": "Rule_PoliticalVote",
+      "type": "instruction",
+      "label": "Αφετηρία αποτελέσματος Β",
+      "script": "Story.Majority = 1; Story.CityDelta = Story.CostB; Story.FoodDelta = Story.FoodB; Story.LegitimacyDelta = Story.TrustB; Story.ReadinessDelta = Story.ReadinessB; Story.WarDelta = 0 - Story.WarInput;",
+      "x": 6600,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_21",
+      "parent": "Rule_PoliticalVote",
+      "type": "condition",
+      "label": "Επικράτηση Α;",
+      "script": "Story.Score >= Story.RequiredSupport",
+      "x": 6930,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_22",
+      "parent": "Rule_PoliticalVote",
+      "type": "instruction",
+      "label": "Επικράτηση Α",
+      "script": "Story.Majority = 0; Story.CityDelta = Story.CostA; Story.FoodDelta = Story.FoodA; Story.LegitimacyDelta = Story.TrustA; Story.ReadinessDelta = Story.ReadinessA; Story.WarDelta = Story.WarInput;",
+      "x": 7260,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_23",
+      "parent": "Rule_PoliticalVote",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 7590,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_24",
+      "parent": "Rule_PoliticalVote",
+      "type": "condition",
+      "label": "Διαθέσιμο ταμείο;",
+      "script": "Story.CityDelta < 0 - Story.CityFunds",
+      "x": 7920,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_25",
+      "parent": "Rule_PoliticalVote",
+      "type": "instruction",
+      "label": "Διαθέσιμο ταμείο",
+      "script": "Story.CityDelta = 0 - Story.CityFunds;",
+      "x": 8250,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_26",
+      "parent": "Rule_PoliticalVote",
+      "type": "hub",
+      "label": "Συνέχεια",
+      "script": "",
+      "x": 8580,
+      "y": 0
+    },
+    {
+      "name": "Rule_PoliticalVote_27",
+      "parent": "Rule_PoliticalVote",
+      "type": "result",
+      "label": "Ολοκλήρωση",
+      "script": "",
+      "x": 8910,
       "y": 0
     }
   ],
@@ -2078,6 +2815,491 @@
     {
       "from": "Route_VoteResult_4",
       "to": "Route_VoteResult_5",
+      "pin": 0
+    },
+    {
+      "to": "Rule_DecisionEffects_2",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_1"
+    },
+    {
+      "to": "Rule_DecisionEffects_3",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_2"
+    },
+    {
+      "to": "Rule_DecisionEffects_4",
+      "pin": 1,
+      "from": "Rule_DecisionEffects_2"
+    },
+    {
+      "to": "Rule_DecisionEffects_4",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_3"
+    },
+    {
+      "to": "Rule_DecisionEffects_5",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_4"
+    },
+    {
+      "to": "Rule_DecisionEffects_6",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_5"
+    },
+    {
+      "to": "Rule_DecisionEffects_7",
+      "pin": 1,
+      "from": "Rule_DecisionEffects_5"
+    },
+    {
+      "to": "Rule_DecisionEffects_7",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_6"
+    },
+    {
+      "to": "Rule_DecisionEffects_8",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_7"
+    },
+    {
+      "to": "Rule_DecisionEffects_9",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_8"
+    },
+    {
+      "to": "Rule_DecisionEffects_10",
+      "pin": 1,
+      "from": "Rule_DecisionEffects_8"
+    },
+    {
+      "to": "Rule_DecisionEffects_10",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_9"
+    },
+    {
+      "to": "Rule_DecisionEffects_11",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_10"
+    },
+    {
+      "to": "Rule_DecisionEffects_12",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_11"
+    },
+    {
+      "to": "Rule_DecisionEffects_13",
+      "pin": 1,
+      "from": "Rule_DecisionEffects_11"
+    },
+    {
+      "to": "Rule_DecisionEffects_13",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_12"
+    },
+    {
+      "to": "Rule_DecisionEffects_14",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_13"
+    },
+    {
+      "to": "Rule_DecisionEffects_15",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_14"
+    },
+    {
+      "to": "Rule_DecisionEffects_16",
+      "pin": 1,
+      "from": "Rule_DecisionEffects_14"
+    },
+    {
+      "to": "Rule_DecisionEffects_16",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_15"
+    },
+    {
+      "to": "Rule_DecisionEffects_17",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_16"
+    },
+    {
+      "to": "Rule_DecisionEffects_18",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_17"
+    },
+    {
+      "to": "Rule_DecisionEffects_19",
+      "pin": 1,
+      "from": "Rule_DecisionEffects_17"
+    },
+    {
+      "to": "Rule_DecisionEffects_19",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_18"
+    },
+    {
+      "to": "Rule_DecisionEffects_20",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_19"
+    },
+    {
+      "to": "Rule_DecisionEffects_21",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_20"
+    },
+    {
+      "to": "Rule_DecisionEffects_22",
+      "pin": 1,
+      "from": "Rule_DecisionEffects_20"
+    },
+    {
+      "to": "Rule_DecisionEffects_22",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_21"
+    },
+    {
+      "to": "Rule_DecisionEffects_23",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_22"
+    },
+    {
+      "to": "Rule_DecisionEffects_24",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_23"
+    },
+    {
+      "to": "Rule_DecisionEffects_25",
+      "pin": 1,
+      "from": "Rule_DecisionEffects_23"
+    },
+    {
+      "to": "Rule_DecisionEffects_25",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_24"
+    },
+    {
+      "to": "Rule_DecisionEffects_26",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_25"
+    },
+    {
+      "to": "Rule_DecisionEffects_27",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_26"
+    },
+    {
+      "to": "Rule_DecisionEffects_28",
+      "pin": 1,
+      "from": "Rule_DecisionEffects_26"
+    },
+    {
+      "to": "Rule_DecisionEffects_28",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_27"
+    },
+    {
+      "to": "Rule_DecisionEffects_29",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_28"
+    },
+    {
+      "to": "Rule_DecisionEffects_30",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_29"
+    },
+    {
+      "to": "Rule_DecisionEffects_31",
+      "pin": 1,
+      "from": "Rule_DecisionEffects_29"
+    },
+    {
+      "to": "Rule_DecisionEffects_31",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_30"
+    },
+    {
+      "to": "Rule_DecisionEffects_32",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_31"
+    },
+    {
+      "to": "Rule_DecisionEffects_33",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_32"
+    },
+    {
+      "to": "Rule_DecisionEffects_34",
+      "pin": 1,
+      "from": "Rule_DecisionEffects_32"
+    },
+    {
+      "to": "Rule_DecisionEffects_34",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_33"
+    },
+    {
+      "to": "Rule_DecisionEffects_35",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_34"
+    },
+    {
+      "to": "Rule_DecisionEffects_36",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_35"
+    },
+    {
+      "to": "Rule_DecisionEffects_37",
+      "pin": 1,
+      "from": "Rule_DecisionEffects_35"
+    },
+    {
+      "to": "Rule_DecisionEffects_37",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_36"
+    },
+    {
+      "to": "Rule_DecisionEffects_38",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_37"
+    },
+    {
+      "to": "Rule_DecisionEffects_39",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_38"
+    },
+    {
+      "to": "Rule_DecisionEffects_40",
+      "pin": 1,
+      "from": "Rule_DecisionEffects_38"
+    },
+    {
+      "to": "Rule_DecisionEffects_40",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_39"
+    },
+    {
+      "to": "Rule_DecisionEffects_41",
+      "pin": 0,
+      "from": "Rule_DecisionEffects_40"
+    },
+    {
+      "from": "Rule_PoliticalSpeech_1",
+      "to": "Rule_PoliticalSpeech_2",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalSpeech_2",
+      "to": "Rule_PoliticalSpeech_3",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalSpeech_2",
+      "to": "Rule_PoliticalSpeech_4",
+      "pin": 1
+    },
+    {
+      "from": "Rule_PoliticalSpeech_3",
+      "to": "Rule_PoliticalSpeech_4",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalSpeech_4",
+      "to": "Rule_PoliticalSpeech_5",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalSpeech_5",
+      "to": "Rule_PoliticalSpeech_6",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalSpeech_5",
+      "to": "Rule_PoliticalSpeech_7",
+      "pin": 1
+    },
+    {
+      "from": "Rule_PoliticalSpeech_6",
+      "to": "Rule_PoliticalSpeech_7",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalSpeech_7",
+      "to": "Rule_PoliticalSpeech_8",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalSpeech_8",
+      "to": "Rule_PoliticalSpeech_9",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_1",
+      "to": "Rule_PoliticalVote_2",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_2",
+      "to": "Rule_PoliticalVote_3",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_2",
+      "to": "Rule_PoliticalVote_4",
+      "pin": 1
+    },
+    {
+      "from": "Rule_PoliticalVote_3",
+      "to": "Rule_PoliticalVote_4",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_4",
+      "to": "Rule_PoliticalVote_5",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_5",
+      "to": "Rule_PoliticalVote_6",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_5",
+      "to": "Rule_PoliticalVote_7",
+      "pin": 1
+    },
+    {
+      "from": "Rule_PoliticalVote_6",
+      "to": "Rule_PoliticalVote_7",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_7",
+      "to": "Rule_PoliticalVote_8",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_8",
+      "to": "Rule_PoliticalVote_9",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_8",
+      "to": "Rule_PoliticalVote_10",
+      "pin": 1
+    },
+    {
+      "from": "Rule_PoliticalVote_9",
+      "to": "Rule_PoliticalVote_10",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_10",
+      "to": "Rule_PoliticalVote_11",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_11",
+      "to": "Rule_PoliticalVote_12",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_11",
+      "to": "Rule_PoliticalVote_13",
+      "pin": 1
+    },
+    {
+      "from": "Rule_PoliticalVote_12",
+      "to": "Rule_PoliticalVote_13",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_13",
+      "to": "Rule_PoliticalVote_14",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_14",
+      "to": "Rule_PoliticalVote_15",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_14",
+      "to": "Rule_PoliticalVote_16",
+      "pin": 1
+    },
+    {
+      "from": "Rule_PoliticalVote_15",
+      "to": "Rule_PoliticalVote_16",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_16",
+      "to": "Rule_PoliticalVote_17",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_17",
+      "to": "Rule_PoliticalVote_18",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_17",
+      "to": "Rule_PoliticalVote_19",
+      "pin": 1
+    },
+    {
+      "from": "Rule_PoliticalVote_18",
+      "to": "Rule_PoliticalVote_19",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_19",
+      "to": "Rule_PoliticalVote_20",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_20",
+      "to": "Rule_PoliticalVote_21",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_21",
+      "to": "Rule_PoliticalVote_22",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_21",
+      "to": "Rule_PoliticalVote_23",
+      "pin": 1
+    },
+    {
+      "from": "Rule_PoliticalVote_22",
+      "to": "Rule_PoliticalVote_23",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_23",
+      "to": "Rule_PoliticalVote_24",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_24",
+      "to": "Rule_PoliticalVote_25",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_24",
+      "to": "Rule_PoliticalVote_26",
+      "pin": 1
+    },
+    {
+      "from": "Rule_PoliticalVote_25",
+      "to": "Rule_PoliticalVote_26",
+      "pin": 0
+    },
+    {
+      "from": "Rule_PoliticalVote_26",
+      "to": "Rule_PoliticalVote_27",
       "pin": 0
     }
   ],

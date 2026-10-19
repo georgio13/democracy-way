@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "projectGuid": "9a96eb60-1074-4f6d-bada-e894d8e2c89f",
+  "revisionId": "final-data-corrections-20261019",
+  "contentVersion": "3",
+  "previousManifestFile": "NativeManifest.BeforeFinalDataCorrections-20261019.json",
+  "schemaUpdates": [],
+  "recordUpdates": [
+    {
+      "name": "Case_magistrates_review",
+      "fields": [
+        "F_attendanceObols"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_sacred_embassy",
+      "fields": [
+        "F_leanB"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_illegal_decree",
+      "fields": [
+        "F_leanA"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    }
+  ],
+  "expressionUpdates": [],
+  "replaceOutgoingEdgesFrom": [],
+  "sha256": {
+    "NativeManifest.json": "3d8a46c3031c7fabcf791192f1be4b11ac4d7ba9e6f1c98ada688e859c01bdc9",
+    "NativeManifest.BeforeFinalDataCorrections-20261019.json": "920f62d15b8194452cd60b0214e20cb8868c805175dcd6702d346012bfd39ed1",
+    "RulesManifest.json": "5758f76875a742e4a7d9bccb262fb598b6d7901e1b3affc4ede6508b613ab080",
+    "ContentBindings.json": "122e268329b10195691045232d650d06d4068addbb792a8c6bd00c353fdb6254"
+  }
+}

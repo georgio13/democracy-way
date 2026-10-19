@@ -15,5 +15,6 @@ namespace DemocracyWay.NewUI
         public int[] officialApproaches = new int[6];
         public int[] officialSupport = new int[6];
         public int corruptionRisk;
+        public int[] supportUntilTurn = new int[6];
     }
 }

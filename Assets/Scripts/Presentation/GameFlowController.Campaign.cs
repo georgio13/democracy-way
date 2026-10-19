@@ -23,7 +23,15 @@ namespace DemocracyWay.NewUI
             }
         }
 
-        InstitutionCase Case => CampaignData.cases[CampaignRules.Turn(State) % CampaignData.cases.Length];
+        InstitutionCase Case
+        {
+            get
+            {
+                var value = CampaignData.cases[CampaignRules.Turn(State) % CampaignData.cases.Length];
+                value.contentVersion = CampaignData.contentVersion;
+                return value;
+            }
+        }
 
         CaseRecord CaseRecord => CampaignRules.Current(State);
 
@@ -74,11 +82,11 @@ namespace DemocracyWay.NewUI
             Bind("procedure-briefing.primary", () => FollowStory("BriefingContinue"));
             Bind("appeal.primary", () => FollowStory("AppealContinue"));
             Bind("deliberation.speech", () => FollowStory("DeliberationSpeech"));
-            Bind("deliberation.vote", () => FollowStory("DeliberationVote"));
+            Bind("deliberation.vote", ContinueDebate);
             for (int i = 0; i < 3; i++)
             {
                 int n = i;
-                Bind("deliberation.choice." + i, () => CastCampaignVote(n));
+                Bind("deliberation.choice." + i, () => { if(!DebateComplete){if(n==2)ContinueDebate();return;} CastCampaignVote(n); });
                 Bind("vote.choice." + i, () => CastCampaignVote(n));
                 Bind("speech.choice." + i, () => CampaignSpeak(n));
             }
@@ -152,18 +160,21 @@ namespace DemocracyWay.NewUI
             if (site == Case.site && !CaseRecord.completed)
             {
                 CaseRecord.caseId = Case.id;
+                CaptureCaseHistorySnapshot();
                 GoCampaign(CaseRecord.knowledge < 0 ? "knowledge" : "procedure-briefing");
             }
             else
-                GoCampaign("institution-history");
+                TryOpenInstitutionHistory(site);
         }
 
         void AnswerCampaign(string screen, int n)
         {
+            if (TryAnswerEvaluation(screen,n)) return;
             if (screen == "knowledge")
             {
                 if (!CampaignRules.Answer(State, n))
                     return;
+                CaseRecord.questionId=Case.id+":knowledge"; CaseRecord.caseId=Case.id; CaseRecord.questionCorrect=Case.correct; CaseRecord.selectedAnswer=n; CaseRecord.contentVersion=CampaignData.contentVersion;
                 GoCampaign(n == Case.correct ? "knowledge-correct" : "knowledge-incorrect");
                 return;
             }
@@ -203,27 +214,31 @@ namespace DemocracyWay.NewUI
 
         void CampaignSpeak(int n)
         {
+            if (PoliticalSpeech(n)) return;
             if (Case.observation && n < 2)
             {
                 SetStatus(ArticyNarrative.Copy("Copy_2afaa10a70e5cf45"));
                 return;
             }
 
+            var before=State.metrics.Copy();
             if (CaseRecord.speech < 0)
             {
                 int bonus = n == 2 ? 0 : City.speechUses > 0 ? City.speechBonus : 0;
-                if (CampaignRules.Speak(State, n, bonus) && n != 2 && City.speechUses > 0)
+                if (CampaignRules.Speak(State, n, bonus, Case) && n != 2 && City.speechUses > 0)
                     ConsumeSpeechSupport();
             }
 
             FollowStory("SpeechContinue");
+            SetStatus(MetricDeltas(CampaignRules.Difference(before,State.metrics)));
         }
 
         void CastCampaignVote(int n)
         {
-            if (!CampaignRules.Vote(State, n, Case.costA, Case.costB, Case.war, Case.observation))
+            if (!CampaignRules.Vote(State, n, Case.costA, Case.costB, Case.war, Case.observation, Case))
                 return;
             GoCampaign(ArticyNarrative.Route("VoteResult",State,Case.id,n));
+            SetStatus(MetricDeltas(CaseRecord.metricDelta));
         }
 
         void AdvanceWeek()
@@ -260,6 +275,7 @@ namespace DemocracyWay.NewUI
 
         void FinishSurvey()
         {
+            if (TryFinishEvaluationSurvey()) return;
             if (Campaign.survey.Any(x => x < 1))
                 return;
             Campaign.surveyComplete = true;
@@ -269,9 +285,27 @@ namespace DemocracyWay.NewUI
         void RenderCampaignMap()
         {
             for (int i = 0; i < 4; i++)
-                SetActive("map.institution." + i + ".active", Case.site == i && !CaseRecord.completed);
+            {
+                bool active = Case.site == i && !CaseRecord.completed;
+                string key = "map.institution." + i;
+                var plate = Get<PanelGraphic>(key + ".plate");
+                var title = Get<TMP_Text>(key + ".title");
+                if (plate != null)
+                {
+                    plate.color = active ? new Color32(232, 223, 203, 255) : new Color32(25, 47, 52, 255);
+                    plate.rectTransform.sizeDelta = new Vector2(plate.rectTransform.sizeDelta.x, active ? 72 : 50.4f);
+                }
+                if (title != null)
+                {
+                    title.text = i==3 && Case.site==3 ? "Φάκελος: "+Case.institution : InstitutionNames[i];
+                    title.enableAutoSizing=true;title.fontSizeMin=15;title.fontSizeMax=22;
+                    title.color = active ? new Color32(23, 43, 48, 255) : new Color32(238, 228, 203, 255);
+                    title.rectTransform.anchoredPosition = new Vector2(0, active ? -11 : -9);
+                }
+                SetActive(key + ".newCase", active);
+            }
             SetActive("map.deme", Case.site == 4 && !CaseRecord.completed);
-            SetText("map.case.label", CaseRecord.completed ? ArticyNarrative.Copy("Copy_b383cd29aada7bc7") : InstitutionNames[Case.site] + " · " + Case.title);
+            SetText("map.case.label", CaseRecord.completed ? ArticyNarrative.Copy("Copy_b383cd29aada7bc7") : (Case.institution ?? InstitutionNames[Case.site]) + " · " + Case.title);
             Bind("map.case", () =>
             {
                 if (CaseRecord.completed)
@@ -300,26 +334,62 @@ namespace DemocracyWay.NewUI
             }
         }
 
-        int[] QuizIndices =
+        InstitutionCase AssessmentCase(int index)
         {
-            0,
-            1,
-            2,
-            5,
-            6,
-            7,
-            8,
-            9
-        };
+            string[] fallback={"grain","citizenship","ships","audit","areopagus","defence","scrutiny","generals"};
+            string id=CampaignData.assessmentIds!=null&&index<CampaignData.assessmentIds.Length?CampaignData.assessmentIds[index]:fallback[index];
+            return CampaignData.cases.FirstOrDefault(c=>c.id==id) ?? CampaignData.cases[0];
+        }
+        readonly System.Collections.Generic.HashSet<RectTransform> liftedCaseSources = new System.Collections.Generic.HashSet<RectTransform>();
+        void LiftCaseSource()
+        {
+            var text=Get<TMP_Text>(currentScreen+".source");
+            if(text!=null&&liftedCaseSources.Add(text.rectTransform))text.rectTransform.anchoredPosition+=new Vector2(0,24);
+        }
+        string ShortCaseSource => (Case.source ?? "").Split(new[]{" · "},StringSplitOptions.None)[0];
+        string[] DebateParts => PoliticalCaseRules.Definition(Case, State)?.dialogue?.Select(x => x.text).ToArray() ?? (Case.argumentA+"\n\n"+Case.argumentB).Split(new[]{"\n\n"},StringSplitOptions.RemoveEmptyEntries);
+        bool DebateComplete => CaseRecord.debateIndex>=DebateParts.Length-1;
+        void ContinueDebate()
+        {
+            if(!DebateComplete){CaseRecord.debateIndex++;SaveCheckpoint();RenderCampaign();}
+            else FollowStory("DeliberationVote");
+        }
+        TMP_Text debateSpeakerA,debateSpeakerB;
+        void RenderDebate()
+        {
+            if (RenderPoliticalDebate()) return;
+            if(roots.TryGetValue("deliberation",out var debateRoot))
+            {
+                foreach(var t in debateRoot.GetComponentsInChildren<TMP_Text>(true))
+                {
+                    if(t.text=="Δημόκριτος")debateSpeakerA=t;
+                    if(t.text=="Λύσανδρος")debateSpeakerB=t;
+                    if(System.Text.RegularExpressions.Regex.Replace(t.text,"<[^>]+>|\\s","").IndexOf("Δημοκρατική",StringComparison.OrdinalIgnoreCase)>=0)t.text="Πρώτη πρόταση · εξέτασε τα επιχειρήματα";
+                    if(System.Text.RegularExpressions.Regex.Replace(t.text,"<[^>]+>|\\s","").IndexOf("Ολιγαρχική",StringComparison.OrdinalIgnoreCase)>=0)t.text="Δεύτερη πρόταση · εξέτασε τα επιχειρήματα";
+                    if(t.text.Contains("ΓΟΝΟΣ")||t.text.Contains("ΔΗΜΟΣΙΟΣ ΕΛΕΓΧΟΣ"))t.text="ΠΡΩΤΟΣ ΟΜΙΛΗΤΗΣ";
+                    if(t.text.Contains("ΕΥΠΟΡΟΣ"))t.text="ΔΕΥΤΕΡΟΣ ΟΜΙΛΗΤΗΣ";
+                }
+            }
+            if(debateSpeakerA!=null)debateSpeakerA.text=Case.speakerA;
+            if(debateSpeakerB!=null)debateSpeakerB.text=Case.speakerB;
+            var parts=DebateParts;int n=Math.Min(CaseRecord.debateIndex,parts.Length-1);
+            int aCount=Case.argumentA.Split(new[]{"\n\n"},StringSplitOptions.RemoveEmptyEntries).Length;bool first=n<aCount;
+            CampaignText("argument.0", first ? "«"+parts[n]+"»" : "Ο πρώτος ομιλητής ολοκλήρωσε την τοποθέτησή του.");
+            CampaignText("argument.1", first ? "Περιμένει να λάβει τον λόγο." : "«"+parts[n]+"»");
+            CampaignLabel("vote",DebateComplete ? "Στην ψηφοφορία" : "Συνέχεια λόγου  "+(n+1)+" / "+parts.Length);
+            foreach(string key in new[]{"argument.0","argument.1"}){var t=Get<TMP_Text>("deliberation."+key);if(t!=null){t.enableAutoSizing=true;t.fontSizeMin=19;t.fontSizeMax=28;}}
+        }
         void RenderCampaign()
         {
             string id = currentScreen;
+            if (TryRenderEvaluationQuestion()) return;
+            if (id == "final-survey" && RenderEvaluationSurvey()) return;
             if (campaignContent == null)
                 return;
-            CampaignText("funds", ArticyNarrative.Copy("Copy_9fd25730f3bc1ab9") + State.cityFunds + ArticyNarrative.Copy("Copy_f9278043e324c0bc") + State.personalFunds + ArticyNarrative.Copy("Copy_6cbc6fd72c7bdc12"));
+            CampaignText("funds", "Πόλη: "+State.cityFunds+" οβ. · Προσωπικό: "+State.personalFunds+" οβ.");
             if (id == "institution-history")
             {
-                RenderInstitutionHistory();
+                RenderInstitutionHistoryPanel();
                 return;
             }
 
@@ -343,7 +413,7 @@ namespace DemocracyWay.NewUI
             {
                 bool quiz = id != "knowledge";
                 int index = id == "initial-knowledge" ? Campaign.initialIndex : Campaign.finalIndex;
-                var c = quiz ? CampaignData.cases[QuizIndices[Math.Min(7, index)]] : Case;
+                var c = quiz ? AssessmentCase(Math.Min(7,index)) : Case;
                 CampaignText("banner", quiz ? (id == "initial-knowledge" ? ArticyNarrative.Copy("Copy_3fbbd6062db820e6") : ArticyNarrative.Copy("Copy_ed29f6b542d3a7ad")) + ArticyNarrative.Copy("Copy_7497f4359296eb12") + (Math.Min(index, 7) + 1) + "/8" : ArticyNarrative.Copy("Copy_53405a8145bf2dfe"));
                 CampaignText("heading", quiz && index == 0 ? ArticyNarrative.Copy("Copy_c5878ab2fda6586b") : c.question);
                 CampaignText("body", quiz ? ArticyNarrative.Copy("Copy_f2552600441f7137") : ArticyNarrative.Copy("Copy_9f974b6ae4ac0b34") + Case.title + ArticyNarrative.Copy("Copy_c20dc950f5982180"));
@@ -358,47 +428,59 @@ namespace DemocracyWay.NewUI
                 CampaignText("seal", "?");
                 CampaignText("heading", id == "knowledge-correct" ? (Case.id == "grain" ? ArticyNarrative.Copy("Copy_bb8a0b2b2732efb1") : ArticyNarrative.Copy("Copy_efc30c471c9d9686")) : ArticyNarrative.Copy("Copy_e3f63fadc3624d22"));
                 CampaignText("body", Case.explanation);
-                CampaignText("source", ArticyNarrative.Copy("Copy_c17ca86d5c33684a") + Case.source + ArticyNarrative.Copy("Copy_105a6ddb13eadf83"));
+                CampaignText("source", ShortCaseSource);
+                LiftCaseSource();
                 return;
             }
 
             if (id == "procedure-briefing" || id == "appeal")
             {
-                CampaignText("heading", id == "appeal" ? ArticyNarrative.Copy("Copy_3027ad69a3db1d67") : ArticyNarrative.Copy("Copy_e5e29d2e7d06934f"));
-                CampaignText("body", Case.brief);
+                CampaignText("heading", Case.institution + " · " + (Case.observation ? "Παρακολούθηση διαδικασίας" : "Η διαδικασία αρχίζει"));
+                string context=Case.brief;
+                if(Case.site==3)context+="\n\nΟ δείκτης στον χάρτη ανοίγει τον δικαστικό φάκελο· δεν δηλώνει την ακριβή τοποθεσία αυτού του δικαστηρίου.";
+                if(Case.id=="audit-followup")context+="\n\nΠροηγούμενος λογιστικός έλεγχος: "+(Campaign.cases.Any(x=>x.completed&&x.caseId=="audit") ? "υπάρχει ήδη φάκελος στη διαδρομή σου." : "παρακολουθείς ανεξάρτητο φάκελο.")+" Εκκρεμείς συστάσεις σου: "+string.Join(" · ",City.complaintDecisions.Where(x=>!string.IsNullOrEmpty(x)));
+                CampaignText("body",context);
                 CampaignText("role", Case.observation ? ArticyNarrative.Copy("Copy_f85bd31fc92ebd77") : ArticyNarrative.Copy("Copy_1d174bf1ab96eb21"));
-                CampaignText("source", Case.source + ArticyNarrative.Copy("Copy_d639284ef6ba7c02"));
+                CampaignText("source", ShortCaseSource + " · Εκπαιδευτικό, μυθοπλαστικό περιστατικό.");
                 return;
             }
 
             if (id == "deliberation")
             {
                 CampaignText("heading", Case.title);
-                CampaignText("institution", InstitutionNames[Case.site].ToUpperInvariant() + (Case.observation ? ArticyNarrative.Copy("Copy_3f00a343e8208107") : ArticyNarrative.Copy("Copy_7c3f56f6a142be8b")));
-                CampaignText("argument.0", "«" + Case.argumentA + "»");
-                CampaignText("argument.1", "«" + Case.argumentB + "»");
+                CampaignText("institution", (Case.institution ?? InstitutionNames[Case.site]).ToUpperInvariant() + (Case.observation ? ArticyNarrative.Copy("Copy_3f00a343e8208107") : ArticyNarrative.Copy("Copy_7c3f56f6a142be8b")));
+                RenderDebate();
                 CampaignLabel("choice.0", Case.observation ? ArticyNarrative.Copy("Copy_0b9ceeb7aeb4b781") : ArticyNarrative.Copy("Copy_c2ad6d98110ae3a1"));
                 CampaignLabel("choice.1", Case.observation ? ArticyNarrative.Copy("Copy_c9cf02439a132666") : ArticyNarrative.Copy("Copy_edefc3af0366ead3"));
                 CampaignLabel("choice.2", Case.observation ? ArticyNarrative.Copy("Copy_47f45e8efd2ad58d") : ArticyNarrative.Copy("Copy_cb6ec07aff936e23"));
-                SetInteractable("deliberation.speech", !Case.observation && CaseRecord.speech < 0);
-                CampaignText("source", Case.source + ArticyNarrative.Copy("Copy_e6397e79400ef6f5"));
+                SetInteractable("deliberation.speech", !Case.observation && CaseRecord.speech < 0 && DebateComplete);
+                for(int k=0;k<3;k++)SetInteractable("deliberation.choice."+k,k==2||DebateComplete);
+                CampaignLabel("choice.0",Case.observation ? "Πρώτη εκτίμηση των στοιχείων" : "Υπέρ της πρώτης πρότασης");
+                CampaignLabel("choice.1",Case.observation ? "Δεύτερη εκτίμηση των στοιχείων" : "Υπέρ της δεύτερης πρότασης");
+                if(!DebateComplete)CampaignLabel("choice.2","Συνέχεια λόγου  "+(CaseRecord.debateIndex+1)+" / "+DebateParts.Length);
+                CampaignText("source", ShortCaseSource);
+                LiftCaseSource();
                 return;
             }
 
             if (id == "speech" || id == "vote")
             {
+                if (id == "speech" && RenderPoliticalSpeech()) return;
+                if (id == "vote" && RenderPoliticalVote()) return;
                 CampaignText("heading", id == "speech" ? ArticyNarrative.Copy("Copy_fd2a025dfbcc5500") : Case.observation ? ArticyNarrative.Copy("Copy_595a4262b7a284e3") : ArticyNarrative.Copy("Copy_111d1a88d8ec5459"));
                 CampaignText("body", id == "speech" ? ArticyNarrative.Copy("Copy_4ee6e91c465e068d") : Case.title);
                 CampaignLabel("choice.0", id == "speech" ? ArticyNarrative.Copy("Copy_fba2d921d0335163") : ArticyNarrative.Copy("Copy_432df8f8f9826174"));
                 CampaignLabel("choice.1", id == "speech" ? ArticyNarrative.Copy("Copy_7381b2d39a137766") : ArticyNarrative.Copy("Copy_6b5411ff18007acd"));
                 CampaignLabel("choice.2", id == "speech" ? ArticyNarrative.Copy("Copy_4e4312e35e52b30d") : Case.observation ? ArticyNarrative.Copy("Copy_47f45e8efd2ad58d") : ArticyNarrative.Copy("Copy_5dc4c89644ccd8a8"));
+                if(id=="speech"){CampaignLabel("choice.0","Υποστηρίζω την πρώτη πρόταση");CampaignLabel("choice.1","Υποστηρίζω τη δεύτερη πρόταση");}
                 CampaignText("role", id == "speech" ? (City.speechUses > 0 ? ArticyNarrative.Copy("Copy_3c1124cd8cf502aa") + City.speechBonus + ArticyNarrative.Copy("Copy_787af7ecf0bf6d10") + City.speechUses + ArticyNarrative.Copy("Copy_2f33270ac9233c06") : ArticyNarrative.Copy("Copy_5480bcc4b4f204db")) : ArticyNarrative.Copy("Copy_da46fff6a7f3d4d7"));
-                CampaignText("source", Case.source + ArticyNarrative.Copy("Copy_2e9392c7b6c8cc11"));
+                CampaignText("source", Case.source + "\nΑμοιβή συμμετοχής: "+Case.attendanceObols+" οβ. · αποχή / παρατήρηση: 0.");
                 return;
             }
 
             if (id == "vote-result" || id == "vote-abstention")
             {
+                if (RenderPoliticalResult(false)) return;
                 CampaignText("heading", Case.observation ? ArticyNarrative.Copy("Copy_c4f590baea4f5c33") : CaseRecord.majority == 0 ? ArticyNarrative.Copy("Copy_4740eb1101ce9ab5") : ArticyNarrative.Copy("Copy_d65c0e418f9160b4"));
                 CampaignText("body", Case.observation ? ArticyNarrative.Copy("Copy_5920ca96b1e612f6") : ArticyNarrative.Copy("Copy_c7dfb3d48e356be3"));
                 CampaignText("majority.0", Case.observation ? ArticyNarrative.Copy("Copy_61dd64b4cf9142f7") : CaseRecord.majority == 0 ? ArticyNarrative.Copy("Copy_c60eadba92c53be3") : ArticyNarrative.Copy("Copy_6eeafa245849c490"));
@@ -406,8 +488,8 @@ namespace DemocracyWay.NewUI
                 var bar = Get<Image>(id + ".majority.bar");
                 if (bar != null)
                     bar.rectTransform.sizeDelta = new Vector2((CaseRecord.majority == 0 ? 539 : 359) * 1.2f, 8 * 1.2f);
-                CampaignText("city-effect", CaseRecord.cityDelta + ArticyNarrative.Copy("Copy_732101c50b7cbd87"));
-                CampaignText("personal-effect", ArticyNarrative.Copy("Copy_c9df44a5f28c34e3"));
+                CampaignText("city-effect", "Ταμείο πόλης: "+CaseRecord.cityDelta.ToString("+0;-0;0")+" οβ.");
+                CampaignText("personal-effect", "Προσωπικό ταμείο: "+CaseRecord.personalDelta.ToString("+0;-0;0")+" οβ. · αμοιβή συμμετοχής");
                 CampaignText("speech-effect", CaseRecord.vote == 2 ? Case.observation ? ArticyNarrative.Copy("Copy_36ce9e21ee6c27e5") : ArticyNarrative.Copy("Copy_5dc4c89644ccd8a8") : CaseRecord.speech < 2 ? ArticyNarrative.Copy("Copy_6aa504d763ff2df3") : ArticyNarrative.Copy("Copy_cfe1dc0915e117fb"));
                 CampaignText("source", Case.observation ? ArticyNarrative.Copy("Copy_d89da5913a9fc4db") + Case.source : ArticyNarrative.Copy("Copy_1067f4424df4677d") + Case.source);
                 return;
@@ -415,10 +497,13 @@ namespace DemocracyWay.NewUI
 
             if (id == "week-report")
             {
+                if (RenderPoliticalResult(true)) return;
                 CampaignText("heading", ArticyNarrative.Copy("Copy_ac86789647c262c8"));
-                CampaignText("body", InstitutionNames[Case.site] + " · " + Case.title + "\n\n" + (Case.observation ? ArticyNarrative.Copy("Copy_b7406bb31eaa7a39") : CaseRecord.majority == 0 ? ArticyNarrative.Copy("Copy_cf1747a50e2679e1") : ArticyNarrative.Copy("Copy_783127c8f5fefcc5")) + "\n\n" + (CaseRecord.vote == 2 ? ArticyNarrative.Copy("Copy_7df158ede8a0ee70") : ArticyNarrative.Copy("Copy_a961867b82e71202") + (CaseRecord.vote == 0 ? ArticyNarrative.Copy("Copy_d4405127fbc9ae5e") : ArticyNarrative.Copy("Copy_db0db6b241bed857")) + ArticyNarrative.Copy("Copy_eef2b137c134eb50")) + "\n\n" + (CaseRecord.speech < 2 ? ArticyNarrative.Copy("Copy_974969471a8f45d0") : ArticyNarrative.Copy("Copy_99282444044d7650")) + ArticyNarrative.Copy("Copy_d964c26c06f56fa1") + (CaseRecord.knowledge == Case.correct ? ArticyNarrative.Copy("Copy_da91596b84166fad") : ArticyNarrative.Copy("Copy_240915e4424cb107")));
-                CampaignText("role", ArticyNarrative.Copy("Copy_612f3cd86f799e4b") + State.cityFunds + ArticyNarrative.Copy("Copy_d20b9c69e20b6771") + State.personalFunds + ArticyNarrative.Copy("Copy_6c48c09043274272") + State.metrics.parrhesia + ArticyNarrative.Copy("Copy_a5423f346f29050d") + State.metrics.recognition + ArticyNarrative.Copy("Copy_84eb35ee4d529996") + CaseRecord.cityDelta + "\n\n" + City.complaintDecisions.Count(string.IsNullOrEmpty) + ArticyNarrative.Copy("Copy_500b35659a4cd66c"));
-                CampaignText("source", CampaignData.notice);
+                string decision=CaseRecord.vote==2 ? "Δεν υποστήριξες καμία πρόταση." : "Η επιλογή σου: "+(CaseRecord.vote==0 ? "πρώτη" : "δεύτερη")+" πρόταση.";
+                string result=Case.observation ? "Κατέγραψες εκτίμηση των στοιχείων, χωρίς δικαστική ψήφο." : "Επικράτησε η "+(CaseRecord.majority==0 ? "πρώτη" : "δεύτερη")+" πρόταση.";
+                CampaignText("body", (Case.institution ?? InstitutionNames[Case.site])+" · "+Case.title+"\n\n"+result+"\n\n"+decision+"\n\n"+(CaseRecord.speech<2&&!Case.observation ? "Τοποθετήθηκες δημόσια. Η ενίσχυση λογογράφου έχει περιορισμένη διάρκεια." : "Δεν υπήρξε δημόσια τοποθέτησή σου.")+"\n\n"+(CaseRecord.knowledge==Case.correct ? "Απάντησες σωστά στην ερώτηση γνώσης." : "Η απάντηση γνώσης συνοδεύτηκε από επεξήγηση.")+"\n\nΜεταβολή πόλης: "+CaseRecord.cityDelta.ToString("+0;-0;0")+" οβ. · Προσωπικού ταμείου: "+CaseRecord.personalDelta.ToString("+0;-0;0")+" οβ.");
+                CampaignText("role", "Ταμείο πόλης: "+State.cityFunds+" οβ.\nΠροσωπικό: "+State.personalFunds+" οβ.\n\nΣυνέπεια "+State.metrics.consistency+" · Ηθική "+State.metrics.ethics+"\nΑυθεντία "+State.metrics.authority+" · Πειθώ "+State.metrics.persuasion+"\nΠαρρησία "+State.metrics.parrhesia+" · Αναγνωρισιμότητα "+State.metrics.recognition);
+                CampaignText("source", MetricDeltas(CaseRecord.metricDelta));
                 CampaignLabel("primary", State.week == 5 ? ArticyNarrative.Copy("Copy_910d46162f2a5574") : ArticyNarrative.Copy("Copy_39b53c1534b55e68"));
                 return;
             }
@@ -456,19 +541,10 @@ namespace DemocracyWay.NewUI
 
             if (id == "complete")
             {
-                int score = Campaign.finalAnswers.Select((a, i) => a == (i == 0 ? 1 : CampaignData.cases[QuizIndices[i]].correct) ? 1 : 0).Sum();
+                int score = Campaign.finalAnswers.Select((a, i) => a == (i == 0 ? 1 : AssessmentCase(i).correct) ? 1 : 0).Sum();
                 CampaignText("body", ArticyNarrative.Copy("Copy_d470fb1758f2276b") + score + ArticyNarrative.Copy("Copy_b813c0850f701357"));
                 return;
             }
-        }
-
-        void RenderInstitutionHistory()
-        {
-            CampaignText("heading", ArticyNarrative.Copy("Copy_6cab354ce8aee2fb"));
-            CampaignText("eyebrow", InstitutionNames[Math.Min(4, historySite)]);
-            var records = Campaign.cases.Where(x => x.completed && CampaignData.cases[x.turn % CampaignData.cases.Length].site == historySite).OrderByDescending(x => x.turn).Take(4);
-            string history = string.Join("\n\n", records.Select(x => ArticyNarrative.Copy("Copy_0008e0f7f5eda78f") + (x.turn / 5 + 1) + ArticyNarrative.Copy("Copy_238d1efb10f3eefa") + (x.turn % 5 + 1) + "\n" + CampaignData.cases[x.turn % CampaignData.cases.Length].title + " · " + (x.majority == 0 ? ArticyNarrative.Copy("Copy_2c47a95787d4bf1c") : ArticyNarrative.Copy("Copy_04b7703dc771f57a"))));
-            CampaignText("body", string.IsNullOrEmpty(history) ? ArticyNarrative.Copy("Copy_d27923a55ff7c9e5") + (historySite == 0 ? ArticyNarrative.Copy("Copy_3f1339017bd7d6d8") : historySite == 1 ? ArticyNarrative.Copy("Copy_4879bedd54e11446") : historySite == 2 ? ArticyNarrative.Copy("Copy_4e0e93a7f0ecf5d7") : ArticyNarrative.Copy("Copy_bcab987b8a049de8")) + ArticyNarrative.Copy("Copy_69e8ed290088041a") : history);
         }
 
         void RenderCampaignEnding(bool personal)

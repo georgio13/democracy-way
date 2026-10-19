@@ -1,0 +1,97 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Existing application routes retained unchanged.
+    match /sessions/{sessionId} {
+      allow create, update: if true;
+      allow read, delete: if false;
+    }
+    match /sessions/{sessionId}/events/{eventId} {
+      allow create: if true;
+      allow read, update, delete: if false;
+    }
+    // Email/password accounts: private metadata, never copied into research events.
+    function accountOwner(uid) {
+      return request.auth != null && request.auth.uid == uid
+        && request.auth.token.firebase.sign_in_provider == "password";
+    }
+    function validPlayerProfile() {
+      return request.resource.data.keys().hasOnly(["researchParticipantId","researchConsent","consentVersion","consentUtc"])
+        && request.resource.data.keys().hasAll(["researchParticipantId","researchConsent","consentVersion","consentUtc"])
+        && request.resource.data.researchParticipantId is string
+        && request.resource.data.researchParticipantId.matches("^[a-f0-9]{32}$")
+        && request.resource.data.researchConsent is bool
+        && request.resource.data.consentVersion is string && request.resource.data.consentVersion.size() <= 80
+        && request.resource.data.consentUtc is string && request.resource.data.consentUtc.size() <= 40;
+    }
+    match /players/{uid} {
+      allow get: if accountOwner(uid);
+      allow list, delete: if false;
+      allow create: if accountOwner(uid) && validPlayerProfile();
+      allow update: if accountOwner(uid) && validPlayerProfile()
+        && request.resource.data.researchParticipantId == resource.data.researchParticipantId;
+      match /saves/{slot} {
+        allow read: if accountOwner(uid) && slot in ["0","1","2","3"];
+        allow create, update: if accountOwner(uid)
+          && slot in ["0","1","2","3"]
+          && request.resource.data.keys().hasOnly(["schemaVersion","slot","envelope","deleted","updatedUtc"])
+          && request.resource.data.keys().hasAll(["schemaVersion","slot","envelope","deleted","updatedUtc"])
+          && request.resource.data.schemaVersion == 1
+          && ((slot == "0" && request.resource.data.slot == 0)
+           || (slot == "1" && request.resource.data.slot == 1)
+           || (slot == "2" && request.resource.data.slot == 2)
+           || (slot == "3" && request.resource.data.slot == 3))
+          && request.resource.data.deleted is bool
+          && request.resource.data.envelope is string && request.resource.data.envelope.size() <= 600000
+          && ((request.resource.data.deleted && request.resource.data.envelope == "")
+            || (!request.resource.data.deleted && request.resource.data.envelope.size() > 8))
+          && request.resource.data.updatedUtc is string && request.resource.data.updatedUtc.size() <= 40;
+        allow delete: if accountOwner(uid) && slot in ["0","1","2","3"];
+      }
+    }
+    match /participants/{uid}/events/{eventId} {
+      allow create: if request.auth != null && request.auth.uid == uid
+        && eventId.matches('^[a-f0-9]{32}$')
+        && request.resource.data.keys().hasOnly(['eventId', 'schemaVersion', 'contentVersion', 't', 'session', 'type', 'chapterId', 'nodeId', 'choiceId', 'outcome', 'prytany', 'week', 'answer', 'correct', 'duration', 'treasury', 'integrity', 'trust', 'participation', 'abstentions', 'consistency', 'ethics', 'authority', 'persuasion', 'parrhesia', 'recognition', 'personalTreasury', 'warMandate', 'preparedness', 'diplomacy', 'autonomy', 'cohesion', 'orientation', 'stance', 'sourceRef'])
+        && request.resource.data.keys().hasAll(['eventId','schemaVersion','contentVersion','t','session','type'])
+        && request.resource.data.eventId == eventId
+        && request.resource.data.schemaVersion in [2,5]
+        && request.resource.data.contentVersion in ['1.0.0','5.0.0']
+        && request.resource.data.session is string && request.resource.data.session.size() <= 64
+        && request.resource.data.type is string && request.resource.data.type.size() <= 48
+        && request.resource.data.t is string && request.resource.data.t.size() <= 40
+        && request.resource.data.choiceId is string && request.resource.data.choiceId.size() <= 160
+        && request.resource.data.nodeId is string && request.resource.data.nodeId.size() <= 160
+        && request.resource.data.chapterId is string && request.resource.data.chapterId.size() <= 80
+        && request.resource.data.outcome is string && request.resource.data.outcome.size() <= 160
+        && request.resource.data.prytany is int && request.resource.data.prytany >= 0 && request.resource.data.prytany <= 11
+        && request.resource.data.week is int && request.resource.data.week >= 0 && request.resource.data.week <= 5
+        && request.resource.data.answer is int && request.resource.data.answer >= -1 && request.resource.data.answer <= 20
+        && request.resource.data.correct is int && request.resource.data.correct >= -1 && request.resource.data.correct <= 1
+        && request.resource.data.treasury is int && request.resource.data.treasury >= 0 && request.resource.data.treasury <= 1000000
+        && request.resource.data.integrity is int && request.resource.data.integrity >= 0 && request.resource.data.integrity <= 100
+        && request.resource.data.trust is int && request.resource.data.trust >= 0 && request.resource.data.trust <= 100
+        && request.resource.data.participation is int && request.resource.data.participation >= 0 && request.resource.data.participation <= 50
+        && request.resource.data.abstentions is int && request.resource.data.abstentions >= 0 && request.resource.data.abstentions <= 50
+        && request.resource.data.duration is number && request.resource.data.duration >= 0 && request.resource.data.duration <= 86400
+        && (!('consistency' in request.resource.data) || (request.resource.data.consistency is int && request.resource.data.consistency >= 0 && request.resource.data.consistency <= 100))
+        && (!('ethics' in request.resource.data) || (request.resource.data.ethics is int && request.resource.data.ethics >= 0 && request.resource.data.ethics <= 100))
+        && (!('authority' in request.resource.data) || (request.resource.data.authority is int && request.resource.data.authority >= 0 && request.resource.data.authority <= 100))
+        && (!('persuasion' in request.resource.data) || (request.resource.data.persuasion is int && request.resource.data.persuasion >= 0 && request.resource.data.persuasion <= 100))
+        && (!('parrhesia' in request.resource.data) || (request.resource.data.parrhesia is int && request.resource.data.parrhesia >= 0 && request.resource.data.parrhesia <= 100))
+        && (!('recognition' in request.resource.data) || (request.resource.data.recognition is int && request.resource.data.recognition >= 0 && request.resource.data.recognition <= 100))
+        && (!('warMandate' in request.resource.data) || (request.resource.data.warMandate is int && request.resource.data.warMandate >= 0 && request.resource.data.warMandate <= 100))
+        && (!('preparedness' in request.resource.data) || (request.resource.data.preparedness is int && request.resource.data.preparedness >= 0 && request.resource.data.preparedness <= 100))
+        && (!('diplomacy' in request.resource.data) || (request.resource.data.diplomacy is int && request.resource.data.diplomacy >= 0 && request.resource.data.diplomacy <= 100))
+        && (!('autonomy' in request.resource.data) || (request.resource.data.autonomy is int && request.resource.data.autonomy >= 0 && request.resource.data.autonomy <= 100))
+        && (!('cohesion' in request.resource.data) || (request.resource.data.cohesion is int && request.resource.data.cohesion >= 0 && request.resource.data.cohesion <= 100))
+        && (!('personalTreasury' in request.resource.data) || (request.resource.data.personalTreasury is int && request.resource.data.personalTreasury >= -1000000 && request.resource.data.personalTreasury <= 1000000))
+        && (!('orientation' in request.resource.data) || request.resource.data.orientation in ['democracy','oligarchy','mixed','unclassified'])
+        && (!('stance' in request.resource.data) || (request.resource.data.stance is string && request.resource.data.stance.size() <= 160))
+        && (!('sourceRef' in request.resource.data) || (request.resource.data.sourceRef is string && request.resource.data.sourceRef.size() <= 4000));
+      // Researchers use an authenticated administrator export, never public reads.
+      allow read, update, delete: if false;
+    }
+  }
+}
+
