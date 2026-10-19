@@ -280,7 +280,7 @@ namespace DemocracyWay.NewUI
                     if (exists)
                     {
                         SetText(key + ".label", step.choices[i].text);
-                        SetText(key + ".metrics", MetricDeltas(step.choices[i].metrics));
+                        SetActive(key + ".metrics", false);
                         bool isSelected = selected != null && selected.choiceId == step.choices[i].id;
                         SetActive(key + ".selected", isSelected);
                         TMP_Text optionLabel = Get<TMP_Text>(key + ".label");
@@ -331,11 +331,11 @@ namespace DemocracyWay.NewUI
         private void RenderSummary()
         {
             EnsureState();
-            SetText("summary.body", State.playerName + "\n" + State.playerAge + ArticyNarrative.Copy("Copy_b0ff9eb7a58bf3d6") + TribeName(State.tribeIndex) + "\n" + config.economicClasses[Mathf.Clamp(State.economicClassIndex, 0, config.economicClasses.Count - 1)] + ArticyNarrative.Copy("Copy_72b5e49b1563ea57") + State.deme + ArticyNarrative.Copy("Copy_a90744770635bb27") + State.trittys + "\n" + State.profession + "\n" + State.offices);
+            SetText("summary.body", State.playerName + "\n" + State.playerAge + ArticyNarrative.Copy("Copy_b0ff9eb7a58bf3d6") + TribeName(State.tribeIndex) + "\n" + config.economicClasses[Mathf.Clamp(State.economicClassIndex, 0, config.economicClasses.Count - 1)] + ArticyNarrative.Copy("Copy_72b5e49b1563ea57") + State.deme + ArticyNarrative.Copy("Copy_a90744770635bb27") + TrittysLabel() + "\n" + State.profession + "\n" + State.offices);
             SetText("summary.metrics", State.metrics.ToGreekLines());
             SetText("summary.name", State.playerName);
             SetText("summary.age", ArticyNarrative.Copy("Copy_d27fcffa71ab967e") + State.playerAge + ArticyNarrative.Copy("Copy_750d677c988d9482"));
-            SetText("summary.identity.0", "Φυλή: " + TribeName(State.tribeIndex) + "\nΔήμος: " + State.deme + "\nΤριττύα: " + State.trittys);
+            SetText("summary.identity.0", "Φυλή: " + TribeName(State.tribeIndex) + "\nΔήμος: " + State.deme + "\nΤριττύα: " + TrittysLabel());
             SetText("summary.identity.1", State.profession + "\n" + config.economicClasses[Mathf.Clamp(State.economicClassIndex, 0, config.economicClasses.Count - 1)]);
             SetText("summary.identity.2", (State.offices ?? "").Replace(" · ", "\n"));
             for (int i = 0; i < 3; i++)
@@ -398,19 +398,23 @@ namespace DemocracyWay.NewUI
                 "X"
             };
             int chapter = Mathf.Clamp(State.prytany - 1, 0, 9);
-            SetText("prytany.title", ArticyNarrative.Copy("Copy_3e3295844f841450") + ordinals[chapter] + ArticyNarrative.Copy("Copy_8ba25509b337198d"));
+            SetText("prytany.title", ArticyNarrative.Copy("Copy_3e3295844f841450").TrimEnd() + " " + ordinals[chapter].Trim() + " " + ArticyNarrative.Copy("Copy_8ba25509b337198d").TrimStart());
             SetText("prytany.roman", roman[chapter]);
             SetText("prytany.tribe", State.currentTribe >= 0 ? TribeName(State.currentTribe).ToUpperInvariant() + ArticyNarrative.Copy("Copy_0318871c2b7b5380") : ArticyNarrative.Copy("Copy_8b44729931e24eab"));
             SetText("prytany.footer", ArticyNarrative.Copy("Copy_228a792defd35fbf") + State.week + ArticyNarrative.Copy("Copy_8177807e48b3c5c3"));
             DemocracyQuote quote = config.prytanyQuotes.Count > 0 ? config.prytanyQuotes[(State.prytany - 1) % config.prytanyQuotes.Count] : null;
             SetText("prytany.quote", quote != null ? quote.text : "");
-            SetText("prytany.attribution", quote != null ? quote.attribution : "");
+            SetText("prytany.attribution", quote != null ? (quote.attribution ?? "").Split('·')[0].Trim() : "");
             TMP_Text body = Get<TMP_Text>("prytany.quote"), source = Get<TMP_Text>("prytany.attribution");
             if (body != null && source != null)
             {
-                body.ForceMeshUpdate(true);
-                float height = Mathf.Min(body.preferredHeight / 1.2f, 130);
-                source.rectTransform.anchoredPosition = new Vector2(300 * 1.2f, -(559 + height + 18) * 1.2f);
+                source.fontSize = 27;
+                source.enableAutoSizing = true; source.fontSizeMin = 24; source.fontSizeMax = 27;
+                body.enableAutoSizing = true; body.fontSizeMin = 25; body.fontSizeMax = 36;
+                CivicUIFactory.Box(body.rectTransform, 360, 658, 1200, 154);
+                body.alignment = TextAlignmentOptions.Center;
+                CivicUIFactory.Box(source.rectTransform, 360, 838, 1200, 42);
+                source.alignment = TextAlignmentOptions.Center;
             }
         }
 
@@ -481,7 +485,7 @@ namespace DemocracyWay.NewUI
             {
                 TribeName(State.tribeIndex),
                 State.deme,
-                State.trittys,
+                TrittysLabel(),
                 config.economicClasses[Mathf.Clamp(State.economicClassIndex, 0, config.economicClasses.Count - 1)]
             };
             for (int i = 0; i < 4; i++)
@@ -514,5 +518,7 @@ namespace DemocracyWay.NewUI
 
     }
 }
+
+
 
 

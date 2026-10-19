@@ -1,0 +1,580 @@
+{
+  "schemaVersion": 1,
+  "projectGuid": "9a96eb60-1074-4f6d-bada-e894d8e2c89f",
+  "revisionId": "biography-dialogue-polish-20261019",
+  "contentVersion": "3",
+  "previousManifestFile": "NativeManifest.BeforeNarrativePolish-20261019.json",
+  "schemaUpdates": [],
+  "recordUpdates": [
+    {
+      "name": "Bio_heritage_tribe",
+      "fields": [
+        "F_body"
+      ],
+      "updateText": true,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Bio_heritage_trittys",
+      "fields": [
+        "F_body"
+      ],
+      "updateText": true,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Bio_heritage_deme",
+      "fields": [
+        "F_body"
+      ],
+      "updateText": true,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Bio_heritage_class",
+      "fields": [
+        "F_body"
+      ],
+      "updateText": true,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Bio_heritage_class_pentakosiomedimnoi",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_heritage_class_hippeis",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_heritage_class_zeugitai",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_heritage_class_thetes",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_birth_name",
+      "fields": [
+        "F_body"
+      ],
+      "updateText": true,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Bio_city_before_adult",
+      "fields": [
+        "F_body"
+      ],
+      "updateText": true,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Bio_city_before_adult_food_support",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_city_before_adult_defence_support",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_city_before_adult_public_cooperation",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_city_before_adult_reserve_resources",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_citizen_oath",
+      "fields": [
+        "F_body"
+      ],
+      "updateText": true,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Bio_citizen_oath_law_accountability",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_citizen_oath_solidarity",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_citizen_oath_speak_truth",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_citizen_oath_capable_service",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_military_service",
+      "fields": [
+        "F_body"
+      ],
+      "updateText": true,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Bio_military_service_steady_watch",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_military_service_protect_comrade",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_military_service_organise_group",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_military_service_raise_objection",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_adult_profession",
+      "fields": [
+        "F_body"
+      ],
+      "updateText": true,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Bio_adult_profession_large_landowner",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_adult_profession_arms_workshop_owner",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_adult_profession_furniture_workshop_owner",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_adult_profession_mining_concessionaire",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_adult_profession_landowner",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_adult_profession_grain_trader",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_adult_profession_pottery_workshop_owner",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_adult_profession_oil_trader",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_adult_profession_working_farmer",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_adult_profession_potter",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_adult_profession_metalworker",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_adult_profession_carpenter",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_adult_profession_day_labourer",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_adult_profession_sailor_rower",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_adult_profession_dock_worker",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_adult_profession_building_worker",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Bio_council_lottery",
+      "fields": [
+        "F_body"
+      ],
+      "updateText": true,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Bio_council_lottery_accept_service",
+      "fields": [
+        "F_text"
+      ],
+      "updateText": true,
+      "updateDisplayName": true
+    },
+    {
+      "name": "Case_grain",
+      "fields": [
+        "F_politicsData"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_citizenship",
+      "fields": [
+        "F_politicsData"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_ships",
+      "fields": [
+        "F_politicsData"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_appeal",
+      "fields": [
+        "F_argumentA",
+        "F_argumentB"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_peace",
+      "fields": [
+        "F_politicsData"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_audit",
+      "fields": [
+        "F_politicsData"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_areopagus",
+      "fields": [
+        "F_argumentA",
+        "F_argumentB"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_defence",
+      "fields": [
+        "F_argumentA",
+        "F_argumentB"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_scrutiny",
+      "fields": [
+        "F_argumentA",
+        "F_argumentB"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_generals",
+      "fields": [
+        "F_argumentA",
+        "F_argumentB"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_public_buildings",
+      "fields": [
+        "F_argumentA",
+        "F_argumentB"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_tax_receipts",
+      "fields": [
+        "F_argumentA",
+        "F_argumentB"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_leases",
+      "fields": [
+        "F_argumentA",
+        "F_argumentB"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_grain_inspection",
+      "fields": [
+        "F_argumentA",
+        "F_argumentB"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_disabled_support",
+      "fields": [
+        "F_argumentA",
+        "F_argumentB"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_magistrates_review",
+      "fields": [
+        "F_argumentA",
+        "F_argumentB"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_sacred_embassy",
+      "fields": [
+        "F_argumentA",
+        "F_argumentB"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_illegal_decree",
+      "fields": [
+        "F_argumentA",
+        "F_argumentB"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_audit_followup",
+      "fields": [
+        "F_argumentA",
+        "F_argumentB"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_arbitration",
+      "fields": [
+        "F_argumentA",
+        "F_argumentB"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_palladion",
+      "fields": [
+        "F_argumentA",
+        "F_argumentB"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_delphinion",
+      "fields": [
+        "F_argumentA",
+        "F_argumentB"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_phreatto",
+      "fields": [
+        "F_argumentA",
+        "F_argumentB"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_prytaneion",
+      "fields": [
+        "F_argumentA",
+        "F_argumentB"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    },
+    {
+      "name": "Case_jurisdiction_eleven",
+      "fields": [
+        "F_argumentA",
+        "F_argumentB"
+      ],
+      "updateText": false,
+      "updateDisplayName": false
+    }
+  ],
+  "expressionUpdates": [],
+  "replaceOutgoingEdgesFrom": [],
+  "sha256": {
+    "NativeManifest.json": "54b510dfee8510f5e5db1051d35ce68102cf1e2d66db7c57817aed46ecafc98b",
+    "NativeManifest.BeforeNarrativePolish-20261019.json": "3d8a46c3031c7fabcf791192f1be4b11ac4d7ba9e6f1c98ada688e859c01bdc9"
+  }
+}

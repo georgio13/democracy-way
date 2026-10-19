@@ -22,7 +22,7 @@ namespace DemocracyWay.NewUI
         const int MaximumEnvelopeLength = 600000;
 
         public bool Busy { get; private set; }
-        public bool ProfileRequired { get; private set; }
+        public bool HasError { get; private set; }
         public bool IsSignedIn => auth != null;
         public bool ResearchConsent => profile != null && profile.researchConsent;
         public string Status { get; private set; } = "";
@@ -38,31 +38,31 @@ namespace DemocracyWay.NewUI
         readonly List<PendingSave> pending = new List<PendingSave>();
         readonly HashSet<UnityWebRequest> requests = new HashSet<UnityWebRequest>();
 
-        sealed class Session { public string uid, idToken, refreshToken; public DateTime expires; }
-        sealed class PlayerProfile { public string researchParticipantId, consentVersion, consentUtc; public bool researchConsent; }
-        sealed class PendingSave { public int slot; public string envelope, updatedUtc; public bool deleted; }
+        sealed class Session { public string uid = default, idToken = default, refreshToken = default; public DateTime expires; }
+        sealed class PlayerProfile { public string researchParticipantId = default, consentVersion = default, consentUtc = default; public bool researchConsent = default; }
+        sealed class PendingSave { public int slot = default; public string envelope = default, updatedUtc = default; public bool deleted = default; }
         sealed class Response
         {
-            public bool ok;
+            public bool ok = default;
             public long status;
-            public string text, code;
+            public string text = default, code = default;
         }
-        [Serializable] sealed class AuthRequest { public string email, password; public bool returnSecureToken = true; }
+        [Serializable] sealed class AuthRequest { public string email = default, password = default; public bool returnSecureToken = true; }
         [Serializable] sealed class ResetRequest { public string requestType = "PASSWORD_RESET", email; }
-        [Serializable] sealed class AuthReply { public string localId, idToken, refreshToken, expiresIn; }
-        [Serializable] sealed class RefreshReply { public string user_id, id_token, refresh_token, expires_in; }
-        [Serializable] sealed class ErrorBody { public ErrorDetails error; }
-        [Serializable] sealed class ErrorDetails { public string message, status; }
-        [Serializable] sealed class Document { public DocumentFields fields; }
+        [Serializable] sealed class AuthReply { public string localId = default, idToken = default, refreshToken = default, expiresIn = default; }
+        [Serializable] sealed class RefreshReply { public string user_id = default, id_token = default, refresh_token = default, expires_in = default; }
+        [Serializable] sealed class ErrorBody { public ErrorDetails error = default; }
+        [Serializable] sealed class ErrorDetails { public string message = default, status = default; }
+        [Serializable] sealed class Document { public DocumentFields fields = default; }
         [Serializable] sealed class DocumentFields
         {
-            public Value researchParticipantId, researchConsent, consentVersion, consentUtc;
-            public Value slot, envelope, updatedUtc, deleted;
+            public Value researchParticipantId = default, researchConsent = default, consentVersion = default, consentUtc = default;
+            public Value slot = default, envelope = default, updatedUtc = default, deleted = default;
         }
-        [Serializable] sealed class Value { public string stringValue, integerValue; public bool booleanValue; }
-        [Serializable] sealed class CloudSlot { public int slot; public string envelope, updatedUtc; public bool deleted; }
-        [Serializable] sealed class AccountPacket { public string uid, researchParticipantId; public bool researchConsent; public CloudSlot[] slots; }
-        [Serializable] sealed class SyncStatus { public bool ok; public string code; public int pending; }
+        [Serializable] sealed class Value { public string stringValue = default, integerValue = default; public bool booleanValue = default; }
+        [Serializable] sealed class CloudSlot { public int slot = default; public string envelope = default, updatedUtc = default; public bool deleted = default; }
+        [Serializable] sealed class AccountPacket { public string uid = default, researchParticipantId = default; public bool researchConsent = default; public CloudSlot[] slots = default; }
+        [Serializable] sealed class SyncStatus { public bool ok = default; public string code = default; public int pending = default; }
 
         public void Initialize(AccountBridge accountBridge) { bridge = accountBridge; }
 
@@ -71,29 +71,23 @@ namespace DemocracyWay.NewUI
             if (Busy) return;
             if (!ValidateCredentials(email, password)) return;
             ClearSession();
-            StartCoroutine(Authenticate(email.Trim(), password, false, false));
+            StartCoroutine(Authenticate(email.Trim(), password, false));
         }
 
-        public void Register(string email, string password, bool privacyAccepted, bool researchConsent)
+        public void Register(string email, string password)
         {
             if (Busy) return;
-            if (!privacyAccepted) { SetStatus("Χρειάζεται να διαβάσεις την ενημέρωση λογαριασμού."); return; }
             if (!ValidateCredentials(email, password)) return;
             ClearSession();
-            StartCoroutine(Authenticate(email.Trim(), password, true, researchConsent));
+            StartCoroutine(Authenticate(email.Trim(), password, true));
         }
 
-        public void CompleteProfile(bool privacyAccepted, bool researchConsent)
-        {
-            if (Busy || auth == null || !ProfileRequired) return;
-            if (!privacyAccepted) { SetStatus("Χρειάζεται να διαβάσεις την ενημέρωση λογαριασμού."); return; }
-            StartCoroutine(CompleteExistingProfile(researchConsent));
-        }
+        public void ClearStatus() { if (!Busy) SetStatus(""); }
 
         public void ResetPassword(string email)
         {
             if (Busy) return;
-            if (string.IsNullOrWhiteSpace(email) || !email.Contains("@")) { SetStatus("Έλεγξε τη μορφή του email."); return; }
+            if (string.IsNullOrWhiteSpace(email) || !email.Contains("@")) { SetStatus("Έλεγξε τη μορφή του email.", true); return; }
             StartCoroutine(SendReset(email.Trim()));
         }
 
@@ -109,7 +103,7 @@ namespace DemocracyWay.NewUI
         public void UploadSlot(int slot, string envelope)
         {
             if (!ready || auth == null || slot < 0 || slot >= SaveStore.SlotCount) return;
-            if (!ValidEnvelope(slot, envelope)) { NotifyCloud(false, "invalid-save"); return; }
+            if (!ValidEnvelope(slot, envelope)) { NotifyCloud(false, "invalid-save"); SetStatus("Δεν ολοκληρώθηκε η αποστολή της αποθήκευσης.", true); return; }
             Enqueue(new PendingSave { slot = slot, envelope = envelope, updatedUtc = UtcNow() });
         }
 
@@ -124,18 +118,19 @@ namespace DemocracyWay.NewUI
             ClearSession();
             Email = "";
             Status = "";
+            HasError = false;
             bridge.OnAccountSignedOut("");
             Changed();
         }
 
         bool ValidateCredentials(string email, string password)
         {
-            if (string.IsNullOrWhiteSpace(email) || !email.Contains("@")) { SetStatus("Έλεγξε τη μορφή του email."); return false; }
-            if (string.IsNullOrEmpty(password) || password.Length < 6) { SetStatus("Ο κωδικός χρειάζεται τουλάχιστον 6 χαρακτήρες."); return false; }
+            if (string.IsNullOrWhiteSpace(email) || !email.Contains("@")) { SetStatus("Έλεγξε τη μορφή του email.", true); return false; }
+            if (string.IsNullOrEmpty(password) || password.Length < 6) { SetStatus("Ο κωδικός χρειάζεται τουλάχιστον 6 χαρακτήρες.", true); return false; }
             return true;
         }
 
-        IEnumerator Authenticate(string email, string password, bool register, bool researchConsent)
+        IEnumerator Authenticate(string email, string password, bool register)
         {
             Busy = true;
             Email = email;
@@ -152,25 +147,19 @@ namespace DemocracyWay.NewUI
             if (account == null || string.IsNullOrEmpty(account.localId) || string.IsNullOrEmpty(account.idToken) || string.IsNullOrEmpty(account.refreshToken))
             { FinishError("INVALID_LOGIN_CREDENTIALS"); yield break; }
             auth = new Session { uid = account.localId, idToken = account.idToken, refreshToken = account.refreshToken, expires = Expiry(account.expiresIn) };
-            yield return FinishLogin(operation, register, researchConsent);
+            yield return FinishLogin(operation);
         }
 
-        IEnumerator CompleteExistingProfile(bool researchConsent)
-        {
-            Busy = true;
-            SetStatus("Αποθήκευση ενημέρωσης λογαριασμού…");
-            yield return FinishLogin(generation, true, researchConsent);
-        }
-
-        IEnumerator FinishLogin(int operation, bool allowCreate, bool researchConsent)
+        IEnumerator FinishLogin(int operation)
         {
             var response = new Response();
             yield return Cloud("players/" + auth.uid, "GET", null, response, operation);
             if (operation != generation) yield break;
             if (!response.ok && response.status == 404)
             {
-                if (!allowCreate) { ProfileRequired = true; Busy = false; SetStatus("Διάβασε την ενημέρωση και ολοκλήρωσε τον λογαριασμό σου."); yield break; }
-                profile = new PlayerProfile { researchParticipantId = Guid.NewGuid().ToString("N"), researchConsent = researchConsent, consentVersion = ConsentVersion, consentUtc = UtcNow() };
+                // Creating an ordinary game account never opts a player into
+                // research. A missing private profile is repaired transparently.
+                profile = NewProfile();
                 yield return Cloud("players?documentId=" + Uri.EscapeDataString(auth.uid), "POST", ProfileDocument(profile), response, operation);
                 if (operation != generation) yield break;
                 if (response.status == 409)
@@ -182,7 +171,7 @@ namespace DemocracyWay.NewUI
             }
             else if (response.ok) profile = ProfileFrom(response.text);
             if (!response.ok) { FinishError(response.code); yield break; }
-            if (!ValidProfile(profile)) { ProfileRequired = true; Busy = false; SetStatus("Δεν αναγνωρίστηκαν τα στοιχεία του λογαριασμού. Επικοινώνησε με τον διαχειριστή."); yield break; }
+            if (!ValidProfile(profile)) { FinishError("INVALID_PLAYER_PROFILE"); yield break; }
             var slots = new CloudSlot[SaveStore.SlotCount];
             for (int slot = 0; slot < slots.Length; slot++)
             {
@@ -195,7 +184,6 @@ namespace DemocracyWay.NewUI
                 { FinishError("INVALID_CLOUD_SAVE"); yield break; }
                 slots[slot] = new CloudSlot { slot = slot, deleted = fields.deleted.booleanValue, envelope = fields.envelope.stringValue ?? "", updatedUtc = fields.updatedUtc.stringValue ?? "" };
             }
-            ProfileRequired = false;
             ready = true; // Reconciliation may enqueue a newer local envelope.
             bridge.OnAccountReady(JsonUtility.ToJson(new AccountPacket { uid = auth.uid, researchParticipantId = profile.researchParticipantId, researchConsent = profile.researchConsent, slots = slots }));
             if (!AccountBridge.IsReady) { ready = false; FinishError("INVALID_CLOUD_SAVE"); yield break; }
@@ -213,13 +201,13 @@ namespace DemocracyWay.NewUI
             if (operation != generation) yield break;
             Busy = false;
             if (response.ok || response.code == "EMAIL_NOT_FOUND") SetStatus("Αν υπάρχει λογαριασμός, έλεγξε το email σου για οδηγίες.");
-            else SetStatus(ErrorMessage(response.code));
+            else SetStatus(ErrorMessage(response.code), true);
         }
 
         IEnumerator UpdateConsent(bool consent)
         {
             Busy = true;
-            Changed();
+            SetStatus("Αποθήκευση προτίμησης…");
             int operation = generation;
             profile.researchConsent = consent;
             profile.consentVersion = ConsentVersion;
@@ -228,7 +216,7 @@ namespace DemocracyWay.NewUI
             yield return Cloud("players/" + auth.uid, "PATCH", ProfileDocument(profile), response, operation);
             if (operation != generation) yield break;
             Busy = false;
-            SetStatus(response.ok ? "Η προτίμησή σου αποθηκεύτηκε." : "Η προτίμηση ισχύει στην τρέχουσα συνεδρία, αλλά δεν συγχρονίστηκε. Δοκίμασε ξανά όταν υπάρχει σύνδεση.");
+            SetStatus(response.ok ? "Η προτίμησή σου αποθηκεύτηκε." : "Η προτίμηση ισχύει στην τρέχουσα συνεδρία, αλλά δεν συγχρονίστηκε. Δοκίμασε ξανά όταν υπάρχει σύνδεση.", !response.ok);
         }
 
         void Enqueue(PendingSave item)
@@ -251,8 +239,8 @@ namespace DemocracyWay.NewUI
                 var response = new Response();
                 yield return Cloud("players/" + auth.uid + "/saves/" + item.slot, "PATCH", SaveDocument(item), response, operation);
                 if (operation != generation) yield break;
-                if (response.ok) { pending.Remove(item); NotifyCloud(true, "saved"); }
-                else { NotifyCloud(false, response.code); yield return new WaitForSecondsRealtime(15); }
+                if (response.ok) { pending.Remove(item); NotifyCloud(true, "saved"); SetStatus("Η πρόοδος συγχρονίστηκε."); }
+                else { NotifyCloud(false, response.code); SetStatus(ErrorMessage(response.code), true); yield return new WaitForSecondsRealtime(15); }
             }
             if (operation == generation) pump = null;
         }
@@ -314,15 +302,16 @@ namespace DemocracyWay.NewUI
             auth = null;
             profile = null;
             ready = false;
-            Busy = ProfileRequired = false;
+            Busy = HasError = false;
         }
 
         void OnDestroy() { ClearSession(); }
-        void FinishError(string code) { Busy = false; ready = false; SetStatus(ErrorMessage(code)); }
-        void SetStatus(string message) { Status = message; Changed(); }
+        void FinishError(string code) { Busy = false; ready = false; SetStatus(ErrorMessage(code), true); }
+        void SetStatus(string message, bool error = false) { Status = message; HasError = error; Changed(); }
         void Changed() { StateChanged?.Invoke(); }
         void NotifyCloud(bool success, string code) { if (bridge != null) bridge.OnCloudStatus(JsonUtility.ToJson(new SyncStatus { ok = success, code = code, pending = pending.Count })); }
         static string UtcNow() => DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture);
+        static PlayerProfile NewProfile() => new PlayerProfile { researchParticipantId = Guid.NewGuid().ToString("N"), researchConsent = false, consentVersion = ConsentVersion, consentUtc = UtcNow() };
         static string AuthUrl(string method) => "https://identitytoolkit.googleapis.com/v1/accounts:" + method + "?key=" + ApiKey;
         static DateTime Expiry(string seconds) => DateTime.UtcNow.AddSeconds(double.TryParse(seconds, NumberStyles.Float, CultureInfo.InvariantCulture, out double duration) ? Math.Max(1, duration) : 3600);
         static T Parse<T>(string json) where T : class { try { return string.IsNullOrEmpty(json) ? null : JsonUtility.FromJson<T>(json); } catch (ArgumentException) { return null; } }
@@ -386,6 +375,7 @@ namespace DemocracyWay.NewUI
                 case "OPERATION_NOT_ALLOWED": return "Η σύνδεση Email/Password δεν έχει ενεργοποιηθεί στο Firebase.";
                 case "PERMISSION_DENIED": return "Δεν υπάρχουν δικαιώματα συγχρονισμού. Χρειάζεται έλεγχος των κανόνων Firestore από τον διαχειριστή.";
                 case "INVALID_CLOUD_SAVE": return "Δεν ολοκληρώθηκε η εισαγωγή των αποθηκεύσεων. Η πρόοδος δεν διαγράφηκε. Δοκίμασε ξανά τη σύνδεση.";
+                case "INVALID_PLAYER_PROFILE": return "Δεν αναγνωρίστηκαν τα στοιχεία του λογαριασμού. Επικοινώνησε με τον διαχειριστή.";
                 case "TOKEN_EXPIRED": case "INVALID_REFRESH_TOKEN": case "USER_NOT_FOUND": case "INVALID_ID_TOKEN": return "Η συνεδρία έληξε. Συνδέσου ξανά.";
                 case "NETWORK": return "Δεν υπάρχει σύνδεση με τον διακομιστή. Δοκίμασε ξανά όταν αποκατασταθεί η σύνδεση.";
                 default: return "Δεν ολοκληρώθηκε η ενέργεια. Δοκίμασε ξανά.";

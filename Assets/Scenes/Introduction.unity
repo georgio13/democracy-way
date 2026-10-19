@@ -418,6 +418,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 2.4
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -1086,6 +1087,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 4.2000003
   border: 1.2
   borderColor: {r: 0, g: 0, b: 0, a: 0}
@@ -1970,6 +1972,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 13.200001
   border: 1.2
   borderColor: {r: 0.8392157, g: 0.7372549, b: 0.5019608, a: 1}
@@ -2219,6 +2222,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 8.400001
   border: 1.2
   borderColor: {r: 0.8, g: 0.72156864, b: 0.4745098, a: 1}
@@ -2383,6 +2387,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 16.800001
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -3075,6 +3080,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 0
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -3453,6 +3459,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 7.8
   border: 1.2
   borderColor: {r: 0.48235294, g: 0.45490196, b: 0.33333334, a: 1}
@@ -3596,6 +3603,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 2.4
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -4150,6 +4158,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 8.400001
   border: 1.2
   borderColor: {r: 0.8, g: 0.72156864, b: 0.4745098, a: 1}
@@ -5348,6 +5357,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 16.800001
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -5493,6 +5503,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 13.200001
   border: 1.2
   borderColor: {r: 0.8392157, g: 0.7372549, b: 0.5019608, a: 1}
@@ -6425,6 +6436,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 0
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -6846,6 +6858,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 8.400001
   border: 1.2
   borderColor: {r: 0.8, g: 0.72156864, b: 0.4745098, a: 1}
@@ -7126,6 +7139,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 8.400001
   border: 1.2
   borderColor: {r: 0.8, g: 0.72156864, b: 0.4745098, a: 1}
@@ -7345,6 +7359,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 0
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -8004,6 +8019,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 16.800001
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -8072,6 +8088,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 19.2
   border: 2.4
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -8851,6 +8868,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 16.800001
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -11808,6 +11826,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 13.200001
   border: 1.2
   borderColor: {r: 0.8392157, g: 0.7372549, b: 0.5019608, a: 1}
@@ -12768,6 +12787,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 16.800001
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -13024,6 +13044,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 0
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -13092,6 +13113,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 8.400001
   border: 1.2
   borderColor: {r: 0.8, g: 0.72156864, b: 0.4745098, a: 1}
@@ -13708,6 +13730,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 8.400001
   border: 1.2
   borderColor: {r: 0.8, g: 0.72156864, b: 0.4745098, a: 1}
@@ -14187,6 +14210,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 7.8
   border: 1.2
   borderColor: {r: 0.48235294, g: 0.45490196, b: 0.33333334, a: 1}
@@ -14455,6 +14479,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 8.400001
   border: 1.2
   borderColor: {r: 0.8, g: 0.72156864, b: 0.4745098, a: 1}
@@ -14593,6 +14618,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 13.200001
   border: 1.2
   borderColor: {r: 0.8392157, g: 0.7372549, b: 0.5019608, a: 1}
@@ -14706,6 +14732,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 0
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -14775,6 +14802,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 0
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -15164,6 +15192,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 10.8
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -15413,6 +15442,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 16.800001
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -16415,6 +16445,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 0
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -19117,6 +19148,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 0
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -19185,6 +19217,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 4.2000003
   border: 1.2
   borderColor: {r: 0, g: 0, b: 0, a: 0}
@@ -19847,6 +19880,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 16.800001
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -21020,6 +21054,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 0
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -21163,6 +21198,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 7.8
   border: 1.2
   borderColor: {r: 0.48235294, g: 0.45490196, b: 0.33333334, a: 1}
@@ -21904,6 +21940,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 2.4
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -21972,6 +22009,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 2.4
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -22178,6 +22216,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 0
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -22342,6 +22381,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 16.800001
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -23790,6 +23830,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 7.8
   border: 1.2
   borderColor: {r: 0.48235294, g: 0.45490196, b: 0.33333334, a: 1}
@@ -23858,6 +23899,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 16.800001
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -24929,6 +24971,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 8.400001
   border: 1.2
   borderColor: {r: 0.8, g: 0.72156864, b: 0.4745098, a: 1}
@@ -26068,6 +26111,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 13.200001
   border: 1.2
   borderColor: {r: 0.8392157, g: 0.7372549, b: 0.5019608, a: 1}
@@ -26180,6 +26224,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 8.400001
   border: 1.2
   borderColor: {r: 0.8, g: 0.72156864, b: 0.4745098, a: 1}
@@ -26325,6 +26370,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 13.200001
   border: 1.2
   borderColor: {r: 0.8392157, g: 0.7372549, b: 0.5019608, a: 1}
@@ -26836,6 +26882,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 16.800001
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -27501,6 +27548,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 8.400001
   border: 1.2
   borderColor: {r: 0.8, g: 0.72156864, b: 0.4745098, a: 1}
@@ -29102,6 +29150,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 0
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -29784,6 +29833,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 0
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -29990,6 +30040,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 0
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -30641,6 +30692,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 0
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -31545,6 +31597,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 16.800001
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -31750,6 +31803,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 16.800001
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -32081,6 +32135,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.GameFlowController
   campaignContent: {fileID: 0}
   cityContent: {fileID: 0}
+  evaluationContent: {fileID: 0}
   config: {fileID: 11400000, guid: 1bb51eaec60f1af48a2f660ded7211ba, type: 2}
   screens:
   - id: prologue
@@ -33080,6 +33135,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 4.2000003
   border: 1.2
   borderColor: {r: 0, g: 0, b: 0, a: 0}
@@ -33291,6 +33347,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 8.400001
   border: 1.2
   borderColor: {r: 0.8, g: 0.72156864, b: 0.4745098, a: 1}
@@ -33359,6 +33416,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 16.800001
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -33503,6 +33561,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 0
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -33571,6 +33630,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 8.400001
   border: 1.2
   borderColor: {r: 0.8, g: 0.72156864, b: 0.4745098, a: 1}
@@ -34461,6 +34521,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 2.4
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -34681,6 +34742,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 19.2
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -35634,6 +35696,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 8.400001
   border: 1.2
   borderColor: {r: 0.8, g: 0.72156864, b: 0.4745098, a: 1}
@@ -35703,6 +35766,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 0
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -36300,6 +36364,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 16.800001
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -36730,6 +36795,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 16.800001
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -37973,6 +38039,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 0
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -38178,6 +38245,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 8.400001
   border: 1.2
   borderColor: {r: 0.8, g: 0.72156864, b: 0.4745098, a: 1}
@@ -38563,6 +38631,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 8.400001
   border: 1.2
   borderColor: {r: 0.8, g: 0.72156864, b: 0.4745098, a: 1}
@@ -38862,6 +38931,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 2.4
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
@@ -39454,6 +39524,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 4.2000003
   border: 1.2
   borderColor: {r: 0, g: 0, b: 0, a: 0}
@@ -39574,6 +39645,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  silhouette: 0
   cut: 0
   border: 1.2
   borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}

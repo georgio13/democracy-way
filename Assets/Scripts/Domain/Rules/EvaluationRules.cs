@@ -24,6 +24,16 @@ namespace DemocracyWay.NewUI
             e.offerPoint = NormalisePoint(e.offerPoint);
             e.startPoint = NormalisePoint(e.startPoint);
             e.submitPoint = NormalisePoint(e.submitPoint);
+            e.postPoint = NormalisePoint(e.postPoint);
+            if (string.IsNullOrEmpty(e.administrationVersion)) e.administrationVersion = "experience-only-midcampaign-v2";
+            // Keep previously answered data and its actual administration point.
+            // A questionnaire-only evaluation never fabricates post-test answers.
+            if (e.postIndex > 0 && e.postPoint == null && HasPoint(e.startPoint)) e.postPoint = e.startPoint;
+            if (e.postComplete) e.postTestStatus = "complete";
+            else if (e.postIndex > 0) e.postTestStatus = "partial";
+            else if (HasPoint(e.postPoint)) e.postTestStatus = "in_progress";
+            else if (HasPoint(e.startPoint)) e.postTestStatus = "not_administered";
+            else e.postTestStatus = "not_started";
             return e;
         }
 
@@ -80,6 +90,7 @@ namespace DemocracyWay.NewUI
         }
 
         public static bool Available(GameState state, EvaluationContent content) => Ensure(state, content).baselineComplete && (state.campaign?.cases?.Count(c => c.completed) ?? 0) >= content.minimumCompletedCases;
+        public static bool FullCampaignComplete(GameState state) => (state?.campaign?.cases?.Count(c => c.completed) ?? 0) >= 50;
         public static bool ShouldOffer(GameState state, EvaluationContent content) => Available(state, content) && state.prytany >= content.offerAtPrytany && !state.evaluation.offered && !state.evaluation.completed;
         public static bool Offer(GameState state, EvaluationContent content, EvaluationPoint point)
         {
@@ -101,14 +112,28 @@ namespace DemocracyWay.NewUI
             if (e.startPoint == null) e.startPoint = point;
             e.returnPhase = string.IsNullOrEmpty(returnPhase) ? "map-stela" : returnPhase;
             e.deferred = false;
+            if (point.completedCases >= 50 && e.postPoint == null) e.postPoint = point;
+            e.postTestStatus = e.postComplete ? "complete" : e.postIndex > 0 ? "partial" : e.postPoint != null ? "in_progress" : "not_administered";
+            return true;
+        }
+        public static bool BeginPost(GameState state, EvaluationContent content, EvaluationPoint point)
+        {
+            if (!Available(state, content) || !HasPoint(point) || point.completedCases < 50) return false;
+            var e = state.evaluation;
+            if (e.postComplete) return false;
+            if (!HasPoint(e.startPoint) && !Begin(state, content, point, "complete")) return false;
+            if (e.postPoint != null && !HasPoint(e.postPoint)) return false;
+            if (e.postPoint == null) e.postPoint = point;
+            e.postTestStatus = e.postIndex > 0 ? "partial" : "in_progress";
             return true;
         }
         public static bool AnswerPost(GameState state, EvaluationContent content, int answer)
         {
             var e = Ensure(state, content);
-            if (!HasPoint(e.startPoint) || e.postComplete || e.postIndex < 0 || e.postIndex >= 8 || answer < 0 || answer > 3) return false;
+            if (!HasPoint(e.postPoint) || e.postComplete || e.postIndex < 0 || e.postIndex >= 8 || answer < 0 || answer > 3) return false;
             e.postAnswers[e.postIndex++] = answer;
             e.postComplete = e.postIndex >= 8;
+            e.postTestStatus = e.postComplete ? "complete" : "partial";
             MirrorCampaign(state, e);
             return true;
         }
@@ -116,19 +141,20 @@ namespace DemocracyWay.NewUI
         {
             var e = Ensure(state, content);
             var answers = intention ? e.intentionAnswers : e.experienceAnswers;
-            if (!HasPoint(e.startPoint) || !e.postComplete || e.completed || index < 0 || index >= answers.Length || value < 1 || value > 5) return false;
+            if (!QuestionnaireReady(e) || e.completed || index < 0 || index >= answers.Length || value < 1 || value > 5) return false;
             answers[index] = value;
             return true;
         }
         public static bool Submit(GameState state, EvaluationContent content, EvaluationPoint point)
         {
             var e = Ensure(state, content);
-            if (e.completed || !e.postComplete || !HasPoint(e.startPoint) || !HasPoint(point) || e.experienceAnswers.Any(x => x < 1) || e.intentionAnswers.Any(x => x < 1)) return false;
+            if (e.completed || !QuestionnaireReady(e) || !HasPoint(point) || e.experienceAnswers.Any(x => x < 1) || e.intentionAnswers.Any(x => x < 1)) return false;
             e.completed = e.surveyComplete = true;
             e.submitPoint = point;
             MirrorCampaign(state, e);
             return true;
         }
+        static bool QuestionnaireReady(EvaluationState e) => HasPoint(e.startPoint) && (e.startPoint.completedCases < 50 || e.postComplete);
         static void MirrorCampaign(GameState state, EvaluationState e)
         {
             if (state.campaign == null) state.campaign = new CampaignState();
@@ -146,8 +172,9 @@ namespace DemocracyWay.NewUI
             if (e.baselineAnswers == null || e.baselineAnswers.Length != 8 || e.postAnswers == null || e.postAnswers.Length != 8 || e.experienceAnswers == null || e.experienceAnswers.Length != 12 || e.intentionAnswers == null || e.intentionAnswers.Length != 2) return false;
             if (e.baselineIndex < 0 || e.baselineIndex > 8 || e.postIndex < 0 || e.postIndex > 8) return false;
             if (e.baselineAnswers.Concat(e.postAnswers).Any(x => x < -1 || x > 3) || e.experienceAnswers.Concat(e.intentionAnswers).Any(x => x != -1 && (x < 1 || x > 5))) return false;
-            if (new[] { e.baselinePoint, e.offerPoint, e.startPoint, e.submitPoint }.Any(p => !EmptyPoint(p) && !HasPoint(p))) return false;
-            return !e.completed || e.postComplete && e.surveyComplete && HasPoint(e.startPoint) && HasPoint(e.submitPoint) && !e.experienceAnswers.Concat(e.intentionAnswers).Any(x => x < 1);
+            if (new[] { e.baselinePoint, e.offerPoint, e.startPoint, e.submitPoint, e.postPoint }.Any(p => !EmptyPoint(p) && !HasPoint(p))) return false;
+            if (e.postComplete && (e.postIndex != 8 || e.postAnswers.Any(x => x < 0))) return false;
+            return !e.completed || QuestionnaireReady(e) && e.surveyComplete && HasPoint(e.submitPoint) && !e.experienceAnswers.Concat(e.intentionAnswers).Any(x => x < 1);
         }
     }
 }

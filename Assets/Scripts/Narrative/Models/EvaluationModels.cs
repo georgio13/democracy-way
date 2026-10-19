@@ -45,13 +45,15 @@ namespace DemocracyWay.NewUI
     {
         public string instrumentVersion, researchParticipantId;
         public string exposure = "biography+baseline-feedback";
+        public string administrationVersion = "experience-only-midcampaign-v2";
+        public string postTestStatus = "not_started";
         public string returnPhase = "map-stela";
         public int baselineIndex, postIndex;
         public int[] baselineAnswers = Empty(8), postAnswers = Empty(8);
         public int[] experienceAnswers = Empty(12), intentionAnswers = Empty(2);
-        public bool baselineFeedbackPending, baselineComplete, postComplete, surveyComplete;
+        public bool baselineFeedbackPending, baselineComplete, postComplete, surveyComplete, onboardingHelpSeen;
         public bool offered, deferred, completed;
-        public EvaluationPoint baselinePoint, offerPoint, startPoint, submitPoint;
+        public EvaluationPoint baselinePoint, offerPoint, startPoint, submitPoint, postPoint;
         static int[] Empty(int length) { var a = new int[length]; for (int i = 0; i < length; i++) a[i] = -1; return a; }
     }
 }

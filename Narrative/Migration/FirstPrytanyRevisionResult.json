@@ -1,11 +1,11 @@
 {
-  "revisionId": "first-prytany-20261019",
-  "completedUtc": "2026-10-19T10:53:52.6910745Z",
-  "contentVersion": "3",
-  "schemaReplacements": 2,
-  "nativeRecordsCaptured": 614,
-  "recordsCreated": 226,
-  "recordsUpdated": 7,
-  "expressionsUpdated": 1,
-  "beforeArchive": "C:\\Projects\\democracy-way\\Narrative\\Articy\\..\\Migration\\FirstPrytanyBefore-first-prytany-20261019-20261019-105330-5828.json"
+  "revisionId": "ui-restoration-20261019",
+  "completedUtc": "2026-10-19T18:22:58.2417938Z",
+  "contentVersion": "8.0.0-four-answer-cases",
+  "schemaReplacements": 0,
+  "nativeRecordsCaptured": 849,
+  "recordsCreated": 0,
+  "recordsUpdated": 57,
+  "expressionsUpdated": 0,
+  "beforeArchive": "C:\\Projects\\democracy-way\\Narrative\\Articy\\..\\Migration\\FirstPrytanyBefore-ui-restoration-20261019-20261019-182255-5670.json"
 }

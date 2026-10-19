@@ -109979,6 +109979,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.GameFlowController
   campaignContent: {fileID: 4900000, guid: 0a972921abcc1f94b8f75d4091a0077c, type: 3}
   cityContent: {fileID: 4900000, guid: 732b49f58cc29df458cbb431eceff32a, type: 3}
+  evaluationContent: {fileID: 0}
   config: {fileID: 11400000, guid: 1bb51eaec60f1af48a2f660ded7211ba, type: 2}
   screens:
   - id: prytany-title

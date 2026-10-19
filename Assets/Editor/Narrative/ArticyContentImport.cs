@@ -96,7 +96,7 @@ namespace DemocracyWay.Editor
                 if (baseline.prologue.Any(p => !clone.prologue.Any(n => n.id == p.id))) throw new InvalidOperationException("Export removes a shipped prologue ID.");
                 var campaign = JsonUtility.FromJson<CampaignContent>(bundle.campaignJson);
                 var city = JsonUtility.FromJson<CityContent>(bundle.cityJson);
-                if (campaign?.cases == null || campaign.cases.Length == 0 || campaign.cases.Any(c => c == null || string.IsNullOrEmpty(c.id) || c.answers == null || c.answers.Length != 3 || c.correct < 0 || c.correct >= 3)) throw new InvalidOperationException("Invalid campaign export.");
+                if (campaign?.cases == null || campaign.cases.Length == 0 || campaign.cases.Any(c => c == null || string.IsNullOrEmpty(c.id) || c.answers == null || (c.answers.Length != 3 && c.answers.Length != 4) || c.correct < 0 || c.correct >= c.answers.Length)) throw new InvalidOperationException("Invalid campaign export.");
                 if (campaign.cases.Select(c => c.id).Distinct().Count() != campaign.cases.Length) throw new InvalidOperationException("Duplicate campaign IDs.");
                 if (city?.news == null || city.writers == null || city.complaints == null || city.officials == null) throw new InvalidOperationException("Incomplete city export.");
                 if (string.IsNullOrWhiteSpace(bundle.lexiconJson) || !bundle.lexiconJson.Contains("\"gameEntries\"")) throw new InvalidOperationException("Missing reference content export.");
@@ -106,3 +106,4 @@ namespace DemocracyWay.Editor
         }
     }
 }
+

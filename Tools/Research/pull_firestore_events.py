@@ -35,7 +35,7 @@ CITY_METRICS = ("food", "trust", "readiness", "war")
 POINT_FIELDS = ("prytany", "week", "turn", "completedCases", "caseId", "lastCompletedCaseId",
                 "contentVersion", "activeSeconds", "phase", "utc")
 META_FIELDS = (
-    "researchParticipantId", "researchConsent", "instrumentVersion", "exposure", "bank", "bankHash",
+    "researchParticipantId", "researchConsent", "instrumentVersion", "administrationVersion", "postTestStatus", "exposure", "bank", "bankHash",
     "assessmentId", "stage", "caseId", "institution", "observation", "reason", "reference",
     "cityDelta", "personalDelta", "questionId", "construct", "correctIndex", "responseActiveSeconds",
     "itemId", "scale", "status", "synthetic", "metadataCompacted", "collectiveOutcome",

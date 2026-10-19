@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -311,6 +311,14 @@ namespace DemocracyWay.NewUI
                 if (b != null)
                 {
                     b.interactable = City.speechUses == 0 && State.personalFunds >= w.price;
+                    var reference = Get<Button>("logographers.buy.0");
+                    if (reference != null && b != reference)
+                    {
+                        var frame = b.GetComponent<PanelGraphic>(); var original = reference.GetComponent<PanelGraphic>();
+                        if (frame != null && original != null) { frame.color = original.color; frame.borderColor = original.borderColor; frame.border = original.border; frame.cut = original.cut; frame.SetVerticesDirty(); }
+                        ((RectTransform)b.transform).sizeDelta = ((RectTransform)reference.transform).sizeDelta;
+                        b.colors = reference.colors; b.transition = reference.transition;
+                    }
                     var t = b.GetComponentInChildren<TMP_Text>();
                     t.color = new Color32(36, 60, 61, 255);
                     t.text = active ? ArticyNarrative.Copy("Copy_907154af23cc95af") : State.personalFunds < w.price ? ArticyNarrative.Copy("Copy_27014bd19c0d887d") : ArticyNarrative.Copy("Copy_b766598ece531f8c") + w.price + " οβ.";
@@ -524,7 +532,7 @@ namespace DemocracyWay.NewUI
                 CivicUIFactory.Box(name.rectTransform, 20, 14, width - 40, 38);
                 string category = item.category == "magistracy" ? "Δημόσια αρχή" : item.category == "council-subgroup" ? "Υποσύνολο της Βουλής" : "Συναφής ρόλος/σώμα/υπηρεσία";
                 string count = item.count > 0 && item.countStatus == "explicit" ? " · Αριθμός: " + item.count : " · Ο αριθμός δεν γενικεύεται χωρίς τεκμηρίωση";
-                string body = category + " · " + item.institution + count + "\nΑνάδειξη: " + item.selection + "\n" + item.role + "\n" + item.notes + "\nΠηγή: " + item.primaryReference;
+                string body = category + " · " + item.institution + count + "\nΑνάδειξη: " + item.selection + "\n" + item.role + "\n" + item.notes ;
                 var description = CivicUIFactory.Text(row.transform, "Role and primary source", body, font, 23, CivicUIFactory.Ink);
                 float height = description.GetPreferredValues(body, width - 40, 0).y + 10;
                 CivicUIFactory.Box(description.rectTransform, 20, 58, width - 40, height);
@@ -539,6 +547,8 @@ namespace DemocracyWay.NewUI
             SetText("official-detail.relationship", City.officialApproaches[selectedOfficial] == 0 ? ArticyNarrative.Copy("Copy_ba2f3162cc86a84e") : City.officialSupport[selectedOfficial] > 0 ? ArticyNarrative.Copy("Copy_63275b04f9ff9fb7") : ArticyNarrative.Copy("Copy_7321982a1b882482"));
             SetText("official-detail.name", o.name);
             SetText("official-detail.office", o.office.ToUpperInvariant());
+            var officeLabel = Get<TMP_Text>("official-detail.office");
+            if (officeLabel != null) { officeLabel.enableAutoSizing = true; officeLabel.fontSizeMin = 10; officeLabel.fontSizeMax = 16; officeLabel.textWrappingMode = TextWrappingModes.NoWrap; }
             SetText("official-detail.origin", o.tribe + "\nΤριττύς: " + o.trittys + " · Δήμος: " + o.deme);
             SetText("official-detail.method", o.method);
             SetText("official-detail.influence", "Στήριξη για 5 εβδομάδες.\nΕπανάληψη μετά τη λήξη.");
@@ -625,3 +635,4 @@ namespace DemocracyWay.NewUI
         }
     }
 }
+

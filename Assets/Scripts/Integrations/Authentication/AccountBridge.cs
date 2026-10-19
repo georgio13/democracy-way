@@ -16,6 +16,14 @@ namespace DemocracyWay.NewUI
         public static string UserId { get; private set; }
         public static string ResearchParticipantId { get; private set; }
         public static bool ResearchConsent { get; private set; }
+        public static bool IsBusy { get; private set; }
+        public static bool HasError { get; private set; }
+        public static string StatusMessage { get; private set; } = "";
+        public static string Email { get; private set; } = "";
+        public static bool OfferResearch { get; private set; }
+        public static bool IsAccountScreenOpen { get; private set; }
+        public static bool ShowingAccount { get; private set; }
+        public static event Action StateChanged;
         public static string CloudStatus { get; private set; } = "not-connected";
         public static bool IsAuthenticated => !string.IsNullOrEmpty(UserId);
         public static string LocalNamespace => IsAuthenticated ? "account-" + Digest(UserId).Substring(0, 32) : "not-signed-in";
@@ -23,11 +31,11 @@ namespace DemocracyWay.NewUI
         static AccountBridge instance;
 #if UNITY_EDITOR
         EditorAccountClient editorClient;
-        EditorAccountPanel editorPanel;
 #endif
-        [Serializable] sealed class CloudSlot { public int slot; public string envelope, updatedUtc; public bool deleted; }
-        [Serializable] sealed class AccountPacket { public string uid, researchParticipantId; public bool researchConsent; public CloudSlot[] slots; }
-        [Serializable] sealed class SyncStatus { public bool ok; public string code; public int pending; }
+        [Serializable] sealed class CloudSlot { public int slot = default; public string envelope = default, updatedUtc = default; public bool deleted = default; }
+        [Serializable] sealed class AccountPacket { public string uid = default, researchParticipantId = default; public bool researchConsent = default; public CloudSlot[] slots = default; }
+        [Serializable] sealed class SyncStatus { public bool ok = default; public string code = default; public int pending = default; }
+        [Serializable] sealed class AccountState { public bool busy = default, error = default; public string status = default, email = default; }
 #if UNITY_WEBGL && !UNITY_EDITOR
         [DllImport("__Internal")] static extern void DW_AccountRegister(string callbackObject);
         [DllImport("__Internal")] static extern void DW_AccountApplied();
@@ -35,20 +43,26 @@ namespace DemocracyWay.NewUI
         [DllImport("__Internal")] static extern void DW_AccountUpload(int slot, string envelope);
         [DllImport("__Internal")] static extern void DW_AccountDelete(int slot);
         [DllImport("__Internal")] static extern void DW_AccountOpen();
+        [DllImport("__Internal")] static extern void DW_AccountLogin(string email, string password);
+        [DllImport("__Internal")] static extern void DW_AccountCreate(string email, string password);
+        [DllImport("__Internal")] static extern void DW_AccountReset(string email);
+        [DllImport("__Internal")] static extern void DW_AccountSignOut();
+        [DllImport("__Internal")] static extern void DW_AccountResearchConsent(int consent);
 #endif
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Initialise()
         {
             if (instance != null) return;
             IsReady = false; UserId = ResearchParticipantId = null; ResearchConsent = false; CloudStatus = "not-connected";
+            IsBusy = HasError = OfferResearch = IsAccountScreenOpen = ShowingAccount = false;
+            StatusMessage = Email = ""; StateChanged = null;
             var host = new GameObject("PlayerAccountBridge"); instance = host.AddComponent<AccountBridge>(); DontDestroyOnLoad(host);
 #if UNITY_WEBGL && !UNITY_EDITOR
-            WebGLInput.captureAllKeyboardInput = false; IsReady = false; DW_AccountRegister(host.name);
+            WebGLInput.captureAllKeyboardInput = true; DW_AccountRegister(host.name);
 #elif UNITY_EDITOR
             instance.editorClient = host.AddComponent<EditorAccountClient>();
             instance.editorClient.Initialize(instance);
-            instance.editorPanel = host.AddComponent<EditorAccountPanel>();
-            instance.editorPanel.Initialize(instance.editorClient);
+            instance.editorClient.StateChanged += instance.ReadEditorState;
 #else
             IsReady = true; CloudStatus = "local-preview";
 #endif
@@ -71,12 +85,101 @@ namespace DemocracyWay.NewUI
         }
         public static void OpenAccount()
         {
-#if UNITY_WEBGL && !UNITY_EDITOR
-            DW_AccountOpen();
-#elif UNITY_EDITOR
-            instance?.editorPanel.OpenAccount();
+            if (IsAccountScreenOpen) return;
+            IsAccountScreenOpen = true;
+            ShowingAccount = IsAuthenticated; ClearStatus();
+            SceneManager.LoadSceneAsync("Login", IsAuthenticated ? LoadSceneMode.Additive : LoadSceneMode.Single);
+        }
+        public static void SignIn(string email, string password)
+        {
+            if (IsBusy) return;
+            OfferResearch = false;
+#if UNITY_EDITOR
+            instance.editorClient.SignIn(email, password);
+#elif UNITY_WEBGL
+            DW_AccountLogin(email, password);
 #endif
         }
+        public static void Register(string email, string password)
+        {
+            if (IsBusy) return;
+            OfferResearch = true;
+#if UNITY_EDITOR
+            instance.editorClient.Register(email, password);
+#elif UNITY_WEBGL
+            DW_AccountCreate(email, password);
+#endif
+        }
+        public static void ResetPassword(string email)
+        {
+            if (IsBusy) return;
+#if UNITY_EDITOR
+            instance.editorClient.ResetPassword(email);
+#elif UNITY_WEBGL
+            DW_AccountReset(email);
+#endif
+        }
+        public static void SetResearchConsent(bool consent)
+        {
+#if UNITY_EDITOR
+            instance.editorClient.SetResearchConsent(consent);
+#elif UNITY_WEBGL
+            DW_AccountResearchConsent(consent ? 1 : 0);
+#endif
+        }
+        public static void SignOut()
+        {
+#if UNITY_EDITOR
+            instance.editorClient.SignOut();
+#elif UNITY_WEBGL
+            DW_AccountSignOut();
+#endif
+        }
+        public static void ClearStatus()
+        {
+            StatusMessage = ""; HasError = false;
+#if UNITY_EDITOR
+            if (instance != null) instance.editorClient.ClearStatus();
+#endif
+            StateChanged?.Invoke();
+        }
+        public static void SetScreenOpen(bool open) { IsAccountScreenOpen = open; }
+        public static void ResearchDecision(bool consent)
+        {
+            OfferResearch = false;
+            if (consent != ResearchConsent) SetResearchConsent(consent);
+            StateChanged?.Invoke();
+        }
+        public static void CloseAccount()
+        {
+            if (IsBusy && !IsReady) return;
+            var scene = SceneManager.GetSceneByName("Login");
+            if (scene.IsValid())
+                foreach (var root in scene.GetRootGameObjects())
+                {
+                    var login = root.GetComponentInChildren<LoginScreen>(true);
+                    if (login != null && login.events != null) login.events.enabled = false;
+                }
+            bool additive = ShowingAccount && SceneManager.sceneCount > 1;
+            ShowingAccount = false;
+            if (additive && scene.IsValid()) SceneManager.UnloadSceneAsync(scene);
+            else SceneManager.LoadSceneAsync("MainMenu");
+        }
+        public void OnAccountOpen(string ignored) { OpenAccount(); }
+        public void OnAccountState(string json)
+        {
+            var state = JsonUtility.FromJson<AccountState>(json); if (state == null) return;
+            IsBusy = state.busy; HasError = state.error; StatusMessage = state.status ?? ""; Email = state.email ?? "";
+            StateChanged?.Invoke();
+        }
+#if UNITY_EDITOR
+        void ReadEditorState()
+        {
+            IsBusy = editorClient.Busy; HasError = editorClient.HasError;
+            StatusMessage = editorClient.Status; Email = editorClient.Email;
+            StateChanged?.Invoke();
+        }
+#endif
         public void OnAccountReady(string json)
         {
             try
@@ -91,7 +194,7 @@ namespace DemocracyWay.NewUI
                 foreach (var slot in packet.slots ?? Array.Empty<CloudSlot>()) Reconcile(slot);
                 GameSession.State = null; GameSession.Slot = -1; CloudStatus = "ready";
                 SaveStore.FlushWebStorage();
-                var controller = FindAnyObjectByType<GameFlowController>(); if (controller != null) controller.Show("main-menu");
+                StateChanged?.Invoke();
 #if UNITY_WEBGL && !UNITY_EDITOR
                 DW_AccountApplied();
 #endif
@@ -125,11 +228,13 @@ namespace DemocracyWay.NewUI
         static string Digest(string text) { using var sha = SHA256.Create(); return BitConverter.ToString(sha.ComputeHash(Encoding.UTF8.GetBytes(text))).Replace("-", "").ToLowerInvariant(); }
         static string EnvelopeChecksum(string text) { unchecked { uint value = 2166136261; foreach (byte b in Encoding.UTF8.GetBytes(text)) { value ^= b; value *= 16777619; } return value.ToString("X8", CultureInfo.InvariantCulture); } }
         public void OnCloudStatus(string json) { var status = JsonUtility.FromJson<SyncStatus>(json); CloudStatus = status != null && status.ok && status.pending == 0 ? "synced" : "pending"; }
-        public void OnResearchConsent(string consent) { ResearchConsent = consent == "true"; }
+        public void OnResearchConsent(string consent) { ResearchConsent = consent == "true"; StateChanged?.Invoke(); }
         public void OnAccountSignedOut(string ignored)
         {
             IsReady = false; UserId = ResearchParticipantId = null; ResearchConsent = false; CloudStatus = "signed-out";
-            GameSession.State = null; GameSession.Slot = -1; GameSession.PendingScreen = "main-menu"; Time.timeScale = 1; SceneManager.LoadScene("MainMenu");
+            IsBusy = HasError = OfferResearch = ShowingAccount = false; StatusMessage = Email = "";
+            GameSession.State = null; GameSession.Slot = -1; GameSession.PendingScreen = "main-menu"; Time.timeScale = 1;
+            SceneManager.LoadSceneAsync("Login", LoadSceneMode.Single); StateChanged?.Invoke();
         }
     }
 }

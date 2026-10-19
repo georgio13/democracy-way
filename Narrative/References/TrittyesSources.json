@@ -1,0 +1,250 @@
+{
+  "catalog": [
+    {
+      "id": "erechtheis-city",
+      "name": "Ευώνυμον (?)",
+      "region": "city",
+      "uncertain": true,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "erechtheis-coast",
+      "name": "Ονομασία άγνωστη",
+      "region": "coast",
+      "uncertain": false,
+      "unknown": true,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "erechtheis-inland",
+      "name": "Κηφισιά (?)",
+      "region": "inland",
+      "uncertain": true,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "aigeis-city",
+      "name": "Κολλυτός (?)",
+      "region": "city",
+      "uncertain": true,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "aigeis-coast",
+      "name": "Ονομασία άγνωστη",
+      "region": "coast",
+      "uncertain": false,
+      "unknown": true,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "aigeis-inland",
+      "name": "Επακρία (?)",
+      "region": "inland",
+      "uncertain": true,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "pandionis-city",
+      "name": "Κυδαθήναιον (?)",
+      "region": "city",
+      "uncertain": true,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "pandionis-coast",
+      "name": "Μυρρινούς",
+      "region": "coast",
+      "uncertain": false,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "pandionis-inland",
+      "name": "Παιανία",
+      "region": "inland",
+      "uncertain": false,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "leontis-city",
+      "name": "Σκαμβωνίδαι",
+      "region": "city",
+      "uncertain": false,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "leontis-coast",
+      "name": "Φρεάρριοι",
+      "region": "coast",
+      "uncertain": false,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "leontis-inland",
+      "name": "Διακρίς",
+      "region": "inland",
+      "uncertain": false,
+      "unknown": false,
+      "source": "Traill, Diakris, Hesperia, pp. 89–90"
+    },
+    {
+      "id": "akamantis-city",
+      "name": "Χολαργός",
+      "region": "city",
+      "uncertain": false,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "akamantis-coast",
+      "name": "Θορικός",
+      "region": "coast",
+      "uncertain": false,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "akamantis-inland",
+      "name": "Σφηττός",
+      "region": "inland",
+      "uncertain": false,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "oineis-city",
+      "name": "Λακιάδαι",
+      "region": "city",
+      "uncertain": false,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "oineis-coast",
+      "name": "Θρία",
+      "region": "coast",
+      "uncertain": false,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "oineis-inland",
+      "name": "Πεδίον",
+      "region": "inland",
+      "uncertain": false,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "kekropis-city",
+      "name": "Μελίτη (?)",
+      "region": "city",
+      "uncertain": true,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "kekropis-coast",
+      "name": "Αιξωνή (?)",
+      "region": "coast",
+      "uncertain": true,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "kekropis-inland",
+      "name": "Φλύα (?)",
+      "region": "inland",
+      "uncertain": true,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "hippothontis-city",
+      "name": "Πειραιεύς",
+      "region": "city",
+      "uncertain": false,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "hippothontis-coast",
+      "name": "Ελευσίς",
+      "region": "coast",
+      "uncertain": false,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "hippothontis-inland",
+      "name": "Δεκέλεια (?)",
+      "region": "inland",
+      "uncertain": true,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "aiantis-city",
+      "name": "Φάληρον (?)",
+      "region": "city",
+      "uncertain": true,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "aiantis-coast",
+      "name": "Τετράπολις",
+      "region": "coast",
+      "uncertain": false,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "aiantis-inland",
+      "name": "Άφιδνα (?)",
+      "region": "inland",
+      "uncertain": true,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "antiochis-city",
+      "name": "Αλωπεκή",
+      "region": "city",
+      "uncertain": false,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "antiochis-coast",
+      "name": "Ανάφλυστος",
+      "region": "coast",
+      "uncertain": false,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    },
+    {
+      "id": "antiochis-inland",
+      "name": "Παλλήνη",
+      "region": "inland",
+      "uncertain": false,
+      "unknown": false,
+      "source": "John Paul Adams (CSUN), Kleisthenic Demes and Trittyes; Demes of Some Famous Athenians"
+    }
+  ],
+  "note": "Το (?) δηλώνει ανασύνθεση ή αβέβαιη ταύτιση, όχι ασφαλώς σωζόμενο αρχαίο όνομα. Οι άγνωστες ονομασίες δεν συμπληρώνονται με επινοήσεις. Δεν αλλάζει η υφιστάμενη εκπαιδευτική αντιστοίχιση των δήμων.",
+  "sources": [
+    "https://www.csun.edu/~hcfll004/KleisthenicDemes.html",
+    "https://www.csun.edu/~hcfll004/Demes.html",
+    "https://www.ascsa.edu.gr/uploads/media/hesperia/148000.pdf"
+  ]
+}

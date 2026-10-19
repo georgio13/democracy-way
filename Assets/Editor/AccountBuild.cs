@@ -7,7 +7,7 @@ using UnityEngine;
 // Static Web asset copying only; never generates or edits scenes.
 public sealed class AccountBuild : IPreprocessBuildWithReport, IPostprocessBuildWithReport
 {
-    static readonly string[] Files = { "account.js", "account.css" };
+    static readonly string[] Files = { "account.js" };
     public int callbackOrder => 120;
     static string Source(string file) => Path.Combine(Application.dataPath, "WebGLTemplates/DemocracyWayLoader", file);
     public void OnPreprocessBuild(BuildReport report) { if (report.summary.platform != BuildTarget.WebGL) return; foreach (var file in Files) if (!File.Exists(Source(file))) throw new BuildFailedException("Missing account UI asset: " + file); }

@@ -348,11 +348,25 @@ namespace DemocracyWay.NewUI
         }
         string ShortCaseSource => (Case.source ?? "").Split(new[]{" · "},StringSplitOptions.None)[0];
         string[] DebateParts => PoliticalCaseRules.Definition(Case, State)?.dialogue?.Select(x => x.text).ToArray() ?? (Case.argumentA+"\n\n"+Case.argumentB).Split(new[]{"\n\n"},StringSplitOptions.RemoveEmptyEntries);
-        bool DebateComplete => CaseRecord.debateIndex>=DebateParts.Length-1;
+        bool DebateComplete => CaseRecord.debateIndex >= DebateParts.Length - 1 &&
+            CaseRecord.debateChunk >= CurrentDialogueChunks().Length - 1;
         void ContinueDebate()
         {
-            if(!DebateComplete){CaseRecord.debateIndex++;SaveCheckpoint();RenderCampaign();}
-            else FollowStory("DeliberationVote");
+            string[] chunks = CurrentDialogueChunks();
+            if (CaseRecord.debateChunk < chunks.Length - 1)
+                CaseRecord.debateChunk++;
+            else if (CaseRecord.debateIndex < DebateParts.Length - 1)
+            {
+                CaseRecord.debateIndex++;
+                CaseRecord.debateChunk = 0;
+            }
+            else
+            {
+                FollowStory("DeliberationVote");
+                return;
+            }
+            SaveCheckpoint();
+            RenderCampaign();
         }
         TMP_Text debateSpeakerA,debateSpeakerB;
         void RenderDebate()
@@ -417,8 +431,18 @@ namespace DemocracyWay.NewUI
                 CampaignText("banner", quiz ? (id == "initial-knowledge" ? ArticyNarrative.Copy("Copy_3fbbd6062db820e6") : ArticyNarrative.Copy("Copy_ed29f6b542d3a7ad")) + ArticyNarrative.Copy("Copy_7497f4359296eb12") + (Math.Min(index, 7) + 1) + "/8" : ArticyNarrative.Copy("Copy_53405a8145bf2dfe"));
                 CampaignText("heading", quiz && index == 0 ? ArticyNarrative.Copy("Copy_c5878ab2fda6586b") : c.question);
                 CampaignText("body", quiz ? ArticyNarrative.Copy("Copy_f2552600441f7137") : ArticyNarrative.Copy("Copy_9f974b6ae4ac0b34") + Case.title + ArticyNarrative.Copy("Copy_c20dc950f5982180"));
-                for (int i = 0; i < 3; i++)
-                    CampaignLabel("answer." + i, (char)('Α' + i) + "   " + (quiz && index == 0 ? new[] { ArticyNarrative.Copy("Copy_1631e8d5409bcdb6"), ArticyNarrative.Copy("Copy_26b0375e5ed1a510"), ArticyNarrative.Copy("Copy_215939b847d2e67c") }[i] : c.answers[i]));
+                for (int i = 0; i < 4; i++)
+                {
+                    var answer = Get<Button>(id + ".answer." + i);
+                    if (answer == null) continue;
+                    answer.gameObject.SetActive(i < c.answers.Length);
+                    if (i >= c.answers.Length) continue;
+                    CampaignLabel("answer." + i, "ΑΒΓΔ"[i] + "   " + c.answers[i]);
+                    var rect = (RectTransform)answer.transform;
+                    CivicUIFactory.Box(rect, 0, 280 + i * 88, 1058.4f, 78);
+                    var label = answer.GetComponentInChildren<TMP_Text>(true);
+                    label.enableAutoSizing = true; label.fontSizeMin = 20; label.fontSizeMax = 27;
+                }
                 CampaignText("source", quiz ? ArticyNarrative.Copy("Copy_1d57091a46f50302") : ArticyNarrative.Copy("Copy_3cc3c8bead627006"));
                 return;
             }
@@ -501,7 +525,7 @@ namespace DemocracyWay.NewUI
                 CampaignText("heading", ArticyNarrative.Copy("Copy_ac86789647c262c8"));
                 string decision=CaseRecord.vote==2 ? "Δεν υποστήριξες καμία πρόταση." : "Η επιλογή σου: "+(CaseRecord.vote==0 ? "πρώτη" : "δεύτερη")+" πρόταση.";
                 string result=Case.observation ? "Κατέγραψες εκτίμηση των στοιχείων, χωρίς δικαστική ψήφο." : "Επικράτησε η "+(CaseRecord.majority==0 ? "πρώτη" : "δεύτερη")+" πρόταση.";
-                CampaignText("body", (Case.institution ?? InstitutionNames[Case.site])+" · "+Case.title+"\n\n"+result+"\n\n"+decision+"\n\n"+(CaseRecord.speech<2&&!Case.observation ? "Τοποθετήθηκες δημόσια. Η ενίσχυση λογογράφου έχει περιορισμένη διάρκεια." : "Δεν υπήρξε δημόσια τοποθέτησή σου.")+"\n\n"+(CaseRecord.knowledge==Case.correct ? "Απάντησες σωστά στην ερώτηση γνώσης." : "Η απάντηση γνώσης συνοδεύτηκε από επεξήγηση.")+"\n\nΜεταβολή πόλης: "+CaseRecord.cityDelta.ToString("+0;-0;0")+" οβ. · Προσωπικού ταμείου: "+CaseRecord.personalDelta.ToString("+0;-0;0")+" οβ.");
+                CampaignText("body", (Case.institution ?? InstitutionNames[Case.site])+" · "+Case.title+"\n\n"+result+"\n\n"+decision+"\n\n"+(CaseRecord.speech<2&&!Case.observation ? "Τοποθετήθηκες δημόσια. Η ενίσχυση λογογράφου έχει περιορισμένη διάρκεια." : "Δεν υπήρξε δημόσια τοποθέτησή σου.")+"\n\n"+(CaseRecord.knowledge==(CaseRecord.questionCorrect>=0 ? CaseRecord.questionCorrect : Case.correct) ? "Απάντησες σωστά στην ερώτηση γνώσης." : "Η απάντηση γνώσης συνοδεύτηκε από επεξήγηση.")+"\n\nΜεταβολή πόλης: "+CaseRecord.cityDelta.ToString("+0;-0;0")+" οβ. · Προσωπικού ταμείου: "+CaseRecord.personalDelta.ToString("+0;-0;0")+" οβ.");
                 CampaignText("role", "Ταμείο πόλης: "+State.cityFunds+" οβ.\nΠροσωπικό: "+State.personalFunds+" οβ.\n\nΣυνέπεια "+State.metrics.consistency+" · Ηθική "+State.metrics.ethics+"\nΑυθεντία "+State.metrics.authority+" · Πειθώ "+State.metrics.persuasion+"\nΠαρρησία "+State.metrics.parrhesia+" · Αναγνωρισιμότητα "+State.metrics.recognition);
                 CampaignText("source", MetricDeltas(CaseRecord.metricDelta));
                 CampaignLabel("primary", State.week == 5 ? ArticyNarrative.Copy("Copy_910d46162f2a5574") : ArticyNarrative.Copy("Copy_39b53c1534b55e68"));
@@ -510,7 +534,7 @@ namespace DemocracyWay.NewUI
 
             if (id == "week-transition" || id == "prytany-transition")
             {
-                CampaignText("heading", id == "week-transition" ? ArticyNarrative.Copy("Copy_3e3295844f841450") + State.week + ArticyNarrative.Copy("Copy_c9ca01a1fb6fd52c") : TribeName(State.currentTribe) + ArticyNarrative.Copy("Copy_2ca1530bcc6160dd"));
+                CampaignText("heading", id == "week-transition" ? ArticyNarrative.Copy("Copy_3e3295844f841450").TrimEnd() + " " + State.week + ArticyNarrative.Copy("Copy_c9ca01a1fb6fd52c") : TribeName(State.currentTribe) + ArticyNarrative.Copy("Copy_2ca1530bcc6160dd"));
                 CampaignText("body", id == "week-transition" ? ArticyNarrative.Copy("Copy_1967453206a07b96") : ArticyNarrative.Copy("Copy_aff5a1cc5552abdf"));
                 for (int i = 0; i < 5; i++)
                 {
@@ -561,3 +585,4 @@ namespace DemocracyWay.NewUI
         }
     }
 }
+

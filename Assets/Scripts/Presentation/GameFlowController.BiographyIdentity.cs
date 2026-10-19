@@ -10,6 +10,14 @@ namespace DemocracyWay.NewUI
     public sealed partial class GameFlowController
     {
         readonly Dictionary<string, TMP_Text> biographyIdentityLabels = new Dictionary<string, TMP_Text>();
+        readonly Dictionary<string, TMP_Text> biographyCityLabels = new Dictionary<string, TMP_Text>();
+        readonly Dictionary<string, TMP_Text> biographyPlayerLabels = new Dictionary<string, TMP_Text>();
+
+        string TrittysLabel()
+        {
+            var step = config.biography.FirstOrDefault(s => s.selectionKind == "trittys");
+            return step?.choices.FirstOrDefault(c => c.trittysId == State.trittysId)?.trittys ?? State.trittys;
+        }
 
         List<NarrativeChoice> VisibleBioChoices(BiographyStep step) => step.choices.Where(c =>
             (c.requireTribe < 0 || c.requireTribe == State.tribeIndex) &&
@@ -85,10 +93,10 @@ namespace DemocracyWay.NewUI
                 CivicUIFactory.Box(row, 0, i * (height + gap), viewportWidth, height);
                 button.navigation = new Navigation { mode = Navigation.Mode.None };
                 var choice = choices[i];
-                string changes = MetricDeltas(choice.metrics);
-                if (choice.cityMetrics != null && step.selectionKind == "city")
-                    changes = CityChoiceChanges(choice);
-                SetText(key + ".label", choice.text + (string.IsNullOrEmpty(changes) ? "" : "\n" + changes));
+                // Decisions are read as dialogue. Their effects belong in the indicators,
+                // rather than numerical hints attached to an answer.
+                SetText(key + ".label", choice.text);
+                SetActive(key + ".metrics", false);
                 bool chosen = selected != null && selected.choiceId == choice.id;
                 SetActive(key + ".selected", chosen);
                 var shape = button.GetComponent<PanelGraphic>();
@@ -115,8 +123,15 @@ namespace DemocracyWay.NewUI
             var primary = Get<Button>(currentScreen + ".primary");
             if (primary != null)
             {
-                CivicUIFactory.Box((RectTransform)primary.transform, 1486, 994, 340, 64);
                 primary.navigation = new Navigation { mode = Navigation.Mode.None };
+                var primaryLabel = primary.GetComponentInChildren<TMP_Text>(true);
+                if (primaryLabel != null)
+                {
+                    primaryLabel.enableAutoSizing = true;
+                    primaryLabel.fontSizeMin = 21;
+                    primaryLabel.fontSizeMax = 26;
+                    primaryLabel.textWrappingMode = TextWrappingModes.NoWrap;
+                }
             }
             int milestone = State.biographyIndex < 4 ? 0 : State.biographyIndex == 4 ? 1 : State.biographyIndex == 5 ? 2 : State.biographyIndex < 9 ? 3 : 4;
             string[] years = { "Πριν από το 352", "352 π.Χ.", "338 π.Χ.", "334–332 π.Χ.", "322 π.Χ." };
@@ -124,6 +139,7 @@ namespace DemocracyWay.NewUI
             for (int i = 0; i < 5; i++) { SetActive(currentScreen + ".milestone." + i, i == milestone); SetText(currentScreen + ".milestone." + i + ".label", years[i]); }
             SetInteractable(currentScreen + ".primary", selected != null);
             RenderBiographyIdentity(step);
+            RenderBiographyCityIndicators();
             int[] values = { State.metrics.consistency, State.metrics.ethics, State.metrics.authority, State.metrics.persuasion, State.metrics.parrhesia, State.metrics.recognition };
             for (int i = 0; i < values.Length; i++) SetText(currentScreen + ".metric." + i, values[i].ToString());
             LayoutAuthoredBiographyMetrics();
@@ -174,12 +190,26 @@ namespace DemocracyWay.NewUI
                 var label = labels.FirstOrDefault(x => x.name == "Metric label " + i);
                 if (label != null)
                 {
-                    CivicUIFactory.Box(label.rectTransform, 105 + i * 144, 916, 136, 38);
-                    label.enableAutoSizing = true; label.fontSizeMin = 14; label.fontSizeMax = 18;
+                    label.gameObject.SetActive(false);
                 }
                 var value = Get<TMP_Text>(currentScreen + ".metric." + i);
-                if (value != null) CivicUIFactory.Box(value.rectTransform, 105 + i * 144, 960, 136, 44);
+                if (value != null) value.gameObject.SetActive(false);
             }
+            if (!biographyPlayerLabels.TryGetValue(currentScreen, out var playerText))
+            {
+                var panel = CivicUIFactory.Panel(root.transform, "Biography player indicators", new Color32(28, 52, 56, 242));
+                CivicUIFactory.Box(panel.rectTransform, 85, 922, 850, 118);
+                playerText = CivicUIFactory.Text(panel.transform, "Player values and changes", "", Get<TMP_Text>(currentScreen + ".body").font, 22, new Color32(239, 229, 203, 255));
+                CivicUIFactory.Fill(playerText.rectTransform, new Vector2(22, 8), new Vector2(22, 8));
+                playerText.enableAutoSizing = true; playerText.fontSizeMin = 17; playerText.fontSizeMax = 22;
+                biographyPlayerLabels[currentScreen] = playerText;
+            }
+            var m = State.metrics;
+            var selected = State.choices.LastOrDefault(c => c.stepId == CurrentBioStep()?.id);
+            string delta = selected != null ? MetricDeltas(selected.metrics) : "";
+            playerText.text = "<b>Ο χαρακτήρας σου</b> · Συνέπεια " + m.consistency + " · Ηθική " + m.ethics + " · Αυθεντία " + m.authority
+                + "\nΠειθώ " + m.persuasion + " · Παρρησία " + m.parrhesia + " · Αναγνωρισιμότητα " + m.recognition
+                + (string.IsNullOrEmpty(delta) ? "" : "\n<color=#D6BA7F>Η επιλογή σου: " + delta + "</color>");
         }
 
         void RestoreAuthoredBiographyTimeline()
@@ -196,14 +226,38 @@ namespace DemocracyWay.NewUI
                     if (caption.name == "Chapter " + i) caption.text = captions[i];
         }
 
-        string CityChoiceChanges(NarrativeChoice choice)
+        static string CityChoiceChanges(ChoiceRecord choice)
         {
             var d = choice.cityMetrics; var parts = new List<string>();
+            if (d == null) return "";
             if (d.food != 0) parts.Add("Επισιτισμός " + Signed(d.food));
             if (d.trust != 0) parts.Add("Εμπιστοσύνη " + Signed(d.trust));
             if (d.readiness != 0) parts.Add("Ετοιμότητα " + Signed(d.readiness));
+            if (d.war != 0) parts.Add("Πολεμική εντολή " + Signed(d.war));
             if (choice.cityFunds != 0) parts.Add("Ταμείο πόλης " + Signed(choice.cityFunds) + " οβ.");
             return string.Join(" · ", parts);
+        }
+
+        void RenderBiographyCityIndicators()
+        {
+            if (!biographyCityLabels.TryGetValue(currentScreen, out var text))
+            {
+                var panel = CivicUIFactory.Panel(roots[currentScreen].transform, "Biography city indicators", new Color32(28, 52, 56, 242));
+                CivicUIFactory.Box(panel.rectTransform, 85, 810, 850, 100);
+                text = CivicUIFactory.Text(panel.transform, "City values and changes", "", Get<TMP_Text>(currentScreen + ".body").font, 22, new Color32(239, 229, 203, 255));
+                CivicUIFactory.Fill(text.rectTransform, new Vector2(22, 8), new Vector2(22, 8));
+                text.enableAutoSizing = true;
+                text.fontSizeMin = 17;
+                text.fontSizeMax = 22;
+                biographyCityLabels[currentScreen] = text;
+            }
+            var city = State.campaign;
+            string values = "<b>Η πόλη</b> · Επισιτισμός " + city.foodSecurity + "/100 · Ετοιμότητα " + Signed(city.readiness)
+                + "\nΘεσμική εμπιστοσύνη " + Signed(city.legitimacy) + " · Πολεμική εντολή " + Signed(city.war);
+            var lastCityChoice = State.choices.LastOrDefault(c => c.cityMetrics != null &&
+                (c.cityMetrics.food != 0 || c.cityMetrics.trust != 0 || c.cityMetrics.readiness != 0 || c.cityMetrics.war != 0));
+            string change = lastCityChoice != null ? CityChoiceChanges(lastCityChoice) : "";
+            text.text = values + (string.IsNullOrEmpty(change) ? "" : "\n<color=#D6BA7F>Η επιλογή σου: " + change + "</color>");
         }
 
         void RenderBiographyIdentity(BiographyStep step)
@@ -211,7 +265,7 @@ namespace DemocracyWay.NewUI
             if (!biographyIdentityLabels.TryGetValue(currentScreen, out var text))
             {
                 var panel = CivicUIFactory.Panel(roots[currentScreen].transform, "Citizen identity", new Color32(28, 52, 56, 242));
-                CivicUIFactory.Box(panel.rectTransform, 85, 650, 850, 220);
+                CivicUIFactory.Box(panel.rectTransform, 85, 578, 850, 220);
                 var font = Get<TMP_Text>(currentScreen + ".body").font;
                 text = CivicUIFactory.Text(panel.transform, "Identity details", "", font, 24, new Color32(239, 229, 203, 255));
                 CivicUIFactory.Fill(text.rectTransform, new Vector2(26, 18), new Vector2(26, 18));
@@ -222,7 +276,7 @@ namespace DemocracyWay.NewUI
             string age = State.biographyIndex < 4 ? "Πριν από τη γέννηση" : State.biographyIndex == 4 ? "Γέννηση" : State.biographyIndex == 5 ? "14 ετών" : State.biographyIndex == 6 ? "18 ετών" : State.biographyIndex == 7 ? "18–20 ετών" : State.biographyIndex == 8 ? "20–29 ετών" : "30 ετών";
             text.text = "<b>" + (Has("birth-name") ? State.playerName : "Η οικογένειά σου") + "</b> · " + age
                 + "\nΦυλή: " + (Has("heritage-tribe") ? TribeName(State.tribeIndex) : "—")
-                + "\nΤριττύς: " + (Has("heritage-trittys") ? State.trittys : "—")
+                + "\nΤριττύς: " + (Has("heritage-trittys") ? TrittysLabel() : "—")
                 + "\nΔήμος: " + (Has("heritage-deme") ? State.deme : "—")
                 + "\nΟικονομική τάξη: " + (Has("heritage-class") ? config.economicClasses[State.economicClassIndex] : "—")
                 + "\nΕπάγγελμα: " + (Has("adult-profession") ? State.profession : "—")

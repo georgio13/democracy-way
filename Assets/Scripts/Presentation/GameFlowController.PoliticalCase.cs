@@ -48,16 +48,14 @@ namespace DemocracyWay.NewUI
             CampaignText("heading", choosingApproach ? "Πώς θα στηρίξεις τη θέση σου;" : "Ζητάς τον λόγο");
             CampaignText("body", choosingApproach ? "Επιλέγεις τρόπο παρέμβασης. Οι σχετικοί δείκτες καθορίζουν την επιρροή του λόγου σου· η ενίσχυση λογογράφου προστίθεται μόνο αν μιλήσεις."
                 : "Ποια πρόταση θα υποστηρίξεις δημόσια; Η ομιλία είναι ξεχωριστή από την τελική σου ψήφο.");
-            var details = new StringBuilder();
             for (int i = 0; i < 3; i++)
             {
                 CampaignLabel("choice." + i, choosingApproach ? p.approaches[i].label : i == 0 ? p.choiceA : i == 1 ? p.choiceB : "Δεν ζητώ τον λόγο");
-                if (choosingApproach) details.Append(p.approaches[i].label).Append(": ").Append(MetricDeltas(p.approaches[i].metrics)).Append('\n');
                 var button = Get<Button>("speech.choice." + i);
                 var text = button?.GetComponentInChildren<TMP_Text>();
                 if (text != null) { text.enableAutoSizing = true; text.fontSizeMin = 20; text.fontSizeMax = 28; }
             }
-            CampaignText("role", choosingApproach ? details.ToString().TrimEnd() : "Τεκμηρίωση: Αυθεντία και Πειθώ\nΔημόσια δέσμευση: Συνέπεια, Ηθική και Πειθώ\nΟξεία αντιπαράθεση: Παρρησία και Αναγνωρισιμότητα");
+            CampaignText("role", "Τεκμηρίωση: Αυθεντία και Πειθώ\nΔημόσια δέσμευση: Συνέπεια, Ηθική και Πειθώ\nΟξεία αντιπαράθεση: Παρρησία και Αναγνωρισιμότητα");
             FitPoliticalText("speech.role", 20, 23);
             CampaignText("source", "Οι αριθμοί επιρροής είναι μονάδες εκπαιδευτικής προσομοίωσης. Το αρμόδιο σώμα αποφασίζει συλλογικά.");
             return true;
@@ -183,24 +181,67 @@ namespace DemocracyWay.NewUI
             politicalTranscript.gameObject.SetActive(true);
             CaptureCaseHistorySnapshot();
             var lines = p?.dialogue ?? LegacyDialogueLines();
+            if (lines.Length == 0) return false;
             int last = Math.Min(CaseRecord.debateIndex, lines.Length - 1);
-            string key = CampaignRules.Turn(State) + ":" + Case.id + ":" + last + ":" + (p?.version ?? 0);
+            string[] chunks = SplitDialogueText(lines[last].text);
+            int chunk = Mathf.Clamp(CaseRecord.debateChunk, 0, chunks.Length - 1);
+            string key = CampaignRules.Turn(State) + ":" + Case.id + ":" + last + ":" + chunk + ":" + (p?.version ?? 0);
             if (renderedPoliticalDialogue != key)
             {
                 renderedPoliticalDialogue = key;
                 foreach (Transform child in politicalTranscriptContent) { child.gameObject.SetActive(false); Destroy(child.gameObject); }
                 Canvas.ForceUpdateCanvases();
                 float width = Mathf.Max(600, politicalTranscript.viewport.rect.width - 20), y = 10;
-                for (int i = 0; i <= last; i++) y += CreateDialogueEntry(lines[i], i, width, y, template.font);
+                for (int i = 0; i <= last; i++)
+                {
+                    var line = lines[i];
+                    string[] revealed = i < last ? SplitDialogueText(line.text) : chunks.Take(chunk + 1).ToArray();
+                    for (int part = 0; part < revealed.Length; part++)
+                        y += CreateDialogueEntry(line, revealed[part], part == 0, part == 0 && (i == 0 || lines[i - 1].speaker != line.speaker), i * 1000 + part, width, y, template.font);
+                }
                 politicalTranscriptContent.sizeDelta = new Vector2(0, Mathf.Max(y + 10, politicalTranscript.viewport.rect.height));
                 Canvas.ForceUpdateCanvases();
                 politicalTranscript.verticalNormalizedPosition = 0;
             }
-            politicalNext.GetComponentInChildren<TMP_Text>().text = last < lines.Length - 1 ? "Συνέχεια · " + (last + 1) + "/" + lines.Length : Case.observation ? "Στην εκτίμηση των στοιχείων" : "Στην ψηφοφορία";
-            politicalAsk.gameObject.SetActive(last >= lines.Length - 1 && !Case.observation && CaseRecord.speech < 0);
+            politicalNext.GetComponentInChildren<TMP_Text>().text = !DebateComplete ? "Συνέχεια  ›" : Case.observation ? "Στην εκτίμηση των στοιχείων" : "Στην ψηφοφορία";
+            politicalAsk.gameObject.SetActive(DebateComplete && !Case.observation && CaseRecord.speech < 0);
+            politicalAsk.interactable = DebateComplete && !Case.observation && CaseRecord.speech < 0;
             politicalNext.gameObject.SetActive(true);
+            var nextLabel = politicalNext.GetComponentInChildren<TMP_Text>();
+            ((RectTransform)politicalNext.transform).sizeDelta = new Vector2(Mathf.Clamp(nextLabel.GetPreferredValues(nextLabel.text).x + 60, 220, 420), 72);
             for (int i = 0; i < 3; i++) { var old = Get<Button>("deliberation.choice." + i); if (old != null) old.gameObject.SetActive(false); }
             return true;
+        }
+
+        string[] CurrentDialogueChunks()
+        {
+            var lines = PoliticalCaseRules.Definition(Case, State)?.dialogue ?? LegacyDialogueLines();
+            return lines.Length == 0 ? new[] { "" } : SplitDialogueText(lines[Mathf.Clamp(CaseRecord.debateIndex, 0, lines.Length - 1)].text);
+        }
+
+        // One click reveals at most two sentences. Sentence boundaries are kept verbatim,
+        // so the saved transcript is still the complete authored speech, not a summary.
+        internal static string[] SplitDialogueText(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return new[] { "" };
+            string[] sentences = System.Text.RegularExpressions.Regex.Split(text.Trim(), @"(?<=[.!?;;])\s+|(?<=[.!?;;][»”""])\s+");
+            var chunks = new List<string>();
+            string current = "";
+            int count = 0;
+            foreach (string sentence in sentences)
+            {
+                if (string.IsNullOrWhiteSpace(sentence)) continue;
+                if (count >= 2 || (current.Length > 0 && current.Length + sentence.Length + 1 > 420))
+                {
+                    chunks.Add(current);
+                    current = "";
+                    count = 0;
+                }
+                current += (current.Length == 0 ? "" : " ") + sentence;
+                count++;
+            }
+            if (current.Length > 0) chunks.Add(current);
+            return chunks.Count > 0 ? chunks.ToArray() : new[] { "" };
         }
 
         PoliticalDialogueLine[] LegacyDialogueLines()
@@ -220,24 +261,49 @@ namespace DemocracyWay.NewUI
             return roots.TryGetValue("logographers", out var writers) ? writers.GetComponentsInChildren<RawImage>(true).FirstOrDefault(x => x.texture != null)?.texture : null;
         }
 
-        float CreateDialogueEntry(PoliticalDialogueLine line, int number, float width, float y, TMP_FontAsset font)
+        float CreateDialogueEntry(PoliticalDialogueLine line, string visibleText, bool firstChunk, bool showHeader, int number, float width, float y, TMP_FontAsset font)
         {
             var row = CivicUIFactory.Rect(politicalTranscriptContent, "Speaker " + number + " " + line.speaker);
             float textWidth = width - 222;
-            var stage = CivicUIFactory.Text(row, "Procedural narration", line.stageText, font, 21, new Color32(97, 99, 84, 255));
-            stage.fontStyle = FontStyles.Italic;
-            float stageHeight = Mathf.Max(32, stage.GetPreferredValues(stage.text, width - 32, 0).y + 8);
-            CivicUIFactory.Box(stage.rectTransform, 16, 4, width - 32, stageHeight);
-            var portrait = CivicUIFactory.Portrait(row, "Speaker portrait", CivicPortraitAtlas(), line.portraitIndex);
-            CivicUIFactory.Box(portrait.rectTransform, 16, stageHeight + 18, 150, 188);
-            var name = CivicUIFactory.Text(row, "Speaker name", line.speaker, font, 29, CivicUIFactory.Teal); name.fontStyle = FontStyles.Bold;
-            CivicUIFactory.Box(name.rectTransform, 192, stageHeight + 12, textWidth, 40);
-            var role = CivicUIFactory.Text(row, "Speaker role", line.speakerRole, font, 20, new Color32(105, 91, 59, 255));
-            CivicUIFactory.Box(role.rectTransform, 192, stageHeight + 52, textWidth, 50);
-            var body = CivicUIFactory.Text(row, "Argument", line.text, font, 27, CivicUIFactory.Ink);
+            float stageHeight = 0;
+            if (firstChunk && !string.IsNullOrWhiteSpace(line.stageText))
+            {
+                var stage = CivicUIFactory.Text(row, "Procedural narration", line.stageText, font, 21, new Color32(97, 99, 84, 255));
+                stage.fontStyle = FontStyles.Italic;
+                stageHeight = Mathf.Max(32, stage.GetPreferredValues(stage.text, width - 32, 0).y + 8);
+                CivicUIFactory.Box(stage.rectTransform, 16, 4, width - 32, stageHeight);
+            }
+            float headerHeight = showHeader ? 112 : 0;
+            if (showHeader)
+            {
+                var frame = CivicUIFactory.Rect(row, "Circular portrait frame");
+                CivicUIFactory.Box(frame, 20, stageHeight + 12, 100, 100);
+                frame.gameObject.AddComponent<CanvasRenderer>();
+                frame.gameObject.AddComponent<EllipseGraphic>().color = CivicUIFactory.Gold;
+                var mask = CivicUIFactory.Rect(frame, "Circular portrait mask");
+                CivicUIFactory.Box(mask, 3, 3, 94, 94);
+                mask.gameObject.AddComponent<CanvasRenderer>();
+                mask.gameObject.AddComponent<EllipseGraphic>().color = Color.white;
+                mask.gameObject.AddComponent<Mask>().showMaskGraphic = false;
+                var portrait = CivicUIFactory.Portrait(mask, "Speaker portrait", CivicPortraitAtlas(), line.portraitIndex);
+                CivicUIFactory.Fill(portrait.rectTransform, Vector2.zero, Vector2.zero);
+                if (portrait.texture != null)
+                {
+                    var uv = portrait.uvRect; float cellRatio = portrait.texture.width * uv.width / (portrait.texture.height * uv.height);
+                    if (cellRatio > 1) { float size = uv.width / cellRatio; uv.x += (uv.width - size) / 2; uv.width = size; }
+                    else { float size = uv.height * cellRatio; uv.y += (uv.height - size) / 2; uv.height = size; }
+                    portrait.uvRect = uv;
+                }
+                var name = CivicUIFactory.Text(row, "Speaker name", line.speaker, font, 29, CivicUIFactory.Teal); name.fontStyle = FontStyles.Bold;
+                CivicUIFactory.Box(name.rectTransform, 144, stageHeight + 12, width - 170, 40);
+                var role = CivicUIFactory.Text(row, "Speaker role", line.speakerRole, font, 20, new Color32(105, 91, 59, 255));
+                CivicUIFactory.Box(role.rectTransform, 144, stageHeight + 52, width - 170, 48);
+            }
+            textWidth = width - 48;
+            var body = CivicUIFactory.Text(row, "Argument", visibleText, font, 27, CivicUIFactory.Ink);
             float bodyHeight = body.GetPreferredValues(body.text, textWidth, 0).y + 12;
-            CivicUIFactory.Box(body.rectTransform, 192, stageHeight + 106, textWidth, bodyHeight);
-            float height = Mathf.Max(stageHeight + 224, stageHeight + 120 + bodyHeight);
+            CivicUIFactory.Box(body.rectTransform, 24, stageHeight + headerHeight + 8, textWidth, bodyHeight);
+            float height = stageHeight + headerHeight + bodyHeight + 16;
             CivicUIFactory.Box(row, 0, y, width, height);
             return height + 24;
         }
@@ -251,14 +317,14 @@ namespace DemocracyWay.NewUI
             var rt = (RectTransform)politicalTranscript.transform;
             rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0, 1);
             rt.anchoredPosition = first.anchoredPosition;
-            rt.sizeDelta = new Vector2(second.anchoredPosition.x + second.sizeDelta.x - first.anchoredPosition.x, first.sizeDelta.y);
+            rt.sizeDelta = new Vector2(second.anchoredPosition.x + second.sizeDelta.x - first.anchoredPosition.x, Mathf.Max(first.sizeDelta.y, 1080 - Mathf.Abs(first.anchoredPosition.y) - 140));
             foreach (string key in new[] { "deliberation.vote", "deliberation.speech" }) { var old = Get<Button>(key); if (old != null) old.gameObject.SetActive(false); }
             politicalNext = CivicUIFactory.Button(root, "Next speaker or vote", "Συνέχεια", template.font, ContinueDebate, this);
             politicalAsk = CivicUIFactory.Button(root, "Request a public intervention", "Ζητώ τον λόγο", template.font, () => FollowStory("DeliberationSpeech"), this);
             foreach (var pair in new[] { new { button = politicalNext, x = .72f }, new { button = politicalAsk, x = .28f } })
             {
-                var buttonRect = (RectTransform)pair.button.transform; buttonRect.anchorMin = buttonRect.anchorMax = new Vector2(pair.x, .2f); buttonRect.pivot = new Vector2(.5f, .5f);
-                buttonRect.anchoredPosition = Vector2.zero; buttonRect.sizeDelta = new Vector2(600, 76);
+                var buttonRect = (RectTransform)pair.button.transform; buttonRect.anchorMin = buttonRect.anchorMax = new Vector2(pair.x == .72f ? .96f : .04f, .075f); buttonRect.pivot = new Vector2(pair.x == .72f ? 1 : 0, .5f);
+                buttonRect.anchoredPosition = Vector2.zero; buttonRect.sizeDelta = new Vector2(270, 72);
             }
             targets["deliberation.vote"] = politicalNext; targets["deliberation.speech"] = politicalAsk;
             targets["deliberation.vote.label"] = politicalNext.GetComponentInChildren<TMP_Text>();
@@ -266,3 +332,4 @@ namespace DemocracyWay.NewUI
         }
     }
 }
+

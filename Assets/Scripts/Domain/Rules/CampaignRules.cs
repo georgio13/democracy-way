@@ -47,7 +47,7 @@ namespace DemocracyWay.NewUI
         public static bool Answer(GameState state, int answer)
         {
             var record = Current(state);
-            if (answer < 0 || answer > 2 || record.knowledge >= 0)
+            if (answer < 0 || answer > 3 || record.knowledge >= 0)
                 return false;
             record.knowledge = answer;
             return true;
@@ -146,7 +146,7 @@ namespace DemocracyWay.NewUI
                 return false;
             var seen = new System.Collections.Generic.HashSet<int>();
             foreach (var record in campaign.cases)
-                if (record == null || record.turn < 0 || record.turn > 49 || !seen.Add(record.turn) || record.knowledge < -1 || record.knowledge > 2 || record.speech < -1 || record.speech > 2 || record.vote < -1 || record.vote > 2 || record.majority < -1 || record.majority > 1 || (record.completed && (record.knowledge < 0 || record.vote < 0 || record.majority < 0)))
+                if (record == null || record.turn < 0 || record.turn > 49 || !seen.Add(record.turn) || record.knowledge < -1 || record.knowledge > 3 || record.speech < -1 || record.speech > 2 || record.vote < -1 || record.vote > 2 || record.majority < -1 || record.majority > 1 || (record.completed && (record.knowledge < 0 || record.vote < 0 || record.majority < 0)))
                     return false;
             return true;
         }
@@ -163,3 +163,4 @@ namespace DemocracyWay.NewUI
         }.Contains(id));
     }
 }
+

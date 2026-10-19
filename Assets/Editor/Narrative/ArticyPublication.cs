@@ -9,7 +9,7 @@ namespace DemocracyWay.Editor
     // Applies only a complete matching publication. Failed validation leaves current game assets intact.
     [InitializeOnLoad] public static class ArticyPublication
     {
-        [Serializable] sealed class Publication { public int schemaVersion; public string exportedUtc,bundleSha256,unitySha256; }
+        [Serializable] sealed class Publication { public int schemaVersion = default; public string exportedUtc = default, bundleSha256 = default, unitySha256 = default; }
         static string attempted;
         static double next;
         static ArticyPublication(){EditorApplication.update+=Poll;}

@@ -93,6 +93,19 @@ namespace DemocracyWay.NewUI
         public void SetOpen(bool value)
         {
             panel.gameObject.SetActive(value);
+            foreach (var ribbon in panel.GetComponentsInChildren<RectTransform>(true).Where(r => r.name.StartsWith("Banner ", StringComparison.Ordinal)))
+            {
+                ribbon.gameObject.SetActive(true);
+                float right = ((RectTransform)close.transform).anchoredPosition.x - 24;
+                float width = Mathf.Max(240, right - ribbon.anchoredPosition.x);
+                ribbon.sizeDelta = new Vector2(width, ribbon.sizeDelta.y);
+                foreach (var child in ribbon.GetComponentsInChildren<RectTransform>(true))
+                    if (child != ribbon && child.anchorMin == child.anchorMax && child.sizeDelta.x > width)
+                        child.sizeDelta = new Vector2(Mathf.Max(200, width - Mathf.Max(0, child.anchoredPosition.x)), child.sizeDelta.y);
+            }
+            if (value) close.transform.SetAsLastSibling();
+            foreach (var city in world.parent.GetComponentsInChildren<RectTransform>(true).Where(r => r.name == "City indicators"))
+                CivicUIFactory.Box(city, value ? 340 : 690, 154, value ? 620 : 720, 64);
             float q = 1.2f, w = value ? 1060 : 1600;
             world.sizeDelta = new Vector2(w * q, 900 * q);
             RectTransform caseHeader = world.Find("Active weekly case") as RectTransform;
@@ -248,3 +261,4 @@ namespace DemocracyWay.NewUI
         }
     }
 }
+

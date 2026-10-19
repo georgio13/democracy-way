@@ -12,6 +12,7 @@ namespace DemocracyWay.NewUI
         public int cityDelta, personalDelta;
         public string caseId, questionId, argumentId, institutionalLean, leanReason, sourceRef;
         public int debateIndex, questionCorrect = -1, selectedAnswer = -1;
+        public int debateChunk;
         public string contentVersion;
         public CharacterMetrics metricDelta;
         public string authoredCaseSnapshot, authoredDialogueSnapshot;

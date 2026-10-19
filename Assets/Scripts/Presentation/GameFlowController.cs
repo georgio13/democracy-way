@@ -105,6 +105,11 @@ namespace DemocracyWay.NewUI
 
         private void Start()
         {
+            if (!AccountBridge.IsReady && string.IsNullOrEmpty(EditorTestDirectory()))
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Login");
+                return;
+            }
             if (config.cursorTexture != null)
                 Cursor.SetCursor(config.cursorTexture, config.cursorHotspot, CursorMode.Auto);
             string requested = GameSession.PendingScreen;
@@ -141,9 +146,7 @@ namespace DemocracyWay.NewUI
 
         private void Update()
         {
-#if UNITY_EDITOR
-            if (!AccountBridge.IsReady && string.IsNullOrEmpty(SaveStore.TestDirectory)) return;
-#endif
+            if (AccountBridge.IsAccountScreenOpen || (!AccountBridge.IsReady && string.IsNullOrEmpty(EditorTestDirectory()))) return;
             if (State != null && Application.isFocused && !gamePaused && !modalOpen)
                 State.activeSeconds += Mathf.Min(Time.unscaledDeltaTime, 1f);
 #if ENABLE_INPUT_SYSTEM
@@ -172,6 +175,15 @@ namespace DemocracyWay.NewUI
             foreach (var pair in clickHandlers)
                 if (pair.Key != null)
                     pair.Key.onClick.RemoveListener(pair.Value);
+        }
+
+        private static string EditorTestDirectory()
+        {
+#if UNITY_EDITOR
+            return SaveStore.TestDirectory;
+#else
+            return null;
+#endif
         }
 
         public T Get<T>(string key)
@@ -287,7 +299,7 @@ namespace DemocracyWay.NewUI
         {
             if (routing || string.IsNullOrEmpty(id))
                 return;
-            if (id == "final-knowledge" && State != null && State.evaluation != null && State.evaluation.completed && State.campaign != null && !string.IsNullOrEmpty(State.campaign.personalEnding)) id = "complete";
+            if (id == "final-knowledge" && State != null && State.evaluation != null && State.evaluation.completed && State.evaluation.postComplete && State.campaign != null && !string.IsNullOrEmpty(State.campaign.personalEnding)) id = "complete";
             if (id == "biography")
             {
                 ShowBiography();

@@ -38,7 +38,7 @@ namespace DemocracyWay.NewUI
         void SetupEvaluationUI()
         {
             if (EvaluationData == null) return;
-            foreach (string screen in new[] { "initial-knowledge", "final-knowledge" })
+            foreach (string screen in new[] { "knowledge", "initial-knowledge", "final-knowledge" })
             {
                 if (!roots.ContainsKey(screen)) continue;
                 var first = Get<Button>(screen + ".answer.0");
@@ -67,22 +67,29 @@ namespace DemocracyWay.NewUI
             if (EvaluationData == null || (screen != "initial-knowledge" && screen != "final-knowledge")) return false;
             if (screen == "initial-knowledge")
             {
+                if (Evaluation.baselineComplete)
+                {
+                    if (answer == 0) { Evaluation.onboardingHelpSeen = true; SaveCheckpoint(); GoCampaign("prytany-title"); }
+                    return true;
+                }
                 if (Evaluation.baselineFeedbackPending)
                 {
                     if (answer != 0 || !EvaluationRules.ContinueBaseline(State, EvaluationData)) return true;
-                    if (Evaluation.baselineComplete) { GoCampaign("prytany-title"); return true; }
+                    if (Evaluation.baselineComplete) { SaveCheckpoint(); RenderCampaign(); ClearSelection(); return true; }
                 }
                 else if (!EvaluationRules.AnswerBaseline(State, EvaluationData, answer, EvaluationPointNow())) return true;
             }
             else
             {
-                if (!EvaluationRules.HasPoint(Evaluation.startPoint))
+                if (!EvaluationRules.Available(State, EvaluationData)) return false;
+                if (!EvaluationRules.FullCampaignComplete(State))
                 {
-                    if (!EvaluationRules.Available(State, EvaluationData)) return false;
-                    EvaluationRules.Begin(State, EvaluationData, EvaluationPointNow(), "map-stela");
+                    if (!EvaluationRules.HasPoint(Evaluation.startPoint)) EvaluationRules.Begin(State, EvaluationData, EvaluationPointNow(), "map-stela");
+                    GoCampaign("final-survey"); return true;
                 }
+                if (!EvaluationRules.BeginPost(State, EvaluationData, EvaluationPointNow()) && !Evaluation.postComplete) return true;
                 if (!EvaluationRules.AnswerPost(State, EvaluationData, answer)) return true;
-                if (Evaluation.postComplete) { GoCampaign("final-survey"); return true; }
+                if (Evaluation.postComplete) { GoCampaign(Evaluation.completed ? "complete" : "final-survey"); return true; }
             }
             SaveCheckpoint(); RenderCampaign(); ClearSelection(); return true;
         }
@@ -92,18 +99,31 @@ namespace DemocracyWay.NewUI
             if (EvaluationData == null || (currentScreen != "initial-knowledge" && currentScreen != "final-knowledge")) return false;
             if (!evaluationQuizLayouts.Contains(currentScreen)) SetupEvaluationUI();
             bool baseline = currentScreen == "initial-knowledge";
-            if (!baseline && !EvaluationRules.HasPoint(Evaluation.startPoint))
+            if (!baseline)
             {
                 if (!EvaluationRules.Available(State, EvaluationData))
                 {
                     var fourth = Get<Button>(currentScreen + ".answer.3"); if (fourth != null) fourth.gameObject.SetActive(false);
                     return false; // A legacy run without the new baseline keeps its legacy end-of-campaign instrument.
                 }
-                EvaluationRules.Begin(State, EvaluationData, EvaluationPointNow(), "map-stela"); SaveCheckpoint();
+                if (!EvaluationRules.FullCampaignComplete(State))
+                {
+                    if (!EvaluationRules.HasPoint(Evaluation.startPoint)) EvaluationRules.Begin(State, EvaluationData, EvaluationPointNow(), "map-stela");
+                    GoCampaign("final-survey"); return true;
+                }
+                if (!Evaluation.postComplete && !EvaluationRules.HasPoint(Evaluation.postPoint))
+                {
+                    if (!EvaluationRules.BeginPost(State, EvaluationData, EvaluationPointNow())) return false;
+                    SaveCheckpoint();
+                }
             }
             var state = Evaluation;
-            if (baseline && state.baselineComplete) { GoCampaign("prytany-title"); return true; }
-            if (!baseline && state.postComplete) { GoCampaign("final-survey"); return true; }
+            if (baseline && state.baselineComplete)
+            {
+                if (state.onboardingHelpSeen) { GoCampaign("prytany-title"); return true; }
+                RenderOnboardingGuide(); return true;
+            }
+            if (!baseline && state.postComplete) { GoCampaign(state.completed ? "complete" : "final-survey"); return true; }
             int index = Mathf.Clamp(baseline ? state.baselineIndex : state.postIndex, 0, 7);
             var question = (baseline ? EvaluationData.onboarding : EvaluationData.postTest)[index];
             bool feedback = baseline && state.baselineFeedbackPending;
@@ -151,13 +171,34 @@ namespace DemocracyWay.NewUI
         {
             string economic = State.economicClassIndex >= 0 && State.economicClassIndex < config.economicClasses.Count ? config.economicClasses[State.economicClassIndex] : "—";
             return template.Replace("{playerName}", State.playerName ?? "").Replace("{tribe}", TribeName(State.tribeIndex))
-                .Replace("{trittys}", State.trittys ?? "").Replace("{deme}", State.deme ?? "")
+                .Replace("{trittys}", TrittysLabel() ?? "").Replace("{deme}", State.deme ?? "")
                 .Replace("{economicClass}", economic).Replace("{offices}", State.offices ?? "").Replace("{profession}", State.profession ?? "");
+        }
+
+        void RenderOnboardingGuide()
+        {
+            HideEvaluationChrome(currentScreen);
+            CampaignText("heading", "Πώς θα κινηθείς στην πόλη");
+            CampaignText("body", "Το παιχνίδι ακολουθεί δέκα πρυτανείες. Στην αρχή καθεμιάς κληρώνεται η φυλή που θα πρυτανεύσει· όσες έχουν ήδη αναλάβει δεν κληρώνονται ξανά. Οι πέντε εβδομάδες κάθε πρυτανείας είναι εκπαιδευτική συμπύκνωση του ιστορικού χρόνου.\n\nΣτον χάρτη επίλεξε τον θεσμό με ενεργή υπόθεση. Απάντησε στην ερώτηση γνώσης, γνώρισε τη διαδικασία και άκουσε τους ομιλητές με το «Συνέχεια». Έπειτα μπορείς να ζητήσεις τον λόγο και να υποστηρίξεις μία πρόταση. Η προσωπική σου ψήφος δεν εξασφαλίζει την επικράτησή της.\n\nΣτην αγορά διαβάζεις τις εξελίξεις. Στο Ευρετήριο βρίσκεις εξηγήσεις, στους λογογράφους μπορείς να προμηθευτείς λόγο και στους αξιωματούχους να αναζητήσεις υποστήριξη. Παρακολούθησε τους προσωπικούς δείκτες, την κατάσταση της πόλης και τα δύο ταμεία: οι αποφάσεις αφήνουν συνέπειες στις επόμενες υποθέσεις.\n\nΑφού ολοκληρώσεις την εβδομάδα, προχωράς στην επόμενη· η πρόοδος αποθηκεύεται αυτόματα. Μετά την πρώτη πρυτανεία θα μπορείς να συμπληρώσεις την αξιολόγηση ή να συνεχίσεις και να την κάνεις αργότερα.");
+            var heading = Get<TMP_Text>(currentScreen + ".heading");
+            var body = Get<TMP_Text>(currentScreen + ".body");
+            CivicUIFactory.Box(heading.rectTransform, 0, 24, 1058.4f, 80);
+            heading.color = CivicUIFactory.Ink;
+            CivicUIFactory.Box(body.rectTransform, 0, 124, 1058.4f, 446);
+            body.enableAutoSizing = true; body.fontSizeMin = 23; body.fontSizeMax = 27;
+            for (int i = 0; i < 4; i++)
+            {
+                var button = Get<Button>(currentScreen + ".answer." + i);
+                button.gameObject.SetActive(i == 0);
+                if (i != 0) continue;
+                CivicUIFactory.Box((RectTransform)button.transform, 239, 590, 580, 76);
+                button.GetComponentInChildren<TMP_Text>(true).text = "Στην πρώτη πρυτανεία";
+            }
         }
 
         void HideEvaluationChrome(string screen)
         {
-            foreach (string key in new[] { "funds", "banner", "eyebrow", "footer", "source" })
+            foreach (string key in new[] { "funds", "eyebrow", "footer", "source" })
             {
                 var item = Get<GameObject>(screen + "." + key); if (item == null) continue;
                 item.SetActive(false);
@@ -194,8 +235,9 @@ namespace DemocracyWay.NewUI
         public void StartEvaluation()
         {
             HideEvaluationDialog();
-            if (EvaluationData == null || !EvaluationRules.Begin(State, EvaluationData, EvaluationPointNow(), State.phase)) return;
-            GoCampaign(Evaluation.postComplete ? "final-survey" : "final-knowledge");
+            bool fullCampaign = EvaluationRules.FullCampaignComplete(State);
+            if (EvaluationData == null || !EvaluationRules.Begin(State, EvaluationData, EvaluationPointNow(), fullCampaign ? "complete" : State.phase)) return;
+            GoCampaign(fullCampaign && !Evaluation.postComplete ? "final-knowledge" : "final-survey");
         }
 
         public void DeferEvaluation()
@@ -280,7 +322,7 @@ namespace DemocracyWay.NewUI
             evaluationSurveyProgress = CivicUIFactory.Text(rect, "Answered statement count", "", font, 24, CivicUIFactory.Paper);
             var progressRect = evaluationSurveyProgress.rectTransform; progressRect.anchorMin = progressRect.anchorMax = new Vector2(.04f, .065f); progressRect.pivot = new Vector2(0, .5f); progressRect.anchoredPosition = Vector2.zero; progressRect.sizeDelta = new Vector2(900, 54);
             evaluationSubmitButton = CivicUIFactory.Button(rect, "Submit questionnaire", "Υποβολή αξιολόγησης", font, () => { TryFinishEvaluationSurvey(); }, this);
-            var submitRect = (RectTransform)evaluationSubmitButton.transform; submitRect.anchorMin = submitRect.anchorMax = new Vector2(.79f, .065f); submitRect.pivot = new Vector2(.5f, .5f); submitRect.anchoredPosition = Vector2.zero; submitRect.sizeDelta = new Vector2(650, 76);
+            var submitRect = (RectTransform)evaluationSubmitButton.transform; submitRect.anchorMin = submitRect.anchorMax = new Vector2(.79f, .065f); submitRect.pivot = new Vector2(.5f, .5f); submitRect.anchoredPosition = Vector2.zero; submitRect.sizeDelta = new Vector2(370, 76);
             targets["evaluation.submit"] = evaluationSubmitButton; targets["final-survey.primary"] = evaluationSubmitButton;
             Canvas.ForceUpdateCanvases(); evaluationSurveyScroll.verticalNormalizedPosition = 1;
         }
@@ -369,3 +411,4 @@ namespace DemocracyWay.NewUI
         }
     }
 }
+

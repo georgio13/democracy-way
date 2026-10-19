@@ -11,11 +11,15 @@ namespace DemocracyWay.NewUI
 
         void CleanPresentation()
         {
+            string scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+            bool keepApprovedBanners = true;
             foreach (var binding in targets.ToArray())
             {
                 string key = binding.Key.ToLowerInvariant();
                 bool mapMoney = key.StartsWith("map.", StringComparison.Ordinal);
-                if (key.EndsWith(".footer") || key.Contains(".eyebrow") || key.EndsWith(".source") || key.EndsWith(".banner") ||
+                bool keepBanner = keepApprovedBanners;
+                if (key.EndsWith(".banner")) { var banner = Get<GameObject>(binding.Key); if (banner != null) banner.SetActive(true); }
+                if (key.EndsWith(".footer") || key.Contains(".eyebrow") || key.EndsWith(".source") || (!keepBanner && key.EndsWith(".banner")) ||
                     (!mapMoney && (key.EndsWith(".funds") || key.Contains("treasuries"))))
                 {
                     var go = Get<GameObject>(binding.Key);
@@ -30,6 +34,11 @@ namespace DemocracyWay.NewUI
                 {
                     if (timeline != null && (item == timeline || item.IsChildOf(timeline))) continue;
                     string name = item.name.ToLowerInvariant();
+                    if (keepApprovedBanners && name.StartsWith("banner ", StringComparison.Ordinal))
+                    {
+                        item.gameObject.SetActive(true);
+                        continue;
+                    }
                     bool decoration = name.StartsWith("banner ", StringComparison.Ordinal) || name.Contains("eyebrow") || name.Contains("footer") || name.Contains("vertical");
                     if (decoration && item.GetComponentInChildren<UnityEngine.UI.Selectable>(true) == null)
                         item.gameObject.SetActive(false);
@@ -56,7 +65,7 @@ namespace DemocracyWay.NewUI
             if (cityMetricsHUD == null)
             {
                 var panel = CivicUIFactory.Panel(roots["map-stela"].transform, "City indicators", new Color32(30, 56, 60, 244));
-                CivicUIFactory.Box(panel.rectTransform, 550, 154, 1000, 64);
+                CivicUIFactory.Box(panel.rectTransform, 690, 154, 720, 64);
                 var font = Get<TMP_Text>("map.funds")?.font ?? Get<TMP_Text>("map.identity")?.font;
                 cityMetricsHUD = CivicUIFactory.Text(panel.transform, "City indicators values", "", font, 24, new Color32(238, 227, 199, 255));
                 CivicUIFactory.Fill(cityMetricsHUD.rectTransform, new Vector2(18, 7), new Vector2(18, 7));
@@ -64,8 +73,12 @@ namespace DemocracyWay.NewUI
                 cityMetricsHUD.alignment = TextAlignmentOptions.Center;
                 targets["map.city-metrics"] = cityMetricsHUD;
             }
-            cityMetricsHUD.text = "Επισιτισμός " + Campaign.foodSecurity + "/100  ·  Ετοιμότητα " + Signed(Campaign.readiness)
-                + "\nΘεσμική εμπιστοσύνη " + Signed(Campaign.legitimacy) + "  ·  Πολεμική εντολή " + Signed(Campaign.war);
+            var previous = Campaign.cases.Where(c => c.completed).OrderByDescending(c => c.turn).FirstOrDefault();
+            string foodChange = previous != null && previous.foodDelta != 0 ? " (" + Signed(previous.foodDelta) + ")" : "";
+            string trustChange = previous != null && previous.trustDelta != 0 ? " (" + Signed(previous.trustDelta) + ")" : "";
+            cityMetricsHUD.text = "Επισιτισμός " + Campaign.foodSecurity + "/100" + foodChange + "  ·  Ετοιμότητα " + Signed(Campaign.readiness)
+                + "\nΘεσμική εμπιστοσύνη " + Signed(Campaign.legitimacy) + trustChange + "  ·  Πολεμική εντολή " + Signed(Campaign.war);
         }
     }
 }
+

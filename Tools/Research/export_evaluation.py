@@ -77,6 +77,8 @@ def analyse(input_file, output_folder, content_file=P/'EvaluationContent.json'):
         participant=research_participant(e,meta)
         instrument=meta.get('instrumentVersion') or evaluation.get('instrumentVersion') or meta.get('instrument') or 'unknown'
         common={'research_participant_id':participant,'session':e.get('session',''),'instrument_version':instrument,
+          'administration_version':meta.get('administrationVersion','legacy-midcampaign-post-v1'),
+          'post_test_status':meta.get('postTestStatus','unknown'),
           'assessment_id':meta.get('assessmentId') or evaluation.get('assessmentId') or (e.get('session','')+':'+stage),
           'stage':stage,'timestamp_utc':e.get('t',''),'event_id':e.get('eventId',''),
           'prytany':point.get('prytany',e.get('prytany','')),'week':point.get('week',e.get('week','')),
@@ -131,7 +133,7 @@ def analyse(input_file, output_folder, content_file=P/'EvaluationContent.json'):
                 'player_choice_prevailed':answer==collective if stance=='vote' and not observation and answer in [0,1] and collective in [0,1] else '',
                 **choice_deltas,
                 **{'political_'+k:v for k,v in political.items() if not isinstance(v,(dict,list))},'_order':order})
-        if kind in ['assessment_start','assessment_complete','evaluation_offer','evaluation_deferred','evaluation_complete']:
+        if kind in ['assessment_start','assessment_complete','assessment_not_administered','evaluation_start','evaluation_offer','evaluation_deferred','evaluation_complete']:
             points.append({**common,'type':kind})
     # Keep a final answer per item when the questionnaire permits edits. The event CSV
     # still preserves all original answer changes and their timestamps.
@@ -151,7 +153,7 @@ def analyse(input_file, output_folder, content_file=P/'EvaluationContent.json'):
         complete=[a for a in candidates if len({r['construct'] for r in a})==8]
         grouped[key]=complete[0] if complete else candidates[-1]
         if len(candidates)>1:warnings.append({'kind':'multiple-administrations-first-complete-selected','session':key[1],'stage':key[3],'count':len(candidates)})
-    session_keys=sorted({(r['research_participant_id'],r['session'],r['instrument_version']) for r in knowledge})
+    session_keys=sorted({(r['research_participant_id'],r['session'],r['instrument_version']) for r in knowledge+rating_rows+points})
     sessions=[];gains=[]
     for key in session_keys:
         pre=grouped[key+('pre',)];post=grouped[key+('post',)]
@@ -161,9 +163,17 @@ def analyse(input_file, output_folder, content_file=P/'EvaluationContent.json'):
         gain=sum(r['correct'] for r in post)-sum(r['correct'] for r in pre) if paired else ''
         if paired:gains.append(gain)
         post_counts={r['completed_cases'] for r in post}
+        context=[r for r in rows if (r['research_participant_id'],r['session'],r['instrument_version'])==key]
+        observed_statuses={r['post_test_status'] for r in context}
+        post_status='complete' if post_complete else 'partial' if post else 'in_progress' if 'in_progress' in observed_statuses else 'not_administered' if 'not_administered' in observed_statuses else 'not_started'
+        evaluations=[r for r in points if (r['research_participant_id'],r['session'],r['instrument_version'])==key]
         if paired and '' in post_counts:warnings.append({'kind':'missing-assessment-progress','session':key[1]})
         sessions.append({'research_participant_id':key[0],'session':key[1],'instrument_version':key[2],
             'pre_answered':len(pre),'post_answered':len(post),'pre_complete':pre_complete,'post_complete':post_complete,
+            'administration_versions':','.join(sorted({r['administration_version'] for r in context})),
+            'post_test_status':post_status,'post_test_administered':bool(post) or post_status=='in_progress',
+            'evaluation_complete':any(r['type']=='evaluation_complete' for r in evaluations),
+            'evaluation_completed_cases':','.join(map(str,sorted({r['completed_cases'] for r in evaluations if r['type']=='evaluation_complete'},key=str))),
             'paired_complete':paired,'pre_score_8':sum(r['correct'] for r in pre) if pre_complete else '',
             'post_score_8':sum(r['correct'] for r in post) if post_complete else '', 'gain_points_8':gain,
             'post_completed_cases':','.join(map(str,sorted(post_counts,key=str))), 'synthetic':synthetic})
@@ -185,12 +195,14 @@ def analyse(input_file, output_folder, content_file=P/'EvaluationContent.json'):
         write_csv(out/(name+'.csv'),cleaned(items),columns)
     summary={'synthetic':synthetic,'input_events':len(events),'unique_events':len(unique),'deduplicated_events':duplicates,
        'sessions':len(sessions),'paired_complete_sessions':len(gains),'mean_paired_gain_points_8':mean(gains) if gains else None,
+       'post_test_not_administered_sessions':sum(r['post_test_status']=='not_administered' for r in sessions),
        'median_paired_gain_points_8':median(gains) if gains else None,'orientation_denominator':denominator,
        'in_game_orientation_counts':dict(orientation),
        'in_game_orientation_percent':{k:100*v/denominator for k,v in orientation.items()} if denominator else {},
        'abstention_ballots':sum(r['abstention'] for r in decisions),
        'excluded_observation_decisions':sum(r['observation'] and r['stance']=='vote' for r in decisions),
-       'ratings_by_item':rating_summary,'interpretation':'Descriptive pilot data; not validated ideology, causal participation change, or comparative efficacy.'}
+       'ratings_by_item':rating_summary,'knowledge_missing_data':'Mid-campaign evaluation has no post-test. Empty CSV scores are missing, never zero. Paired gain requires eight actual answers in each administration; keep administration versions and exposure separate.',
+       'interpretation':'Descriptive pilot data; not validated ideology, causal participation change, or comparative efficacy.'}
     (out/'Summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2),encoding='utf-8')
     quality={'errors':errors,'warnings':warnings,'contextual_replays_deduplicated':contextual_replays,'no_imputation':True,'auth_uid_exported':False,'email_exported':False,
              'raw_source_ref_exported':False,'synthetic':synthetic}
