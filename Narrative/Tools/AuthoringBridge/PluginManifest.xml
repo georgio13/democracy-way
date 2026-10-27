@@ -1,3 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<PluginManifest Type="MacroPlugin"><Name>Narrative.Migration</Name><Title>Narrative migration</Title><Version>1.0.0</Version><MinimumArticyVersion>4.3.15</MinimumArticyVersion><Description>Native narrative migration and deterministic Unity content export</Description><Properties><Property Name="MultiUser" Value="false"/><Property Name="SingleUser" Value="true"/><Property Name="API" Value="false"/></Properties></PluginManifest>
-

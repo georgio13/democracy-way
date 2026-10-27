@@ -3,10 +3,13 @@ using System.Linq;
 
 namespace DemocracyWay.NewUI
 {
-    // State guards and save-ledger adapter. Narrative calculations execute native articy graphs.
+    // Campaign progression and decision ledger. Calculations are ordinary deterministic C#.
     public static class CampaignRules
     {
-        public static int Turn(GameState state) => (state.prytany - 1) * 5 + state.week - 1;
+        public static int CasesPerPrytany => JsonContent.Settings.casesPerPrytany;
+        public static int TotalCases => JsonContent.Settings.prytanyCount * CasesPerPrytany;
+        public static int Turn(GameState state) => (state.prytany - 1) * CasesPerPrytany + state.week - 1;
+        public static string CaseIdForTurn(int turn) => JsonContent.Plan.prytanies[turn / CasesPerPrytany].caseIds[turn % CasesPerPrytany];
         public static CaseRecord Current(GameState state)
         {
             if (state.campaign == null)
@@ -44,24 +47,15 @@ namespace DemocracyWay.NewUI
             GameRules.Recalculate(state);
         }
 
-        public static bool Answer(GameState state, int answer)
-        {
-            var record = Current(state);
-            if (answer < 0 || answer > 3 || record.knowledge >= 0)
-                return false;
-            record.knowledge = answer;
-            return true;
-        }
-
         public static bool Speak(GameState state, int side, int bonus, InstitutionCase definition = null, int approach = 0)
         {
             if (PoliticalCaseRules.Definition(definition, state) != null) return PoliticalCaseRules.Speak(state, definition, side, approach, bonus);
             var record = Current(state);
             if (record.completed || record.speech >= 0 || side < 0 || side > 2) return false;
-            using var result = ArticyNarrative.Run("Rule_Speech", state, ("Side", side), ("Bonus", Math.Max(0, bonus)));
+            var result = DecisionRules.Speech(state, side, bonus);
             record.speech = side;
-            record.influence = result.Number("Influence");
-            Record(state, "case-" + record.turn + "-speech", side == 2 ? "silent" : side == 0 ? "public-accountability" : "restricted-authority", ArticyNarrative.Effects(state,0,side), lean: side == 0 ? definition?.leanA ?? "mixed" : side == 1 ? definition?.leanB ?? "mixed" : "mixed");
+            record.influence = result.influence;
+            Record(state, "case-" + record.turn + "-speech", side == 2 ? "silent" : side == 0 ? "public-accountability" : "restricted-authority", DecisionRules.Effects(state,0,side), lean: side == 0 ? definition?.leanA ?? "mixed" : side == 1 ? definition?.leanB ?? "mixed" : "mixed");
             return true;
         }
 
@@ -69,14 +63,14 @@ namespace DemocracyWay.NewUI
         {
             if (PoliticalCaseRules.Definition(definition, state) != null) return PoliticalCaseRules.Vote(state, definition, side);
             var record = Current(state);
-            if (record.completed || record.knowledge < 0 || side < 0 || side > 2) return false;
+            if (record.completed || side < 0 || side > 2) return false;
             int speech = record.speech < 0 ? 2 : record.speech;
             int support = OfficialSupport(state,definition?.site ?? 0);
-            using var result = ArticyNarrative.Run("Rule_Vote", state, ("Side", side), ("Speech", speech), ("Turn", record.turn), ("Support", support), ("Influence", record.influence), ("CostA", costA), ("CostB", costB), ("WarInput", war), ("Observation", observation));
+            var result = DecisionRules.Vote(state, side, speech, support, record.influence, costA, costB, war, observation);
             record.speech = speech;
             record.vote = side;
-            record.majority = result.Number("Majority");
-            record.cityDelta = result.Number("CityDelta");
+            record.majority = result.majority;
+            record.cityDelta = result.cityDelta;
             int pay = !observation && side != 2 ? Math.Max(0,definition?.attendanceObols ?? 0) : 0;
             record.personalDelta = Math.Min(pay,Math.Max(0,state.cityFunds + record.cityDelta));
             record.cityDelta -= record.personalDelta;
@@ -88,11 +82,11 @@ namespace DemocracyWay.NewUI
             if(!observation && side!=2) state.campaign.personalWar += side==0 ? war : -war;
             var profile=side==0 ? definition?.metricsA : side==1 ? definition?.metricsB : null;
             var before=state.metrics.Copy();
-            var effects=ArticyNarrative.Effects(state,1,side,profile,speech,observation);
+            var effects=DecisionRules.Effects(state,1,side,profile,speech,observation);
             record.completed = true;
-            state.campaign.war += result.Number("WarDelta");
-            state.campaign.readiness += result.Number("ReadinessDelta");
-            state.campaign.legitimacy += result.Number("LegitimacyDelta");
+            state.campaign.war += result.warDelta;
+            state.campaign.readiness += result.readinessDelta;
+            state.campaign.legitimacy += result.legitimacyDelta;
             Record(state, "case-" + record.turn + "-vote", (observation ? "reflection-" : "vote-") + side, effects, record.cityDelta, record.personalDelta, record.institutionalLean);
             record.metricDelta = Difference(before,state.metrics);
             return true;
@@ -113,45 +107,54 @@ namespace DemocracyWay.NewUI
         public static string Advance(GameState state)
         {
             if (!Current(state).completed) return null;
-            using var result = ArticyNarrative.Run("Rule_AdvanceWeek", state);
-            state.week = result.Number("Week");
-            state.phase = result.Text("NextPhase");
+            if (state.week < CasesPerPrytany) { state.week++; state.phase = "week-transition"; }
+            else state.phase = "prytany-transition";
+
             return state.phase;
         }
 
         public static string NextPrytany(GameState state)
         {
             if (state.phase != "prytany-transition" || !Current(state).completed) return null;
-            using var result = ArticyNarrative.Run("Rule_AdvancePrytany", state);
-            state.phase = result.Text("NextPhase");
-            if (state.phase == "ending-city") Endings(state);
-            else { state.prytany = result.Number("Prytany"); state.week = result.Number("Week"); state.currentTribe = -1; }
+            if (state.prytany >= JsonContent.Settings.prytanyCount) { state.phase = "ending-city"; Endings(state); }
+            else { state.prytany++; state.week = 1; state.currentTribe = -1; state.phase = "prytany-title"; }
+
             return state.phase;
         }
 
         public static void Endings(GameState state)
         {
-            using var result = ArticyNarrative.Run("Rule_Endings", state);
-            state.campaign.cityEnding = result.Text("CityEnding");
-            state.campaign.personalEnding = result.Text("PersonalEnding");
+            var c = state.campaign; var m = state.metrics; var settings = JsonContent.Settings.endings;
+            c.cityEnding = "agreement"; c.personalEnding = "citizen";
+            if (c.war >= settings.warThreshold) c.cityEnding = "defeat";
+            if (c.war >= settings.warThreshold && c.readiness >= settings.victoryReadiness && state.cityFunds >= settings.victoryCityFunds) c.cityEnding = "victory";
+            if (c.war <= -settings.warThreshold && c.legitimacy <= settings.subjectionLegitimacy) c.cityEnding = "subjection";
+            if (c.war > -settings.warThreshold && c.war < settings.warThreshold && c.legitimacy >= 0) c.cityEnding = "sovereignty";
+            if (c.cityEnding == "subjection") c.personalEnding = "home";
+            if (c.cityEnding == "agreement" && m.persuasion >= 45) c.personalEnding = "envoy";
+            if (c.cityEnding == "victory" && m.recognition >= 45 && m.ethics >= 40 && m.consistency >= 40) c.personalEnding = "honour";
+            if (c.cityEnding == "defeat" && c.personalWar >= settings.exilePersonalWar) c.personalEnding = "exile";
+            if (state.city.corruptionRisk >= 4) c.personalEnding = "trial";
         }
+
+
 
         public static bool ValidCampaign(CampaignState campaign)
         {
             if (campaign == null)
                 return true; // Saves written before campaign UI were introduced remain readable.
-            if (campaign.cases == null || campaign.cases.Count > 50 || campaign.initialAnswers == null || campaign.finalAnswers == null || campaign.initialAnswers.Length != 8 || campaign.finalAnswers.Length != 8 || campaign.survey == null || campaign.survey.Length != 2 || campaign.initialIndex < 0 || campaign.initialIndex > 8 || campaign.finalIndex < 0 || campaign.finalIndex > 8)
+            if (campaign.cases == null || campaign.cases.Count > 50 || campaign.initialAnswers == null || campaign.finalAnswers == null || campaign.initialAnswers.Length > 200 || campaign.finalAnswers.Length > 200 || campaign.survey == null || campaign.survey.Length != 2 || campaign.initialIndex < 0 || campaign.initialIndex > campaign.initialAnswers.Length || campaign.finalIndex < 0 || campaign.finalIndex > campaign.finalAnswers.Length)
                 return false;
             if (campaign.initialAnswers.Any(a => a < -1 || a > 3) || campaign.finalAnswers.Any(a => a < -1 || a > 3) || campaign.survey.Any(a => a != -1 && (a < 1 || a > 7)))
                 return false;
             var seen = new System.Collections.Generic.HashSet<int>();
             foreach (var record in campaign.cases)
-                if (record == null || record.turn < 0 || record.turn > 49 || !seen.Add(record.turn) || record.knowledge < -1 || record.knowledge > 3 || record.speech < -1 || record.speech > 2 || record.vote < -1 || record.vote > 2 || record.majority < -1 || record.majority > 1 || (record.completed && (record.knowledge < 0 || record.vote < 0 || record.majority < 0)))
+                if (record == null || record.turn < 0 || record.turn > 49 || !seen.Add(record.turn) || record.knowledge < -1 || record.knowledge > 3 || record.speech < -1 || record.speech > 2 || record.vote < -1 || record.vote > 2 || record.majority < -1 || record.majority > 1 || (record.completed && (record.vote < 0 || record.majority < 0)))
                     return false;
             return true;
         }
 
-        public static bool ValidPhase(string id) => !string.IsNullOrEmpty(id) && (id == "appeal" || id == "knowledge" || id == "knowledge-correct" || id == "knowledge-incorrect" || id == "procedure-briefing" || id == "deliberation" || id == "speech" || id == "vote" || id == "vote-result" || id == "vote-abstention" || id == "week-report" || id == "week-transition" || id == "prytany-transition" || id == "initial-knowledge" || id == "final-knowledge" || id == "final-survey" || id == "ending-city" || id == "ending-personal" || id == "complete" || new[]
+        public static bool ValidPhase(string id) => !string.IsNullOrEmpty(id) && (id == "demographics" || id == "appeal" || id == "knowledge" || id == "knowledge-correct" || id == "knowledge-incorrect" || id == "procedure-briefing" || id == "deliberation" || id == "speech" || id == "vote" || id == "vote-result" || id == "vote-abstention" || id == "week-report" || id == "week-transition" || id == "prytany-transition" || id == "initial-knowledge" || id == "initial-tendencies" || id == "final-tendencies" || id == "final-knowledge" || id == "final-survey" || id == "ending-city" || id == "ending-personal" || id == "complete" || new[]
         {
             "institution-history",
             "institution-deme",

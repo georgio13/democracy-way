@@ -38,7 +38,7 @@ namespace DemocracyWay.NewUI
                 RenderCityBadges();
                 RenderCampaignMap();
                 RenderCityMetricsHUD();
-                RenderEvaluationAccess();
+
             }
             else if (IsCityScreen(currentScreen))
                 RenderCity();
@@ -66,9 +66,9 @@ namespace DemocracyWay.NewUI
         {
             bool loading = currentScreen == "slots-load";
             string prefix = loading ? "slots-load" : "slots-new";
-            SetText(prefix + ".eyebrow", loading ? ArticyNarrative.Copy("Copy_88432a37c69e06d6") : ArticyNarrative.Copy("Copy_b193aad902079130"));
-            SetText(prefix + ".title", loading ? ArticyNarrative.Copy("Copy_0f6b2ffdfe795cf8") : ArticyNarrative.Copy("Copy_370c113c787a399b"));
-            SetText(prefix + ".primary.label", loading ? ArticyNarrative.Copy("Copy_027b0b558dd1e26a") : ArticyNarrative.Copy("Copy_d4cf2992479f2dad"));
+            SetText(prefix + ".eyebrow", loading ? JsonContent.Copy("Copy_88432a37c69e06d6") : JsonContent.Copy("Copy_b193aad902079130"));
+            SetText(prefix + ".title", loading ? JsonContent.Copy("Copy_0f6b2ffdfe795cf8") : JsonContent.Copy("Copy_370c113c787a399b"));
+            SetText(prefix + ".primary.label", loading ? JsonContent.Copy("Copy_027b0b558dd1e26a") : JsonContent.Copy("Copy_d4cf2992479f2dad"));
             bool allowedSelection = false, anyAvailable = false;
             for (int i = 0; i < SaveStore.SlotCount; i++)
             {
@@ -78,13 +78,13 @@ namespace DemocracyWay.NewUI
                 bool allowed = loading ? valid : empty;
                 bool chosen = selectedSlot == i && allowed;
                 anyAvailable |= allowed;
-                string name = valid ? result.state.playerName : empty ? ArticyNarrative.Copy("Copy_ae8812cabfe6d28c") : ArticyNarrative.Copy("Copy_aa1d0930e0ebc648");
+                string name = valid ? result.state.playerName : empty ? JsonContent.Copy("Copy_ae8812cabfe6d28c") : JsonContent.Copy("Copy_aa1d0930e0ebc648");
                 SetText(key + ".title", name);
-                string detail = empty ? (loading ? ArticyNarrative.Copy("Copy_202c21be0bed7103") : ArticyNarrative.Copy("Copy_e46a7e190a1a355d")) : valid ? SlotStage(result.state) : ArticyNarrative.Copy("Copy_b576f5addc0d5a4b");
+                string detail = empty ? (loading ? JsonContent.Copy("Copy_202c21be0bed7103") : JsonContent.Copy("Copy_e46a7e190a1a355d")) : valid ? SlotStage(result.state) : JsonContent.Copy("Copy_b576f5addc0d5a4b");
                 if (valid && DateTime.TryParse(result.savedAtUtc, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out DateTime date))
                 {
                     date = date.ToLocalTime();
-                    string day = date.Date == DateTime.Today ? ArticyNarrative.Copy("Copy_cf2ea4c9b5150068") : date.Date == DateTime.Today.AddDays(-1) ? ArticyNarrative.Copy("Copy_f57c54b41ba935aa") : date.ToString("dd/MM/yyyy");
+                    string day = date.Date == DateTime.Today ? JsonContent.Copy("Copy_cf2ea4c9b5150068") : date.Date == DateTime.Today.AddDays(-1) ? JsonContent.Copy("Copy_f57c54b41ba935aa") : date.ToString("dd/MM/yyyy");
                     detail += "\n" + day + ", " + date.ToString("HH:mm");
                 }
 
@@ -129,29 +129,29 @@ namespace DemocracyWay.NewUI
             }
 
             SetInteractable(prefix + ".primary", allowedSelection);
-            SetText(prefix + ".hint", loading ? ArticyNarrative.Copy("Copy_eaae7ae5917b8623") : anyAvailable ? ArticyNarrative.Copy("Copy_74e5162662e35f3f") : ArticyNarrative.Copy("Copy_f66c2696f5c74aff"));
+            SetText(prefix + ".hint", loading ? JsonContent.Copy("Copy_eaae7ae5917b8623") : anyAvailable ? JsonContent.Copy("Copy_74e5162662e35f3f") : JsonContent.Copy("Copy_f66c2696f5c74aff"));
         }
 
         private static string SlotStage(GameState state)
         {
             if (state.phase == "prologue")
-                return ArticyNarrative.Copy("Copy_25b0ef0e5008174d");
+                return JsonContent.Copy("Copy_25b0ef0e5008174d");
             if (state.phase == "biography" || state.phase == "summary")
-                return ArticyNarrative.Copy("Copy_1ca3a318398adcc3");
+                return JsonContent.Copy("Copy_1ca3a318398adcc3");
             string[] greek =
             {
-                ArticyNarrative.Copy("Copy_89f9d2fb8432db42"),
-                ArticyNarrative.Copy("Copy_98b57fb1137b35bd"),
-                ArticyNarrative.Copy("Copy_f235b2d4e165b68e"),
-                ArticyNarrative.Copy("Copy_a8dd9dae37132b84"),
-                ArticyNarrative.Copy("Copy_5f826232605f221e"),
-                ArticyNarrative.Copy("Copy_3c102fabd92cfdea"),
-                ArticyNarrative.Copy("Copy_c7c43d61ccac1cb9"),
-                ArticyNarrative.Copy("Copy_7dd80f6afc4ed10b"),
-                ArticyNarrative.Copy("Copy_2dd5885ba989d7ee"),
-                ArticyNarrative.Copy("Copy_07b1f0f313750d22")
+                JsonContent.Copy("Copy_89f9d2fb8432db42"),
+                JsonContent.Copy("Copy_98b57fb1137b35bd"),
+                JsonContent.Copy("Copy_f235b2d4e165b68e"),
+                JsonContent.Copy("Copy_a8dd9dae37132b84"),
+                JsonContent.Copy("Copy_5f826232605f221e"),
+                JsonContent.Copy("Copy_3c102fabd92cfdea"),
+                JsonContent.Copy("Copy_c7c43d61ccac1cb9"),
+                JsonContent.Copy("Copy_7dd80f6afc4ed10b"),
+                JsonContent.Copy("Copy_2dd5885ba989d7ee"),
+                JsonContent.Copy("Copy_07b1f0f313750d22")
             };
-            return greek[Mathf.Clamp(state.prytany - 1, 0, 9)] + ArticyNarrative.Copy("Copy_9573ff89eebfbd15") + state.week + " / 5";
+            return greek[Mathf.Clamp(state.prytany - 1, 0, 9)] + JsonContent.Copy("Copy_9573ff89eebfbd15") + state.week + " / " + CampaignRules.CasesPerPrytany;
         }
 
         private void RenderPrologue()
@@ -331,10 +331,10 @@ namespace DemocracyWay.NewUI
         private void RenderSummary()
         {
             EnsureState();
-            SetText("summary.body", State.playerName + "\n" + State.playerAge + ArticyNarrative.Copy("Copy_b0ff9eb7a58bf3d6") + TribeName(State.tribeIndex) + "\n" + config.economicClasses[Mathf.Clamp(State.economicClassIndex, 0, config.economicClasses.Count - 1)] + ArticyNarrative.Copy("Copy_72b5e49b1563ea57") + State.deme + ArticyNarrative.Copy("Copy_a90744770635bb27") + TrittysLabel() + "\n" + State.profession + "\n" + State.offices);
+            SetText("summary.body", State.playerName + "\n" + State.playerAge + JsonContent.Copy("Copy_b0ff9eb7a58bf3d6") + TribeName(State.tribeIndex) + "\n" + config.economicClasses[Mathf.Clamp(State.economicClassIndex, 0, config.economicClasses.Count - 1)] + JsonContent.Copy("Copy_72b5e49b1563ea57") + State.deme + JsonContent.Copy("Copy_a90744770635bb27") + TrittysLabel() + "\n" + State.profession + "\n" + State.offices);
             SetText("summary.metrics", State.metrics.ToGreekLines());
             SetText("summary.name", State.playerName);
-            SetText("summary.age", ArticyNarrative.Copy("Copy_d27fcffa71ab967e") + State.playerAge + ArticyNarrative.Copy("Copy_750d677c988d9482"));
+            SetText("summary.age", JsonContent.Copy("Copy_d27fcffa71ab967e") + State.playerAge + JsonContent.Copy("Copy_750d677c988d9482"));
             SetText("summary.identity.0", "Φυλή: " + TribeName(State.tribeIndex) + "\nΔήμος: " + State.deme + "\nΤριττύα: " + TrittysLabel());
             SetText("summary.identity.1", State.profession + "\n" + config.economicClasses[Mathf.Clamp(State.economicClassIndex, 0, config.economicClasses.Count - 1)]);
             SetText("summary.identity.2", (State.offices ?? "").Replace(" · ", "\n"));
@@ -373,16 +373,16 @@ namespace DemocracyWay.NewUI
             EnsureState();
             string[] ordinals =
             {
-                ArticyNarrative.Copy("Copy_5c46fb5ce3c0a458"),
-                ArticyNarrative.Copy("Copy_8509d0fc5943c94c"),
-                ArticyNarrative.Copy("Copy_d4f1082945860c05"),
-                ArticyNarrative.Copy("Copy_5f489244eac49453"),
-                ArticyNarrative.Copy("Copy_0b6a7606784364a7"),
-                ArticyNarrative.Copy("Copy_1adbd881e87894f4"),
-                ArticyNarrative.Copy("Copy_e05547ea8d704479"),
-                ArticyNarrative.Copy("Copy_d336b8d752196427"),
-                ArticyNarrative.Copy("Copy_84ed3f352e51672f"),
-                ArticyNarrative.Copy("Copy_ba8676935e1bf943")
+                JsonContent.Copy("Copy_5c46fb5ce3c0a458"),
+                JsonContent.Copy("Copy_8509d0fc5943c94c"),
+                JsonContent.Copy("Copy_d4f1082945860c05"),
+                JsonContent.Copy("Copy_5f489244eac49453"),
+                JsonContent.Copy("Copy_0b6a7606784364a7"),
+                JsonContent.Copy("Copy_1adbd881e87894f4"),
+                JsonContent.Copy("Copy_e05547ea8d704479"),
+                JsonContent.Copy("Copy_d336b8d752196427"),
+                JsonContent.Copy("Copy_84ed3f352e51672f"),
+                JsonContent.Copy("Copy_ba8676935e1bf943")
             };
             string[] roman =
             {
@@ -398,10 +398,10 @@ namespace DemocracyWay.NewUI
                 "X"
             };
             int chapter = Mathf.Clamp(State.prytany - 1, 0, 9);
-            SetText("prytany.title", ArticyNarrative.Copy("Copy_3e3295844f841450").TrimEnd() + " " + ordinals[chapter].Trim() + " " + ArticyNarrative.Copy("Copy_8ba25509b337198d").TrimStart());
+            SetText("prytany.title", JsonContent.Copy("Copy_3e3295844f841450").TrimEnd() + " " + ordinals[chapter].Trim() + " " + JsonContent.Copy("Copy_8ba25509b337198d").TrimStart());
             SetText("prytany.roman", roman[chapter]);
-            SetText("prytany.tribe", State.currentTribe >= 0 ? TribeName(State.currentTribe).ToUpperInvariant() + ArticyNarrative.Copy("Copy_0318871c2b7b5380") : ArticyNarrative.Copy("Copy_8b44729931e24eab"));
-            SetText("prytany.footer", ArticyNarrative.Copy("Copy_228a792defd35fbf") + State.week + ArticyNarrative.Copy("Copy_8177807e48b3c5c3"));
+            SetText("prytany.tribe", State.currentTribe >= 0 ? TribeName(State.currentTribe).ToUpperInvariant() + JsonContent.Copy("Copy_0318871c2b7b5380") : JsonContent.Copy("Copy_8b44729931e24eab"));
+            SetText("prytany.footer", JsonContent.Copy("Copy_228a792defd35fbf") + State.week + JsonContent.Copy("Copy_8177807e48b3c5c3"));
             DemocracyQuote quote = config.prytanyQuotes.Count > 0 ? config.prytanyQuotes[(State.prytany - 1) % config.prytanyQuotes.Count] : null;
             SetText("prytany.quote", quote != null ? quote.text : "");
             SetText("prytany.attribution", quote != null ? (quote.attribution ?? "").Split('·')[0].Trim() : "");
@@ -421,10 +421,10 @@ namespace DemocracyWay.NewUI
         private void RenderLottery()
         {
             EnsureState();
-            SetText("lottery.body", State.currentTribe < 0 ? ArticyNarrative.Copy("Copy_f98d9d533ac8b805") : ArticyNarrative.Copy("Copy_c1f733670aebd7d7") + TribeName(State.currentTribe) + ".");
+            SetText("lottery.body", State.currentTribe < 0 ? JsonContent.Copy("Copy_f98d9d533ac8b805") : JsonContent.Copy("Copy_c1f733670aebd7d7") + TribeName(State.currentTribe) + ".");
             for (int i = 0; i < 10; i++)
             {
-                string status = State.currentTribe == i ? ArticyNarrative.Copy("Copy_a21b664817565e8c") : State.drawnTribes.Contains(i) ? ArticyNarrative.Copy("Copy_0008e0f7f5eda78f") + (State.drawnTribes.IndexOf(i) + 1).ToString("00") : ArticyNarrative.Copy("Copy_7961be8330cfef48");
+                string status = State.currentTribe == i ? JsonContent.Copy("Copy_a21b664817565e8c") : State.drawnTribes.Contains(i) ? JsonContent.Copy("Copy_0008e0f7f5eda78f") + (State.drawnTribes.IndexOf(i) + 1).ToString("00") : JsonContent.Copy("Copy_7961be8330cfef48");
                 SetText("lottery.tribe." + i, status);
                 CanvasGroup fade = Get<CanvasGroup>("lottery.tribe." + i + ".fade");
                 if (fade != null)
@@ -433,8 +433,8 @@ namespace DemocracyWay.NewUI
                 SetActive("lottery.tribe." + i + ".used", State.drawnTribes.Contains(i) && State.currentTribe != i);
             }
 
-            SetText("lottery.result", State.currentTribe >= 0 ? TribeName(State.currentTribe) + ArticyNarrative.Copy("Copy_cebe6ca122c440f7") : ArticyNarrative.Copy("Copy_83229ddd6f5397d0"));
-            SetText("lottery.primary.label", State.currentTribe >= 0 ? ArticyNarrative.Copy("Copy_f3fc4caef743a68e") : ArticyNarrative.Copy("Copy_7e810e5a6a10a819"));
+            SetText("lottery.result", State.currentTribe >= 0 ? TribeName(State.currentTribe) + JsonContent.Copy("Copy_cebe6ca122c440f7") : JsonContent.Copy("Copy_83229ddd6f5397d0"));
+            SetText("lottery.primary.label", State.currentTribe >= 0 ? JsonContent.Copy("Copy_f3fc4caef743a68e") : JsonContent.Copy("Copy_7e810e5a6a10a819"));
             SetInteractable("lottery.primary", State.currentTribe >= 0 || State.drawnTribes.Count < 10);
             SetInteractable("lottery.begin", State.currentTribe >= 0);
         }
@@ -442,15 +442,15 @@ namespace DemocracyWay.NewUI
         private void RenderMap()
         {
             EnsureState();
-            SetText("map.status", ArticyNarrative.Copy("Copy_0008e0f7f5eda78f") + State.prytany + ArticyNarrative.Copy("Copy_8ba8e7d0292e8747") + State.week + " / 5");
-            SetText("map.week", State.week + " / 5");
+            SetText("map.status", JsonContent.Copy("Copy_0008e0f7f5eda78f") + State.prytany + JsonContent.Copy("Copy_8ba8e7d0292e8747") + State.week + " / " + CampaignRules.CasesPerPrytany);
+            SetText("map.week", State.week + " / " + CampaignRules.CasesPerPrytany);
             SetText("map.identity", State.playerName);
             SetText("map.office.label", State.offices);
             SetText("map.city", State.cityFunds.ToString("N0") + " οβ.");
             SetText("map.personal", State.personalFunds.ToString("N0") + " οβ.");
             string[] prytanyNumerals = { "Α΄", "Β΄", "Γ΄", "Δ΄", "Ε΄", "ΣΤ΄", "Ζ΄", "Η΄", "Θ΄", "Ι΄" };
             SetText("map.prytany", prytanyNumerals[Mathf.Clamp(State.prytany - 1, 0, 9)] + "\nπρυτανεία");
-            SetText("map.week", State.week + " / 5");
+            SetText("map.week", State.week + " / " + CampaignRules.CasesPerPrytany);
             for (int i = 0; i < 10; i++)
             {
                 var tick = Get<PanelGraphic>("map.tick." + i);
@@ -461,15 +461,17 @@ namespace DemocracyWay.NewUI
             for (int i = 0; i < 5; i++)
             {
                 var tick = Get<PanelGraphic>("map.bead." + i);
-                if (tick != null)
+                if (tick != null) {
+                    tick.gameObject.SetActive(i < CampaignRules.CasesPerPrytany);
                     tick.color = i == State.week - 1 ? new Color32(232, 223, 203, 255) : i < State.week - 1 ? new Color32(180, 154, 98, 255) : new Color32(66, 93, 83, 255);
+                }
             }
 
-            SetText("map.funds", ArticyNarrative.Copy("Copy_047651c755e3bfc4") + State.cityFunds.ToString("N0") + ArticyNarrative.Copy("Copy_a056bcffd38f7391") + State.personalFunds.ToString("N0") + " οβ.");
+            SetText("map.funds", JsonContent.Copy("Copy_047651c755e3bfc4") + State.cityFunds.ToString("N0") + JsonContent.Copy("Copy_a056bcffd38f7391") + State.personalFunds.ToString("N0") + " οβ.");
             SetText("map.tribe", TribeName(State.currentTribe));
             SetImage("map.tribe.emblem", State.currentTribe >= 0 ? config.tribes[State.currentTribe].emblem : null);
             SetImage("map.player.emblem", config.tribes[State.tribeIndex].emblem);
-            SetText("map.notice", ArticyNarrative.Copy("Copy_2aede956f376db8b"));
+            SetText("map.notice", JsonContent.Copy("Copy_2aede956f376db8b"));
         }
 
         private void RenderProfile()
@@ -477,10 +479,10 @@ namespace DemocracyWay.NewUI
             EnsureState();
             SetText("profile.heading", State.playerName);
             SetText("profile.name", State.playerName);
-            SetText("profile.age", State.playerAge + ArticyNarrative.Copy("Copy_b0ff9eb7a58bf3d6") + State.profession);
+            SetText("profile.age", State.playerAge + JsonContent.Copy("Copy_b0ff9eb7a58bf3d6") + State.profession);
             SetText("profile.origin", State.deme + " · " + TribeName(State.tribeIndex));
             SetImage("profile.emblem", config.tribes[State.tribeIndex].emblem);
-            SetText("profile.funds", ArticyNarrative.Copy("Copy_9fd25730f3bc1ab9") + State.cityFunds.ToString("N0") + ArticyNarrative.Copy("Copy_9bc90cc634c1c0ff") + State.personalFunds.ToString("N0") + " οβ.");
+            SetText("profile.funds", JsonContent.Copy("Copy_9fd25730f3bc1ab9") + State.cityFunds.ToString("N0") + JsonContent.Copy("Copy_9bc90cc634c1c0ff") + State.personalFunds.ToString("N0") + " οβ.");
             string[] identity =
             {
                 TribeName(State.tribeIndex),

@@ -5,12 +5,20 @@ namespace DemocracyWay.NewUI
     [Serializable]
     public sealed class EvaluationContent
     {
-        public int schemaVersion, minimumCompletedCases = 5, offerAtPrytany = 2;
+        public int schemaVersion, minimumCompletedCases = 20, offerAtPrytany = 10;
         public string instrumentVersion, language, offerTitle, offerBody, offerNow, offerLater;
         public string questionnaireStatus, knowledgeDesignNote;
+        public string questionnaireInstructions, notApplicableLabel, openFeedbackPrompt;
+        public int openFeedbackMaxLength = 1000;
+        public bool openFeedbackOptional = true;
         public string[] ratingLabels;
         public EvaluationQuestion[] onboarding, postTest;
         public EvaluationRating[] experience, participationIntention;
+        public DemographicsContent demographics;
+        public EvaluationRating[] tendencies;
+        public string knowledgeVersion, tendencyVersion, tendencyInstructions, tendencyStatus;
+        public string[] tendencyRatingLabels;
+        public bool showBaselineFeedback;
         public EvaluationSource[] sources;
     }
 
@@ -26,7 +34,11 @@ namespace DemocracyWay.NewUI
     public sealed class EvaluationRating
     {
         public string id, construct, prompt, sourceRef;
-        public bool reverse;
+        public string group, section, instrumentSection, officialItemId;
+        public bool reverse, allowNotApplicable;
+        public string orientation;
+        public float analysisWeight = 1;
+        public bool required = true;
     }
 
     [Serializable]
@@ -36,14 +48,26 @@ namespace DemocracyWay.NewUI
     public sealed class EvaluationPoint
     {
         public string utc, caseId, lastCompletedCaseId, contentVersion, phase;
-        public int prytany, week, turn, completedCases;
+        public int prytany, week, turn, completedCases, casesPerPrytany, totalCases;
         public float activeSeconds, progress;
     }
 
     [Serializable]
     public sealed class EvaluationState
     {
+        public DemographicsState demographics = new DemographicsState();
         public string instrumentVersion, researchParticipantId;
+        public string tendencyVersion;
+        public string[] tendencyItemIds;
+        public int[] baselineTendencyAnswers = Array.Empty<int>(), finalTendencyAnswers = Array.Empty<int>();
+        public int baselineTendencyIndex, finalTendencyIndex;
+        public bool baselineTendencyComplete, finalTendencyComplete;
+        public EvaluationPoint baselineTendencyPoint, finalTendencyPoint;
+        public string submissionId, openFeedback;
+        public string[] experienceItemIds, intentionItemIds;
+        public bool synthetic;
+        public string syntheticScenario;
+        public EvaluationSurveyArchive[] archivedSurveys;
         public string exposure = "biography+baseline-feedback";
         public string administrationVersion = "experience-only-midcampaign-v2";
         public string postTestStatus = "not_started";
@@ -55,5 +79,16 @@ namespace DemocracyWay.NewUI
         public bool offered, deferred, completed;
         public EvaluationPoint baselinePoint, offerPoint, startPoint, submitPoint, postPoint;
         static int[] Empty(int length) { var a = new int[length]; for (int i = 0; i < length; i++) a[i] = -1; return a; }
+    }
+
+    // A changed instrument never reinterprets old positional answers as new items.
+    [Serializable]
+    public sealed class EvaluationSurveyArchive
+    {
+        public string instrumentVersion, administrationVersion, submissionId, openFeedback;
+        public string[] experienceItemIds, intentionItemIds;
+        public int[] experienceAnswers, intentionAnswers;
+        public EvaluationPoint offerPoint, startPoint, submitPoint;
+        public bool completed;
     }
 }

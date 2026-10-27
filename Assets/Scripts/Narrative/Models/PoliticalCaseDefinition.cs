@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DemocracyWay.NewUI
 {
-    // Authored in the case's articy feature. Unity only adapts the published data.
+    // Authored directly in the case JSON, together with its arguments and choices.
     [Serializable]
     public sealed class PoliticalCaseDefinition
     {
@@ -14,17 +14,9 @@ namespace DemocracyWay.NewUI
         public int lowFundsThreshold = 6500, lowFundsPenalty = -4;
         public int foodDeltaA, foodDeltaB, trustDeltaA, trustDeltaB, readinessDeltaA, readinessDeltaB;
         public string choiceA, choiceB, outcomeA, outcomeB, historicalStatus;
-        public PoliticalDialogueLine[] dialogue;
+        [NonSerialized] public PoliticalDialogueLine[] dialogue;
         public PoliticalSpeechApproach[] approaches;
 
-        public static PoliticalCaseDefinition Parse(string value)
-        {
-            if (string.IsNullOrWhiteSpace(value)) return null;
-            var result = JsonUtility.FromJson<PoliticalCaseDefinition>(value);
-            if (result == null || result.version != 1 || result.dialogue == null || result.dialogue.Length == 0 || result.approaches == null || result.approaches.Length != 3)
-                throw new InvalidOperationException("Incomplete authored political case.");
-            return result;
-        }
     }
 
     [Serializable]

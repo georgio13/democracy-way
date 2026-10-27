@@ -14,12 +14,13 @@ namespace DemocracyWay.NewUI
         public AudioClip hoverSound;
         public Texture2D cursorTexture;
         public Vector2 cursorHotspot;
-        public int contentVersion = 1;
-        public int playerAge = 30;
-        public int startingPersonalFunds = 120;
-        public int startingCityFunds = 10000;
-        public string defaultProfession = "Τεχνίτης";
-        public CharacterMetrics startingMetrics = new CharacterMetrics
+        public List<NamedSprite> contentSprites = new List<NamedSprite>();
+        [System.NonSerialized] public int contentVersion = 1;
+        [System.NonSerialized] public int playerAge = 30;
+        [System.NonSerialized] public int startingPersonalFunds = 120;
+        [System.NonSerialized] public int startingCityFunds = 10000;
+        [System.NonSerialized] public string defaultProfession = "Τεχνίτης";
+        [System.NonSerialized] public CharacterMetrics startingMetrics = new CharacterMetrics
         {
             consistency = 50,
             ethics = 50,
@@ -28,17 +29,17 @@ namespace DemocracyWay.NewUI
             parrhesia = 35,
             recognition = 10
         };
-        public List<ProloguePage> prologue = new List<ProloguePage>();
-        public List<BiographyStep> biography = new List<BiographyStep>();
-        public List<TribeDefinition> tribes = new List<TribeDefinition>();
-        public List<string> economicClasses = new List<string>
+        [System.NonSerialized] public List<ProloguePage> prologue = new List<ProloguePage>();
+        [System.NonSerialized] public List<BiographyStep> biography = new List<BiographyStep>();
+        [System.NonSerialized] public List<TribeDefinition> tribes = new List<TribeDefinition>();
+        [System.NonSerialized] public List<string> economicClasses = new List<string>
         {
             "Πεντακοσιομέδιμνοι",
             "Ιππείς",
             "Ζευγίτες",
             "Θήτες"
         };
-        public List<DemocracyQuote> prytanyQuotes = new List<DemocracyQuote>();
+        [System.NonSerialized] public List<DemocracyQuote> prytanyQuotes = new List<DemocracyQuote>();
         public AudioClip MusicForPrytany(int prytany)
         {
             int index = prytany - 1;

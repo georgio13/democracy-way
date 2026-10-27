@@ -2,11 +2,11 @@ using System;
 
 namespace DemocracyWay.NewUI
 {
-    // Boundary adapter for the authored articy political rules, not a second rule engine.
+    // Political support is calculated from authored case data and the current city/character state.
     public static class PoliticalCaseRules
     {
         public const string Version = "political-core-1";
-        public static PoliticalCaseDefinition Definition(InstitutionCase c) => PoliticalCaseDefinition.Parse(c?.politicsData);
+        public static PoliticalCaseDefinition Definition(InstitutionCase c) => c?.politics;
         // Keep an already spoken/completed legacy case on its original rule set.
         // Changing the current export must not combine old influence with new vote rules.
         public static PoliticalCaseDefinition Definition(InstitutionCase c, GameState state)
@@ -27,20 +27,16 @@ namespace DemocracyWay.NewUI
             var approach = side < 2 ? p.approaches[approachIndex] : null;
             var w = approach?.weights ?? new CharacterMetrics();
             int weightTotal = w.consistency + w.ethics + w.authority + w.persuasion + w.parrhesia + w.recognition;
-            using var result = ArticyNarrative.Run("Rule_PoliticalSpeech", state,
-                ("Side", side), ("Threshold", Math.Max(1, weightTotal)), ("Bonus", WriterInfluence(p, writerBonus)),
-                ("MaxInfluence", p.maxSpeakerInfluence), ("ArgumentBonus", approach?.argumentBonus ?? 0),
-                ("DeltaConsistency", w.consistency), ("DeltaEthics", w.ethics), ("DeltaAuthority", w.authority),
-                ("DeltaPersuasion", w.persuasion), ("DeltaParrhesia", w.parrhesia), ("DeltaRecognition", w.recognition));
+            var result = DecisionRules.PoliticalSpeech(state, side, w, weightTotal, WriterInfluence(p, writerBonus), p.maxSpeakerInfluence, approach?.argumentBonus ?? 0);
             record.politicalVersion = Version;
             record.speech = side;
             record.pendingSpeechSide = -1;
             record.speechApproach = approachIndex;
             record.speechApproachId = approach?.id;
             record.speechMetricsBefore = state.metrics.Copy();
-            record.speakerComponent = result.Number("SpeakerInfluence");
-            record.writerComponent = result.Number("WriterInfluence");
-            record.influence = result.Number("Influence");
+            record.speakerComponent = result.speakerInfluence;
+            record.writerComponent = result.writerInfluence;
+            record.influence = result.influence;
             var effects = approach?.metrics?.Copy() ?? new CharacterMetrics();
             CampaignRules.Record(state, "case-" + record.turn + "-speech", side == 2 ? "silent" : "speech-" + side + "-" + approach.id,
                 effects, lean: side == 0 ? c.leanA : side == 1 ? c.leanB : "mixed");
@@ -51,7 +47,7 @@ namespace DemocracyWay.NewUI
         {
             var p = Definition(c, state);
             var record = CampaignRules.Current(state);
-            if (p == null || record.completed || record.knowledge < 0 || side < 0 || side > 2) return false;
+            if (p == null || record.completed || side < 0 || side > 2) return false;
             int food = state.campaign.foodSecurity;
             int foodContext = Clamp((p.foodBaseline - food) / Math.Max(1, p.foodContextDivisor), -3, 3);
             int trustContext = Clamp(state.campaign.legitimacy / Math.Max(1, p.trustContextDivisor), -3, 3);
@@ -59,33 +55,28 @@ namespace DemocracyWay.NewUI
             int support = Math.Min(p.maxOfficialInfluence, CampaignRules.OfficialSupport(state, c.site));
             int speech = record.speech < 0 ? 2 : record.speech;
             int supportSide = speech < 2 ? speech : side;
-            using var result = ArticyNarrative.Run("Rule_PoliticalVote", state,
-                ("Side", side), ("Speech", speech), ("SupportSide", supportSide), ("Support", support), ("Influence", record.influence),
-                ("BaseSupport", p.baseSupportA), ("Context", foodContext + trustContext + fundsContext), ("RequiredSupport", p.requiredSupport),
-                ("CostA", c.costA), ("CostB", c.costB), ("WarInput", c.war),
-                ("FoodA", p.foodDeltaA), ("FoodB", p.foodDeltaB), ("TrustA", p.trustDeltaA), ("TrustB", p.trustDeltaB),
-                ("ReadinessA", p.readinessDeltaA), ("ReadinessB", p.readinessDeltaB));
+            var result = DecisionRules.PoliticalVote(state, c, p, speech, supportSide, support, record.influence, foodContext + trustContext + fundsContext);
             record.politicalVersion = Version;
             record.speech = speech;
             record.vote = side;
-            record.majority = result.Number("Majority");
+            record.majority = result.majority;
             record.baseComponent = p.baseSupportA;
             record.foodComponent = foodContext;
             record.trustComponent = trustContext;
             record.fundsComponent = fundsContext;
             record.officialComponent = supportSide == 2 ? 0 : support;
             record.supportSide = supportSide;
-            record.supportTotal = result.Number("Score");
+            record.supportTotal = result.score;
             record.supportThreshold = p.requiredSupport;
             record.foodBefore = food;
             record.trustBefore = state.campaign.legitimacy;
             int requestedCost = record.majority == 0 ? c.costA : c.costB;
-            int actualPolicyCost = result.Number("CityDelta");
+            int actualPolicyCost = result.cityDelta;
             record.cityDelta = actualPolicyCost;
             // All three ballot choices occur after attendance; abstention is not non-attendance.
             record.personalDelta = Math.Min(Math.Max(0, c.attendanceObols), Math.Max(0, state.cityFunds + actualPolicyCost));
             record.cityDelta -= record.personalDelta;
-            int foodChange = result.Number("FoodDelta");
+            int foodChange = result.foodDelta;
             record.policyFullyFunded = requestedCost >= 0 || actualPolicyCost <= requestedCost;
             if (!record.policyFullyFunded && requestedCost < 0)
                 foodChange = foodChange * Math.Max(0, -actualPolicyCost) / -requestedCost;
@@ -97,12 +88,12 @@ namespace DemocracyWay.NewUI
             record.leanReason = side == 0 ? c.leanReasonA : side == 1 ? c.leanReasonB : "Αποχή από την ψηφοφορία, χωρίς αυτόματη πολιτειακή ταξινόμηση.";
             record.sourceRef = c.source;
             record.contentVersion = c.contentVersion;
-            state.campaign.war += result.Number("WarDelta");
-            int readinessChange = result.Number("ReadinessDelta");
+            state.campaign.war += result.warDelta;
+            int readinessChange = result.readinessDelta;
             if (!record.policyFullyFunded && requestedCost < 0 && readinessChange > 0)
                 readinessChange = readinessChange * Math.Max(0, -actualPolicyCost) / -requestedCost;
             state.campaign.readiness += readinessChange;
-            int trustChange = record.policyFullyFunded ? result.Number("LegitimacyDelta") : 0;
+            int trustChange = record.policyFullyFunded ? result.legitimacyDelta : 0;
             state.campaign.legitimacy += trustChange;
             record.trustDelta = trustChange;
             if (side != 2) state.campaign.personalWar += side == 0 ? c.war : -c.war;

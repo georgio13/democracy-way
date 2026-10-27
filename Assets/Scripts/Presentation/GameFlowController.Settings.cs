@@ -65,7 +65,7 @@ namespace DemocracyWay.NewUI
 
         private void RenderSettings()
         {
-            SetText("settings.hint", ArticyNarrative.Copy("Copy_21feabc3fc6eca22"));
+            SetText("settings.hint", JsonContent.Copy("Copy_21feabc3fc6eca22"));
             RefreshVolumeLabels();
         }
 

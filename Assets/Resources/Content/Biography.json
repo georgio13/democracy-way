@@ -1,0 +1,529 @@
+{
+  "schemaVersion": 1,
+  "steps": [
+    {
+      "id": "heritage-tribe",
+      "selectionKind": "tribe",
+      "kind": 2,
+      "year": "Πριν από το 352 π.Χ.",
+      "title": "Η οικογένεια πριν από εσένα",
+      "body": "Πριν ακουστεί το όνομά σου, οι δικοί σου έχουν ήδη τη θέση τους ανάμεσα στους Αθηναίους. Στις γιορτές συναντούν τους ανθρώπους της φυλής τους· στο σπίτι μιλούν για τον ήρωα που της έδωσε το όνομά του. Αυτοί οι δεσμοί περνούν από τη μια γενιά στην επόμενη, μαζί με την εγγραφή στον δήμο.\n\nΕκεί αρχίζει και η δική σου ιστορία. Σε ποια φυλή ανήκει η οικογένεια που θα σε μεγαλώσει;",
+      "editEconomicClass": 0,
+      "backgroundId": "Backgrounds/BackgroundEndingHome"
+    },
+    {
+      "id": "heritage-trittys",
+      "selectionKind": "trittys",
+      "kind": 1,
+      "year": "Πριν από το 352 π.Χ.",
+      "title": "Οι δεσμοί της καταγωγής",
+      "body": "Όταν οι δικοί σου μιλούν για τους ανθρώπους της φυλής τους, οι ιστορίες τους φτάνουν πολύ πέρα από τη γειτονιά. Άλλοι έρχονται από το άστυ, άλλοι από τα παράλια και άλλοι από τη μεσογαία. Τρεις τριττύες, μία από κάθε περιοχή, τους συνδέουν στην ίδια φυλή.\n\nΗ οικογένειά σου έχει τις δικές της ρίζες σε έναν από αυτούς τους τόπους. Ποια τριττύς κρατά τη μνήμη της καταγωγής της;",
+      "editEconomicClass": 0,
+      "backgroundId": "Backgrounds/BackgroundEndingHome"
+    },
+    {
+      "id": "heritage-deme",
+      "selectionKind": "deme",
+      "kind": 1,
+      "year": "Πριν από το 352 π.Χ.",
+      "title": "Ο δήμος της οικογένειας",
+      "body": "Στο σπίτι ακούγεται συχνά το όνομα του δήμου. Εκεί είναι εγγεγραμμένοι οι άνδρες της οικογένειας· εκεί τους γνωρίζουν ως δημότες και εκεί θα εξεταστεί κάποτε και η δική σου εγγραφή. Ακόμη κι αν μετακομίσετε, αυτή η καταγωγή θα εξακολουθεί να σας συνδέει.\n\nΠοιος δήμος βρίσκεται πίσω από την οικογενειακή σας ιστορία;",
+      "editEconomicClass": 0,
+      "backgroundId": "Backgrounds/BackgroundChildhood"
+    },
+    {
+      "id": "heritage-class",
+      "selectionKind": "class",
+      "kind": 0,
+      "year": "Πριν από το 352 π.Χ.",
+      "title": "Όσα διαθέτει το σπίτι",
+      "body": "Στο σπίτι δεν φτάνουν μόνο οι ειδήσεις της πόλης. Φτάνουν οι λογαριασμοί, οι ανάγκες της επόμενης μέρας και όσα περιμένουν οι άλλοι από την οικογένεια. Για κάποιους, η γη και η πρόσοδος προσφέρουν ασφάλεια. Για άλλους, κάθε μέρα αρχίζει με την αναζήτηση δουλειάς.\n\nΟι παλιές σολώνειες τάξεις δίνουν ακόμη ονόματα σε αυτές τις διαφορές. Με τι μέσα ζουν οι δικοί σου;",
+      "editEconomicClass": 0,
+      "backgroundId": "Backgrounds/BackgroundEndingHome"
+    },
+    {
+      "id": "birth-name",
+      "selectionKind": "name",
+      "kind": 1,
+      "year": "352 π.Χ. · Γέννηση",
+      "title": "Το όνομα που θα ακουστεί",
+      "body": "Το 352 π.Χ. γεννιέσαι σε αυτό το σπίτι. Οι δικοί σου σε κρατούν στην αγκαλιά τους και συζητούν ποιο όνομα θα σε συντροφεύει. Για εκείνους, είναι ακόμη δύσκολο να φανταστούν τον άνδρα που θα γίνεις. Ελπίζουν όμως ότι κάποτε θα σταθείς ανάμεσα στους συμπολίτες σου και θα τιμήσεις την οικογένεια.\n\nΠοιο όνομα ακούγεται για πρώτη φορά πάνω από την κούνια σου;",
+      "editEconomicClass": 0,
+      "backgroundId": "Backgrounds/BackgroundChildhood"
+    },
+    {
+      "id": "city-before-adult",
+      "selectionKind": "city",
+      "kind": 1,
+      "year": "338 π.Χ. · 14 ετών",
+      "title": "Η πόλη που σε μεγαλώνει",
+      "body": "Είσαι δεκατεσσάρων όταν φτάνει η είδηση της ήττας στη Χαιρώνεια. Οι κουβέντες στο σπίτι χαμηλώνουν· ύστερα γίνονται πιο έντονες. Θα φτάσουν τα τρόφιμα; Είναι έτοιμη η άμυνα; Σε ποιον μπορούν να έχουν εμπιστοσύνη; Εσύ δεν έχεις ακόμη ψήφο. Ακούς και παρατηρείς, καθώς οι δικοί σου αποφασίζουν πώς θα βοηθήσουν.\n\nΗ απάντησή τους γίνεται μία από τις πρώτες πολιτικές αναμνήσεις σου. Πού στρέφουν τις δυνάμεις τους;",
+      "editEconomicClass": 0,
+      "backgroundId": "Backgrounds/BackgroundAssembly",
+      "choices": [
+        {
+          "id": "food-support",
+          "text": "Οι δικοί μου βοηθούν να οργανωθούν οι προμήθειες και να συγκεντρωθούν αποθέματα.",
+          "metrics": {
+            "consistency": 0,
+            "ethics": 0,
+            "authority": 0,
+            "persuasion": 0,
+            "parrhesia": 0,
+            "recognition": 0
+          },
+          "personalFunds": 0,
+          "cityFunds": -70,
+          "economicClassIndex": -1,
+          "tribeIndex": -1,
+          "profession": null,
+          "playerName": null,
+          "demeId": null,
+          "trittysId": null,
+          "requireTribe": -1,
+          "requireClass": -1,
+          "requireTrittys": null,
+          "cityMetrics": {
+            "food": 5,
+            "trust": 1,
+            "readiness": 0,
+            "war": 0
+          },
+          "deme": null,
+          "trittys": null,
+          "institutionalLean": "mixed"
+        },
+        {
+          "id": "defence-support",
+          "text": "Προσφέρουμε εργασία και πόρους για την αμυντική προετοιμασία της πόλης.",
+          "metrics": {
+            "consistency": 0,
+            "ethics": 0,
+            "authority": 0,
+            "persuasion": 0,
+            "parrhesia": 0,
+            "recognition": 0
+          },
+          "personalFunds": 0,
+          "cityFunds": -60,
+          "economicClassIndex": -1,
+          "tribeIndex": -1,
+          "profession": null,
+          "playerName": null,
+          "demeId": null,
+          "trittysId": null,
+          "requireTribe": -1,
+          "requireClass": -1,
+          "requireTrittys": null,
+          "cityMetrics": {
+            "food": 0,
+            "trust": 0,
+            "readiness": 4,
+            "war": 0
+          },
+          "deme": null,
+          "trittys": null,
+          "institutionalLean": "mixed"
+        },
+        {
+          "id": "public-cooperation",
+          "text": "Ζητούμε να ενημερώνονται δημόσια οι πολίτες και να συνεργάζονται μεταξύ τους.",
+          "metrics": {
+            "consistency": 0,
+            "ethics": 0,
+            "authority": 0,
+            "persuasion": 0,
+            "parrhesia": 0,
+            "recognition": 0
+          },
+          "personalFunds": 0,
+          "cityFunds": 0,
+          "economicClassIndex": -1,
+          "tribeIndex": -1,
+          "profession": null,
+          "playerName": null,
+          "demeId": null,
+          "trittysId": null,
+          "requireTribe": -1,
+          "requireClass": -1,
+          "requireTrittys": null,
+          "cityMetrics": {
+            "food": 0,
+            "trust": 4,
+            "readiness": 0,
+            "war": 0
+          },
+          "deme": null,
+          "trittys": null,
+          "institutionalLean": "mixed"
+        },
+        {
+          "id": "reserve-resources",
+          "text": "Κρατούμε πόρους διαθέσιμους, για να ανταποκριθούμε στις ανάγκες που θα ακολουθήσουν.",
+          "metrics": {
+            "consistency": 0,
+            "ethics": 0,
+            "authority": 0,
+            "persuasion": 0,
+            "parrhesia": 0,
+            "recognition": 0
+          },
+          "personalFunds": 0,
+          "cityFunds": 70,
+          "economicClassIndex": -1,
+          "tribeIndex": -1,
+          "profession": null,
+          "playerName": null,
+          "demeId": null,
+          "trittysId": null,
+          "requireTribe": -1,
+          "requireClass": -1,
+          "requireTrittys": null,
+          "cityMetrics": {
+            "food": -2,
+            "trust": -1,
+            "readiness": 0,
+            "war": 0
+          },
+          "deme": null,
+          "trittys": null,
+          "institutionalLean": "mixed"
+        }
+      ]
+    },
+    {
+      "id": "citizen-oath",
+      "selectionKind": "oath",
+      "kind": 3,
+      "year": "334 π.Χ. · 18 ετών",
+      "title": "Μπροστά στους συμπολίτες σου",
+      "body": "Στα δεκαοκτώ σου στέκεσαι μπροστά στους δημότες. Εξετάζουν την ηλικία και την καταγωγή σου· ακολουθεί ο έλεγχος της Βουλής. Τώρα είσαι εγγεγραμμένος πολίτης και αρχίζει η εφηβική σου υπηρεσία.\n\nΛες τα λόγια του όρκου: «Δεν θα καταισχύνω τα ιερά όπλα, ούτε θα εγκαταλείψω τον συμπολεμιστή μου· θα υπερασπιστώ τα ιερά και τα όσια και δεν θα παραδώσω την πατρίδα μικρότερη, αλλά μεγαλύτερη και ισχυρότερη».\n\nΌταν σωπαίνεις, μια δέσμευση μένει πιο έντονα στη σκέψη σου. Ποια θα προσπαθήσεις να κρατήσεις;",
+      "editEconomicClass": 0,
+      "backgroundId": "Backgrounds/BackgroundOath",
+      "choices": [
+        {
+          "id": "law-accountability",
+          "text": "Θα σέβομαι τους νόμους και θα ζητώ να λογοδοτούν δημόσια όσοι αναλαμβάνουν ευθύνη.",
+          "metrics": {
+            "consistency": 5,
+            "ethics": 4,
+            "authority": 1,
+            "persuasion": 0,
+            "parrhesia": 0,
+            "recognition": 0
+          },
+          "personalFunds": 0,
+          "cityFunds": 0,
+          "economicClassIndex": -1,
+          "tribeIndex": -1,
+          "profession": null,
+          "playerName": null,
+          "demeId": null,
+          "trittysId": null,
+          "requireTribe": -1,
+          "requireClass": -1,
+          "requireTrittys": null,
+          "cityMetrics": {
+            "food": 0,
+            "trust": 0,
+            "readiness": 0,
+            "war": 0
+          },
+          "deme": null,
+          "trittys": null,
+          "institutionalLean": "mixed"
+        },
+        {
+          "id": "solidarity",
+          "text": "Δεν θα εγκαταλείπω εκείνους που στηρίζονται σε εμένα, ακόμη κι όταν δυσκολεύομαι.",
+          "metrics": {
+            "consistency": 4,
+            "ethics": 4,
+            "authority": 0,
+            "persuasion": 1,
+            "parrhesia": 0,
+            "recognition": 0
+          },
+          "personalFunds": 0,
+          "cityFunds": 0,
+          "economicClassIndex": -1,
+          "tribeIndex": -1,
+          "profession": null,
+          "playerName": null,
+          "demeId": null,
+          "trittysId": null,
+          "requireTribe": -1,
+          "requireClass": -1,
+          "requireTrittys": null,
+          "cityMetrics": {
+            "food": 0,
+            "trust": 0,
+            "readiness": 0,
+            "war": 0
+          },
+          "deme": null,
+          "trittys": null,
+          "institutionalLean": "mixed"
+        },
+        {
+          "id": "speak-truth",
+          "text": "Θα λέω δημόσια όσα θεωρώ δίκαια, ακόμη κι αν δεν είναι ευχάριστα σε όλους.",
+          "metrics": {
+            "consistency": 0,
+            "ethics": 0,
+            "authority": 0,
+            "persuasion": 3,
+            "parrhesia": 5,
+            "recognition": 1
+          },
+          "personalFunds": 0,
+          "cityFunds": 0,
+          "economicClassIndex": -1,
+          "tribeIndex": -1,
+          "profession": null,
+          "playerName": null,
+          "demeId": null,
+          "trittysId": null,
+          "requireTribe": -1,
+          "requireClass": -1,
+          "requireTrittys": null,
+          "cityMetrics": {
+            "food": 0,
+            "trust": 0,
+            "readiness": 0,
+            "war": 0
+          },
+          "deme": null,
+          "trittys": null,
+          "institutionalLean": "mixed"
+        },
+        {
+          "id": "capable-service",
+          "text": "Θα γίνομαι ικανότερος, ώστε η προσφορά μου στην πόλη να φαίνεται στις πράξεις.",
+          "metrics": {
+            "consistency": 3,
+            "ethics": 0,
+            "authority": 5,
+            "persuasion": 0,
+            "parrhesia": 0,
+            "recognition": 1
+          },
+          "personalFunds": 0,
+          "cityFunds": 0,
+          "economicClassIndex": -1,
+          "tribeIndex": -1,
+          "profession": null,
+          "playerName": null,
+          "demeId": null,
+          "trittysId": null,
+          "requireTribe": -1,
+          "requireClass": -1,
+          "requireTrittys": null,
+          "cityMetrics": {
+            "food": 0,
+            "trust": 0,
+            "readiness": 0,
+            "war": 0
+          },
+          "deme": null,
+          "trittys": null,
+          "institutionalLean": "mixed"
+        }
+      ]
+    },
+    {
+      "id": "military-service",
+      "selectionKind": "service",
+      "kind": 1,
+      "year": "334–332 π.Χ. · 18–20 ετών",
+      "title": "Δύο χρόνια υπηρεσίας",
+      "body": "Τα επόμενα δύο χρόνια, η εκπαίδευση και οι φρουρές δίνουν βάρος στα λόγια του όρκου. Μαθαίνεις να κρατάς τα όπλα σου, να ακούς τους συντρόφους σου και να στηρίζεσαι πάνω τους. Είσαι ήδη πολίτης· τώρα δοκιμάζεις στην πράξη τι σημαίνει να έχεις ευθύνη και για άλλους.\n\nΣε μια δύσκολη βάρδια, η κούραση βαραίνει την ομάδα και όλοι περιμένουν από κάποιον να κάνει το πρώτο βήμα. Τι κάνεις;",
+      "editEconomicClass": 0,
+      "backgroundId": "Backgrounds/BackgroundEphebeNight",
+      "choices": [
+        {
+          "id": "steady-watch",
+          "text": "Μένω στη θέση μου και αναφέρω όσα παρατηρώ. Κάποιος πρέπει να κρατήσει τη βάρδια.",
+          "metrics": {
+            "consistency": 5,
+            "ethics": 0,
+            "authority": 3,
+            "persuasion": 0,
+            "parrhesia": 0,
+            "recognition": 0
+          },
+          "personalFunds": 0,
+          "cityFunds": 0,
+          "economicClassIndex": -1,
+          "tribeIndex": -1,
+          "profession": null,
+          "playerName": null,
+          "demeId": null,
+          "trittysId": null,
+          "requireTribe": -1,
+          "requireClass": -1,
+          "requireTrittys": null,
+          "cityMetrics": {
+            "food": 0,
+            "trust": 0,
+            "readiness": 0,
+            "war": 0
+          },
+          "deme": null,
+          "trittys": null,
+          "institutionalLean": "mixed"
+        },
+        {
+          "id": "protect-comrade",
+          "text": "Στέκομαι δίπλα στον σύντροφο που δυσκολεύεται και αναλαμβάνω μέρος της ευθύνης του.",
+          "metrics": {
+            "consistency": 3,
+            "ethics": 4,
+            "authority": 0,
+            "persuasion": 0,
+            "parrhesia": 0,
+            "recognition": 1
+          },
+          "personalFunds": 0,
+          "cityFunds": 0,
+          "economicClassIndex": -1,
+          "tribeIndex": -1,
+          "profession": null,
+          "playerName": null,
+          "demeId": null,
+          "trittysId": null,
+          "requireTribe": -1,
+          "requireClass": -1,
+          "requireTrittys": null,
+          "cityMetrics": {
+            "food": 0,
+            "trust": 0,
+            "readiness": 0,
+            "war": 0
+          },
+          "deme": null,
+          "trittys": null,
+          "institutionalLean": "mixed"
+        },
+        {
+          "id": "organise-group",
+          "text": "Μιλώ στους υπόλοιπους και οργανώνω τη συνεννόησή μας, πριν χαθεί η εμπιστοσύνη.",
+          "metrics": {
+            "consistency": 0,
+            "ethics": 0,
+            "authority": 3,
+            "persuasion": 4,
+            "parrhesia": 0,
+            "recognition": 2
+          },
+          "personalFunds": 0,
+          "cityFunds": 0,
+          "economicClassIndex": -1,
+          "tribeIndex": -1,
+          "profession": null,
+          "playerName": null,
+          "demeId": null,
+          "trittysId": null,
+          "requireTribe": -1,
+          "requireClass": -1,
+          "requireTrittys": null,
+          "cityMetrics": {
+            "food": 0,
+            "trust": 0,
+            "readiness": 0,
+            "war": 0
+          },
+          "deme": null,
+          "trittys": null,
+          "institutionalLean": "mixed"
+        },
+        {
+          "id": "raise-objection",
+          "text": "Μια ατεκμηρίωτη διαταγή δεν μου αρκεί. Διατυπώνω δημόσια την ένστασή μου και την εξηγώ.",
+          "metrics": {
+            "consistency": -1,
+            "ethics": 0,
+            "authority": 0,
+            "persuasion": 2,
+            "parrhesia": 5,
+            "recognition": 0
+          },
+          "personalFunds": 0,
+          "cityFunds": 0,
+          "economicClassIndex": -1,
+          "tribeIndex": -1,
+          "profession": null,
+          "playerName": null,
+          "demeId": null,
+          "trittysId": null,
+          "requireTribe": -1,
+          "requireClass": -1,
+          "requireTrittys": null,
+          "cityMetrics": {
+            "food": 0,
+            "trust": 0,
+            "readiness": 0,
+            "war": 0
+          },
+          "deme": null,
+          "trittys": null,
+          "institutionalLean": "mixed"
+        }
+      ]
+    },
+    {
+      "id": "adult-profession",
+      "selectionKind": "profession",
+      "kind": 1,
+      "year": "332–323 π.Χ. · Ενήλικος βίος",
+      "title": "Ο βίος που διαμορφώνεις",
+      "body": "Όταν τελειώνει η υπηρεσία, επιστρέφεις στις δουλειές του σπιτιού. Τα χρόνια περνούν ανάμεσα στην εργασία, στις οικογενειακές υποχρεώσεις και στις συζητήσεις με τους συμπολίτες σου. Τα μέσα που διαθέτεις ανοίγουν ορισμένους δρόμους ευκολότερα από άλλους, χωρίς να αποφασίζουν για πάντα τη ζωή σου.\n\nΜέσα σε αυτή την καθημερινότητα, ποια δουλειά γίνεται το στήριγμά σου;",
+      "editEconomicClass": 0,
+      "backgroundId": "Backgrounds/BackgroundAgora"
+    },
+    {
+      "id": "council-lottery",
+      "selectionKind": "offices",
+      "kind": 1,
+      "year": "322 π.Χ. · 30 ετών",
+      "title": "Το όνομά σου στην κληρωτίδα",
+      "body": "Είσαι πια τριάντα ετών. Στην κλήρωση ακούς το όνομά σου: θα υπηρετήσεις στη Βουλή των Πεντακοσίων. Περνάς τη δοκιμασία και, μέσα από τη Βουλή, κληρώνεσαι ένας από τους δέκα λογιστές της. Οι λογαριασμοί της πόλης θα περνούν και από τα δικά σου χέρια.\n\nΓύρω σου οι συμπολίτες μιλούν για χρήματα, προμήθειες και τη σύγκρουση με τη Μακεδονία. Θα πρέπει να ακούσεις, να κρίνεις και να πάρεις θέση. Η δική σου φωνή θα είναι μία ανάμεσα σε πολλές.",
+      "editEconomicClass": 0,
+      "backgroundId": "Backgrounds/BackgroundBoule",
+      "choices": [
+        {
+          "id": "accept-service",
+          "text": "Αναλαμβάνω την υπηρεσία μου. Θα κρίνω και θα λογοδοτώ μαζί με τους συμπολίτες μου.",
+          "metrics": {
+            "consistency": 0,
+            "ethics": 0,
+            "authority": 0,
+            "persuasion": 0,
+            "parrhesia": 0,
+            "recognition": 0
+          },
+          "personalFunds": 0,
+          "cityFunds": 0,
+          "economicClassIndex": -1,
+          "tribeIndex": -1,
+          "profession": null,
+          "playerName": null,
+          "demeId": null,
+          "trittysId": null,
+          "requireTribe": -1,
+          "requireClass": -1,
+          "requireTrittys": null,
+          "cityMetrics": {
+            "food": 0,
+            "trust": 0,
+            "readiness": 0,
+            "war": 0
+          },
+          "deme": null,
+          "trittys": null,
+          "institutionalLean": "mixed"
+        }
+      ]
+    }
+  ]
+}

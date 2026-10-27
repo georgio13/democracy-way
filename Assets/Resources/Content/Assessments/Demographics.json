@@ -1,0 +1,149 @@
+{
+  "version": "meega-demographics-el-1",
+  "sourceUrl": "https://www.ufsm.br/app/uploads/sites/517/2022/08/Questionnaire-Evaluation-of-games-english-v2018.docx",
+  "adaptationNote": "Ελληνική προσαρμογή προφίλ MEEGA+ 2018. Διατηρούνται οι αρχικές ηλικιακές ομάδες και οι πέντε συχνότητες. Προστίθενται επιλογές μη δήλωσης και άλλη ταυτότητα φύλου. Το εκπαιδευτικό πλαίσιο είναι προαιρετικό για το γενικό κοινό.",
+  "instructions": "Τα παρακάτω αφορούν εσένα, όχι τον χαρακτήρα του παιχνιδιού. Μπορείς να επιλέξεις μη δήλωση. Τα στοιχεία σπουδών είναι προαιρετικά.",
+  "questions": [
+    {
+      "id": "age-group",
+      "prompt": "Ηλικιακή ομάδα",
+      "kind": "choice",
+      "required": true,
+      "options": [
+        {
+          "id": "under-18",
+          "label": "Κάτω των 18"
+        },
+        {
+          "id": "18-28",
+          "label": "18–28 ετών"
+        },
+        {
+          "id": "29-39",
+          "label": "29–39 ετών"
+        },
+        {
+          "id": "40-50",
+          "label": "40–50 ετών"
+        },
+        {
+          "id": "over-50",
+          "label": "Άνω των 50"
+        },
+        {
+          "id": "not-disclosed",
+          "label": "Δεν επιθυμώ να δηλώσω"
+        }
+      ]
+    },
+    {
+      "id": "gender",
+      "prompt": "Φύλο",
+      "kind": "choice",
+      "required": true,
+      "options": [
+        {
+          "id": "male",
+          "label": "Άνδρας"
+        },
+        {
+          "id": "female",
+          "label": "Γυναίκα"
+        },
+        {
+          "id": "another",
+          "label": "Άλλη ταυτότητα φύλου"
+        },
+        {
+          "id": "not-disclosed",
+          "label": "Δεν επιθυμώ να δηλώσω"
+        }
+      ]
+    },
+    {
+      "id": "digital-frequency",
+      "prompt": "Πόσο συχνά παίζεις ψηφιακά παιχνίδια;",
+      "kind": "choice",
+      "required": true,
+      "options": [
+        {
+          "id": "never",
+          "label": "Ποτέ"
+        },
+        {
+          "id": "rarely",
+          "label": "Σπάνια"
+        },
+        {
+          "id": "monthly",
+          "label": "Κάθε μήνα"
+        },
+        {
+          "id": "weekly",
+          "label": "Κάθε εβδομάδα"
+        },
+        {
+          "id": "daily",
+          "label": "Καθημερινά"
+        },
+        {
+          "id": "not-disclosed",
+          "label": "Δεν επιθυμώ να δηλώσω"
+        }
+      ]
+    },
+    {
+      "id": "non-digital-frequency",
+      "prompt": "Πόσο συχνά παίζεις επιτραπέζια, κάρτες ή άλλα μη ψηφιακά παιχνίδια;",
+      "kind": "choice",
+      "required": true,
+      "options": [
+        {
+          "id": "never",
+          "label": "Ποτέ"
+        },
+        {
+          "id": "rarely",
+          "label": "Σπάνια"
+        },
+        {
+          "id": "monthly",
+          "label": "Κάθε μήνα"
+        },
+        {
+          "id": "weekly",
+          "label": "Κάθε εβδομάδα"
+        },
+        {
+          "id": "daily",
+          "label": "Καθημερινά"
+        },
+        {
+          "id": "not-disclosed",
+          "label": "Δεν επιθυμώ να δηλώσω"
+        }
+      ]
+    },
+    {
+      "id": "institution",
+      "prompt": "Εκπαιδευτικό ίδρυμα (προαιρετικό)",
+      "kind": "text",
+      "required": false,
+      "maxLength": 100
+    },
+    {
+      "id": "course-degree",
+      "prompt": "Σπουδές / ειδικότητα (προαιρετικό)",
+      "kind": "text",
+      "required": false,
+      "maxLength": 100
+    },
+    {
+      "id": "subject",
+      "prompt": "Μάθημα, εφόσον εφαρμόζεται (προαιρετικό)",
+      "kind": "text",
+      "required": false,
+      "maxLength": 100
+    }
+  ]
+}

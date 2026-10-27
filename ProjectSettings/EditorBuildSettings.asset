@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Introduction.unity
     guid: c383e3749bcb4004db0eff6deed6d76d
   - enabled: 1
+    path: Assets/Scenes/Assessment.unity
+    guid: 355a36f26ff986645980e71a4caeedbf
+  - enabled: 1
     path: Assets/Scenes/Gameplay.unity
     guid: 7a3b4f85744ff044a9387635d9ccf638
   m_configObjects: {}

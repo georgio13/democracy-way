@@ -29,7 +29,7 @@ namespace DemocracyWay.NewUI
             string snapshot = JsonUtility.ToJson(Case);
             var same = Campaign.cases.FirstOrDefault(x => x.turn < record.turn && x.authoredCaseSnapshot == snapshot);
             record.authoredCaseSnapshot = same == null ? snapshot : HistoryTurnReference + same.turn;
-            // The full case already contains politicsData. Do not store its complete dialogue a second time.
+            // The case snapshot contains the authored arguments; do not duplicate a transcript.
             record.authoredDialogueSnapshot = "";
         }
 
@@ -69,7 +69,7 @@ namespace DemocracyWay.NewUI
                     catch (ArgumentException) { return false; }
                     if (authored == null) return false;
                     // Earlier saves had an explicit dialogue field. Preserve it even if the nested copy differs.
-                    if (!string.IsNullOrWhiteSpace(original.authoredDialogueSnapshot)) authored.politicsData = original.authoredDialogueSnapshot;
+                    if (authored != null) JsonContent.HydrateCase(authored);
                     return true;
                 }
                 if (!int.TryParse(value.Substring(HistoryTurnReference.Length), out int turn) || turn >= original.turn) return false;
@@ -110,9 +110,9 @@ namespace DemocracyWay.NewUI
                 return "Τελευταία καταγεγραμμένη εξέλιξη · " + NewsDate(last.turn) + ": «" + c.title + "». " + (c.observation ? "Ο φάκελος παρακολουθήθηκε ως διαδικασία." : "Το σώμα ολοκλήρωσε τη συλλογική του κρίση.");
             }
             int current = CampaignRules.Turn(State);
-            for (int turn = current; turn < 50; turn++)
+            for (int turn = current; turn < CampaignRules.TotalCases; turn++)
             {
-                var upcoming = CampaignData.cases[turn % CampaignData.cases.Length];
+                var upcoming = CampaignData.cases.First(c => c.id == CampaignRules.CaseIdForTurn(turn));
                 if (upcoming.site != historySite) continue;
                 return "Προετοιμασία εκπαιδευτικού φακέλου · " + NewsDate(turn) + ": «" + upcoming.title + "». Η αναγγελία δεν προεξοφλεί την απόφαση ή τη δικαστική κρίση.";
             }
@@ -165,7 +165,7 @@ namespace DemocracyWay.NewUI
             if (!exact) result.Append("<i>Η παλιά αποθήκευση δεν περιέχει το αρχικό πλήρες κείμενο. Εμφανίζονται η καταγεγραμμένη επιλογή και η τρέχουσα σύντομη περιγραφή.</i>\n\n");
             result.Append(c.brief).Append("\n\n");
             PoliticalCaseDefinition p = null;
-            if (exact && !string.IsNullOrWhiteSpace(c.politicsData)) p = PoliticalCaseDefinition.Parse(c.politicsData);
+            if (exact) p = c.politics;
             if (p != null)
             {
                 foreach (var line in p.dialogue)

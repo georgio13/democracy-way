@@ -49,10 +49,9 @@ namespace DemocracyWay.NewUI
             }
             else
             {
-                State.phase = "biography";
-                State.biographyIndex = 0;
+                State.phase = "demographics";
                 SaveCheckpoint();
-                ShowBiography();
+                Show(State.phase);
             }
 
             elapsed = 0f;
@@ -102,7 +101,7 @@ namespace DemocracyWay.NewUI
                 return;
             if (!State.choices.Exists(x => x.stepId == step.id))
             {
-                SetStatus(ArticyNarrative.Copy("Copy_63be43133176a9a4"));
+                SetStatus(JsonContent.Copy("Copy_63be43133176a9a4"));
                 return;
             }
 
@@ -111,25 +110,13 @@ namespace DemocracyWay.NewUI
 
         private void AdvanceBiographyIndex()
         {
-            var step=CurrentBioStep();
-            string node="Bio_"+step.id.Replace('-','_');
-            var chosen=State.choices.Find(c=>c.stepId==step.id);
-            if(chosen!=null)node+="_"+chosen.choiceId.Replace('-','_');
-            string next=ArticyNarrative.Next(node);
-            int nextIndex=config.biography.FindIndex(b=>"Bio_"+b.id.Replace('-','_')==next);
-            if (nextIndex>=0)
+            int nextIndex = State.biographyIndex + 1;
+            if (nextIndex < config.biography.Count)
             {
-                State.biographyIndex=nextIndex;
-                SaveCheckpoint();
-                ShowBiography();
+                State.biographyIndex = nextIndex;
+                SaveCheckpoint(); ShowBiography();
             }
-            else
-            {
-                if(next!="BioSummary")throw new InvalidOperationException("Unknown native biography continuation: "+next);
-                State.phase = "summary";
-                SaveCheckpoint();
-                Show("bio-summary");
-            }
+            else { State.phase = "summary"; SaveCheckpoint(); Show("bio-summary"); }
         }
 
         public void FinishBio()
@@ -145,13 +132,13 @@ namespace DemocracyWay.NewUI
                     State.biographyIndex = i;
                     State.phase = "biography";
                     ShowBiography();
-                    SetStatus(ArticyNarrative.Copy("Copy_7ec44327191f5131"));
+                    SetStatus(JsonContent.Copy("Copy_7ec44327191f5131"));
                     return;
                 }
             }
 
             State.biographyComplete = true;
-            State.phase = "initial-knowledge";
+            State.phase = "prytany-title";
             RecalculateMetrics();
             SaveCheckpoint();
             Show(State.phase);
@@ -168,7 +155,7 @@ namespace DemocracyWay.NewUI
             BiographyStep step = CurrentBioStep();
             if (step == null)
             {
-                SetStatus(ArticyNarrative.Copy("Copy_1bdbf5eab98ae2e2"));
+                SetStatus(JsonContent.Copy("Copy_1bdbf5eab98ae2e2"));
                 return;
             }
 

@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "contentVersion": "9.0.0-json-two-cases",
+  "availableCaseIds": [
+    "grain",
+    "citizenship",
+    "ships",
+    "audit",
+    "peace",
+    "appeal",
+    "areopagus",
+    "defence",
+    "scrutiny",
+    "generals",
+    "public-buildings",
+    "tax-receipts",
+    "leases",
+    "grain-inspection",
+    "disabled-support",
+    "magistrates-review",
+    "sacred-embassy",
+    "illegal-decree",
+    "audit-followup",
+    "arbitration",
+    "palladion",
+    "delphinion",
+    "phreatto",
+    "prytaneion",
+    "jurisdiction-eleven"
+  ],
+  "prytanies": [
+    {
+      "id": "prytany-1",
+      "caseIds": [
+        "grain",
+        "citizenship"
+      ]
+    },
+    {
+      "id": "prytany-2",
+      "caseIds": [
+        "ships",
+        "audit"
+      ]
+    },
+    {
+      "id": "prytany-3",
+      "caseIds": [
+        "peace",
+        "appeal"
+      ]
+    },
+    {
+      "id": "prytany-4",
+      "caseIds": [
+        "areopagus",
+        "defence"
+      ]
+    },
+    {
+      "id": "prytany-5",
+      "caseIds": [
+        "scrutiny",
+        "generals"
+      ]
+    },
+    {
+      "id": "prytany-6",
+      "caseIds": [
+        "public-buildings",
+        "tax-receipts"
+      ]
+    },
+    {
+      "id": "prytany-7",
+      "caseIds": [
+        "leases",
+        "grain-inspection"
+      ]
+    },
+    {
+      "id": "prytany-8",
+      "caseIds": [
+        "disabled-support",
+        "magistrates-review"
+      ]
+    },
+    {
+      "id": "prytany-9",
+      "caseIds": [
+        "palladion",
+        "delphinion"
+      ]
+    },
+    {
+      "id": "prytany-10",
+      "caseIds": [
+        "audit-followup",
+        "arbitration"
+      ]
+    }
+  ],
+  "notice": "Κάθε πρυτανεία περιλαμβάνει δύο εκπαιδευτικές υποθέσεις. Η διάρκεια αυτή είναι σύμβαση του παιχνιδιού."
+}

@@ -13,6 +13,7 @@ namespace DemocracyWay.NewUI
     public sealed class AccountBridge : MonoBehaviour
     {
         public static bool IsReady { get; private set; }
+        public static bool AuthenticationResolved { get; private set; }
         public static string UserId { get; private set; }
         public static string ResearchParticipantId { get; private set; }
         public static bool ResearchConsent { get; private set; }
@@ -35,7 +36,7 @@ namespace DemocracyWay.NewUI
         [Serializable] sealed class CloudSlot { public int slot = default; public string envelope = default, updatedUtc = default; public bool deleted = default; }
         [Serializable] sealed class AccountPacket { public string uid = default, researchParticipantId = default; public bool researchConsent = default; public CloudSlot[] slots = default; }
         [Serializable] sealed class SyncStatus { public bool ok = default; public string code = default; public int pending = default; }
-        [Serializable] sealed class AccountState { public bool busy = default, error = default; public string status = default, email = default; }
+        [Serializable] sealed class AccountState { public bool busy = default, error = default, resolved = default; public string status = default, email = default; }
 #if UNITY_WEBGL && !UNITY_EDITOR
         [DllImport("__Internal")] static extern void DW_AccountRegister(string callbackObject);
         [DllImport("__Internal")] static extern void DW_AccountApplied();
@@ -53,6 +54,7 @@ namespace DemocracyWay.NewUI
         static void Initialise()
         {
             if (instance != null) return;
+            AuthenticationResolved = false;
             IsReady = false; UserId = ResearchParticipantId = null; ResearchConsent = false; CloudStatus = "not-connected";
             IsBusy = HasError = OfferResearch = IsAccountScreenOpen = ShowingAccount = false;
             StatusMessage = Email = ""; StateChanged = null;
@@ -62,9 +64,10 @@ namespace DemocracyWay.NewUI
 #elif UNITY_EDITOR
             instance.editorClient = host.AddComponent<EditorAccountClient>();
             instance.editorClient.Initialize(instance);
+            AuthenticationResolved = true;
             instance.editorClient.StateChanged += instance.ReadEditorState;
 #else
-            IsReady = true; CloudStatus = "local-preview";
+            IsReady = true; AuthenticationResolved = true; CloudStatus = "local-preview";
 #endif
         }
         public static void UploadSlot(int slot, string envelope)
@@ -169,6 +172,7 @@ namespace DemocracyWay.NewUI
         public void OnAccountState(string json)
         {
             var state = JsonUtility.FromJson<AccountState>(json); if (state == null) return;
+            AuthenticationResolved |= state.resolved;
             IsBusy = state.busy; HasError = state.error; StatusMessage = state.status ?? ""; Email = state.email ?? "";
             StateChanged?.Invoke();
         }
@@ -190,7 +194,7 @@ namespace DemocracyWay.NewUI
                 Directory.CreateDirectory(LocalDirectory);
                 // Namespace is established before reconciliation; local newer writes
                 // must be allowed back into that same account's upload queue.
-                IsReady = true;
+                IsReady = true; AuthenticationResolved = true;
                 foreach (var slot in packet.slots ?? Array.Empty<CloudSlot>()) Reconcile(slot);
                 GameSession.State = null; GameSession.Slot = -1; CloudStatus = "ready";
                 SaveStore.FlushWebStorage();
@@ -234,7 +238,8 @@ namespace DemocracyWay.NewUI
             IsReady = false; UserId = ResearchParticipantId = null; ResearchConsent = false; CloudStatus = "signed-out";
             IsBusy = HasError = OfferResearch = ShowingAccount = false; StatusMessage = Email = "";
             GameSession.State = null; GameSession.Slot = -1; GameSession.PendingScreen = "main-menu"; Time.timeScale = 1;
-            SceneManager.LoadSceneAsync("Login", LoadSceneMode.Single); StateChanged?.Invoke();
+            AuthenticationResolved = true;
+            SceneManager.LoadSceneAsync("Boot", LoadSceneMode.Single); StateChanged?.Invoke();
         }
     }
 }

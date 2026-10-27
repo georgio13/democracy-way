@@ -16,7 +16,7 @@ namespace DemocracyWay.NewUI
         {
             if (modalOpen || State == null || State.phase != "prytany-title")
                 return;
-            State.phase = ArticyNarrative.Route("PrytanyTitleContinue",State);
+            State.phase = StoryRoutes.Next("PrytanyTitleContinue",State);
             SaveCheckpoint();
             Show(State.phase);
         }
@@ -28,7 +28,7 @@ namespace DemocracyWay.NewUI
             List<int> available = GameRules.AvailableTribes(State, Mathf.Min(10, config.tribes.Count));
             if (available.Count == 0)
             {
-                SetStatus(ArticyNarrative.Copy("Copy_5a94a27ea56fd278"));
+                SetStatus(JsonContent.Copy("Copy_5a94a27ea56fd278"));
                 return;
             }
 
@@ -39,7 +39,7 @@ namespace DemocracyWay.NewUI
         {
             drawingLottery = true;
             SetInteractable("lottery.primary", false);
-            SetText("lottery.result", ArticyNarrative.Copy("Copy_77a67d0477966069"));
+            SetText("lottery.result", JsonContent.Copy("Copy_77a67d0477966069"));
             for (int step = 0; step < 18; step++)
             {
                 int index = available[step % available.Count];
@@ -63,7 +63,7 @@ namespace DemocracyWay.NewUI
         {
             if (modalOpen || drawingLottery || State == null || State.phase != "lottery" || State.currentTribe < 0)
                 return;
-            State.phase = ArticyNarrative.Route("LotteryContinue",State);
+            State.phase = StoryRoutes.Next("LotteryContinue",State);
             if (!SaveCheckpoint())
                 return;
             Show(State.phase);

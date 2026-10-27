@@ -9,55 +9,44 @@ namespace DemocracyWay.NewUI
 {
     public sealed partial class GameFlowController
     {
-        public TextAsset evaluationContent;
         EvaluationContent evaluationData;
         readonly HashSet<string> evaluationQuizLayouts = new HashSet<string>();
         readonly List<Button[]> evaluationRatingRows = new List<Button[]>();
+        readonly Dictionary<int, Button> evaluationNotApplicableButtons = new Dictionary<int, Button>();
+        TMP_InputField evaluationFeedback;
         GameObject evaluationSurveyPanel, evaluationDialog;
-        Button evaluationAccessButton, evaluationSubmitButton, evaluationDialogConfirm, evaluationDialogCancel;
+        Button evaluationSubmitButton, evaluationDialogConfirm, evaluationDialogCancel;
         TMP_Text evaluationSurveyProgress, evaluationDialogTitle, evaluationDialogBody;
-        CheckmarkGraphic evaluationCompletedMark;
         RectTransform evaluationSurveyContent;
         ScrollRect evaluationSurveyScroll;
         CanvasGroup evaluationBlockedGroup;
         bool evaluationPreviousInteractable, evaluationPreviousRaycasts;
         Action evaluationDialogEscape;
 
-        EvaluationContent EvaluationData
-        {
-            get
-            {
-                if (evaluationData != null) return evaluationData;
-                if (evaluationContent == null) evaluationContent = Resources.Load<TextAsset>("Narrative/EvaluationContent");
-                if (evaluationContent != null) evaluationData = JsonUtility.FromJson<EvaluationContent>(evaluationContent.text);
-                return evaluationData;
-            }
-        }
+        EvaluationContent EvaluationData => evaluationData ?? (evaluationData = JsonContent.Evaluation);
+
         EvaluationState Evaluation => EvaluationRules.Ensure(State, EvaluationData);
         EvaluationPoint EvaluationPointNow() => EvaluationRules.Point(State, Case.id, CampaignData.contentVersion);
 
         void SetupEvaluationUI()
         {
-            if (EvaluationData == null) return;
-            foreach (string screen in new[] { "knowledge", "initial-knowledge", "final-knowledge" })
+            foreach (string screen in new[] { "initial-knowledge", "final-knowledge", "initial-tendencies", "final-tendencies" })
             {
                 if (!roots.ContainsKey(screen)) continue;
-                var first = Get<Button>(screen + ".answer.0");
-                if (first == null) continue;
-                if (Get<Button>(screen + ".answer.3") == null)
+                var first = Get<Button>(screen + ".answer.0"); if (first == null) continue;
+                for (int i = 0; i < 5; i++)
                 {
-                    var fourth = Instantiate(first.gameObject, first.transform.parent).GetComponent<Button>();
-                    fourth.name = "Fourth knowledge answer";
-                    fourth.onClick.RemoveAllListeners();
-                    string targetScreen = screen;
-                    fourth.onClick.AddListener(() => { PlayClick(); AnswerCampaign(targetScreen, 3); });
-                    targets[screen + ".answer.3"] = fourth;
-                    targets[screen + ".answer.3.label"] = fourth.GetComponentInChildren<TMP_Text>(true);
-                }
-                for (int i = 0; i < 4; i++)
-                {
-                    var button = Get<Button>(screen + ".answer." + i);
-                    if (button != null) button.navigation = new Navigation { mode = Navigation.Mode.None };
+                    string key = screen + ".answer." + i;
+                    var button = Get<Button>(key);
+                    if (button == null)
+                    {
+                        button = Instantiate(first.gameObject, first.transform.parent).GetComponent<Button>();
+                        button.name = "Assessment answer " + i; button.onClick.RemoveAllListeners();
+                        string target = screen; int answer = i;
+                        button.onClick.AddListener(() => { PlayClick(); AnswerCampaign(target, answer); });
+                        targets[key] = button; targets[key + ".label"] = button.GetComponentInChildren<TMP_Text>(true);
+                    }
+                    button.navigation = new Navigation { mode = Navigation.Mode.None };
                 }
                 evaluationQuizLayouts.Add(screen);
             }
@@ -65,136 +54,76 @@ namespace DemocracyWay.NewUI
 
         bool TryAnswerEvaluation(string screen, int answer)
         {
-            if (EvaluationData == null || (screen != "initial-knowledge" && screen != "final-knowledge")) return false;
-            if (screen == "initial-knowledge")
+            bool initial = screen == "initial-knowledge", final = screen == "final-knowledge";
+            bool tendency = screen == "initial-tendencies" || screen == "final-tendencies";
+            if (!initial && !final && !tendency) return false;
+            if (tendency)
             {
-                if (Evaluation.baselineComplete)
+                bool post = screen == "final-tendencies";
+                if (!EvaluationRules.AnswerTendency(State, EvaluationData, post, answer + 1, EvaluationPointNow())) return true;
+                if (post && Evaluation.finalTendencyComplete) { GoCampaign("final-survey"); return true; }
+                if (!post && Evaluation.baselineTendencyComplete)
                 {
-                    if (answer == 0) { Evaluation.onboardingHelpSeen = true; SaveCheckpoint(); GoCampaign("prytany-title"); }
-                    return true;
+                    State.biographyIndex = 0; State.phase = "biography"; SaveCheckpoint(); ShowBiography(); return true;
                 }
+            }
+            else if (initial)
+            {
                 if (Evaluation.baselineFeedbackPending)
                 {
                     if (answer != 0 || !EvaluationRules.ContinueBaseline(State, EvaluationData)) return true;
-                    if (Evaluation.baselineComplete) { SaveCheckpoint(); RenderCampaign(); ClearSelection(); return true; }
                 }
                 else if (!EvaluationRules.AnswerBaseline(State, EvaluationData, answer, EvaluationPointNow())) return true;
+                if (Evaluation.baselineComplete) { GoCampaign("initial-tendencies"); return true; }
             }
             else
             {
-                if (!EvaluationRules.Available(State, EvaluationData)) return false;
-                if (!EvaluationRules.FullCampaignComplete(State))
-                {
-                    if (!EvaluationRules.HasPoint(Evaluation.startPoint)) EvaluationRules.Begin(State, EvaluationData, EvaluationPointNow(), "map-stela");
-                    GoCampaign("final-survey"); return true;
-                }
-                if (!EvaluationRules.BeginPost(State, EvaluationData, EvaluationPointNow()) && !Evaluation.postComplete) return true;
-                if (!EvaluationRules.AnswerPost(State, EvaluationData, answer)) return true;
-                if (Evaluation.postComplete) { GoCampaign(Evaluation.completed ? "complete" : "final-survey"); return true; }
+                if (!EvaluationRules.BeginPost(State, EvaluationData, EvaluationPointNow()) || !EvaluationRules.AnswerPost(State, EvaluationData, answer)) return true;
+                if (Evaluation.postComplete) { GoCampaign("final-tendencies"); return true; }
             }
             SaveCheckpoint(); RenderCampaign(); ClearSelection(); return true;
         }
 
         bool TryRenderEvaluationQuestion()
         {
-            if (EvaluationData == null || (currentScreen != "initial-knowledge" && currentScreen != "final-knowledge")) return false;
+            if(currentScreen=="demographics"){RenderDemographics();return true;}
+            bool baseline = currentScreen == "initial-knowledge", post = currentScreen == "final-knowledge";
+            bool tendency = currentScreen == "initial-tendencies" || currentScreen == "final-tendencies";
+            if (!baseline && !post && !tendency) return false;
             if (!evaluationQuizLayouts.Contains(currentScreen)) SetupEvaluationUI();
-            bool baseline = currentScreen == "initial-knowledge";
-            if (!baseline)
+            var e = Evaluation;
+            if (post && !EvaluationRules.BeginPost(State, EvaluationData, EvaluationPointNow())) { GoCampaign("map-stela"); return true; }
+            if(baseline && !e.baselineComplete && e.baselineIndex==0 && !DemographicsRules.Ensure(State,EvaluationData.demographics).completed){GoCampaign("demographics");return true;}
+            if (baseline && e.baselineComplete) { GoCampaign("initial-tendencies"); return true; }
+            if (post && e.postComplete) { GoCampaign("final-tendencies"); return true; }
+            bool finalTendency = currentScreen == "final-tendencies";
+            if (tendency && (finalTendency ? e.finalTendencyComplete : e.baselineTendencyComplete))
             {
-                if (!EvaluationRules.Available(State, EvaluationData))
-                {
-                    var fourth = Get<Button>(currentScreen + ".answer.3"); if (fourth != null) fourth.gameObject.SetActive(false);
-                    return false; // A legacy run without the new baseline keeps its legacy end-of-campaign instrument.
-                }
-                if (!EvaluationRules.FullCampaignComplete(State))
-                {
-                    if (!EvaluationRules.HasPoint(Evaluation.startPoint)) EvaluationRules.Begin(State, EvaluationData, EvaluationPointNow(), "map-stela");
-                    GoCampaign("final-survey"); return true;
-                }
-                if (!Evaluation.postComplete && !EvaluationRules.HasPoint(Evaluation.postPoint))
-                {
-                    if (!EvaluationRules.BeginPost(State, EvaluationData, EvaluationPointNow())) return false;
-                    SaveCheckpoint();
-                }
+                if (finalTendency) GoCampaign("final-survey");
+                else { State.biographyIndex = 0; State.phase = "biography"; SaveCheckpoint(); ShowBiography(); }
+                return true;
             }
-            var state = Evaluation;
-            if (baseline && state.baselineComplete)
-            {
-                if (state.onboardingHelpSeen) { GoCampaign("prytany-title"); return true; }
-                RenderOnboardingGuide(); return true;
-            }
-            if (!baseline && state.postComplete) { GoCampaign(state.completed ? "complete" : "final-survey"); return true; }
-            int index = Mathf.Clamp(baseline ? state.baselineIndex : state.postIndex, 0, 7);
-            var question = (baseline ? EvaluationData.onboarding : EvaluationData.postTest)[index];
-            bool feedback = baseline && state.baselineFeedbackPending;
-            bool correct = feedback && state.baselineAnswers[index] == question.correctIndex;
+            if (tendency && (finalTendency ? !e.postComplete : !e.baselineComplete)) { GoCampaign(finalTendency ? "final-knowledge" : "initial-knowledge"); return true; }
+            int index = tendency ? finalTendency ? e.finalTendencyIndex : e.baselineTendencyIndex : baseline ? e.baselineIndex : e.postIndex;
+            var questions = baseline ? EvaluationData.onboarding : EvaluationData.postTest;
+            var question = tendency ? null : questions[index];
+            int count = tendency ? EvaluationData.tendencies.Length : questions.Length;
+            string prompt = tendency ? EvaluationData.tendencies[index].prompt : question.prompt;
+            CampaignText("heading", (index+1)+"/"+count+" · "+prompt);
+            CampaignText("banner", tendency ? finalTendency ? "Τελικές τάσεις" : "Αρχικές τάσεις" : baseline ? "Αρχικές γνώσεις" : "Τελικές γνώσεις");
+            CampaignText("body", tendency ? EvaluationData.tendencyInstructions : "Επίλεξε μία από τις τέσσερις απαντήσεις.");
             HideEvaluationChrome(currentScreen);
-            CampaignText("heading", feedback ? correct ? "Σωστά!" : "Δεν ήταν αυτή η σωστή απάντηση" : (index + 1) + "/8 · " + question.prompt);
-            CampaignText("body", feedback ? "Σωστή απάντηση: " + question.answers[question.correctIndex] + "\n\n" + question.feedback +
-                (string.IsNullOrWhiteSpace(question.identityTemplate) ? "" : "\n\n" + EvaluationIdentity(question.identityTemplate))
-                : baseline ? "Επίλεξε μία απάντηση. Στη συνέχεια θα δεις μια σύντομη εξήγηση και τη σύνδεση με τον χαρακτήρα σου."
-                : "Επίλεξε μία απάντηση για κάθε ερώτηση. Η απάντησή σου οριστικοποιείται με την επιλογή.");
-            var heading = Get<TMP_Text>(currentScreen + ".heading");
-            var body = Get<TMP_Text>(currentScreen + ".body");
-            if (heading != null)
-            {
-                CivicUIFactory.Box(heading.rectTransform, 0, 88, 1058.4f, feedback ? 80 : 124);
-                heading.enableAutoSizing = true; heading.fontSizeMin = 26; heading.fontSizeMax = 39;
-                heading.color = feedback && !correct ? new Color32(135, 64, 51, 255) : CivicUIFactory.Ink;
-            }
-            if (body != null)
-            {
-                CivicUIFactory.Box(body.rectTransform, 0, feedback ? 182 : 224, 1058.4f, feedback ? 330 : 64);
-                body.enableAutoSizing = true; body.fontSizeMin = 22; body.fontSizeMax = feedback ? 29 : 25;
-            }
-            for (int i = 0; i < 4; i++)
-            {
-                var button = Get<Button>(currentScreen + ".answer." + i);
-                if (button == null) continue;
-                button.gameObject.SetActive(!feedback || i == 0); button.interactable = true;
-                var r = (RectTransform)button.transform;
-                CivicUIFactory.Box(r, feedback ? 239 : 0, feedback ? 548 : 308 + i * 80, feedback ? 580 : 1058.4f, feedback ? 76 : 72);
-                var label = button.GetComponentInChildren<TMP_Text>(true);
-                if (label != null)
-                {
-                    CivicUIFactory.Fill(label.rectTransform, new Vector2(24, 8), new Vector2(24, 8));
-                    label.text = feedback ? "Συνέχεια" : (char)('Α' + i) + "   " + question.answers[i];
-                    label.enableAutoSizing = true; label.fontSizeMin = 20; label.fontSizeMax = 28;
-                    if (feedback) label.alignment = TextAlignmentOptions.Center;
-                    else label.alignment = TextAlignmentOptions.Left;
-                }
+            var heading=Get<TMP_Text>(currentScreen+".heading");var body=Get<TMP_Text>(currentScreen+".body");
+            if(heading!=null){CivicUIFactory.Box(heading.rectTransform,0,88,1058.4f,124);heading.enableAutoSizing=true;heading.fontSizeMin=25;heading.fontSizeMax=38;heading.color=CivicUIFactory.Ink;}
+            if(body!=null){CivicUIFactory.Box(body.rectTransform,0,218,1058.4f,64);body.enableAutoSizing=true;body.fontSizeMin=21;body.fontSizeMax=26;}
+            for(int i=0;i<5;i++) {
+                var button=Get<Button>(currentScreen+".answer."+i);if(button==null)continue;
+                button.gameObject.SetActive(i<(tendency?5:4));button.interactable=true;
+                CivicUIFactory.Box((RectTransform)button.transform,0,296+i*68,1058.4f,62);
+                var label=button.GetComponentInChildren<TMP_Text>(true);
+                if(label!=null){CivicUIFactory.Fill(label.rectTransform,new Vector2(24,8),new Vector2(24,8));label.text=tendency?(i+1)+"   "+EvaluationData.tendencyRatingLabels[i]:(char)('Α'+i)+"   "+(i<4?question.answers[i]:"");label.enableAutoSizing=true;label.fontSizeMin=20;label.fontSizeMax=27;label.alignment=TextAlignmentOptions.Left;}
             }
             ClearSelection(); return true;
-        }
-
-        string EvaluationIdentity(string template)
-        {
-            string economic = State.economicClassIndex >= 0 && State.economicClassIndex < config.economicClasses.Count ? config.economicClasses[State.economicClassIndex] : "—";
-            return template.Replace("{playerName}", State.playerName ?? "").Replace("{tribe}", TribeName(State.tribeIndex))
-                .Replace("{trittys}", TrittysLabel() ?? "").Replace("{deme}", State.deme ?? "")
-                .Replace("{economicClass}", economic).Replace("{offices}", State.offices ?? "").Replace("{profession}", State.profession ?? "");
-        }
-
-        void RenderOnboardingGuide()
-        {
-            HideEvaluationChrome(currentScreen);
-            CampaignText("heading", "Πώς θα κινηθείς στην πόλη");
-            CampaignText("body", "Το παιχνίδι ακολουθεί δέκα πρυτανείες. Στην αρχή καθεμιάς κληρώνεται η φυλή που θα πρυτανεύσει· όσες έχουν ήδη αναλάβει δεν κληρώνονται ξανά. Οι πέντε εβδομάδες κάθε πρυτανείας είναι εκπαιδευτική συμπύκνωση του ιστορικού χρόνου.\n\nΣτον χάρτη επίλεξε τον θεσμό με ενεργή υπόθεση. Απάντησε στην ερώτηση γνώσης, γνώρισε τη διαδικασία και άκουσε τους ομιλητές με το «Συνέχεια». Έπειτα μπορείς να ζητήσεις τον λόγο και να υποστηρίξεις μία πρόταση. Η προσωπική σου ψήφος δεν εξασφαλίζει την επικράτησή της.\n\nΣτην αγορά διαβάζεις τις εξελίξεις. Στο Ευρετήριο βρίσκεις εξηγήσεις, στους λογογράφους μπορείς να προμηθευτείς λόγο και στους αξιωματούχους να αναζητήσεις υποστήριξη. Παρακολούθησε τους προσωπικούς δείκτες, την κατάσταση της πόλης και τα δύο ταμεία: οι αποφάσεις αφήνουν συνέπειες στις επόμενες υποθέσεις.\n\nΑφού ολοκληρώσεις την εβδομάδα, προχωράς στην επόμενη· η πρόοδος αποθηκεύεται αυτόματα. Μετά την πρώτη πρυτανεία θα μπορείς να συμπληρώσεις την αξιολόγηση ή να συνεχίσεις και να την κάνεις αργότερα.");
-            var heading = Get<TMP_Text>(currentScreen + ".heading");
-            var body = Get<TMP_Text>(currentScreen + ".body");
-            CivicUIFactory.Box(heading.rectTransform, 0, 88, 1058.4f, 64);
-            heading.color = CivicUIFactory.Ink;
-            CivicUIFactory.Box(body.rectTransform, 0, 166, 1058.4f, 420);
-            body.enableAutoSizing = true; body.fontSizeMin = 21; body.fontSizeMax = 26;
-            for (int i = 0; i < 4; i++)
-            {
-                var button = Get<Button>(currentScreen + ".answer." + i);
-                button.gameObject.SetActive(i == 0);
-                if (i != 0) continue;
-                CivicUIFactory.Box((RectTransform)button.transform, 239, 610, 580, 70);
-                button.GetComponentInChildren<TMP_Text>(true).text = "Στην πρώτη πρυτανεία";
-            }
         }
 
         void HideEvaluationChrome(string screen)
@@ -211,48 +140,11 @@ namespace DemocracyWay.NewUI
             }
         }
 
-        void RenderEvaluationAccess()
-        {
-            if (State == null || EvaluationData == null || !roots.TryGetValue("map-stela", out var map)) return;
-            if (evaluationAccessButton == null)
-            {
-                var font = Get<TMP_Text>("initial-knowledge.heading")?.font;
-                evaluationAccessButton = CivicUIFactory.Button(map.transform, "Evaluation access", "Αξιολόγηση", font, StartEvaluation, this);
-                var rect = (RectTransform)evaluationAccessButton.transform; rect.anchorMin = rect.anchorMax = new Vector2(.91f, .13f); rect.pivot = new Vector2(.5f, .5f); rect.anchoredPosition = Vector2.zero; rect.sizeDelta = new Vector2(330, 76);
-                var mark = CivicUIFactory.Rect(rect, "Completed evaluation checkmark");
-                mark.anchorMin = mark.anchorMax = mark.pivot = new Vector2(1, .5f);
-                mark.anchoredPosition = new Vector2(-20, 0); mark.sizeDelta = new Vector2(26, 26);
-                mark.gameObject.AddComponent<CanvasRenderer>();
-                evaluationCompletedMark = mark.gameObject.AddComponent<CheckmarkGraphic>();
-                evaluationCompletedMark.color = CivicUIFactory.Ink; evaluationCompletedMark.raycastTarget = false;
-                mark.gameObject.SetActive(false);
-                targets["map.evaluation"] = evaluationAccessButton;
-            }
-            bool available = EvaluationRules.Available(State, EvaluationData);
-            evaluationAccessButton.gameObject.SetActive(available || Evaluation.completed);
-            evaluationAccessButton.interactable = available && !Evaluation.completed;
-            evaluationAccessButton.GetComponentInChildren<TMP_Text>().text = "Αξιολόγηση";
-            if (evaluationCompletedMark != null) evaluationCompletedMark.gameObject.SetActive(Evaluation.completed);
-            if (!modalOpen && !gamePaused && EvaluationRules.Offer(State, EvaluationData, EvaluationPointNow()))
-            {
-                SaveCheckpoint();
-                ShowEvaluationDialog(EvaluationData.offerTitle, EvaluationData.offerBody, EvaluationData.offerNow ?? "Αξιολόγηση τώρα", StartEvaluation,
-                    EvaluationData.offerLater ?? "Συνεχίζω και θα την κάνω μετά", DeferEvaluation);
-            }
-        }
-
         public void StartEvaluation()
         {
             HideEvaluationDialog();
-            bool fullCampaign = EvaluationRules.FullCampaignComplete(State);
-            if (EvaluationData == null || !EvaluationRules.Begin(State, EvaluationData, EvaluationPointNow(), fullCampaign ? "complete" : State.phase)) return;
-            GoCampaign(fullCampaign && !Evaluation.postComplete ? "final-knowledge" : "final-survey");
-        }
-
-        public void DeferEvaluation()
-        {
-            HideEvaluationDialog();
-            if (EvaluationData != null && EvaluationRules.Defer(State, EvaluationData)) SaveCheckpoint();
+            if (!EvaluationRules.Begin(State, EvaluationData, EvaluationPointNow(), "complete")) return;
+            GoCampaign(!Evaluation.postComplete ? "final-knowledge" : !Evaluation.finalTendencyComplete ? "final-tendencies" : "final-survey");
         }
 
         public void RecordEvaluationRating(bool intention, int index, int value)
@@ -266,20 +158,33 @@ namespace DemocracyWay.NewUI
             if (EvaluationData == null || State == null || !EvaluationRules.HasPoint(Evaluation.startPoint)) return false;
             if (evaluationSurveyPanel == null) CreateEvaluationSurvey();
             evaluationSurveyPanel.SetActive(true); HideEvaluationChrome("final-survey");
-            int[] values = Evaluation.experienceAnswers.Concat(Evaluation.intentionAnswers).ToArray();
+            var evaluation = Evaluation;
+            int[] values = evaluation.experienceAnswers.Concat(evaluation.intentionAnswers).ToArray();
             for (int row = 0; row < evaluationRatingRows.Count; row++)
                 for (int value = 0; value < 5; value++)
                 {
                     var button = evaluationRatingRows[row][value]; bool selected = values[row] == value + 1;
                     button.GetComponent<PanelGraphic>().color = selected ? CivicUIFactory.Teal : CivicUIFactory.Paper;
                     button.GetComponentInChildren<TMP_Text>().color = selected ? CivicUIFactory.Paper : CivicUIFactory.Ink;
-                    button.interactable = !Evaluation.completed;
+                    button.interactable = !evaluation.completed;
                 }
-            int answered = values.Count(x => x >= 1);
-            evaluationSurveyProgress.text = Evaluation.completed ? "Οι απαντήσεις σου αποθηκεύτηκαν." : answered + " από " + values.Length + " απαντήσεις";
-            evaluationSubmitButton.interactable = Evaluation.completed || answered == values.Length;
-            evaluationSubmitButton.GetComponentInChildren<TMP_Text>().text = Evaluation.completed ? "Επιστροφή στο παιχνίδι" : "Υποβολή αξιολόγησης";
-            if (Evaluation.completed && !modalOpen) ShowEvaluationCompletion();
+            foreach (var pair in evaluationNotApplicableButtons)
+            {
+                bool selected = values[pair.Key] == 0;
+                pair.Value.GetComponent<PanelGraphic>().color = selected ? CivicUIFactory.Teal : CivicUIFactory.Paper;
+                pair.Value.GetComponentInChildren<TMP_Text>().color = selected ? CivicUIFactory.Paper : CivicUIFactory.Ink;
+                pair.Value.interactable = !evaluation.completed;
+            }
+            if (evaluationFeedback != null)
+            {
+                if (!evaluationFeedback.isFocused) evaluationFeedback.SetTextWithoutNotify(evaluation.openFeedback ?? "");
+                evaluationFeedback.readOnly = evaluation.completed;
+            }
+            int answered = values.Count(x => x >= 0);
+            evaluationSurveyProgress.text = evaluation.completed ? "Οι απαντήσεις σου αποθηκεύτηκαν." : answered + " από " + values.Length + " απαντήσεις";
+            evaluationSubmitButton.interactable = evaluation.completed || EvaluationRules.QuestionnaireAnswered(evaluation, EvaluationData);
+            evaluationSubmitButton.GetComponentInChildren<TMP_Text>().text = evaluation.completed ? "Ολοκλήρωση" : "Υποβολή αξιολόγησης";
+            if (evaluation.completed && !modalOpen) ShowEvaluationCompletion();
             return true;
         }
 
@@ -291,24 +196,34 @@ namespace DemocracyWay.NewUI
             foreach (Transform child in root.transform) if (child.GetComponent<RawImage>() == null) child.gameObject.SetActive(false);
             var panel = CivicUIFactory.Panel(root.transform, "Evaluation questionnaire", CivicUIFactory.Teal); evaluationSurveyPanel = panel.gameObject;
             var rect = panel.rectTransform; rect.anchorMin = new Vector2(.035f, .055f); rect.anchorMax = new Vector2(.965f, .95f); rect.offsetMin = rect.offsetMax = Vector2.zero;
-            var title = CivicUIFactory.Text(rect, "Questionnaire title", "Η εμπειρία σου από το παιχνίδι", font, 36, CivicUIFactory.Paper); CivicUIFactory.Box(title.rectTransform, 30, 20, 1800, 56);
-            var instruction = CivicUIFactory.Text(rect, "Questionnaire instruction", "Απάντησε με βάση το μέρος του παιχνιδιού που πραγματικά έπαιξες. Σε κάθε πρόταση επίλεξε από 1 έως 5.", font, 24, CivicUIFactory.Paper); CivicUIFactory.Box(instruction.rectTransform, 30, 82, 1900, 70);
-            evaluationSurveyScroll = CivicUIFactory.Scroll(rect, "Fourteen evaluation statements", out evaluationSurveyContent);
-            var scroll = (RectTransform)evaluationSurveyScroll.transform; CivicUIFactory.Fill(scroll, new Vector2(26, 128), new Vector2(26, 170));
+            var title = CivicUIFactory.Text(rect, "Questionnaire title", "Η εμπειρία σου από το παιχνίδι", font, 36, CivicUIFactory.Paper);
+            title.rectTransform.anchorMin = new Vector2(0, 1); title.rectTransform.anchorMax = Vector2.one;
+            title.rectTransform.offsetMin = new Vector2(30, -76); title.rectTransform.offsetMax = new Vector2(-30, -20);
+            var instruction = CivicUIFactory.Text(rect, "Questionnaire instruction", EvaluationData.questionnaireInstructions ?? "Απάντησε με βάση το μέρος του παιχνιδιού που έπαιξες. Δεν υπάρχουν σωστές ή λάθος απαντήσεις.", font, 24, CivicUIFactory.Paper);
+            instruction.rectTransform.anchorMin = new Vector2(0, 1); instruction.rectTransform.anchorMax = Vector2.one;
+            instruction.rectTransform.offsetMin = new Vector2(30, -182); instruction.rectTransform.offsetMax = new Vector2(-30, -82);
+            instruction.textWrappingMode = TextWrappingModes.Normal; instruction.overflowMode = TextOverflowModes.Truncate;
+            instruction.alignment = TextAlignmentOptions.TopLeft;
+            instruction.enableAutoSizing = true; instruction.fontSizeMin = 20; instruction.fontSizeMax = 24;
+            evaluationSurveyScroll = CivicUIFactory.Scroll(rect, "Evaluation statements", out evaluationSurveyContent);
+            var scroll = (RectTransform)evaluationSurveyScroll.transform; CivicUIFactory.Fill(scroll, new Vector2(26, 190), new Vector2(26, 170));
             Canvas.ForceUpdateCanvases();
             float width = Mathf.Max(1200, evaluationSurveyScroll.viewport.rect.width - 20), y = 8;
             var items = EvaluationData.experience.Concat(EvaluationData.participationIntention).ToArray();
+            string previousSection = null;
             for (int i = 0; i < items.Length; i++)
             {
-                if (i == EvaluationData.experience.Length)
+                string sectionName = items[i].section;
+                if (!string.IsNullOrEmpty(sectionName) && sectionName != previousSection)
                 {
-                    var section = CivicUIFactory.Text(evaluationSurveyContent, "Participation intention section", "Πρόθεση πολιτικής συμμετοχής", font, 29, CivicUIFactory.Ink); section.fontStyle = FontStyles.Bold;
+                    var section = CivicUIFactory.Text(evaluationSurveyContent, "Questionnaire section", sectionName, font, 29, CivicUIFactory.Ink); section.fontStyle = FontStyles.Bold;
                     CivicUIFactory.Box(section.rectTransform, 22, y + 10, width - 44, 54); y += 78;
                 }
+                previousSection = sectionName;
                 var item = items[i]; var row = CivicUIFactory.Panel(evaluationSurveyContent, "Statement " + i, new Color32(236, 227, 204, 255));
                 float questionWidth = width * .45f;
                 var prompt = CivicUIFactory.Text(row.transform, "Statement prompt", (i + 1) + ". " + item.prompt, font, 26, CivicUIFactory.Ink);
-                float rowHeight = Mathf.Max(148, prompt.GetPreferredValues(prompt.text, questionWidth - 30, 0).y + 42);
+                float rowHeight = Mathf.Max(item.allowNotApplicable ? 205 : 148, prompt.GetPreferredValues(prompt.text, questionWidth - 30, 0).y + 42);
                 CivicUIFactory.Box(row.rectTransform, 0, y, width, rowHeight);
                 CivicUIFactory.Box(prompt.rectTransform, 20, 20, questionWidth - 30, rowHeight - 36);
                 float cellWidth = (width - questionWidth - 25) / 5;
@@ -325,8 +240,37 @@ namespace DemocracyWay.NewUI
                     buttons[j] = b; targets["evaluation.rating." + i + "." + j] = b;
                     targets["evaluation.ratingValue." + i + "." + value] = b;
                 }
+                if (item.allowNotApplicable)
+                {
+                    bool intention = i >= EvaluationData.experience.Length;
+                    int index = intention ? i - EvaluationData.experience.Length : i;
+                    var notApplicable = CivicUIFactory.Button(row.transform, "Cannot judge", EvaluationData.notApplicableLabel ?? "Δεν μπορώ να κρίνω", font,
+                        () => RecordEvaluationRating(intention, index, 0), this);
+                    notApplicable.transition = Selectable.Transition.None;
+                    CivicUIFactory.Box((RectTransform)notApplicable.transform, questionWidth, 134, width - questionWidth - 25, 54);
+                    evaluationNotApplicableButtons[i] = notApplicable;
+                    targets["evaluation.notApplicable." + i] = notApplicable;
+                }
                 evaluationRatingRows.Add(buttons); y += rowHeight + 16;
             }
+            var feedbackTitle = CivicUIFactory.Text(evaluationSurveyContent, "Optional feedback title", EvaluationData.openFeedbackPrompt ?? "Προαιρετικά: τι σε δυσκόλεψε ή τι θα άλλαζες;", font, 26, CivicUIFactory.Ink);
+            CivicUIFactory.Box(feedbackTitle.rectTransform, 22, y + 16, width - 44, 80); y += 104;
+            var feedbackPanel = CivicUIFactory.Panel(evaluationSurveyContent, "Optional feedback", CivicUIFactory.Paper);
+            CivicUIFactory.Box(feedbackPanel.rectTransform, 12, y, width - 24, 190);
+            var viewport = CivicUIFactory.Rect(feedbackPanel.transform, "Text viewport");
+            CivicUIFactory.Fill(viewport, new Vector2(20, 14), new Vector2(20, 14)); viewport.gameObject.AddComponent<RectMask2D>();
+            var feedbackText = CivicUIFactory.Text(viewport, "Feedback text", "", font, 25, CivicUIFactory.Ink); CivicUIFactory.Fill(feedbackText.rectTransform, Vector2.zero, Vector2.zero);
+            feedbackText.alignment = TextAlignmentOptions.TopLeft; feedbackText.richText = false; feedbackText.raycastTarget = false;
+            var placeholder = CivicUIFactory.Text(viewport, "Feedback placeholder", "Μην συμπεριλάβεις όνομα, email ή άλλα προσωπικά στοιχεία.", font, 24, new Color(.25f, .25f, .25f, .7f));
+            CivicUIFactory.Fill(placeholder.rectTransform, Vector2.zero, Vector2.zero); placeholder.alignment = TextAlignmentOptions.TopLeft; placeholder.raycastTarget = false;
+            evaluationFeedback = feedbackPanel.gameObject.AddComponent<TMP_InputField>();
+            evaluationFeedback.textViewport = viewport; evaluationFeedback.textComponent = feedbackText; evaluationFeedback.placeholder = placeholder;
+            evaluationFeedback.targetGraphic = feedbackPanel; evaluationFeedback.lineType = TMP_InputField.LineType.MultiLineNewline;
+            evaluationFeedback.characterLimit = Math.Min(1000, EvaluationData.openFeedbackMaxLength > 0 ? EvaluationData.openFeedbackMaxLength : 1000);
+            evaluationFeedback.navigation = new Navigation { mode = Navigation.Mode.None };
+            evaluationFeedback.onEndEdit.AddListener(value => { if (EvaluationRules.SetFeedback(State, EvaluationData, value)) SaveCheckpoint(); });
+            targets["evaluation.feedback"] = evaluationFeedback;
+            y += 220;
             evaluationSurveyContent.sizeDelta = new Vector2(0, y + 8);
             evaluationSurveyProgress = CivicUIFactory.Text(rect, "Answered statement count", "", font, 24, CivicUIFactory.Paper);
             var progressRect = evaluationSurveyProgress.rectTransform; progressRect.anchorMin = progressRect.anchorMax = new Vector2(.04f, .065f); progressRect.pivot = new Vector2(0, .5f); progressRect.anchoredPosition = Vector2.zero; progressRect.sizeDelta = new Vector2(900, 54);
@@ -341,6 +285,7 @@ namespace DemocracyWay.NewUI
             if (EvaluationData == null || !EvaluationRules.HasPoint(Evaluation.startPoint)) return false;
             if (!Evaluation.completed)
             {
+                if (evaluationFeedback != null && !EvaluationRules.SetFeedback(State, EvaluationData, evaluationFeedback.text)) return true;
                 if (!EvaluationRules.Submit(State, EvaluationData, EvaluationPointNow())) return true;
             }
             if (!SaveCheckpoint()) return true;
@@ -349,16 +294,14 @@ namespace DemocracyWay.NewUI
 
         void ShowEvaluationCompletion()
         {
-            ShowEvaluationDialog("Η αξιολόγηση ολοκληρώθηκε", "Οι απαντήσεις σου αποθηκεύτηκαν. Μπορείς να συνεχίσεις από το σημείο όπου σταμάτησες την πορεία σου.",
-                "Συνέχεια στο παιχνίδι", ReturnFromEvaluation, null, ReturnFromEvaluation);
+            ShowEvaluationDialog("Η αξιολόγηση ολοκληρώθηκε", "Οι απαντήσεις γνώσεων, τάσεων και εμπειρίας αποθηκεύτηκαν. Ευχαριστούμε για τη συμμετοχή σου.",
+                "Ολοκλήρωση", ReturnFromEvaluation, null, ReturnFromEvaluation);
         }
 
         void ReturnFromEvaluation()
         {
             HideEvaluationDialog();
-            string destination = Evaluation.returnPhase;
-            if (string.IsNullOrEmpty(destination) || destination == "final-survey" || destination == "final-knowledge") destination = "map-stela";
-            GoCampaign(destination);
+            GoCampaign("complete");
         }
 
         bool HandleEvaluationEscape()
@@ -402,7 +345,7 @@ namespace DemocracyWay.NewUI
 
         void CreateEvaluationDialog()
         {
-            var parent = roots["map-stela"].transform.parent;
+            var parent = roots[currentScreen].transform.parent;
             var shade = CivicUIFactory.Panel(parent, "Evaluation dialog overlay", new Color32(12, 25, 28, 230));
             evaluationDialog = shade.gameObject; CivicUIFactory.Fill(shade.rectTransform, Vector2.zero, Vector2.zero);
             var panel = CivicUIFactory.Panel(shade.transform, "Evaluation dialog", CivicUIFactory.Paper);

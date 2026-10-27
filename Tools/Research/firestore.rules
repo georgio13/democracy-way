@@ -1,14 +1,9 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Existing application routes retained unchanged.
-    match /sessions/{sessionId} {
-      allow create, update: if true;
-      allow read, delete: if false;
-    }
-    match /sessions/{sessionId}/events/{eventId} {
-      allow create: if true;
-      allow read, update, delete: if false;
+    // Retired unauthenticated prototype route. Current clients use participants/players.
+    match /sessions/{document=**} {
+      allow read, write: if false;
     }
     // Email/password accounts: private metadata, never copied into research events.
     function accountOwner(uid) {

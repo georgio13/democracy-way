@@ -72,6 +72,8 @@ namespace DemocracyWay.NewUI
                 return;
             }
 
+            config = JsonContent.Configuration(config);
+
             foreach (UIBinding binding in bindings)
             {
                 if (binding == null || string.IsNullOrWhiteSpace(binding.key) || binding.target == null)
@@ -105,11 +107,6 @@ namespace DemocracyWay.NewUI
 
         private void Start()
         {
-            if (!AccountBridge.IsReady && string.IsNullOrEmpty(EditorTestDirectory()))
-            {
-                UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Login");
-                return;
-            }
             if (config.cursorTexture != null)
                 Cursor.SetCursor(config.cursorTexture, config.cursorHotspot, CursorMode.Auto);
             string requested = GameSession.PendingScreen;
@@ -170,6 +167,7 @@ namespace DemocracyWay.NewUI
 
         private void OnDestroy()
         {
+            if (config != null && Application.isPlaying) Destroy(config);
             if (gamePaused)
                 Time.timeScale = prePauseTimeScale;
             foreach (var pair in clickHandlers)
@@ -319,7 +317,7 @@ namespace DemocracyWay.NewUI
                 }
 
                 Debug.LogError("GameFlowController: missing screen binding " + id + " in " + SceneManager.GetActiveScene().name, this);
-                SetStatus(ArticyNarrative.Copy("Copy_a2ba254fd31afa60") + id + "».");
+                SetStatus(JsonContent.Copy("Copy_a2ba254fd31afa60") + id + "».");
                 return;
             }
 
@@ -366,6 +364,8 @@ namespace DemocracyWay.NewUI
                 return "MainMenu";
             if (id == "prologue" || id == "biography" || id.StartsWith("bio-", StringComparison.Ordinal))
                 return "Introduction";
+            if (id == "demographics" || id == "initial-knowledge" || id == "initial-tendencies" || id == "final-knowledge" || id == "final-tendencies" || id == "final-survey")
+                return "Assessment";
             if (id == "prytany-title" || id == "lottery" || id == "map-stela" || id == "pause" || id == "profile" || IsCityScreen(id) || IsCampaignScreen(id))
                 return "Gameplay";
             return null;
@@ -406,7 +406,7 @@ namespace DemocracyWay.NewUI
                 return true; // Direct scene preview never writes to a real slot.
             bool ok = SaveStore.Save(GameSession.Slot, State, out string error);
             if (ok)
-                ResearchTelemetry.Capture(State, campaignContent);
+                ResearchTelemetry.Capture(State);
             saveWarning = ok ? null : error;
             if (!ok)
             {
@@ -513,12 +513,12 @@ namespace DemocracyWay.NewUI
                 return "";
             string[] names =
             {
-                ArticyNarrative.Copy("Copy_5c3117cb8ed2675b"),
-                ArticyNarrative.Copy("Copy_44cbf197ce871c19"),
-                ArticyNarrative.Copy("Copy_2b3515f2ecd7824a"),
-                ArticyNarrative.Copy("Copy_2c88568db2fddb62"),
-                ArticyNarrative.Copy("Copy_cc950e76fab76b7a"),
-                ArticyNarrative.Copy("Copy_c638883310aed0c3")
+                JsonContent.Copy("Copy_5c3117cb8ed2675b"),
+                JsonContent.Copy("Copy_44cbf197ce871c19"),
+                JsonContent.Copy("Copy_2b3515f2ecd7824a"),
+                JsonContent.Copy("Copy_2c88568db2fddb62"),
+                JsonContent.Copy("Copy_cc950e76fab76b7a"),
+                JsonContent.Copy("Copy_c638883310aed0c3")
             };
             int[] values =
             {

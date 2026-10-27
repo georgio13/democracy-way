@@ -9,13 +9,15 @@ namespace DemocracyWay.NewUI
     [Serializable]
     public sealed class InstitutionCase
     {
-        public string id, title, question, explanation, source, brief, argumentA, argumentB;
-        public string[] answers;
-        public int site, correct, costA, costB, war;
+        public string id, title, source, brief, choiceA, choiceB, presentationMode;
+        [NonSerialized] public string argumentA, argumentB, speakerA, speakerB;
+        public int site, costA, costB, war;
         public bool observation;
-        public string institution, speakerA, speakerB, leanA, leanB, leanReasonA, leanReasonB;
+        public string institution, leanA, leanB, leanReasonA, leanReasonB;
         public int attendanceObols;
         public CharacterMetrics metricsA = new CharacterMetrics(), metricsB = new CharacterMetrics();
-        public string politicsData, contentVersion;
+        public string contentVersion;
+        public CaseArgument[] arguments;
+        public PoliticalCaseDefinition politics;
     }
 }

@@ -37,7 +37,7 @@ namespace DemocracyWay.NewUI
             bool allowed = currentScreen == "slots-new" ? result.status == SaveSlotStatus.Empty : result.status == SaveSlotStatus.Valid;
             if (!allowed)
             {
-                SetStatus(ArticyNarrative.Copy("Copy_7d2123a2aa37e008"));
+                SetStatus(JsonContent.Copy("Copy_7d2123a2aa37e008"));
                 return;
             }
 
@@ -68,7 +68,7 @@ namespace DemocracyWay.NewUI
 
                 GameSession.State = fresh;
                 GameSession.Slot = selectedSlot;
-                ResearchTelemetry.Capture(fresh, campaignContent);
+                ResearchTelemetry.Capture(fresh);
                 Show("prologue");
             }
             else if (currentScreen == "slots-load")
@@ -81,7 +81,7 @@ namespace DemocracyWay.NewUI
 
                 if (!Compatible(result.state))
                 {
-                    SetStatus(ArticyNarrative.Copy("Copy_5f96ebff952a90d9"));
+                    SetStatus(JsonContent.Copy("Copy_5f96ebff952a90d9"));
                     return;
                 }
 
@@ -104,7 +104,7 @@ namespace DemocracyWay.NewUI
                 return;
             pendingDelete = slot;
             exitConfirmation = false;
-            OpenModal(ArticyNarrative.Copy("Copy_d89d468447c2ade2") + (result.state != null ? result.state.playerName : ArticyNarrative.Copy("Copy_feb8809653ec7d20") + (slot + 1)) + ArticyNarrative.Copy("Copy_b06541c79ca58aee") + (slot + 1) + ArticyNarrative.Copy("Copy_c99911bb15cc693a"));
+            OpenModal(JsonContent.Copy("Copy_d89d468447c2ade2") + (result.state != null ? result.state.playerName : JsonContent.Copy("Copy_feb8809653ec7d20") + (slot + 1)) + JsonContent.Copy("Copy_b06541c79ca58aee") + (slot + 1) + JsonContent.Copy("Copy_c99911bb15cc693a"));
         }
 
         public void ConfirmDelete()
@@ -127,7 +127,7 @@ namespace DemocracyWay.NewUI
                 if (!IsWeb)
                 {
 #if UNITY_EDITOR
-                    Debug.Log(ArticyNarrative.Copy("Copy_c546d6ae1f2ab985"));
+                    Debug.Log(JsonContent.Copy("Copy_c546d6ae1f2ab985"));
 #else
                     Application.Quit();
 #endif
@@ -153,7 +153,7 @@ namespace DemocracyWay.NewUI
             }
 
             RenderSlots();
-            SetStatus(deleted ? ArticyNarrative.Copy("Copy_56fdc3548a43471e") + (slot + 1) + ArticyNarrative.Copy("Copy_08437fd7bef254cd") : error);
+            SetStatus(deleted ? JsonContent.Copy("Copy_56fdc3548a43471e") + (slot + 1) + JsonContent.Copy("Copy_08437fd7bef254cd") : error);
         }
 
         private void OpenModal(string body)
@@ -161,15 +161,15 @@ namespace DemocracyWay.NewUI
             GameObject modal = Get<GameObject>("modal.root");
             if (modal == null)
             {
-                SetStatus(ArticyNarrative.Copy("Copy_26d76bc8ac61da84"));
+                SetStatus(JsonContent.Copy("Copy_26d76bc8ac61da84"));
                 return;
             }
 
             SetText("modal.body", body);
-            SetText("modal.title", returnToMenuConfirmation ? ArticyNarrative.Copy("Copy_3b7d2b4c89341818") : exitConfirmation ? ArticyNarrative.Copy("Copy_3c425a1d54d29c48") : ArticyNarrative.Copy("Copy_08e52a462c5e8087"));
-            SetText("modal.banner", returnToMenuConfirmation ? ArticyNarrative.Copy("Copy_0fbdf139f32fbe03") : exitConfirmation ? ArticyNarrative.Copy("Copy_9e9d8f4e2e474fdd") : ArticyNarrative.Copy("Copy_dfa7abed718a9679"));
-            SetText("modal.cancel.label", returnToMenuConfirmation ? ArticyNarrative.Copy("Copy_98fa5c1c9102ad29") : exitConfirmation ? ArticyNarrative.Copy("Copy_c094b97741b41a20") : ArticyNarrative.Copy("Copy_24281287fc92ad20"));
-            SetText("modal.confirm.label", returnToMenuConfirmation ? ArticyNarrative.Copy("Copy_8394cf88f71e8118") : exitConfirmation ? ArticyNarrative.Copy("Copy_6a5920d4ffad7a42") : ArticyNarrative.Copy("Copy_650a9a115575ccac"));
+            SetText("modal.title", returnToMenuConfirmation ? JsonContent.Copy("Copy_3b7d2b4c89341818") : exitConfirmation ? JsonContent.Copy("Copy_3c425a1d54d29c48") : JsonContent.Copy("Copy_08e52a462c5e8087"));
+            SetText("modal.banner", returnToMenuConfirmation ? JsonContent.Copy("Copy_0fbdf139f32fbe03") : exitConfirmation ? JsonContent.Copy("Copy_9e9d8f4e2e474fdd") : JsonContent.Copy("Copy_dfa7abed718a9679"));
+            SetText("modal.cancel.label", returnToMenuConfirmation ? JsonContent.Copy("Copy_98fa5c1c9102ad29") : exitConfirmation ? JsonContent.Copy("Copy_c094b97741b41a20") : JsonContent.Copy("Copy_24281287fc92ad20"));
+            SetText("modal.confirm.label", returnToMenuConfirmation ? JsonContent.Copy("Copy_8394cf88f71e8118") : exitConfirmation ? JsonContent.Copy("Copy_6a5920d4ffad7a42") : JsonContent.Copy("Copy_650a9a115575ccac"));
             Button confirm = Get<Button>("modal.confirm");
             if (confirm != null && confirm.GetComponent<PanelGraphic>() != null)
                 confirm.GetComponent<PanelGraphic>().color = (exitConfirmation || returnToMenuConfirmation) ? new Color32(185, 160, 102, 255) : new Color32(164, 86, 67, 255);
@@ -216,7 +216,7 @@ namespace DemocracyWay.NewUI
                 return;
             exitConfirmation = true;
             pendingDelete = -1;
-            OpenModal(ArticyNarrative.Copy("Copy_9b8a2f9e7df301f6"));
+            OpenModal(JsonContent.Copy("Copy_9b8a2f9e7df301f6"));
         }
 
         public void OpenPause()
@@ -261,7 +261,7 @@ namespace DemocracyWay.NewUI
         {
             returnToMenuConfirmation = true;
             exitConfirmation = false;
-            OpenModal(ArticyNarrative.Copy("Copy_2abd78f173e97ef8"));
+            OpenModal(JsonContent.Copy("Copy_2abd78f173e97ef8"));
         }
 
         public void OpenProfile()

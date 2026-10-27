@@ -1,0 +1,27 @@
+{
+  "playerAge": 30,
+  "startingPersonalFunds": 120,
+  "startingCityFunds": 10000,
+  "defaultProfession": null,
+  "startingMetrics": {
+    "consistency": 50,
+    "ethics": 50,
+    "authority": 35,
+    "persuasion": 35,
+    "parrhesia": 35,
+    "recognition": 10
+  },
+  "schemaVersion": 1,
+  "contentVersion": 4,
+  "casesPerPrytany": 2,
+  "prytanyCount": 10,
+  "bribePrice": 30,
+  "speechUses": 2,
+  "endings": {
+    "warThreshold": 4,
+    "victoryReadiness": 20,
+    "victoryCityFunds": 6500,
+    "subjectionLegitimacy": -5,
+    "exilePersonalWar": 3
+  }
+}

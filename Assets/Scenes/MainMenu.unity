@@ -13759,9 +13759,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40dbcf9d6b64eaf42953ddcff1985a7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.GameFlowController
-  campaignContent: {fileID: 0}
-  cityContent: {fileID: 0}
-  evaluationContent: {fileID: 0}
   config: {fileID: 11400000, guid: 1bb51eaec60f1af48a2f660ded7211ba, type: 2}
   screens:
   - id: main-menu

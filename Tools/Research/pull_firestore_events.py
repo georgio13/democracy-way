@@ -33,12 +33,16 @@ EVENT_FIELDS = (
 METRICS = ("consistency", "ethics", "authority", "persuasion", "parrhesia", "recognition")
 CITY_METRICS = ("food", "trust", "readiness", "war")
 POINT_FIELDS = ("prytany", "week", "turn", "completedCases", "caseId", "lastCompletedCaseId",
-                "contentVersion", "activeSeconds", "phase", "utc")
+                "contentVersion", "activeSeconds", "phase", "utc", "casesPerPrytany", "totalCases")
 META_FIELDS = (
     "researchParticipantId", "researchConsent", "instrumentVersion", "administrationVersion", "postTestStatus", "exposure", "bank", "bankHash",
     "assessmentId", "stage", "caseId", "institution", "observation", "reason", "reference",
     "cityDelta", "personalDelta", "questionId", "construct", "correctIndex", "responseActiveSeconds",
-    "itemId", "scale", "status", "synthetic", "metadataCompacted", "collectiveOutcome",
+    "itemId", "scale", "status", "synthetic", "metadataCompacted", "collectiveOutcome", "question", "notApplicable",
+    "submissionId", "group", "section", "instrumentSection", "officialItemId", "allowNotApplicable",
+    "demographicVersion", "demographicKind", "demographicOptionId", "demographicValue",
+    "prompt", "orientation", "reverse", "analysisWeight", "tendencyVersion", "knowledgeVersion",
+    "feedback", "openFeedback", "questionnaireSchemaVersion", "instrumentHash", "eventSequence", "syntheticScenario",
 )
 POLITICAL_FIELDS = (
     "ruleVersion", "approach", "base", "foodContext", "trustContext", "fundsContext", "speaker",
@@ -100,10 +104,16 @@ def minimise_metadata(meta):
         result["metricsDelta"] = selected(meta["metricsDelta"], METRICS)
     if isinstance(meta.get("cityMetricsDelta"), dict):
         result["cityMetricsDelta"] = selected(meta["cityMetricsDelta"], CITY_METRICS)
+    if isinstance(meta.get("citySnapshot"), dict):
+        result["citySnapshot"] = selected(meta["citySnapshot"], CITY_METRICS)
     if isinstance(meta.get("political"), dict):
         result["political"] = selected(meta["political"], POLITICAL_FIELDS)
         if isinstance(meta["political"].get("metricsBefore"), dict):
             result["political"]["metricsBefore"] = selected(meta["political"]["metricsBefore"], METRICS)
+    if isinstance(meta.get("campaignLayout"), dict):
+        result["campaignLayout"] = selected(meta["campaignLayout"], ("casesPerPrytany", "totalCases"))
+    if isinstance(meta.get("answers"), list):
+        result["answers"] = [primitive(value) for value in meta["answers"][:4] if isinstance(value,str)]
     return result
 
 
@@ -201,7 +211,7 @@ def snapshot_time(reader):
     return re.sub(r"\.(\d{6})\d+Z$", r".\1Z", value)
 
 
-def collect(reader, study, page_size=500, after=None, before=None, max_documents=100000):
+def collect(reader, study, page_size=500, after=None, before=None, max_documents=100000, include_synthetic=False):
     start = time.monotonic()
     read_time = snapshot_time(reader)
     cursor = None
@@ -231,6 +241,9 @@ def collect(reader, study, page_size=500, after=None, before=None, max_documents
             except (ValueError, TypeError):
                 skipped["invalid-metadata"] += 1
                 continue
+            if meta.get("synthetic") is True and not include_synthetic:
+                skipped["synthetic-excluded"] += 1
+                continue
             if meta.get("researchConsent") is not True:
                 skipped["no-recorded-research-consent"] += 1
                 continue
@@ -238,6 +251,9 @@ def collect(reader, study, page_size=500, after=None, before=None, max_documents
                     str(meta.get("bank", "")) != study["bankVersion"] or
                     meta.get("bankHash") != study["bankHash"]):
                 skipped["different-study-version-or-bank-hash"] += 1
+                continue
+            if meta.get("instrumentHash") and meta["instrumentHash"] != study["instrumentFileSha256"][:32]:
+                skipped["different-instrument-content-hash"] += 1
                 continue
             if not all(HEX_ID.fullmatch(str(value or "")) for value in
                        (meta.get("researchParticipantId"), raw.get("session"), raw.get("eventId"))):
@@ -275,8 +291,9 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", default="democracy-way")
     parser.add_argument("--database", default="(default)")
-    parser.add_argument("--campaign-content", required=True, help="Frozen CampaignContent.json of the evaluated build")
-    parser.add_argument("--evaluation-content", default=str(Path(__file__).with_name("EvaluationContent.json")))
+    parser.add_argument("--campaign-content", help="Frozen CampaignContent.json of the evaluated build")
+    parser.add_argument("--evaluation-content")
+    parser.add_argument("--study-manifest", default=str(Path(__file__).with_name("StudyManifest.json")))
     parser.add_argument("--output", required=True, help="Local privacy-minimised JSON; never a public repository")
     parser.add_argument("--after", help="Inclusive UTC start, ISO-8601 with timezone")
     parser.add_argument("--before", help="Exclusive UTC end, ISO-8601 with timezone")
@@ -284,6 +301,7 @@ def main(argv=None):
     parser.add_argument("--max-documents", type=int, default=100000)
     parser.add_argument("--quota-project", help="Optional Google Cloud quota project; requires serviceusage.services.use")
     parser.add_argument("--overwrite", action="store_true")
+    parser.add_argument("--include-synthetic", action="store_true", help="Explicit QA-only inclusion; synthetic records remain labeled")
     parser.add_argument("--dry-run", action="store_true", help="No login, requests or output files")
     args = parser.parse_args(argv)
     try:
@@ -294,20 +312,29 @@ def main(argv=None):
         after, before = utc(args.after) if args.after else None, utc(args.before) if args.before else None
         if after and before and after >= before:
             raise ExportError("--after must precede --before.")
-        study = load_study(args.campaign_content, args.evaluation_content)
+        if args.campaign_content:
+            campaign_path = args.campaign_content
+            evaluation_path = args.evaluation_content or Path(__file__).with_name("EvaluationContent.json")
+        else:
+            manifest_file = Path(args.study_manifest)
+            current_study = json.loads(manifest_file.read_text(encoding="utf-8-sig"))
+            campaign_path = manifest_file.parent / current_study["campaignFile"]
+            evaluation_path = args.evaluation_content or manifest_file.parent / current_study["instrumentFile"]
+        study = load_study(campaign_path, evaluation_path)
         output = Path(args.output).resolve()
         manifest_path = output.with_suffix(".manifest.json")
         if not args.overwrite and (output.exists() or manifest_path.exists()):
             raise ExportError("Output already exists. Choose a new filename or explicitly use --overwrite.")
         plan = {"project": args.project, "database": args.database, "study": study,
                 "afterInclusive": args.after, "beforeExclusive": args.before,
+                "includeSynthetic": args.include_synthetic,
                 "networkOperation": "read-only POST documents:runQuery", "query": build_query(args.page_size),
                 "rawDocumentPathsSaved": False, "authUidsSaved": False, "emailsSaved": False}
         if args.dry_run:
             print(json.dumps({"dryRun": True, **plan}, ensure_ascii=False, indent=2))
             return 0
         reader = FirestoreReader(args.project, args.database, args.quota_project)
-        events, counts = collect(reader, study, args.page_size, after, before, args.max_documents)
+        events, counts = collect(reader, study, args.page_size, after, before, args.max_documents, args.include_synthetic)
         manifest = {"exportedAtUtc": datetime.now(timezone.utc).isoformat(), **plan, **counts,
                     "privacy": "Pseudonymous research data; not anonymous. No raw response, credentials, authentication document path or account profile saved.",
                     "interpretation": "Keep study versions and exposure/duration context separate. Descriptive pilot; no causal or ideology diagnosis."}

@@ -148,7 +148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea2af014fe60d6a4b8a0741e049a363e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.Bootstrap
-  firstScene: Login
 --- !u!4 &1601333107
 Transform:
   m_ObjectHideFlags: 0

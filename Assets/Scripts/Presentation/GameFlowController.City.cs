@@ -11,7 +11,6 @@ namespace DemocracyWay.NewUI
 {
     public sealed partial class GameFlowController
     {
-        public TextAsset cityContent;
         CityContent cityData;
         int selectedNews, selectedComplaint, selectedOfficial, officeFilter;
         int selectedWriter = -1;
@@ -32,8 +31,7 @@ namespace DemocracyWay.NewUI
         {
             get
             {
-                if (cityData == null && cityContent != null)
-                    cityData = JsonUtility.FromJson<CityContent>(cityContent.text);
+                if (cityData == null) cityData = JsonContent.City;
                 return cityData;
             }
         }
@@ -128,7 +126,7 @@ namespace DemocracyWay.NewUI
             EnsureState();
             if (screen == "market")
             {
-                selectedNews = Mathf.Clamp(CampaignRules.Turn(State), 0, 49);
+                selectedNews = Mathf.Clamp(CampaignRules.Turn(State), 0, CampaignRules.TotalCases - 1);
                 ReadNews();
             }
             if (screen == "complaints" || screen == "complaint-detail") selectedComplaint = 0;
@@ -151,7 +149,7 @@ namespace DemocracyWay.NewUI
         {
             if (CityData == null)
                 return;
-            int unread = Enumerable.Range(0, Mathf.Clamp(CampaignRules.Turn(State) + 1, 1, 50)).Count(t => !City.readNews.Contains(1000 + t));
+            int unread = Enumerable.Range(0, Mathf.Clamp(CampaignRules.Turn(State) + 1, 1, CampaignRules.TotalCases)).Count(t => !City.readNews.Contains(1000 + t));
             int pending = ComplaintAvailable && string.IsNullOrEmpty(City.complaintDecisions[0]) ? 1 : 0;
             foreach (var pair in new[]
             {
@@ -172,7 +170,7 @@ namespace DemocracyWay.NewUI
         {
             if (CityData == null)
                 return;
-            SetText(currentScreen + ".funds", ArticyNarrative.Copy("Copy_9fd25730f3bc1ab9") + State.cityFunds.ToString("N0") + ArticyNarrative.Copy("Copy_226a8ac686f3de22") + State.personalFunds.ToString("N0") + " οβ.");
+            SetText(currentScreen + ".funds", JsonContent.Copy("Copy_9fd25730f3bc1ab9") + State.cityFunds.ToString("N0") + JsonContent.Copy("Copy_226a8ac686f3de22") + State.personalFunds.ToString("N0") + " οβ.");
             if (currentScreen == "market")
                 RenderMarket();
             else if (currentScreen == "logographers")
@@ -190,7 +188,7 @@ namespace DemocracyWay.NewUI
         void RenderMarket()
         {
             EnsureWeeklyNewsList();
-            int count = Mathf.Clamp(CampaignRules.Turn(State) + 1, 1, 50);
+            int count = Mathf.Clamp(CampaignRules.Turn(State) + 1, 1, CampaignRules.TotalCases);
             selectedNews = Mathf.Clamp(selectedNews, 0, count - 1);
             SetText("market.banner", "Ανταποκρίσεις · Πρυτανεία " + State.prytany + " · Εβδομάδα " + State.week);
             SetText("market.unread", Enumerable.Range(0, count).Count(t => !City.readNews.Contains(1000 + t)) + " αδιάβαστες");
@@ -250,7 +248,7 @@ namespace DemocracyWay.NewUI
             PositionCityText("market.read", 628.8f, 712, 936, 28, 17, 20);
         }
 
-        static string NewsDate(int turn) => "Πρυτανεία " + (turn / 5 + 1) + " · Εβδομάδα " + (turn % 5 + 1);
+        static string NewsDate(int turn) => "Πρυτανεία " + (turn / CampaignRules.CasesPerPrytany + 1) + " · Εβδομάδα " + (turn % CampaignRules.CasesPerPrytany + 1);
 
         InstitutionCase CityNewsCase(int turn)
         {
@@ -277,7 +275,7 @@ namespace DemocracyWay.NewUI
 
         void RenderWriters()
         {
-            var politics = campaignContent != null ? PoliticalCaseRules.Definition(Case, State) : null;
+            var politics = PoliticalCaseRules.Definition(Case, State);
             for (int i = 0; i < CityData.writers.Length; i++)
             {
                 var w = CityData.writers[i];
@@ -321,12 +319,12 @@ namespace DemocracyWay.NewUI
                     }
                     var t = b.GetComponentInChildren<TMP_Text>();
                     t.color = new Color32(36, 60, 61, 255);
-                    t.text = active ? ArticyNarrative.Copy("Copy_907154af23cc95af") : State.personalFunds < w.price ? ArticyNarrative.Copy("Copy_27014bd19c0d887d") : ArticyNarrative.Copy("Copy_b766598ece531f8c") + w.price + " οβ.";
+                    t.text = active ? JsonContent.Copy("Copy_907154af23cc95af") : State.personalFunds < w.price ? JsonContent.Copy("Copy_27014bd19c0d887d") : JsonContent.Copy("Copy_b766598ece531f8c") + w.price + " οβ.";
                 }
             }
 
             int shownBonus = politics == null ? City.speechBonus : PoliticalCaseRules.WriterInfluence(politics, City.speechBonus);
-            SetText("logographers.status", City.speechUses > 0 ? ArticyNarrative.Copy("Copy_74fa0a67608bb82a") + CityData.writers[City.speechWriter].name + ArticyNarrative.Copy("Copy_3c3a2782a9f1924d") + shownBonus + " · " + City.speechUses + ArticyNarrative.Copy("Copy_e53ef65a97afbaff") : ArticyNarrative.Copy("Copy_71824ea340238d3d"));
+            SetText("logographers.status", City.speechUses > 0 ? JsonContent.Copy("Copy_74fa0a67608bb82a") + CityData.writers[City.speechWriter].name + JsonContent.Copy("Copy_3c3a2782a9f1924d") + shownBonus + " · " + City.speechUses + JsonContent.Copy("Copy_e53ef65a97afbaff") : JsonContent.Copy("Copy_71824ea340238d3d"));
         }
 
         private static void SetChildText(Transform root, string path, string value)
@@ -342,7 +340,7 @@ namespace DemocracyWay.NewUI
                 return;
             City.speechWriter = i;
             City.speechBonus = w.bonus;
-            City.speechUses = ArticyNarrative.DefaultNumber("SpeechUses");
+            City.speechUses = JsonContent.Settings.speechUses;
             State.personalFunds -= w.price;
             RecordCity("logographer", w.name, -w.price);
             SaveCheckpoint();
@@ -371,23 +369,23 @@ namespace DemocracyWay.NewUI
                 if (i != 0) continue;
                 PaintRow("complaints.row." + i, i == selectedComplaint);
                 SetText("complaints.title." + i, CityData.complaints[i].title);
-                SetText("complaints.meta." + i, "Πρυτανεία 1 · Εβδομάδα 4\n" + ComplaintStatus(i));
+                SetText("complaints.meta." + i, "Πρυτανεία 1 · Εβδομάδα 2\n" + ComplaintStatus(i));
             }
             var open = Get<Button>("complaints.primary"); if (open != null) open.interactable = ComplaintAvailable;
             var c = CityData.complaints[selectedComplaint];
             SetText("complaints.heading", ComplaintAvailable ? c.title : "Δεν έχει υποβληθεί ακόμη καταγγελία");
-            SetText("complaints.body", ComplaintAvailable ? c.summary : "Η πρώτη καταγγελία γίνεται διαθέσιμη την τέταρτη εβδομάδα. Ο τακτικός λογιστικός έλεγχος δεν εξαρτάται από το αν θα επιλέξεις να την παραπέμψεις.");
+            SetText("complaints.body", ComplaintAvailable ? c.summary : "Η πρώτη καταγγελία γίνεται διαθέσιμη την δεύτερη εβδομάδα. Ο τακτικός λογιστικός έλεγχος δεν εξαρτάται από το αν θα επιλέξεις να την παραπέμψεις.");
             SetText("complaints.state", ComplaintAvailable ? ComplaintStatus(selectedComplaint) : "Χωρίς εκκρεμότητα");
-            SetText("complaints.file", ComplaintAvailable ? "Φάκελος 01 · Πρυτανεία 1 / Εβδομάδα 4" : "Αρχείο καταγγελιών");
+            SetText("complaints.file", ComplaintAvailable ? "Φάκελος 01 · Πρυτανεία 1 / Εβδομάδα 2" : "Αρχείο καταγγελιών");
         }
 
-        bool ComplaintAvailable => CampaignRules.Turn(State) >= 3 && CityData.complaints != null && CityData.complaints.Length > 0;
-        string ComplaintStatus(int i) => string.IsNullOrEmpty(City.complaintDecisions[i]) ? ArticyNarrative.Copy("Copy_d799930f31ec453d") : City.complaintDecisions[i];
+        bool ComplaintAvailable => CampaignRules.Turn(State) >= 1 && CityData.complaints != null && CityData.complaints.Length > 0;
+        string ComplaintStatus(int i) => string.IsNullOrEmpty(City.complaintDecisions[i]) ? JsonContent.Copy("Copy_d799930f31ec453d") : City.complaintDecisions[i];
         void RenderComplaintDetail()
         {
             selectedComplaint = 0;
             var c = CityData.complaints[selectedComplaint];
-            SetText("complaint-detail.eyebrow", "Καταγγελία 01 · Πρυτανεία 1 · Εβδομάδα 4");
+            SetText("complaint-detail.eyebrow", "Καταγγελία 01 · Πρυτανεία 1 · Εβδομάδα 2");
             SetText("complaint-detail.heading", c.title);
             SetText("complaint-detail.intro", c.intro);
             SetText("complaint-detail.evidence.0", c.evidenceA + "\nΚαταχώριση φακέλου: εβδομάδα 4 · " + c.amountA + " οβ.");
@@ -409,7 +407,7 @@ namespace DemocracyWay.NewUI
                 }
             }
 
-            SetText("complaint-detail.status", string.IsNullOrEmpty(City.complaintDecisions[selectedComplaint]) ? ArticyNarrative.Copy("Copy_40ba4a4d8a585b6a") : ComplaintStatus(selectedComplaint));
+            SetText("complaint-detail.status", string.IsNullOrEmpty(City.complaintDecisions[selectedComplaint]) ? JsonContent.Copy("Copy_40ba4a4d8a585b6a") : ComplaintStatus(selectedComplaint));
         }
 
         void DecideComplaint(int choice)
@@ -477,7 +475,7 @@ namespace DemocracyWay.NewUI
         void EnsureOfficesCatalogue()
         {
             if (officesCatalogueButton != null || !roots.TryGetValue("offices", out var root)) return;
-            var asset = Resources.Load<TextAsset>("Narrative/OfficesCatalogue");
+            var asset = Resources.Load<TextAsset>("Content/OfficesCatalogue");
             if (asset != null)
             {
                 string text = System.Text.RegularExpressions.Regex.Replace(asset.text, "\"count\"\\s*:\\s*null", "\"count\":0");
@@ -544,7 +542,7 @@ namespace DemocracyWay.NewUI
         void RenderOfficial()
         {
             var o = CityData.officials[selectedOfficial];
-            SetText("official-detail.relationship", City.officialApproaches[selectedOfficial] == 0 ? ArticyNarrative.Copy("Copy_ba2f3162cc86a84e") : City.officialSupport[selectedOfficial] > 0 ? ArticyNarrative.Copy("Copy_63275b04f9ff9fb7") : ArticyNarrative.Copy("Copy_7321982a1b882482"));
+            SetText("official-detail.relationship", City.officialApproaches[selectedOfficial] == 0 ? JsonContent.Copy("Copy_ba2f3162cc86a84e") : City.officialSupport[selectedOfficial] > 0 ? JsonContent.Copy("Copy_63275b04f9ff9fb7") : JsonContent.Copy("Copy_7321982a1b882482"));
             SetText("official-detail.name", o.name);
             SetText("official-detail.office", o.office.ToUpperInvariant());
             var officeLabel = Get<TMP_Text>("official-detail.office");
@@ -555,7 +553,7 @@ namespace DemocracyWay.NewUI
             PositionCityText("official-detail.influence", 786, 122, 270, 50, 17, 20);
             LayoutOfficialSummaryRows();
             SetText("official-detail.priority", o.priority);
-            SetText("official-detail.access", City.supportUntilTurn[selectedOfficial] <= CampaignRules.Turn(State) ? ArticyNarrative.Copy("Copy_aaf8784979b7165d") : ArticyNarrative.Copy("Copy_5d6a15042eef889c"));
+            SetText("official-detail.access", City.supportUntilTurn[selectedOfficial] <= CampaignRules.Turn(State) ? JsonContent.Copy("Copy_aaf8784979b7165d") : JsonContent.Copy("Copy_5d6a15042eef889c"));
             RawImage portrait = Get<RawImage>("official-detail.portrait");
             if (portrait != null)
                 portrait.uvRect = new Rect((o.portrait % 4) * .25f, 1 - (o.portrait / 4 + 1) * .2f, .25f, .2f);
@@ -565,11 +563,11 @@ namespace DemocracyWay.NewUI
                 p.interactable = available;
             if (b != null)
             {
-                b.interactable = available && State.personalFunds >= ArticyNarrative.DefaultNumber("BribePrice");
-                b.GetComponentInChildren<TMP_Text>().text = (confirmBribe ? "Επιβεβαίωσε προσφορά" : "Εξέτασε προσφορά") + " · " + ArticyNarrative.DefaultNumber("BribePrice") + " οβ.";
+                b.interactable = available && State.personalFunds >= JsonContent.Settings.bribePrice;
+                b.GetComponentInChildren<TMP_Text>().text = (confirmBribe ? "Επιβεβαίωσε προσφορά" : "Εξέτασε προσφορά") + " · " + JsonContent.Settings.bribePrice + " οβ.";
             }
 
-            SetText("official-detail.result", available ? (confirmBribe ? ArticyNarrative.Copy("Copy_df0affe0d1e2f2df") : ArticyNarrative.Copy("Copy_1d3d53e5a1e5a7f2")) : (City.officialSupport[selectedOfficial] > 0 ? ArticyNarrative.Copy("Copy_f93c7d5843c765cc") : ArticyNarrative.Copy("Copy_2ffdcc0db1feecc7")));
+            SetText("official-detail.result", available ? (confirmBribe ? JsonContent.Copy("Copy_df0affe0d1e2f2df") : JsonContent.Copy("Copy_1d3d53e5a1e5a7f2")) : (City.officialSupport[selectedOfficial] > 0 ? JsonContent.Copy("Copy_f93c7d5843c765cc") : JsonContent.Copy("Copy_2ffdcc0db1feecc7")));
         }
 
         void LayoutOfficialSummaryRows()
@@ -602,16 +600,16 @@ namespace DemocracyWay.NewUI
                 return;
             }
 
-            if (bribe && State.personalFunds < ArticyNarrative.DefaultNumber("BribePrice"))
+            if (bribe && State.personalFunds < JsonContent.Settings.bribePrice)
                 return;
             var official = CityData.officials[selectedOfficial];
-            using var result=ArticyNarrative.Run("Rule_Official",State,("Bribe",bribe),("Integrity",official.integrity),("Threshold",official.persuasionThreshold));
+            var result=DecisionRules.Official(State,bribe,official.integrity,official.persuasionThreshold);
             City.officialApproaches[selectedOfficial] = bribe ? 2 : 1;
-            City.officialSupport[selectedOfficial] = result.Flag("Supported") ? 1 : 0;
+            City.officialSupport[selectedOfficial] = result.supported ? 1 : 0;
             City.supportUntilTurn[selectedOfficial] = CampaignRules.Turn(State)+5;
-            State.personalFunds += result.Number("PersonalDelta");
-            City.corruptionRisk += result.Number("RiskDelta");
-            RecordCity("official-" + selectedOfficial, bribe ? "private-offer" : "public-argument", result.Number("PersonalDelta"), ArticyNarrative.Effects(State,bribe ? 2 : 3,bribe ? 1 : 0,success:result.Flag("Supported")));
+            State.personalFunds += result.personalDelta;
+            City.corruptionRisk += result.riskDelta;
+            RecordCity("official-" + selectedOfficial, bribe ? "private-offer" : "public-argument", result.personalDelta, DecisionRules.Effects(State,bribe ? 2 : 3,bribe ? 1 : 0,success:result.supported));
             SaveCheckpoint();
             confirmBribe = false;
             RenderCity();
