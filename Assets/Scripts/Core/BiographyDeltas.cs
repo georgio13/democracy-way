@@ -43,7 +43,9 @@ namespace DemocracyWay.NewUI
             if (deltas != null)
             {
                 citizen.peitho = Agora.PlayerState.Clamp(citizen.peitho + deltas.peitho);
-                citizen.ethos = Agora.PlayerState.Clamp(citizen.ethos + deltas.ethos);
+                // Τελικός σχεδιασμός: ήθος + συνέπεια → Ηθική · αναγνωρισιμότητα + παρρησία → Φήμη.
+                citizen.ethos = Agora.PlayerState.Clamp(citizen.ethos + deltas.ethos + deltas.synepeia);
+                citizen.fame = Agora.PlayerState.Clamp(citizen.fame + deltas.anagnorisimotita + deltas.parrhesia);
                 citizen.synepeia = Agora.PlayerState.Clamp(citizen.synepeia + deltas.synepeia);
                 citizen.parrhesia = Agora.PlayerState.Clamp(citizen.parrhesia + deltas.parrhesia);
                 citizen.anagnorisimotita = Agora.PlayerState.Clamp(citizen.anagnorisimotita + deltas.anagnorisimotita);

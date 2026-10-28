@@ -33,6 +33,10 @@ namespace Agora
         [TextArea(3, 10)] public string warTransition;   // μετάβαση πρυτανείας 5
         [TextArea(3, 10)] public string whatReallyHappened;   // «Τι έγινε πραγματικά, Σεπτέμβριος 322»
 
+        [Header("Κοινά κείμενα δικών")]
+        [TextArea(3, 10)] public string heliaiaIntro;
+        [TextArea(3, 10)] public string areopagusIntro;
+
         [Header("Κείμενα τελών (επίλογος — συμπληρώνονται από τον συγγραφέα)")]
         [TextArea(2, 8)] public string endingFamine, endingPropertyLimit, endingStasis, endingCounterfactual, endingGarrisonOnly;
         [TextArea(2, 8)] public string endingHypereides, endingDemades, endingHarpalusMan, endingLycurgus, endingAnonymous, endingStratocles;

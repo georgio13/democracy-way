@@ -51,6 +51,25 @@ namespace Agora
         public bool BelowOneFifth => votesFor * 5 < votesFor + votesAgainst;
     }
 
+    /// <summary>Η δίκη της εβδομάδας (υποθέσεις 3, 9, 10, 11, 13). Γίνεται πάντα· ο παίκτης διαλέγει αν θα κατηγορήσει.</summary>
+    [Serializable]
+    public class TrialData
+    {
+        public bool exists;
+        public TrialVenue venue;
+        public ComplaintProcedure procedure;
+        public OfficialData defendant;
+        [Range(0, 100)] public int evidence;
+        public Side convictionFavors;               // η πλευρά που κερδίζει τους πόντους της δίκης αν καταδικαστεί
+        public OfficialData replacementSpeaker;     // μιλά αντί για τον κατηγορούμενο αν καταδικαστεί
+        public string defaultAccuser;               // ποιος κατηγορεί αν δεν κατηγορήσει ο παίκτης
+        [TextArea(2, 4)] public string marketClue;  // «Αγορά: ένα στοιχείο για τη δίκη» (προαιρετικό)
+        [TextArea(2, 5)] public string charge;
+        [TextArea(2, 5)] public string defence;
+        [TextArea(2, 5)] public string verdictGuilty;
+        [TextArea(2, 5)] public string verdictAcquitted;
+    }
+
     /// <summary>
     /// Μία από τις 20 υποθέσεις. Όλο το περιεχόμενο είναι εδώ — τίποτα στον κώδικα.
     /// Η πρόταση Α είναι πάντα η δημοκρατική, η Β η ολιγαρχική/συγκεντρωτική.
@@ -85,6 +104,15 @@ namespace Agora
         public List<MetricDelta> effectsA = new List<MetricDelta>();
         public List<MetricDelta> effectsB = new List<MetricDelta>();
         public List<OfficialStance> officials = new List<OfficialStance>();
+
+        [Header("Τελικός κανόνας")]
+        public CaseVenue venue;
+        public Metric pressureMetric;
+        public Side pressureFavors;                         // None = η υπόθεση δεν έχει πίεση
+        public bool pressureAnyMetric;                      // υπ. 20: ο χαμηλότερος από τους 4 ορατούς δείκτες
+        public OfficialData undecided;                      // ο ένας αναποφάσιστος που δέχεται κίνηση
+        public Difficulty difficulty;
+        public TrialData trial = new TrialData();
 
         [Header("Καταγγελία (υποθέσεις 3, 9, 10, 11, 13)")]
         public ComplaintOption complaint = new ComplaintOption();

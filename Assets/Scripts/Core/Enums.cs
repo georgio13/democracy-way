@@ -13,7 +13,13 @@ namespace Agora
     public enum SelectionMode { Lot, Election, FromCouncil, ByAge, Lifelong }
 
     /// <summary>Διαδικασίες καταγγελίας (ΑΠ 43.4, 45.2, 52.1, 59.2–3).</summary>
-    public enum ComplaintProcedure { Eisangelia, Endeixis, Phasis, GrapheSykophantias, GrapheParanomon }
+    public enum ComplaintProcedure { Eisangelia, Endeixis, Phasis, GrapheSykophantias, GrapheParanomon, Apophasis }
+
+    /// <summary>Πού ψηφίζεται η υπόθεση. Η Συνέλευση του δήμου ανοίγει μόνο για την υπόθεση 1.</summary>
+    public enum CaseVenue { Pnyx, Council, DemeAssembly }
+
+    /// <summary>Πόσο δύσκολα πείθεται ο αναποφάσιστος. Η Πειθώ που χρειάζεται ορίζεται στο GameConfig.</summary>
+    public enum Difficulty { Easy, Medium, Hard }
 
     /// <summary>Η μία ενέργεια προπαρασκευής ανά υπόθεση.</summary>
     public enum PrepAction { None, Persuade, Bribe, Complain }

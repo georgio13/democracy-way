@@ -78,6 +78,23 @@ namespace Agora
         public int sycophantBelow = 20;             // κατήγορος με D κάτω από αυτό → συκοφάντης
         public int evidenceStrongFrom = 55, evidenceDoubtfulFrom = 35;
 
+        [Header("Παίκτης και κινήσεις (τελικός σχεδιασμός)")]
+        public int startFame = 10;
+        public int difficultyEasy = 30, difficultyMedium = 45, difficultyHard = 60;   // Πειθώ που χρειάζεται ο αναποφάσιστος
+        public int logographerCost = 40;
+        public int bribeCost = 30;                  // η Ηθική −bribeEthosLoss
+        public int bribeExposureOneIn = 3, bribeExposureFameLoss = 5, bribeExposureTrustLoss = 3;
+        public int accuserFine = 50;                // ο συκοφάντης
+        public int fameSpeech = 2, fameWin = 2, fameConviction = 5, fameAcquittal = -3, fameSecondSilence = -2;
+        public int ethosConviction = 3, ethosVoteAgainstSpeech = -5;
+
+        public int PersuadeThreshold(Difficulty d) => d switch
+        {
+            Difficulty.Easy => difficultyEasy,
+            Difficulty.Medium => difficultyMedium,
+            _ => difficultyHard,
+        };
+
         [Header("Τέλη πόλης")]
         public int famineFood = 15, famineReadiness = 15;
         public int coupDemosPower = 25;

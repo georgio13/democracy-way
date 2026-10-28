@@ -85,6 +85,10 @@ namespace Agora
         public static int SpeechPoints(int peitho, bool logographer, GameConfig cfg)
             => Mathf.Clamp(peitho, 0, cfg.speechPeithoMax) / cfg.speechPeithoDivisor + (logographer ? cfg.logographerPoints : 0);
 
+        /// <summary>Η τιμή που κρίνει την Πίεση της υπόθεσης· στην 20 ο χαμηλότερος από τους 4 ορατούς δείκτες.</summary>
+        public static int PressureValue(CaseData c, CityState city)
+            => c.pressureAnyMetric ? city.MinVisible() : city.Get(c.pressureMetric);
+
         public static VoteBreakdown Vote(VoteInput v, GameConfig cfg, System.Random rng) => Vote(v, cfg, Mood(rng, cfg));
 
         public static VoteBreakdown Vote(VoteInput v, GameConfig cfg, int mood)

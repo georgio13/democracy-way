@@ -10,6 +10,7 @@ namespace Agora
         public SocialClass socialClass;
         public int wallet, income;
         public int peitho, ethos, synepeia, parrhesia, anagnorisimotita;
+        public int fame;               // Φήμη (τελικός σχεδιασμός)
 
         // ιστορικό για Αυθεντία και προφίλ
         public int speeches, speechesVindicated, spokeForA, spokeForB;
@@ -27,6 +28,7 @@ namespace Agora
             (wallet, income) = cfg.ClassMoney(cls);
             peitho = cfg.startPeitho; ethos = cfg.startEthos; synepeia = cfg.startSynepeia;
             parrhesia = cfg.startParrhesia; anagnorisimotita = cfg.startAnagnorisimotita;
+            fame = cfg.startFame;
         }
 
         /// <summary>Αυθεντία = Συνέπεια × (ποσοστό λόγων που δικαιώθηκαν).</summary>
