@@ -16,7 +16,7 @@ MonoBehaviour:
   prytany: 8
   title: "\u03A4\u03BF \u03C3\u03B9\u03C4\u03AC\u03C1\u03B9 \u03C4\u03BF\u03C5 \u03A0\u03B5\u03B9\u03C1\u03B1\u03B9\u03AC"
   athPolRef: "\u0391\u03A0 51.3\u20134, 43.4"
-  inCouncil: 0
+  venue: 0
   newsPeace: "\u0388\u03C6\u03C4\u03B1\u03C3\u03B1\u03BD \u03C4\u03C1\u03B9\u03AC\u03BD\u03C4\u03B1
     \u03C3\u03B9\u03C4\u03B1\u03B3\u03C9\u03B3\u03AC \u03B1\u03C0\u03CC \u03C4\u03BF\u03BD
     \u0395\u03CD\u03BE\u03B5\u03B9\u03BD\u03BF \u03BC\u03B5 \u03C3\u03C5\u03BD\u03BF\u03B4\u03B5\u03AF\u03B1.
@@ -28,9 +28,7 @@ MonoBehaviour:
     \u03B6\u03B7\u03C4\u03B5\u03AF \u03BD\u03B1 \u03B1\u03B3\u03BF\u03C1\u03AC\u03C3\u03B5\u03B9
     \u03B7 \u03C0\u03CC\u03BB\u03B7 \u03C4\u03BF \u03C6\u03BF\u03C1\u03C4\u03AF\u03BF
     \u03BA\u03B1\u03B9 \u03BD\u03B1 \u03C4\u03BF \u03B4\u03B9\u03B1\u03BD\u03B5\u03AF\u03BC\u03B5\u03B9
-    \u03C3\u03B5 \u03C3\u03C4\u03B1\u03B8\u03B5\u03C1\u03AE \u03C4\u03B9\u03BC\u03AE.
-    [\u0395\u03C0\u03B9\u03C3\u03B9\u03C4\u03B9\u03C3\u03BC\u03CC\u03C2: 36 \xB7
-    \u03A4\u03B1\u03BC\u03B5\u03AF\u03BF: 42]"
+    \u03C3\u03B5 \u03C3\u03C4\u03B1\u03B8\u03B5\u03C1\u03AE \u03C4\u03B9\u03BC\u03AE."
   newsWar: 
   ek1: "\u0397 \u0391\u03B8\u03AE\u03BD\u03B1 \u03B5\u03B9\u03C3\u03AC\u03B3\u03B5\u03B9
     \u03C4\u03B1 \u03B4\u03CD\u03BF \u03C4\u03C1\u03AF\u03C4\u03B1 \u03C4\u03BF\u03C5
@@ -55,13 +53,31 @@ MonoBehaviour:
     \u03C0\u03C1\u03C5\u03C4\u03B1\u03BD\u03B5\u03AF\u03B1\u03C2: \u03BF \u03B4\u03AE\u03BC\u03BF\u03C2
     \u03B4\u03B5\u03BD \u03B1\u03C6\u03AE\u03BD\u03B5\u03B9 \u03C4\u03BF \u03C8\u03C9\u03BC\u03AF
     \u03C3\u03C4\u03B7\u03BD \u03C4\u03CD\u03C7\u03B7."
-  optionA: "Η πόλη να αγοράσει το φορτίο στην προπολεμική τιμή και να το διανείμει κατά δήμους."
-  optionB: "Πώληση στην τιμή της αγοράς, με την πόλη να εισπράττει μόνο τον φόρο της πεντηκοστής."
-  argumentA: "Η πόλη να αγοράσει το φορτίο στην προπολεμική τιμή και να το μοιράσει κατά δήμους. Στον λιμό το σιτάρι δεν είναι εμπόρευμα — είναι ζωή."
-  argumentB: "Αν πιέσεις την τιμή, το επόμενο καράβι θα πουλήσει αλλού. Τιμή αγοράς και ο φόρος της πεντηκοστής — έτσι ξανάρχονται τα φορτία."
+  optionA: "\u0397 \u03C0\u03CC\u03BB\u03B7 \u03BD\u03B1 \u03B1\u03B3\u03BF\u03C1\u03AC\u03C3\u03B5\u03B9
+    \u03C4\u03BF \u03C6\u03BF\u03C1\u03C4\u03AF\u03BF \u03C3\u03C4\u03B7\u03BD \u03C0\u03C1\u03BF\u03C0\u03BF\u03BB\u03B5\u03BC\u03B9\u03BA\u03AE
+    \u03C4\u03B9\u03BC\u03AE \u03BA\u03B1\u03B9 \u03BD\u03B1 \u03C4\u03BF \u03B4\u03B9\u03B1\u03BD\u03B5\u03AF\u03BC\u03B5\u03B9
+    \u03BA\u03B1\u03C4\u03AC \u03B4\u03AE\u03BC\u03BF\u03C5\u03C2."
+  optionB: "\u03A0\u03CE\u03BB\u03B7\u03C3\u03B7 \u03C3\u03C4\u03B7\u03BD \u03C4\u03B9\u03BC\u03AE
+    \u03C4\u03B7\u03C2 \u03B1\u03B3\u03BF\u03C1\u03AC\u03C2, \u03BC\u03B5 \u03C4\u03B7\u03BD
+    \u03C0\u03CC\u03BB\u03B7 \u03BD\u03B1 \u03B5\u03B9\u03C3\u03C0\u03C1\u03AC\u03C4\u03C4\u03B5\u03B9
+    \u03BC\u03CC\u03BD\u03BF \u03C4\u03BF\u03BD \u03C6\u03CC\u03C1\u03BF \u03C4\u03B7\u03C2
+    \u03C0\u03B5\u03BD\u03C4\u03B7\u03BA\u03BF\u03C3\u03C4\u03AE\u03C2."
+  argumentA: "\u0397 \u03C0\u03CC\u03BB\u03B7 \u03BD\u03B1 \u03B1\u03B3\u03BF\u03C1\u03AC\u03C3\u03B5\u03B9
+    \u03C4\u03BF \u03C6\u03BF\u03C1\u03C4\u03AF\u03BF \u03C3\u03C4\u03B7\u03BD \u03C0\u03C1\u03BF\u03C0\u03BF\u03BB\u03B5\u03BC\u03B9\u03BA\u03AE
+    \u03C4\u03B9\u03BC\u03AE \u03BA\u03B1\u03B9 \u03BD\u03B1 \u03C4\u03BF \u03BC\u03BF\u03B9\u03C1\u03AC\u03C3\u03B5\u03B9
+    \u03BA\u03B1\u03C4\u03AC \u03B4\u03AE\u03BC\u03BF\u03C5\u03C2. \u03A3\u03C4\u03BF\u03BD
+    \u03BB\u03B9\u03BC\u03CC \u03C4\u03BF \u03C3\u03B9\u03C4\u03AC\u03C1\u03B9 \u03B4\u03B5\u03BD
+    \u03B5\u03AF\u03BD\u03B1\u03B9 \u03B5\u03BC\u03C0\u03CC\u03C1\u03B5\u03C5\u03BC\u03B1
+    \u2014 \u03B5\u03AF\u03BD\u03B1\u03B9 \u03B6\u03C9\u03AE."
+  argumentB: "\u0391\u03BD \u03C0\u03B9\u03AD\u03C3\u03B5\u03B9\u03C2 \u03C4\u03B7\u03BD
+    \u03C4\u03B9\u03BC\u03AE, \u03C4\u03BF \u03B5\u03C0\u03CC\u03BC\u03B5\u03BD\u03BF
+    \u03BA\u03B1\u03C1\u03AC\u03B2\u03B9 \u03B8\u03B1 \u03C0\u03BF\u03C5\u03BB\u03AE\u03C3\u03B5\u03B9
+    \u03B1\u03BB\u03BB\u03BF\u03CD. \u03A4\u03B9\u03BC\u03AE \u03B1\u03B3\u03BF\u03C1\u03AC\u03C2
+    \u03BA\u03B1\u03B9 \u03BF \u03C6\u03CC\u03C1\u03BF\u03C2 \u03C4\u03B7\u03C2 \u03C0\u03B5\u03BD\u03C4\u03B7\u03BA\u03BF\u03C3\u03C4\u03AE\u03C2
+    \u2014 \u03AD\u03C4\u03C3\u03B9 \u03BE\u03B1\u03BD\u03AC\u03C1\u03C7\u03BF\u03BD\u03C4\u03B1\u03B9
+    \u03C4\u03B1 \u03C6\u03BF\u03C1\u03C4\u03AF\u03B1."
   speechA:
     speaker: {fileID: 11400000, guid: a4ddd22178e520d46b1d0a24fd3837b8, type: 2}
-    fallbackSpeaker: {fileID: 0}
     text: "\u0386\u03BD\u03B4\u03C1\u03B5\u03C2 \u0391\u03B8\u03B7\u03BD\u03B1\u03AF\u03BF\u03B9,
       \u03BF \u03BD\u03CC\u03BC\u03BF\u03C2 \u03BC\u03BF\u03C5 \u03B4\u03AF\u03BD\u03B5\u03B9
       \u03BD\u03B1 \u03B5\u03BB\u03AD\u03B3\u03C7\u03C9 \u03C4\u03BF \u03B2\u03AC\u03C1\u03BF\u03C2
@@ -84,7 +100,6 @@ MonoBehaviour:
       \u03B1\u03C0\u03CC \u03C4\u03B7\u03BD \u03C0\u03B5\u03AF\u03BD\u03B1 \u03BC\u03B1\u03C2."
   speechB:
     speaker: {fileID: 11400000, guid: bd9917fcb7fc7db4b8d17a1290d460b8, type: 2}
-    fallbackSpeaker: {fileID: 0}
     text: "\u0386\u03BD\u03B4\u03C1\u03B5\u03C2 \u0391\u03B8\u03B7\u03BD\u03B1\u03AF\u03BF\u03B9,
       \u03B1\u03BD \u03C0\u03AC\u03C1\u03B5\u03C4\u03B5 \u03C4\u03BF \u03C6\u03BF\u03C1\u03C4\u03AF\u03BF
       \u03C3\u03B5 \u03C4\u03B9\u03BC\u03AE \u03C0\u03BF\u03C5 \u03BF\u03C1\u03AF\u03B6\u03B5\u03C4\u03B5
@@ -120,11 +135,20 @@ MonoBehaviour:
     \u03B1\u03C0\u03CC \u03BA\u03AC\u03B8\u03B5 \u03AC\u03BB\u03BB\u03B7 \u03C0\u03CC\u03BB\u03B7.
     (\u0391\u03A0 51.3\u20134\xB7 \u0394\u03B7\u03BC. 18.248\xB7 SEG IX 2)"
   visibleMetrics: 
-  baseSupport: 53
-  sensitivities:
-  - metric: 1
-    perTen: -3
+  baseSupport: 49
+  pressureMetric: 1
+  pressureFavors: 1
+  pressureAnyMetric: 0
   emergencyB: 0
+  officials:
+  - official: {fileID: 11400000, guid: a4ddd22178e520d46b1d0a24fd3837b8, type: 2}
+    side: 1
+  - official: {fileID: 11400000, guid: bd9917fcb7fc7db4b8d17a1290d460b8, type: 2}
+    side: 2
+  - official: {fileID: 11400000, guid: e1d3f4693f8c28b489daad92ab715d18, type: 2}
+    side: 0
+  undecided: {fileID: 11400000, guid: e1d3f4693f8c28b489daad92ab715d18, type: 2}
+  difficulty: 0
   effectsA:
   - metric: 1
     amount: 5
@@ -143,33 +167,22 @@ MonoBehaviour:
     amount: -2
   - metric: 4
     amount: -2
-  officials:
-  - official: {fileID: 11400000, guid: a4ddd22178e520d46b1d0a24fd3837b8, type: 2}
-    side: 1
-    weight: 5
-    threshold: 0
-  - official: {fileID: 11400000, guid: bd9917fcb7fc7db4b8d17a1290d460b8, type: 2}
-    side: 2
-    weight: 5
-    threshold: 0
-  - official: {fileID: 11400000, guid: e1d3f4693f8c28b489daad92ab715d18, type: 2}
-    side: 0
-    weight: 10
-    threshold: 50
-  complaint:
-    available: 0
+  trial:
+    exists: 0
+    venue: 0
     procedure: 0
-    target: {fileID: 0}
-    guilty: 0
+    defendant: {fileID: 0}
+    evidence: 0
+    convictionFavors: 0
+    replacementSpeaker: {fileID: 0}
+    defaultAccuser: 
+    marketClue: 
     charge: 
     defence: 
-    votesFor: 0
-    votesAgainst: 0
-    verdictText: 
+    verdictGuilty: 
+    verdictAcquitted: 
   abolishesPayIfB: 0
   decidesWarEnd: 0
   auditFineIfA: 0
   areopagusIfB: 0
   affectedByAreopagus: 0
-  lowTrustBaseOverride: -1
-  lowAnyMetricBaseOverride: -1

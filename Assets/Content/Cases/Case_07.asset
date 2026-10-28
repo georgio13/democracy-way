@@ -16,7 +16,7 @@ MonoBehaviour:
   prytany: 4
   title: "\u0395\u03AF\u03BA\u03BF\u03C3\u03B9 \u03BD\u03AD\u03B5\u03C2 \u03C4\u03C1\u03B9\u03AE\u03C1\u03B5\u03B9\u03C2"
   athPolRef: "\u0391\u03A0 46.1"
-  inCouncil: 1
+  venue: 1
   newsPeace: "\u039F \u039B\u03C5\u03BA\u03BF\u03CD\u03C1\u03B3\u03BF\u03C2 \u03B1\u03BD\u03B1\u03BA\u03BF\u03AF\u03BD\u03C9\u03C3\u03B5
     \u03CC\u03C4\u03B9 \u03BF \u03C3\u03C4\u03CC\u03BB\u03BF\u03C2 \u03AD\u03C6\u03C4\u03B1\u03C3\u03B5
     \u03C4\u03B9\u03C2 \u03C4\u03B5\u03C4\u03C1\u03B1\u03BA\u03CC\u03C3\u03B9\u03B5\u03C2
@@ -26,9 +26,7 @@ MonoBehaviour:
     \u03B5\u03B9\u03C3\u03B7\u03B3\u03B5\u03AF\u03C4\u03B1\u03B9 \u03BD\u03B1\u03C5\u03C0\u03AE\u03B3\u03B7\u03C3\u03B7
     \u03B5\u03AF\u03BA\u03BF\u03C3\u03B9 \u03BD\u03AD\u03C9\u03BD. \u039F\u03B9 \u03C4\u03C1\u03B9\u03AE\u03C1\u03B1\u03C1\u03C7\u03BF\u03B9,
     \u03C0\u03BF\u03C5 \u03B8\u03B1 \u03C0\u03BB\u03B7\u03C1\u03CE\u03C3\u03BF\u03C5\u03BD
-    \u03C4\u03BF\u03BD \u03B5\u03BE\u03BF\u03C0\u03BB\u03B9\u03C3\u03BC\u03CC, \u03B4\u03B9\u03B1\u03BC\u03B1\u03C1\u03C4\u03CD\u03C1\u03BF\u03BD\u03C4\u03B1\u03B9.
-    [\u0395\u03C4\u03BF\u03B9\u03BC\u03CC\u03C4\u03B7\u03C4\u03B1: 44 \xB7 \u03A4\u03B1\u03BC\u03B5\u03AF\u03BF:
-    53]"
+    \u03C4\u03BF\u03BD \u03B5\u03BE\u03BF\u03C0\u03BB\u03B9\u03C3\u03BC\u03CC, \u03B4\u03B9\u03B1\u03BC\u03B1\u03C1\u03C4\u03CD\u03C1\u03BF\u03BD\u03C4\u03B1\u03B9."
   newsWar: 
   ek1: "\u0397 \u0392\u03BF\u03C5\u03BB\u03AE \u03B5\u03C0\u03BF\u03C0\u03C4\u03B5\u03CD\u03B5\u03B9
     \u03C4\u03B9\u03C2 \u03C4\u03C1\u03B9\u03AE\u03C1\u03B5\u03B9\u03C2, \u03C4\u03BF\u03C5\u03C2
@@ -52,13 +50,35 @@ MonoBehaviour:
     \u03C0\u03CC\u03BB\u03B7\xB7 \u03BF \u03C4\u03C1\u03B9\u03AE\u03C1\u03B1\u03C1\u03C7\u03BF\u03C2
     \u03C4\u03BF \u03C3\u03C5\u03BD\u03C4\u03B7\u03C1\u03B5\u03AF \u03B3\u03B9\u03B1
     \u03AD\u03BD\u03B1\u03BD \u03C7\u03C1\u03CC\u03BD\u03BF."
-  optionA: "Ναυπήγηση των είκοσι τριήρεων — ο δήμος αποφασίζει τον στόλο κι όποιος έχει την περιουσία πληρώνει."
-  optionB: "Συμβούλιο των τριηράρχων να ορίζει τον αριθμό των πλοίων και τους τριηροποιούς — όποιος πληρώνει, ορίζει."
-  argumentA: "Ο δήμος αποφασίζει πόσα πλοία χρειάζεται η πόλη, κι όποιος έχει την περιουσία κάνει τη λειτουργία του. Έτσι χτίστηκε κάθε στόλος που μας έσωσε."
-  argumentB: "Όποιος πληρώνει τα πλοία ξέρει και πόσα σηκώνει το ταμείο του. Ας ορίσουν οι τριήραρχοι τον αριθμό και τους τριηροποιούς."
+  optionA: "\u039D\u03B1\u03C5\u03C0\u03AE\u03B3\u03B7\u03C3\u03B7 \u03C4\u03C9\u03BD
+    \u03B5\u03AF\u03BA\u03BF\u03C3\u03B9 \u03C4\u03C1\u03B9\u03AE\u03C1\u03B5\u03C9\u03BD
+    \u2014 \u03BF \u03B4\u03AE\u03BC\u03BF\u03C2 \u03B1\u03C0\u03BF\u03C6\u03B1\u03C3\u03AF\u03B6\u03B5\u03B9
+    \u03C4\u03BF\u03BD \u03C3\u03C4\u03CC\u03BB\u03BF \u03BA\u03B9 \u03CC\u03C0\u03BF\u03B9\u03BF\u03C2
+    \u03AD\u03C7\u03B5\u03B9 \u03C4\u03B7\u03BD \u03C0\u03B5\u03C1\u03B9\u03BF\u03C5\u03C3\u03AF\u03B1
+    \u03C0\u03BB\u03B7\u03C1\u03CE\u03BD\u03B5\u03B9."
+  optionB: "\u03A3\u03C5\u03BC\u03B2\u03BF\u03CD\u03BB\u03B9\u03BF \u03C4\u03C9\u03BD
+    \u03C4\u03C1\u03B9\u03B7\u03C1\u03AC\u03C1\u03C7\u03C9\u03BD \u03BD\u03B1 \u03BF\u03C1\u03AF\u03B6\u03B5\u03B9
+    \u03C4\u03BF\u03BD \u03B1\u03C1\u03B9\u03B8\u03BC\u03CC \u03C4\u03C9\u03BD \u03C0\u03BB\u03BF\u03AF\u03C9\u03BD
+    \u03BA\u03B1\u03B9 \u03C4\u03BF\u03C5\u03C2 \u03C4\u03C1\u03B9\u03B7\u03C1\u03BF\u03C0\u03BF\u03B9\u03BF\u03CD\u03C2
+    \u2014 \u03CC\u03C0\u03BF\u03B9\u03BF\u03C2 \u03C0\u03BB\u03B7\u03C1\u03CE\u03BD\u03B5\u03B9,
+    \u03BF\u03C1\u03AF\u03B6\u03B5\u03B9."
+  argumentA: "\u039F \u03B4\u03AE\u03BC\u03BF\u03C2 \u03B1\u03C0\u03BF\u03C6\u03B1\u03C3\u03AF\u03B6\u03B5\u03B9
+    \u03C0\u03CC\u03C3\u03B1 \u03C0\u03BB\u03BF\u03AF\u03B1 \u03C7\u03C1\u03B5\u03B9\u03AC\u03B6\u03B5\u03C4\u03B1\u03B9
+    \u03B7 \u03C0\u03CC\u03BB\u03B7, \u03BA\u03B9 \u03CC\u03C0\u03BF\u03B9\u03BF\u03C2
+    \u03AD\u03C7\u03B5\u03B9 \u03C4\u03B7\u03BD \u03C0\u03B5\u03C1\u03B9\u03BF\u03C5\u03C3\u03AF\u03B1
+    \u03BA\u03AC\u03BD\u03B5\u03B9 \u03C4\u03B7 \u03BB\u03B5\u03B9\u03C4\u03BF\u03C5\u03C1\u03B3\u03AF\u03B1
+    \u03C4\u03BF\u03C5. \u0388\u03C4\u03C3\u03B9 \u03C7\u03C4\u03AF\u03C3\u03C4\u03B7\u03BA\u03B5
+    \u03BA\u03AC\u03B8\u03B5 \u03C3\u03C4\u03CC\u03BB\u03BF\u03C2 \u03C0\u03BF\u03C5
+    \u03BC\u03B1\u03C2 \u03AD\u03C3\u03C9\u03C3\u03B5."
+  argumentB: "\u038C\u03C0\u03BF\u03B9\u03BF\u03C2 \u03C0\u03BB\u03B7\u03C1\u03CE\u03BD\u03B5\u03B9
+    \u03C4\u03B1 \u03C0\u03BB\u03BF\u03AF\u03B1 \u03BE\u03AD\u03C1\u03B5\u03B9 \u03BA\u03B1\u03B9
+    \u03C0\u03CC\u03C3\u03B1 \u03C3\u03B7\u03BA\u03CE\u03BD\u03B5\u03B9 \u03C4\u03BF
+    \u03C4\u03B1\u03BC\u03B5\u03AF\u03BF \u03C4\u03BF\u03C5. \u0391\u03C2 \u03BF\u03C1\u03AF\u03C3\u03BF\u03C5\u03BD
+    \u03BF\u03B9 \u03C4\u03C1\u03B9\u03AE\u03C1\u03B1\u03C1\u03C7\u03BF\u03B9 \u03C4\u03BF\u03BD
+    \u03B1\u03C1\u03B9\u03B8\u03BC\u03CC \u03BA\u03B1\u03B9 \u03C4\u03BF\u03C5\u03C2
+    \u03C4\u03C1\u03B9\u03B7\u03C1\u03BF\u03C0\u03BF\u03B9\u03BF\u03CD\u03C2."
   speechA:
     speaker: {fileID: 11400000, guid: e1d3f4693f8c28b489daad92ab715d18, type: 2}
-    fallbackSpeaker: {fileID: 0}
     text: "\u0386\u03BD\u03B4\u03C1\u03B5\u03C2 \u0391\u03B8\u03B7\u03BD\u03B1\u03AF\u03BF\u03B9,
       \u03B4\u03CE\u03B4\u03B5\u03BA\u03B1 \u03C7\u03C1\u03CC\u03BD\u03B9\u03B1 \u03B3\u03AD\u03BC\u03B9\u03C3\u03B1
       \u03C4\u03BF \u03C4\u03B1\u03BC\u03B5\u03AF\u03BF \u03B3\u03B9\u03B1 \u03BD\u03B1
@@ -82,7 +102,6 @@ MonoBehaviour:
       \u03BA\u03B9\u03CC\u03BB\u03B1\u03C2."
   speechB:
     speaker: {fileID: 11400000, guid: 1b281fb3fa5263d4aaaef2ec29625619, type: 2}
-    fallbackSpeaker: {fileID: 0}
     text: "\u0386\u03BD\u03B4\u03C1\u03B5\u03C2 \u0391\u03B8\u03B7\u03BD\u03B1\u03AF\u03BF\u03B9,
       \u03C4\u03C1\u03B9\u03B1\u03BA\u03CC\u03C3\u03B9\u03B5\u03C2 \u03BF\u03B9\u03BA\u03BF\u03B3\u03AD\u03BD\u03B5\u03B9\u03B5\u03C2
       \u03C0\u03BB\u03B7\u03C1\u03CE\u03BD\u03BF\u03C5\u03BD \u03C4\u03BF\u03BD \u03C3\u03C4\u03CC\u03BB\u03BF
@@ -119,11 +138,20 @@ MonoBehaviour:
     \u03C4\u03B5\u03C4\u03C1\u03B1\u03BA\u03CC\u03C3\u03B9\u03B1 \u03C0\u03BB\u03BF\u03AF\u03B1.
     (\u0391\u03A0 46.1\xB7 \u0394\u03B7\u03BC. 18.102\u2013108)"
   visibleMetrics: 
-  baseSupport: 48
-  sensitivities:
-  - metric: 2
-    perTen: -5
+  baseSupport: 50
+  pressureMetric: 2
+  pressureFavors: 1
+  pressureAnyMetric: 0
   emergencyB: 1
+  officials:
+  - official: {fileID: 11400000, guid: e1d3f4693f8c28b489daad92ab715d18, type: 2}
+    side: 1
+  - official: {fileID: 11400000, guid: 1b281fb3fa5263d4aaaef2ec29625619, type: 2}
+    side: 2
+  - official: {fileID: 11400000, guid: e4323eccb1496534db9bbc3205b8bebe, type: 2}
+    side: 0
+  undecided: {fileID: 11400000, guid: e4323eccb1496534db9bbc3205b8bebe, type: 2}
+  difficulty: 0
   effectsA:
   - metric: 2
     amount: 10
@@ -140,33 +168,22 @@ MonoBehaviour:
     amount: -2
   - metric: 4
     amount: -2
-  officials:
-  - official: {fileID: 11400000, guid: e1d3f4693f8c28b489daad92ab715d18, type: 2}
-    side: 1
-    weight: 10
-    threshold: 0
-  - official: {fileID: 11400000, guid: 1b281fb3fa5263d4aaaef2ec29625619, type: 2}
-    side: 2
-    weight: 10
-    threshold: 0
-  - official: {fileID: 11400000, guid: e4323eccb1496534db9bbc3205b8bebe, type: 2}
-    side: 0
-    weight: 5
-    threshold: 45
-  complaint:
-    available: 0
+  trial:
+    exists: 0
+    venue: 0
     procedure: 0
-    target: {fileID: 0}
-    guilty: 0
+    defendant: {fileID: 0}
+    evidence: 0
+    convictionFavors: 0
+    replacementSpeaker: {fileID: 0}
+    defaultAccuser: 
+    marketClue: 
     charge: 
     defence: 
-    votesFor: 0
-    votesAgainst: 0
-    verdictText: 
+    verdictGuilty: 
+    verdictAcquitted: 
   abolishesPayIfB: 0
   decidesWarEnd: 0
   auditFineIfA: 0
   areopagusIfB: 0
   affectedByAreopagus: 0
-  lowTrustBaseOverride: -1
-  lowAnyMetricBaseOverride: -1

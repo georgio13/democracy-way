@@ -32,11 +32,13 @@ namespace DemocracyWay.NewUI
                 e.startPoint = e.submitPoint = null; e.submissionId = null;
             }
             e.instrumentVersion = content.instrumentVersion;
-            e.administrationVersion = "prologue-knowledge-tendencies-participation-20cases-endings-post-demographics-meega-v4";
-            e.exposure = "after-prologue-before-character";
+            e.administrationVersion = "knowledge-tendencies-participation-prologue-biography-20cases-endings-post-demographics-meega-v5";
+            e.exposure = "before-prologue";
             if (string.IsNullOrEmpty(e.researchParticipantId)) e.researchParticipantId = Guid.NewGuid().ToString("N");
             e.baselineAnswers = Resize(e.baselineAnswers, content.onboarding.Length, 0, 3);
             e.postAnswers = Resize(e.postAnswers, content.postTest.Length, 0, 3);
+            e.baselineOptionOrders = ResizeOrders(e.baselineOptionOrders, content.onboarding.Length);
+            e.postOptionOrders = ResizeOrders(e.postOptionOrders, content.postTest.Length);
             e.baselineTendencyAnswers = Resize(e.baselineTendencyAnswers, content.tendencies.Length, 1, 5);
             e.finalTendencyAnswers = Resize(e.finalTendencyAnswers, content.tendencies.Length, 1, 5);
             e.tendencyItemIds = content.tendencies.Select(x => x.id).ToArray();
@@ -52,6 +54,12 @@ namespace DemocracyWay.NewUI
             e.baselineParticipationPoint = Normalise(e.baselineParticipationPoint); e.finalParticipationPoint = Normalise(e.finalParticipationPoint);
             e.postTestStatus = e.postComplete ? "complete" : e.postIndex > 0 ? "partial" : HasPoint(e.postPoint) ? "in_progress" : "not_started";
             return e;
+        }
+        static string[] ResizeOrders(string[] values, int length)
+        {
+            var result = Enumerable.Repeat("", length).ToArray();
+            if (values != null) for (int i = 0; i < Math.Min(length, values.Length); i++) result[i] = values[i] ?? "";
+            return result;
         }
         static EvaluationPoint Normalise(EvaluationPoint p) => p == null || string.IsNullOrEmpty(p.utc) ? null : p;
         public static bool HasPoint(EvaluationPoint p)
@@ -73,12 +81,14 @@ namespace DemocracyWay.NewUI
                 casesPerPrytany = CampaignRules.CasesPerPrytany, totalCases = CampaignRules.TotalCases,
                 turn = CampaignRules.Turn(state), completedCases = done.Length, activeSeconds = state.activeSeconds, progress = done.Length / (float)CampaignRules.TotalCases };
         }
-        public static bool AnswerBaseline(GameState state, EvaluationContent content, int answer, EvaluationPoint point)
+        /// <summary>shownOrder: τα ids των επιλογών με τη σειρά που εμφανίστηκαν (η σειρά είναι τυχαία).</summary>
+        public static bool AnswerBaseline(GameState state, EvaluationContent content, int answer, EvaluationPoint point, string shownOrder = null)
         {
             var e = Ensure(state, content);
             if (e.baselineComplete || answer < 0 || answer > 3 || e.baselineIndex >= content.onboarding.Length || !HasPoint(point)) return false;
             e.baselinePoint = e.baselinePoint ?? point;
             e.baselineAnswers[e.baselineIndex] = answer;
+            e.baselineOptionOrders[e.baselineIndex] = shownOrder ?? "";
             e.baselineIndex++; e.baselineComplete = e.baselineIndex == content.onboarding.Length;
             return true;
         }
@@ -138,10 +148,11 @@ namespace DemocracyWay.NewUI
             var e = state.evaluation; e.postPoint = e.postPoint ?? point;
             e.postTestStatus = e.postComplete ? "complete" : "in_progress"; return true;
         }
-        public static bool AnswerPost(GameState state, EvaluationContent content, int answer)
+        public static bool AnswerPost(GameState state, EvaluationContent content, int answer, string shownOrder = null)
         {
             var e = Ensure(state, content);
             if (!FullCampaignComplete(state) || !HasPoint(e.postPoint) || e.postComplete || e.postIndex >= content.postTest.Length || answer < 0 || answer > 3) return false;
+            e.postOptionOrders[e.postIndex] = shownOrder ?? "";
             e.postAnswers[e.postIndex++] = answer; e.postComplete = e.postIndex == content.postTest.Length;
             e.postTestStatus = e.postComplete ? "complete" : "partial"; return true;
         }

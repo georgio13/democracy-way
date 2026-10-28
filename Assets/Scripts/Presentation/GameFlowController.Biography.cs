@@ -49,9 +49,10 @@ namespace DemocracyWay.NewUI
             }
             else
             {
-                State.phase = "initial-knowledge";
+                State.biographyIndex = 0;
+                State.phase = "biography";
                 SaveCheckpoint();
-                Show(State.phase);
+                ShowBiography();
             }
 
             elapsed = 0f;

@@ -132,7 +132,7 @@ namespace DemocracyWay.NewUI
 
         private static string SlotStage(GameState state)
         {
-            if (state.phase == "prologue")
+            if (state.phase == "prologue" || state.phase == "initial-knowledge" || state.phase == "initial-tendencies")
                 return JsonContent.Copy("Copy_25b0ef0e5008174d");
             if (state.phase == "biography" || state.phase == "summary")
                 return JsonContent.Copy("Copy_1ca3a318398adcc3");

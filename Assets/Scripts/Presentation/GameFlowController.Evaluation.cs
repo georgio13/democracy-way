@@ -79,24 +79,40 @@ namespace DemocracyWay.NewUI
                 {
                     if (!EvaluationRules.AnswerParticipation(State, EvaluationData, post, answer + 1, EvaluationPointNow())) return true;
                     if (post && Evaluation.finalParticipationComplete) { GoCampaign(AfterFinalQuestionnaires); return true; }
-                    if (!post && Evaluation.baselineParticipationComplete)
-                    {
-                        State.biographyIndex = 0; State.phase = "biography"; SaveCheckpoint(); ShowBiography(); return true;
-                    }
+                    if (!post && Evaluation.baselineParticipationComplete) { StartPrologueAfterBaseline(); return true; }
                 }
                 else if (!EvaluationRules.AnswerTendency(State, EvaluationData, post, answer + 1, EvaluationPointNow())) return true;
             }
             else if (initial)
             {
-                if (!EvaluationRules.AnswerBaseline(State, EvaluationData, KnowledgeAnswerAt(answer), EvaluationPointNow())) return true;
+                string shown = ShownAnswerOrder(EvaluationData.onboarding, Evaluation.baselineIndex);
+                if (!EvaluationRules.AnswerBaseline(State, EvaluationData, KnowledgeAnswerAt(answer), EvaluationPointNow(), shown)) return true;
                 if (Evaluation.baselineComplete) { GoCampaign("initial-tendencies"); return true; }
             }
             else
             {
-                if (!EvaluationRules.BeginPost(State, EvaluationData, EvaluationPointNow()) || !EvaluationRules.AnswerPost(State, EvaluationData, KnowledgeAnswerAt(answer))) return true;
+                string shown = ShownAnswerOrder(EvaluationData.postTest, Evaluation.postIndex);
+                if (!EvaluationRules.BeginPost(State, EvaluationData, EvaluationPointNow()) || !EvaluationRules.AnswerPost(State, EvaluationData, KnowledgeAnswerAt(answer), shown)) return true;
                 if (Evaluation.postComplete) { GoCampaign("final-tendencies"); return true; }
             }
             SaveCheckpoint(); RenderCampaign(); ClearSelection(); return true;
+        }
+
+        /// <summary>Η σειρά με την οποία είδε ο παίκτης τις επιλογές της ερώτησης, ως ids (π.χ. «c,a,d,b»).</summary>
+        string ShownAnswerOrder(EvaluationQuestion[] questions, int index)
+        {
+            if (knowledgeAnswerOrder == null || questions == null || index < 0 || index >= questions.Length) return null;
+            var answers = questions[index].answers;
+            return string.Join(",", knowledgeAnswerOrder.Where(i => i >= 0 && i < answers.Length).Select(i => answers[i].id));
+        }
+
+        /// <summary>Μετά τα αρχικά ερωτηματολόγια (γνώσεις, τάσεις, συμμετοχή): ο πρόλογος και μετά η βιογραφία.</summary>
+        void StartPrologueAfterBaseline()
+        {
+            State.prologueIndex = 0;
+            State.phase = "prologue";
+            SaveCheckpoint();
+            Show("prologue");
         }
 
         bool TryRenderEvaluationQuestion()
@@ -116,7 +132,7 @@ namespace DemocracyWay.NewUI
             if (participation && (finalTendency ? e.finalParticipationComplete : e.baselineParticipationComplete))
             {
                 if (finalTendency) GoCampaign(AfterFinalQuestionnaires);
-                else { State.biographyIndex = 0; State.phase = "biography"; SaveCheckpoint(); ShowBiography(); }
+                else StartPrologueAfterBaseline();
                 return true;
             }
             if (tendency && (finalTendency ? !e.postComplete : !e.baselineComplete)) { GoCampaign(finalTendency ? "final-knowledge" : "initial-knowledge"); return true; }

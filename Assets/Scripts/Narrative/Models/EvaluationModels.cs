@@ -83,6 +83,7 @@ namespace DemocracyWay.NewUI
         public string postTestStatus = "not_started";
         public int baselineIndex, postIndex;
         public int[] baselineAnswers = Empty(8), postAnswers = Empty(8);
+        public string[] baselineOptionOrders = Array.Empty<string>(), postOptionOrders = Array.Empty<string>();   // ανά ερώτηση: τα ids των επιλογών με τη σειρά που εμφανίστηκαν
         public int[] experienceAnswers = Empty(12), intentionAnswers = Empty(2);
         public bool baselineComplete, postComplete, surveyComplete, onboardingHelpSeen;
         public bool offered, deferred, completed;

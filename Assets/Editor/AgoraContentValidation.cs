@@ -41,7 +41,9 @@ namespace Agora.EditorTools
                 "Χρειάζονται 10 ονόματα φυλών στο prytanyTribes.", content);
             Require(content.prytanyEpistatai.Count == 10 && content.prytanyEpistatai.All(t => !string.IsNullOrWhiteSpace(t)),
                 "Χρειάζονται 10 επιστάτες στο prytanyEpistatai.", content);
-            Require(!string.IsNullOrWhiteSpace(content.prologue), "Λείπει ο πρόλογος στο GameContent.", content);
+            Require(string.IsNullOrWhiteSpace(content.prologue), "Ο πρόλογος ζει στο ContentLibrary· το GameContent.prologue πρέπει να είναι κενό.", content);
+            Require(!string.IsNullOrWhiteSpace(content.heliaiaIntro) && !string.IsNullOrWhiteSpace(content.areopagusIntro),
+                "Λείπουν τα κοινά κείμενα δικών (Ηλιαία, Άρειος Πάγος).", content);
             Require(!string.IsNullOrWhiteSpace(content.warTransition), "Λείπει το warTransition (μετάβαση πρυτανείας 5).", content);
             Require(!string.IsNullOrWhiteSpace(content.whatReallyHappened), "Λείπει το «Τι έγινε πραγματικά».", content);
 

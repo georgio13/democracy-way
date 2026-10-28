@@ -60,6 +60,9 @@ namespace DemocracyWay.NewUI
                 }
 
                 GameState fresh = NewState();
+                // Το αρχικό τεστ γνώσεων (και οι τάσεις) γίνεται πριν από τον πρόλογο και τη βιογραφία:
+                // η βιογραφία διδάσκει απαντήσεις του τεστ και μετρά ως μέρος της παρέμβασης.
+                fresh.phase = "initial-knowledge";
                 if (!SaveStore.Save(selectedSlot, fresh, out string error))
                 {
                     SetStatus(error);
@@ -69,7 +72,7 @@ namespace DemocracyWay.NewUI
                 GameSession.State = fresh;
                 GameSession.Slot = selectedSlot;
                 ResearchTelemetry.Capture(fresh);
-                Show("prologue");
+                Show(fresh.phase);
             }
             else if (currentScreen == "slots-load")
             {
