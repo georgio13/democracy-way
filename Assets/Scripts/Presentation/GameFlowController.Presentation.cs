@@ -303,20 +303,9 @@ namespace DemocracyWay.NewUI
             }
 
             SetInteractable(currentScreen + ".primary", selected != null);
-            // Ένα σύστημα δεικτών: οι θέσεις της σκηνής (Συνέπεια, Ηθική, Αυθεντία, Πειθώ, Παρρησία, Αναγν.)
-            // δείχνουν τον πολίτη όπως θα μπει στην εκστρατεία.
-            var previewCitizen = CitizenPreview();
-            int[] metricValues =
-            {
-                previewCitizen.synepeia,
-                previewCitizen.ethos,
-                previewCitizen.Authority,
-                previewCitizen.peitho,
-                previewCitizen.parrhesia,
-                previewCitizen.anagnorisimotita
-            };
+            var metricValues = SceneMetricSlots(CitizenPreview());
             for (int i = 0; i < 6; i++)
-                SetText(currentScreen + ".metric." + i, metricValues[i].ToString());
+                SetText(currentScreen + ".metric." + i, SlotText(metricValues[i]));
             if (lastRenderedBioStep != step.id)
             {
                 Canvas.ForceUpdateCanvases();
@@ -350,23 +339,21 @@ namespace DemocracyWay.NewUI
             var citizen = CitizenPreview();
             SetText("summary.identity.1", State.profession + "\n" + config.economicClasses[Mathf.Clamp(State.economicClassIndex, 0, config.economicClasses.Count - 1)]
                 + "\nΠορτοφόλι: " + citizen.wallet + " δρ.");
-            int[] values =
-            {
-                citizen.synepeia,
-                citizen.ethos,
-                citizen.Authority,
-                citizen.peitho,
-                citizen.parrhesia,
-                citizen.anagnorisimotita
-            };
+            var values = SceneMetricSlots(citizen);
             for (int i = 0; i < values.Length; i++)
             {
-                SetText("summary.metric." + i, values[i].ToString());
+                SetText("summary.metric." + i, SlotText(values[i]));
                 Slider bar = Get<Slider>("summary.metric." + i + ".bar");
                 if (bar != null)
-                    bar.SetValueWithoutNotify(Mathf.Lerp(bar.minValue, bar.maxValue, values[i] / 100f));
+                    bar.SetValueWithoutNotify(Mathf.Lerp(bar.minValue, bar.maxValue, (values[i] ?? 0) / 100f));
             }
         }
+
+        /// <summary>Οι 6 θέσεις δεικτών της σκηνής (Συνέπεια, Ηθική, Αυθεντία, Πειθώ, Παρρησία, Αναγνωρισιμότητα):
+        /// από τους δείκτες του παίκτη ταιριάζουν μόνο η Ηθική και η Πειθώ. Το νέο HUD έρχεται στο βήμα 6.</summary>
+        static int?[] SceneMetricSlots(Agora.PlayerState c) => new int?[] { null, c.ethos, null, c.peitho, null, null };
+
+        static string SlotText(int? value) => value.HasValue ? value.Value.ToString() : "—";
 
         private void RenderPrytany()
         {
@@ -482,21 +469,13 @@ namespace DemocracyWay.NewUI
                 SetText("profile.office." + i, i < offices.Length ? offices[i] : "—");
             // Το προφίλ δείχνει τον ζωντανό πολίτη του ενιαίου συστήματος, όχι τις παγωμένες μετρικές της βιογραφίας.
             EnsureAgoraReady();
-            int[] metrics =
-            {
-                State.citizen.synepeia,
-                State.citizen.ethos,
-                State.citizen.Authority,
-                State.citizen.peitho,
-                State.citizen.parrhesia,
-                State.citizen.anagnorisimotita
-            };
+            var metrics = SceneMetricSlots(State.citizen);
             for (int i = 0; i < 6; i++)
             {
-                SetText("profile.metric." + i, metrics[i].ToString());
+                SetText("profile.metric." + i, SlotText(metrics[i]));
                 Slider bar = Get<Slider>("profile.metric." + i + ".bar");
                 if (bar != null)
-                    bar.SetValueWithoutNotify(metrics[i]);
+                    bar.SetValueWithoutNotify(metrics[i] ?? 0);
             }
         }
 

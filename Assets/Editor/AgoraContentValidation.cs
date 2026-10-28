@@ -64,21 +64,8 @@ namespace Agora.EditorTools
                 Require(c.effectsA.Count > 0 && c.effectsB.Count > 0, id + ": λείπουν αποτελέσματα Α ή Β.", c);
                 Require(c.officials.Count > 0, id + ": καμία θέση αξιωματούχων.", c);
                 foreach (var stance in c.officials)
-                {
-                    if (stance == null || stance.official == null) { Require(false, id + ": θέση αξιωματούχου χωρίς πρόσωπο.", c); continue; }
-                    if (stance.side == Side.None && stance.weight > 0)
-                        Require(stance.threshold > 0, id + ": ο ουδέτερος " + stance.official.displayName + " δεν έχει κατώφλι T.", c);
-                }
-                if (c.complaint != null && c.complaint.available)
-                {
-                    Require(c.complaint.target != null, id + ": καταγγελία χωρίς στόχο.", c);
-                    Require(!string.IsNullOrWhiteSpace(c.complaint.charge) && !string.IsNullOrWhiteSpace(c.complaint.defence)
-                        && !string.IsNullOrWhiteSpace(c.complaint.verdictText), id + ": ελλιπή κείμενα καταγγελίας.", c);
-                    Require(c.complaint.votesFor > 0 && c.complaint.votesAgainst > 0, id + ": λείπουν οι ψήφοι της καταγγελίας.", c);
-                    if (c.complaint.votesFor > 0 && c.complaint.votesFor + c.complaint.votesAgainst != 501)
-                        Debug.LogWarning("Agora content: " + id + ": ψήφοι καταγγελίας "
-                            + c.complaint.votesFor + "+" + c.complaint.votesAgainst + " ≠ 501 δικαστές.", c);
-                }
+                    if (stance == null || stance.official == null)
+                        Require(false, id + ": θέση αξιωματούχου χωρίς πρόσωπο.", c);
             }
 
             var offices = LoadAll<OfficeData>();
@@ -106,8 +93,6 @@ namespace Agora.EditorTools
                 Require(person.office != null, person.name + ": δεν εκπροσωπεί κανένα σώμα.", person);
                 Require(!string.IsNullOrWhiteSpace(person.bio), person.name + ": λείπει το bio.", person);
             }
-            Require(logographers.Count == 4, "Αναμένονταν 4 λογογράφοι (μόνος + 3), βρέθηκαν " + logographers.Count + ".");
-            Require(logographers.Any(l => l.quality == 0 && l.costDrachmas == 0), "Λείπει η επιλογή «μόνος» (L=0, κόστος 0).");
             foreach (var logo in logographers)
                 Require(!string.IsNullOrWhiteSpace(logo.displayName), logo.name + ": λείπει όνομα λογογράφου.", logo);
 

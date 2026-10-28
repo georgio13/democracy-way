@@ -2,7 +2,7 @@ using NUnit.Framework;
 
 namespace Agora.Tests
 {
-    /// <summary>VERIFICATION.md Δ8: τέλη πόλης και προσωπικά τέλη.</summary>
+    /// <summary>VERIFICATION.md Δ8: τέλη πόλης. Τα τέλη του παίκτη ελέγχονται στο βήμα 7.</summary>
     public sealed class EndingRulesTests
     {
         // T, Ep, Et, Em, ID, war → CityEnding
@@ -19,26 +19,6 @@ namespace Agora.Tests
         {
             var city = TestWorld.City(t, ep, et, em, id, war);
             Assert.AreEqual(expected, EndingRules.City(city, TestWorld.Cfg()));
-        }
-
-        // spokeForA, spokeForB, Αναγν, Ηθική, Συνέπεια, CityEnding → PersonalEnding
-        [TestCase(12, 0, 60, 60, 60, CityEnding.PropertyLimit, PersonalEnding.Hypereides)]
-        [TestCase(0, 12, 60, 60, 60, CityEnding.PropertyLimit, PersonalEnding.Demades)]
-        [TestCase(12, 0, 60, 60, 60, CityEnding.GarrisonOnly, PersonalEnding.Lycurgus)]
-        [TestCase(0, 0, 75, 30, 50, CityEnding.GarrisonOnly, PersonalEnding.HarpalusMan)]
-        [TestCase(0, 0, 20, 60, 50, CityEnding.GarrisonOnly, PersonalEnding.Anonymous)]
-        [TestCase(0, 0, 40, 45, 50, CityEnding.GarrisonOnly, PersonalEnding.Stratocles)]
-        [TestCase(0, 0, 40, 60, 50, CityEnding.GarrisonOnly, PersonalEnding.Anonymous)]
-        public void D8_Personal(int spokeA, int spokeB, int anagn, int ethos, int synepeia, CityEnding city, PersonalEnding expected)
-        {
-            var player = TestWorld.Player(TestWorld.Cfg());
-            player.spokeForA = spokeA;
-            player.spokeForB = spokeB;
-            player.speeches = spokeA + spokeB;
-            player.anagnorisimotita = anagn;
-            player.ethos = ethos;
-            player.synepeia = synepeia;
-            Assert.AreEqual(expected, EndingRules.Personal(player, city, TestWorld.Cfg()));
         }
 
         [Test]

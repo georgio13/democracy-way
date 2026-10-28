@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace Agora.Tests
 {
-    /// <summary>METRICS_UNIFY: ο πολίτης της βιογραφίας = αρχικές τιμές GameConfig + δέλτα + τάξη.</summary>
+    /// <summary>Ο πολίτης της βιογραφίας = αρχικές τιμές GameConfig + δέλτα + τάξη.</summary>
     public sealed class CitizenPreviewTests
     {
         [Test] // (α) Χωρίς επιλογές: ακριβώς τα defaults του GameConfig και το πορτοφόλι της τάξης.
@@ -12,10 +12,8 @@ namespace Agora.Tests
             var cfg = TestWorld.Cfg();
             var citizen = CitizenPreviewRules.Preview(cfg, SocialClass.Zeugites, "t", new BiographyDeltas());
             Assert.AreEqual(cfg.startPeitho, citizen.peitho);
+            Assert.AreEqual(cfg.startFame, citizen.fame);
             Assert.AreEqual(cfg.startEthos, citizen.ethos);
-            Assert.AreEqual(cfg.startSynepeia, citizen.synepeia);
-            Assert.AreEqual(cfg.startParrhesia, citizen.parrhesia);
-            Assert.AreEqual(cfg.startAnagnorisimotita, citizen.anagnorisimotita);
             Assert.AreEqual(cfg.ClassMoney(SocialClass.Zeugites).wallet, citizen.wallet);
         }
 
@@ -27,7 +25,7 @@ namespace Agora.Tests
                 new BiographyDeltas { ethos = -10, peitho = 5, walletDrachmas = -20 });
             Assert.AreEqual(cfg.startEthos - 10, citizen.ethos);
             Assert.AreEqual(cfg.startPeitho + 5, citizen.peitho);
-            Assert.AreEqual(cfg.startSynepeia, citizen.synepeia);
+            Assert.AreEqual(cfg.startFame, citizen.fame);
             Assert.AreEqual(cfg.ClassMoney(SocialClass.Zeugites).wallet - 20, citizen.wallet);
         }
 
@@ -49,6 +47,7 @@ namespace Agora.Tests
             var preview = CitizenPreviewRules.Preview(cfg, SocialClass.Hippeus, "t", null);
             var fresh = new PlayerState(cfg, SocialClass.Hippeus, "t");
             Assert.AreEqual(fresh.peitho, preview.peitho);
+            Assert.AreEqual(fresh.fame, preview.fame);
             Assert.AreEqual(fresh.ethos, preview.ethos);
             Assert.AreEqual(fresh.wallet, preview.wallet);
         }

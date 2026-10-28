@@ -8,9 +8,8 @@ namespace DemocracyWay.NewUI
 {
     /// <summary>
     /// Οι οθόνες της πόλης στη ροή του χάρτη: η Αγορά ξεκινά την υπόθεση της εβδομάδας και δείχνει την
-    /// πλήρη είδηση, οι Λογογράφοι πουλούν λόγο (μία παραγγελία/εβδομάδα), οι Αξιωματούχοι δέχονται
-    /// Πείθω/Δωροδοκώ (η ΜΙΑ ενέργεια της εβδομάδας), οι Καταγγελίες δεσμεύουν την καταγγελία για τη
-    /// συνέλευση — η δίκη γίνεται ΕΚΕΙ. Κανόνες πάντα από Agora.AssemblyRules.
+    /// πλήρη είδηση· οι Αξιωματούχοι δείχνουν τις θέσεις της εβδομάδας και τον κατάλογο αξιωμάτων.
+    /// Οι κινήσεις (λογογράφος, πειθώ/δωροδοκία, κατηγορία) συνδέονται στο βήμα 5 του Agora_FINAL_DESIGN.
     /// </summary>
     public sealed partial class GameFlowController
     {
@@ -18,14 +17,9 @@ namespace DemocracyWay.NewUI
         readonly List<Button> marketRowButtons = new List<Button>();
         ScrollRect marketScroll;
         int selectedOfficeIndex = -1;
-        int selectedComplaintTurn = -1;
         readonly List<Button> officeRowButtons = new List<Button>();
-        int logographerSelected = -1;      // 1..3 όσο διαλέγει πλευρά για παραγγελία
-        bool complaintDetailCurrent;       // το complaint-detail δείχνει τη ζωντανή καταγγελία της εβδομάδας
         bool officialDetailCase;           // το official-detail δείχνει πρόσωπο της τρέχουσας υπόθεσης
         int selectedCaseStance = -1;       // δείκτης στη λίστα στάσεων της υπόθεσης
-        int officialAction;                // 0 τίποτα, 1 εκκρεμεί πλευρά για Πείθω, 2 για Δωροδοκώ
-        string officialFeedback = "";
         int[] weeklyStanceRows = System.Array.Empty<int>();   // offices.row.i → δείκτης στάσης
 
         static bool IsCityScreen(string id) =>
@@ -34,29 +28,19 @@ namespace DemocracyWay.NewUI
         void WireCityButtons()
         {
             Bind("map.market", OpenMarket);
-            Bind("map.speech", () => { logographerSelected = -1; Show("logographers"); });
+            Bind("map.speech", () => Show("logographers"));
             Bind("map.complaint", () => Show("complaints"));
             Bind("map.offices", () => Show("offices"));
             foreach (string id in new[] { "market", "logographers", "complaints", "offices" })
                 Bind(id + ".close", () => Show("map-stela"));
             Bind("complaint-detail.close", () => Show("complaints"));
             Bind("complaint-detail.back", () => Show("complaints"));
-            Bind("official-detail.close", () => { officialAction = 0; Show("offices"); });
-            Bind("official-detail.back", () => { officialAction = 0; Show("offices"); });
-            for (int i = 0; i < 3; i++) { int n = i; Bind("logographers.buy." + i, () => LogographerAction(n)); }
-            Bind("complaint-detail.choice.0", () => { if (complaintDetailCurrent) CommitCurrentComplaint(); });
-            Bind("complaint-detail.choice.1", () => { if (complaintDetailCurrent) Show("complaints"); });
-            Bind("official-detail.persuade", () => OfficialActionClick(0));
-            Bind("official-detail.bribe", () => OfficialActionClick(1));
+            Bind("official-detail.close", () => Show("offices"));
+            Bind("official-detail.back", () => Show("offices"));
             for (int i = 0; i < 4; i++)
             {
                 int n = i;
                 Bind("market.row." + i, () => SelectMarketRow(n));
-            }
-            for (int i = 0; i < 3; i++)
-            {
-                int n = i;
-                Bind("complaints.row." + i, () => OpenComplaintDetail(n));
             }
             for (int i = 0; i < 6; i++)
             {
@@ -70,8 +54,8 @@ namespace DemocracyWay.NewUI
             string id = currentScreen;
             if (id == "market") RenderMarketArchive();
             else if (id == "logographers") RenderLogographerRoster();
-            else if (id == "complaints") RenderComplaintHistory();
-            else if (id == "complaint-detail") RenderComplaintDetail();
+            else if (id == "complaints") RenderComplaints();
+            else if (id == "complaint-detail") Show("complaints");
             else if (id == "offices") RenderOfficesCatalogue();
             else if (id == "official-detail") RenderOfficeDetail();
         }
@@ -179,18 +163,18 @@ namespace DemocracyWay.NewUI
                 var c = AgoraContent.cases[index];
                 SetMarketRowText(i, "title", c.title);
                 SetMarketRowText(i, "date", "Πρυτανεία " + (index / CampaignRules.CasesPerPrytany + 1) + " · Εβδομάδα " + (index % CampaignRules.CasesPerPrytany + 1));
-                SetMarketRowText(i, "meta", c.inCouncil ? "Βουλευτήριο" : "Πνύκα");
+                SetMarketRowText(i, "meta", c.venue == Agora.CaseVenue.Council ? "Βουλευτήριο" : "Πνύκα");
                 CivicUIFactory.PaintSelectable(marketRowButtons[i], index == marketSelected);
             }
             var selected = AgoraContent.cases[Mathf.Clamp(marketSelected, 0, available - 1)];
-            CampaignText("kind", selected.inCouncil ? "Βουλευτήριο" : "Πνύκα");
+            CampaignText("kind", selected.venue == Agora.CaseVenue.Council ? "Βουλευτήριο" : "Πνύκα");
             WireLexiconTerms("market.body");
             var lexiconWords = lexicon != null ? lexicon.content : null;
             SetRichText("market.body", LexiconMarkup.Decorate(selected.NewsFor(State.polis.war), lexiconWords)
                 + "\n\n<b>" + JsonContent.Copy("Copy_5f91d2c7a43e80b6") + "</b>\n" + LexiconMarkup.Decorate(selected.ek1, lexiconWords));
             CampaignText("quote", MarketOption(Agora.Side.A, selected) + "\n\n" + MarketOption(Agora.Side.B, selected));
             CampaignText("after", MarketStancesText(selected));
-            CampaignText("unread", MarketComplaintNotice(selected));
+            CampaignText("unread", "");
             StackMarketColumn();
             SetActive("market.read", false);   // η σελιδοποίηση αντικαταστάθηκε από κύλιση
         }
@@ -298,8 +282,7 @@ namespace DemocracyWay.NewUI
         /// <summary>Μία πρόταση (Α ή Β): περίληψη από το asset + ομιλητής, όπως θα εμφανιστεί στους λόγους.</summary>
         string MarketOption(Agora.Side side, Agora.CaseData c)
         {
-            bool convicted = AgoraState.caseId == c.id && AgoraState.convicted;
-            var speaker = Agora.AssemblyRules.SpeakerOf(side == Agora.Side.A ? c.speechA : c.speechB, c, convicted);
+            var speaker = (side == Agora.Side.A ? c.speechA : c.speechB).speaker;
             string summary = side == Agora.Side.A ? c.optionA : c.optionB;
             string line = JsonContent.Copy(side == Agora.Side.A ? "Copy_d94a07c2e6f51b38" : "Copy_e2b58d14f93c07a6");
             if (!string.IsNullOrEmpty(summary))
@@ -309,12 +292,12 @@ namespace DemocracyWay.NewUI
             return line;
         }
 
-        /// <summary>Ποιοι αξιωματούχοι στηρίζουν ποια θέση: ζωντανές στάσεις αν η υπόθεση τρέχει, αλλιώς οι αρχικές.</summary>
+        /// <summary>Ποιοι αξιωματούχοι στηρίζουν ποια θέση στην υπόθεση.</summary>
         string MarketStancesText(Agora.CaseData c)
         {
-            var stances = AgoraState.caseId == c.id ? AgoraStances() : Agora.AssemblyRules.CloneStances(c);
+            var stances = Agora.AssemblyRules.CloneStances(c);
             string Names(Agora.Side side) => string.Join(" · ",
-                stances.Where(s => s != null && s.official != null && s.weight > 0 && s.side == side).Select(s => s.official.FullName));
+                stances.Where(s => s != null && s.official != null && s.side == side).Select(s => s.official.FullName));
             var lines = new List<string>();
             string forA = Names(Agora.Side.A), forB = Names(Agora.Side.B), neutral = Names(Agora.Side.None);
             if (forA.Length > 0) lines.Add(JsonContent.Copy("Copy_07d2b94e18f5c3a6") + forA);
@@ -323,354 +306,29 @@ namespace DemocracyWay.NewUI
             return string.Join("\n", lines);
         }
 
-        string MarketComplaintNotice(Agora.CaseData c)
-        {
-            if (!c.complaint.available || c.complaint.target == null)
-                return "";
-            return string.Format(JsonContent.Copy("Copy_3a05ec27b4186fd9"), ProcedureLabel(c.complaint.procedure), c.complaint.target.FullName);
-        }
-
-        static string ProcedureLabel(Agora.ComplaintProcedure procedure) => procedure switch
-        {
-            Agora.ComplaintProcedure.Eisangelia => JsonContent.Copy("Copy_4b16fd38c5297a0e"),
-            Agora.ComplaintProcedure.Endeixis => JsonContent.Copy("Copy_5c270e49d63a8b1f"),
-            Agora.ComplaintProcedure.Phasis => JsonContent.Copy("Copy_6d381f5ae74b9c20"),
-            Agora.ComplaintProcedure.GrapheSykophantias => JsonContent.Copy("Copy_7e492a6bf85cad31"),
-            _ => JsonContent.Copy("Copy_8f5a3b7c096dbe42")
-        };
-
-        // ---------- Λογογράφοι: αγορά λόγου (μία παραγγελία την εβδομάδα, χωρίς επιστροφή) ----------
-
-        void LogographerAction(int button)
-        {
-            if (logographerSelected < 1)
-            {
-                int index = button + 1;   // το 0 είναι ο «χωρίς λογογράφο»
-                if (index >= AgoraContent.logographers.Count) return;
-                var logo = AgoraContent.logographers[index];
-                var week = AgoraCaseCurrent ? AgoraState : new AgoraCaseState();
-                if (AgoraCaseResolved || !WeekFlowRules.CanBuySpeech(week, State.citizen.wallet, logo.costDrachmas)) return;
-                logographerSelected = index;
-                RenderCity();
-                return;
-            }
-            if (button == 0) BuySpeechSide(Agora.Side.A);
-            else if (button == 1) BuySpeechSide(Agora.Side.B);
-            else { logographerSelected = -1; RenderCity(); }
-        }
-
-        void BuySpeechSide(Agora.Side side)
-        {
-            int index = logographerSelected;
-            if (index < 1 || index >= AgoraContent.logographers.Count) return;
-            var logo = AgoraContent.logographers[index];
-            bool ok = false;
-            if (!MutateAndSave(() =>
-            {
-                EnsureAgoraCaseStarted();
-                ok = WeekFlowRules.BuySpeech(AgoraState, State.citizen, index, side, logo.costDrachmas);
-            }) || !ok) { logographerSelected = -1; RenderCity(); return; }
-            AgoraFirestoreTelemetry.Send("speech_bought", AgoraEvent(("logo", logo.quality), ("side", side), ("cost", logo.costDrachmas)));
-            logographerSelected = -1;
-            RenderCity();
-        }
-
-        /// <summary>Πώς βλέπει ο λογογράφος την υπόθεση, από το ντετερμινιστικό S₀ — μόνο κείμενο, ποτέ αριθμός.</summary>
-        string LogographerHint(int index, Agora.CaseData c)
-        {
-            if (index == 1) return "«Χωρίς λόγο δεν περνάει τίποτα σε τούτη την πόλη — χρειάζεσαι λόγο.»";
-            var stances = AgoraCaseCurrent ? AgoraStances() : Agora.AssemblyRules.CloneStances(c);
-            float s0 = Agora.AssemblyRules.ComputeS0(c, State.polis, AgoraCfg, stances);
-            float distance = Mathf.Abs(s0 - 50f);
-            if (distance <= 12f) return "«Η υπόθεση είναι αμφίρροπη — ένας καλός λόγος μπορεί να την κρίνει.»";
-            if (distance > 20f) return "«Ο δήμος μοιάζει να το έχει αποφασίσει ήδη. Μίλα μόνο αν το θες για σένα.»";
-            return "«Η πλάστιγγα γέρνει, μα όχι αμετάκλητα.»";
-        }
-
-        /// <summary>Η κάρτα λογογράφου έχει δικά της παιδιά στη σκηνή (Name/Description/Price/Bonus) —
-        /// το δεμένο «logographers.card.i» είναι μόνο το φόντο της.</summary>
-        void FillLogographerCard(int i, string name, string description, string price, string bonus)
-        {
-            string key = "logographers.card." + i;
-            SetChildText(key, "Name", name);
-            SetChildText(key, "Description", description);
-            SetChildText(key, "Price", price);
-            SetChildText(key, "Bonus", bonus);
-            var description2 = ChildText(key, "Description");
-            if (description2 != null)
-            {
-                description2.enableAutoSizing = true;
-                description2.fontSizeMin = 17;
-                description2.fontSizeMax = 23;
-                description2.verticalAlignment = TMPro.VerticalAlignmentOptions.Top;
-                description2.overflowMode = TMPro.TextOverflowModes.Truncate;
-            }
-        }
-
-        /// <summary>Οι κάρτες της σκηνής είχαν 79px για την περιγραφή — με τα γεμάτα βιογραφικά
-        /// δεν έφτανε. Οι κάρτες ανεβαίνουν κοντά στον τίτλο και ψηλώνουν, η περιγραφή παίρνει
-        /// τον έξτρα χώρο, και ό,τι είναι από κάτω της (τιμή, κουμπί) κατεβαίνει αντίστοιχα.</summary>
-        void StretchLogographerCards()
-        {
-            const float extra = 84f;   // κάρτα: -165.6 → -96 και +84 ύψος, περιγραφή 79.2 → 163.2
-            for (int i = 0; i < 3; i++)
-            {
-                var card = Get<GameObject>("logographers.card." + i);
-                if (card == null) continue;
-                var rect = (RectTransform)card.transform;
-                rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, -96f);
-                rect.sizeDelta = new Vector2(rect.sizeDelta.x, 484.8f + extra);
-                void Move(string child, float y)
-                {
-                    var t = card.transform.Find(child) as RectTransform;
-                    if (t != null) t.anchoredPosition = new Vector2(t.anchoredPosition.x, y);
-                }
-                var description = ChildText("logographers.card." + i, "Description");
-                if (description != null)
-                    description.rectTransform.sizeDelta = new Vector2(description.rectTransform.sizeDelta.x, 79.2f + extra);
-                Move("Price rule", -340.8f - extra);
-                Move("Price", -361.2f - extra);
-                Move("Bonus", -368.4f - extra);
-                var buy = Get<Button>("logographers.buy." + i);
-                if (buy != null)
-                    ((RectTransform)buy.transform).anchoredPosition = new Vector2(((RectTransform)buy.transform).anchoredPosition.x, -411.6f - extra);
-            }
-        }
-
-        /// <summary>Η μεσαία κάρτα είχε authored «προτεινόμενο» στυλ (κόκκινη κορδέλα, χρυσό κουμπί) —
-        /// όλες οι κάρτες παίρνουν το στυλ της πρώτης ώστε καμία να μη μοιάζει προεπιλεγμένη.</summary>
-        void MatchLogographerStyle()
-        {
-            var referenceCard = Get<GameObject>("logographers.card.0");
-            var referenceBuy = Get<Button>("logographers.buy.0");
-            if (referenceCard == null || referenceBuy == null) return;
-            var referencePerk = referenceCard.transform.Find("Perk") != null ? referenceCard.transform.Find("Perk").GetComponent<UnityEngine.UI.Graphic>() : null;
-            var referencePerkLabel = ChildText("logographers.card.0", "Perk/Perk label");
-            var referenceBuyShape = referenceBuy.GetComponent<UnityEngine.UI.Graphic>();
-            var referenceBuyLabel = referenceBuy.GetComponentInChildren<TMP_Text>(true);
-            for (int i = 1; i < 3; i++)
-            {
-                var card = Get<GameObject>("logographers.card." + i);
-                var buy = Get<Button>("logographers.buy." + i);
-                if (card != null)
-                {
-                    var perk = card.transform.Find("Perk") != null ? card.transform.Find("Perk").GetComponent<UnityEngine.UI.Graphic>() : null;
-                    if (perk != null && referencePerk != null) perk.color = referencePerk.color;
-                    var perkLabel = ChildText("logographers.card." + i, "Perk/Perk label");
-                    if (perkLabel != null && referencePerkLabel != null) perkLabel.color = referencePerkLabel.color;
-                }
-                if (buy != null)
-                {
-                    var shape = buy.GetComponent<UnityEngine.UI.Graphic>();
-                    if (shape != null && referenceBuyShape != null) shape.color = referenceBuyShape.color;
-                    var label = buy.GetComponentInChildren<TMP_Text>(true);
-                    if (label != null && referenceBuyLabel != null) label.color = referenceBuyLabel.color;
-                    buy.colors = referenceBuy.colors;
-                }
-            }
-        }
+        // ---------- Λογογράφοι και Καταγγελίες: οι κινήσεις συνδέονται στο βήμα 5 ----------
 
         void RenderLogographerRoster()
         {
-            EnsureAgoraReady();
-            MatchLogographerStyle();
-            StretchLogographerCards();
-            var c = CurrentAgoraCase;
             CampaignText("heading", "Λογογράφοι της πόλης");
-            var pouch = BoughtLogographer;
-            if (logographerSelected >= 1 && pouch == null && !AgoraCaseResolved)
-            {
-                // Βήμα 2ο: επιλογή πλευράς για τον λογογράφο που διάλεξε.
-                var logo = AgoraContent.logographers[logographerSelected];
-                CampaignText("status", "Από ποια πλευρά θες τον λόγο του " + logo.displayName + "; Αμοιβή " + logo.costDrachmas + " δρ. — χωρίς επιστροφή.");
-                SetActive("logographers.card.0", true); SetActive("logographers.card.1", true); SetActive("logographers.card.2", true);
-                FillLogographerCard(0, "Πρόταση Α", c.optionA, "", "");
-                FillLogographerCard(1, "Πρόταση Β", c.optionB, "", "");
-                FillLogographerCard(2, logo.displayName, "Η γνώμη του: " + LogographerHint(logographerSelected, c), "", "");
-                for (int i = 0; i < 3; i++) { SetActive("logographers.buy." + i, true); SetInteractable("logographers.buy." + i, true); }
-                CampaignLabel("buy.0", "Υπέρ της Α — " + logo.costDrachmas + " δρ.");
-                CampaignLabel("buy.1", "Υπέρ της Β — " + logo.costDrachmas + " δρ.");
-                CampaignLabel("buy.2", "Άλλαξα γνώμη");
-                return;
-            }
-            logographerSelected = -1;
-            CampaignText("status", pouch != null
-                ? "Στο σακούλι σου: ο λόγος του " + pouch.displayName + " υπέρ της " + SideLabel((Agora.Side)AgoraState.speechSide) + ". Θα τον εκφωνήσεις στη συνέλευση."
-                : AgoraCaseResolved ? "Η υπόθεση της εβδομάδας κρίθηκε — οι λογογράφοι ξεκουράζονται."
-                : AgoraCaseCurrent && AgoraState.spoke ? "Μίλησες ήδη αυτή την εβδομάδα."
-                : "Διάλεξε λογογράφο για να παραγγείλεις λόγο — μία παραγγελία την εβδομάδα, πληρώνεται τώρα.");
-            bool canBuy = pouch == null && !AgoraCaseResolved && !(AgoraCaseCurrent && (AgoraState.spoke || AgoraState.speechBought));
+            CampaignText("status", "");
             for (int i = 0; i < 3; i++)
             {
-                int index = i + 1;   // το 0 είναι ο «χωρίς λογογράφο»
-                var logo = index < AgoraContent.logographers.Count ? AgoraContent.logographers[index] : null;
-                SetActive("logographers.card." + i, logo != null);
-                SetActive("logographers.buy." + i, logo != null && canBuy);
-                if (logo == null) continue;
-                FillLogographerCard(i, logo.displayName,
-                    (string.IsNullOrEmpty(logo.bio) ? "" : logo.bio + "\n") + LogographerHint(index, c),
-                    logo.costDrachmas + " δραχμές", "Ποιότητα " + logo.quality);
-                if (!canBuy) continue;
-                CampaignLabel("buy." + i, "Παραγγέλνω λόγο — " + logo.costDrachmas + " δρ.");
-                SetInteractable("logographers.buy." + i, State.citizen.wallet >= logo.costDrachmas);
+                SetActive("logographers.card." + i, false);
+                SetActive("logographers.buy." + i, false);
             }
         }
 
-        // ---------- Καταγγελίες: το ιστορικό των δικών σου ----------
-
-        CaseRecord[] FiledComplaints() =>
-            Campaign.cases.Where(r => r != null && r.complaintFiled).OrderByDescending(r => r.turn).ToArray();
-
-        /// <summary>Η ζωντανή καταγγελία της εβδομάδας έχει δεσμευτεί για τη συνέλευση.</summary>
-        bool ComplaintCommitted => AgoraCaseCurrent && AgoraState.complaintPending;
-
-        void RenderComplaintHistory()
+        void RenderComplaints()
         {
-            EnsureAgoraReady();
-            var current = CurrentAgoraCase;
-            bool live = AgoraComplaintAvailable(current);
-            bool committed = ComplaintCommitted;
-            int offset = live || committed ? 1 : 0;
-            var filed = FiledComplaints();
             CampaignText("page-heading", "Καταγγελίες");
             SetText("complaints.banner", "Οι καταγγελίες σου");
-            CampaignText("heading", State.citizen.sycophantFlag ? "Συκοφάντης"
-                : live ? "Διαθέσιμη καταγγελία" : committed ? "Δεσμευμένη καταγγελία" : "Το ιστορικό σου");
-            CampaignText("state", filed.Length == 0 ? "Δεν έχεις καταθέσει καμία καταγγελία." : filed.Length + " καταγγελίες");
-            CampaignText("body", State.citizen.sycophantFlag
-                ? "Το δικαστήριο σε χαρακτήρισε συκοφάντη — δεν μπορείς να καταγγείλεις ξανά."
-                : live ? "Αυτή την εβδομάδα υπάρχει δυνατότητα καταγγελίας — άνοιξέ τη για να αποφασίσεις."
-                : committed ? "Δεσμεύτηκες: η καταγγελία θα κριθεί στη συνέλευση, πριν από τους λόγους."
-                : "Καμία διαθέσιμη καταγγελία αυτή την εβδομάδα. Από κάτω, το ιστορικό των δικών σου.");
+            CampaignText("heading", "");
+            CampaignText("state", "");
+            CampaignText("body", "");
             SetActive("complaints.file", false);
             SetActive("complaints.primary", false);
-            for (int i = 0; i < 3; i++)
-            {
-                bool isLiveRow = i == 0 && offset == 1;
-                bool exists = isLiveRow || i - offset < filed.Length && i - offset >= 0;
-                SetActive("complaints.row." + i, exists);
-                if (!exists) continue;
-                if (isLiveRow)
-                {
-                    SetText("complaints.title." + i, ProcedureLabel(current.complaint.procedure) + " κατά " + current.complaint.target.FullName);
-                    SetText("complaints.meta." + i, current.title + " · " + (committed ? "Τη φέρνεις στη συνέλευση" : "Αυτή την εβδομάδα — αποφάσισε"));
-                    continue;
-                }
-                var c = AgoraContent.cases[filed[i - offset].turn];
-                SetText("complaints.title." + i, ProcedureLabel(c.complaint.procedure) + " κατά " + c.complaint.target.FullName);
-                SetText("complaints.meta." + i, c.title + " · " + (filed[i - offset].complaintConvicted ? "Καταδίκη" : "Αθώωση"));
-            }
-        }
-
-        void OpenComplaintDetail(int row)
-        {
-            bool liveRow = AgoraComplaintAvailable(CurrentAgoraCase) || ComplaintCommitted;
-            if (liveRow && row == 0)
-            {
-                complaintDetailCurrent = true;
-                Show("complaint-detail");
-                return;
-            }
-            int index = row - (liveRow ? 1 : 0);
-            var filed = FiledComplaints();
-            if (index < 0 || index >= filed.Length) return;
-            complaintDetailCurrent = false;
-            selectedComplaintTurn = filed[index].turn;
-            Show("complaint-detail");
-        }
-
-        void CommitCurrentComplaint()
-        {
-            var c = CurrentAgoraCase;
-            if (!AgoraComplaintAvailable(c)) return;
-            bool ok = false;
-            if (!MutateAndSave(() =>
-            {
-                EnsureAgoraCaseStarted();
-                ok = WeekFlowRules.CommitComplaint(AgoraState);
-            }) || !ok) return;
-            AgoraFirestoreTelemetry.Send("complaint_committed", AgoraEvent(("target", c.complaint.target.displayName)));
-            RenderCity();
-        }
-
-        /// <summary>Το πρώτο κομμάτι του λήμματος του ευρετηρίου για τη διαδικασία — αν υπάρχει.</summary>
-        string ProcedureLexiconText(Agora.ComplaintProcedure procedure)
-        {
-            if (lexicon == null || lexicon.content == null || lexicon.content.entries == null) return "";
-            string wanted = LexiconPanel.Normalize(ProcedureLabel(procedure));
-            var entry = lexicon.content.entries.FirstOrDefault(e =>
-                LexiconPanel.Normalize(e.title) == wanted
-                || e.aliases != null && e.aliases.Any(a => LexiconPanel.Normalize(a) == wanted));
-            return entry == null || string.IsNullOrEmpty(entry.text) ? ""
-                : entry.text.Split(new[] { "\n\n" }, System.StringSplitOptions.None)[0];
-        }
-
-        /// <summary>Τα κουτιά της λεπτομέρειας καταγγελίας είναι σταθερά στη σκηνή — τα μακριά
-        /// κείμενα (κατηγορία, είδηση, λήμμα διαδικασίας) χωρούν με αυτόματη σμίκρυνση αντί
-        /// να ξεχειλίζουν το ένα πάνω στο άλλο.</summary>
-        void FitComplaintDetailTexts()
-        {
-            void Fit(string key, float min, float max)
-            {
-                var label = Get<TMP_Text>("complaint-detail." + key);
-                if (label == null) return;
-                label.textWrappingMode = TextWrappingModes.Normal;
-                label.verticalAlignment = TMPro.VerticalAlignmentOptions.Top;
-                label.overflowMode = TMPro.TextOverflowModes.Truncate;
-                label.enableAutoSizing = true;
-                label.fontSizeMin = min;
-                label.fontSizeMax = max;
-            }
-            Fit("intro", 15f, 23f);
-            Fit("body", 15f, 23f);
-            Fit("evidence.0", 14f, 20f);
-            Fit("evidence.1", 14f, 20f);
-            Fit("note", 14f, 21f);
-        }
-
-        void RenderComplaintDetail()
-        {
-            FitComplaintDetailTexts();
-            if (complaintDetailCurrent) { RenderCurrentComplaint(); return; }
-            if (selectedComplaintTurn < 0 || selectedComplaintTurn >= AgoraContent.cases.Count) { Show("complaints"); return; }
-            var c = AgoraContent.cases[selectedComplaintTurn];
-            var record = Campaign.cases.FirstOrDefault(r => r != null && r.turn == selectedComplaintTurn);
-            CampaignText("heading", ProcedureLabel(c.complaint.procedure) + " κατά " + c.complaint.target.FullName);
-            CampaignText("intro", c.complaint.charge);
-            CampaignText("body", "Απολογία: " + c.complaint.defence);
-            CampaignText("evidence.0", "Ψήφοι δικαστών: " + c.complaint.votesFor + " – " + c.complaint.votesAgainst);
-            CampaignText("evidence.1", c.complaint.verdictText);
-            CampaignText("note", record != null && record.complaintConvicted
-                ? "Καταδίκη: ο κατηγορούμενος αποσύρθηκε από την υπόθεση."
-                : "Αθώωση" + (State.citizen.sycophantFlag ? " — και πρόστιμο συκοφαντίας." : "."));
-            CampaignText("status", "");
-            for (int i = 0; i < 3; i++) SetActive("complaint-detail.choice." + i, false);
-        }
-
-        /// <summary>Η απόφαση της εβδομάδας: δεσμεύω ή όχι. Η δίκη ΔΕΝ γίνεται εδώ — στη συνέλευση.</summary>
-        void RenderCurrentComplaint()
-        {
-            var c = CurrentAgoraCase;
-            bool committed = ComplaintCommitted;
-            if (!committed && !AgoraComplaintAvailable(c)) { complaintDetailCurrent = false; Show("complaints"); return; }
-            var opt = c.complaint;
-            CampaignText("heading", ProcedureLabel(opt.procedure) + " κατά " + opt.target.FullName);
-            CampaignText("intro", opt.charge);
-            CampaignText("body", c.NewsFor(State.polis.war));
-            CampaignText("evidence.0", ProcedureLexiconText(opt.procedure));
-            CampaignText("evidence.1", "Αν το δικαστήριο καταδικάσει, ο κατηγορούμενος αποσύρεται από την υπόθεση και κερδίζεις κύρος. "
-                + "Αν η καταγγελία πέσει κάτω από το ένα πέμπτο των ψήφων, χαρακτηρίζεσαι συκοφάντης και πληρώνεις πρόστιμο. "
-                + "Η καταγγελία είναι η ΜΙΑ ενέργειά σου για την εβδομάδα.");
-            CampaignText("note", committed ? "Δεσμεύτηκες: η δίκη θα γίνει στη συνέλευση, πριν από τους λόγους." : "");
-            CampaignText("status", "");
-            SetActive("complaint-detail.choice.0", !committed);
-            SetActive("complaint-detail.choice.1", !committed);
-            SetActive("complaint-detail.choice.2", false);
-            if (!committed)
-            {
-                CampaignLabel("choice.0", "Τη φέρνω στη συνέλευση");
-                CampaignLabel("choice.1", "Δεν τη φέρνω");
-            }
+            for (int i = 0; i < 3; i++) SetActive("complaints.row." + i, false);
         }
 
         // ---------- Αξιωματούχοι: πρώτα οι φωνές της εβδομάδας, μετά ολόκληρος ο κατάλογος ----------
@@ -709,9 +367,8 @@ namespace DemocracyWay.NewUI
             content.sizeDelta = new Vector2(content.sizeDelta.x, Mathf.Max(720f, Mathf.CeilToInt(needed / 3f) * 372f + 12f));
         }
 
-        /// <summary>Οι στάσεις της υπόθεσης της εβδομάδας (ζωντανές αν έχει ξεκινήσει, αλλιώς οι αρχικές).</summary>
-        List<Agora.OfficialStance> WeeklyStances(Agora.CaseData c) =>
-            AgoraCaseCurrent ? AgoraStances() : Agora.AssemblyRules.CloneStances(c);
+        /// <summary>Οι θέσεις των αξιωματούχων στην υπόθεση της εβδομάδας.</summary>
+        List<Agora.OfficialStance> WeeklyStances(Agora.CaseData c) => Agora.AssemblyRules.CloneStances(c);
 
         static string StanceLine(Agora.OfficialStance s) =>
             s.side == Agora.Side.None ? "αναποφάσιστος" : "υπέρ της " + SideLabel(s.side);
@@ -722,7 +379,7 @@ namespace DemocracyWay.NewUI
             var c = CurrentAgoraCase;
             var stances = WeeklyStances(c);
             weeklyStanceRows = Enumerable.Range(0, stances.Count)
-                .Where(i => stances[i] != null && stances[i].official != null && stances[i].weight > 0).ToArray();
+                .Where(i => stances[i] != null && stances[i].official != null).ToArray();
             var offices = AllOffices();
             CampaignText("heading", "Αξιωματούχοι");
             var heading = Get<TMP_Text>("offices.heading");
@@ -757,7 +414,7 @@ namespace DemocracyWay.NewUI
                     var s = stances[weeklyStanceRows[i]];
                     SetChildText(key, "Office banner/Office", "Αυτή την εβδομάδα — " + c.title);
                     SetChildText(key, "Name", s.official.FullName);
-                    SetChildText(key, "Origin", StanceLine(s) + " · βάρος " + s.weight);
+                    SetChildText(key, "Origin", StanceLine(s));
                     SetChildText(key, "Method", s.official.office != null ? SelectionLabel(s.official.office.selection) : "Χωρίς αξίωμα");
                     SetChildText(key, "Meet", "Γνωριμία ›");
                 }
@@ -776,8 +433,6 @@ namespace DemocracyWay.NewUI
 
         void OpenOfficeDetail(int row)
         {
-            officialAction = 0;
-            officialFeedback = "";
             int weekly = weeklyStanceRows.Length;
             if (row < weekly)
             {
@@ -810,7 +465,7 @@ namespace DemocracyWay.NewUI
                 : personBio.Length == 0 ? office.description : office.description + "\n\n" + personBio);
             CampaignText("method", SelectionLabel(office.selection) + (office.payObols > 0 ? " · Μισθός " + office.payObols + " οβ." : "")
                 + (string.IsNullOrEmpty(office.athPolRef) ? "" : " · ΑΠ " + office.athPolRef));
-            CampaignText("influence", "Βάρος θέσης: " + office.defaultWeight);
+            CampaignText("influence", "");
             CampaignText("relationship", "");
             CampaignText("access", "");
             CampaignText("priority", "");
@@ -872,7 +527,7 @@ namespace DemocracyWay.NewUI
             bio.rectTransform.sizeDelta = new Vector2(bio.rectTransform.sizeDelta.x, Mathf.Max(60f, bottom - y));
         }
 
-        /// <summary>Πρόσωπο της υπόθεσης της εβδομάδας: εδώ γίνεται το Πείθω / Δωροδοκώ (η ΜΙΑ ενέργεια).</summary>
+        /// <summary>Πρόσωπο της υπόθεσης της εβδομάδας: η θέση του και το βιογραφικό του.</summary>
         void RenderCaseOfficialDetail()
         {
             var c = CurrentAgoraCase;
@@ -883,51 +538,21 @@ namespace DemocracyWay.NewUI
             var person = s.official;
             var office = person.office;
             CampaignText("heading", person.FullName);
-            CampaignText("name", StanceLine(s) + " · βάρος " + s.weight);
+            CampaignText("name", StanceLine(s));
             SetOfficialBanner(office != null ? office.displayName : "");
-            bool canAct = !AgoraCaseResolved && WeekFlowRules.CanPrepare(AgoraCaseCurrent ? AgoraState : new AgoraCaseState());
-            int bribeCost = AgoraCfg.bribeCostPerWeight * s.weight;
-            bool canPersuade = canAct && s.side == Agora.Side.None && s.weight > 0;
-            bool canBribe = canAct && person.bribable && s.weight > 0;
             string officeLine = office != null ? office.displayNameWithCount + " — " + office.description : "";
             CampaignText("origin", string.IsNullOrEmpty(person.bio) ? officeLine
                 : officeLine.Length == 0 ? person.bio : person.bio + "\n\n" + officeLine);
             CampaignText("method", office != null ? SelectionLabel(office.selection) : "");
-            CampaignText("influence", "Βάρος " + s.weight);
+            CampaignText("influence", "");
             CampaignText("relationship", "");
             CampaignText("priority", StanceLine(s));
-            CampaignText("access", canPersuade && canBribe ? "Πείθω ή Δωροδοκώ"
-                : canPersuade ? "Πείθω"
-                : canBribe ? "Δωροδοκώ — " + bribeCost + " δρ."
-                : AgoraCaseCurrent && AgoraState.prepDone ? "Η ενέργεια έγινε" : "—");
-            CampaignText("result", officialFeedback);
+            CampaignText("access", "");
+            CampaignText("result", "");
+            CampaignText("status", "");
+            SetActive("official-detail.persuade", false);
+            SetActive("official-detail.bribe", false);
             StackOfficialCard();
-            if (officialAction != 0)
-            {
-                // Δεύτερο βήμα: η πλευρά. Το «πίσω» ακυρώνει.
-                CampaignText("status", officialAction == 1
-                    ? "Να στηρίξει ποια πλευρά; Η ενέργεια της εβδομάδας καταναλώνεται ό,τι κι αν απαντήσει."
-                    : "Να στηρίξει ποια πλευρά; Κόστος " + bribeCost + " δρ. — και η Ηθική σου έχει τιμή.");
-                SetActive("official-detail.persuade", true);
-                SetActive("official-detail.bribe", true);
-                SetButtonLabel("official-detail.persuade", "Να στηρίξει την Α");
-                SetButtonLabel("official-detail.bribe", "Να στηρίξει τη Β");
-                SetInteractable("official-detail.persuade", true);
-                SetInteractable("official-detail.bribe", true);
-                return;
-            }
-            CampaignText("status", officialFeedback.Length > 0 ? officialFeedback
-                : !canAct
-                ? AgoraCaseCurrent && AgoraState.prepDone ? "Η ενέργεια της εβδομάδας έχει γίνει." : ""
-                : "Μία ενέργεια την εβδομάδα: Πείθω (αναποφάσιστο) ή Δωροδοκώ (δωροδοκήσιμο).");
-            SetActive("official-detail.persuade", canPersuade);
-            SetActive("official-detail.bribe", canBribe);
-            if (canPersuade) { SetButtonLabel("official-detail.persuade", "Πείθω τον " + person.displayName); SetInteractable("official-detail.persuade", true); }
-            if (canBribe)
-            {
-                SetButtonLabel("official-detail.bribe", "Δωροδοκώ — " + bribeCost + " δρ.");
-                SetInteractable("official-detail.bribe", State.citizen.wallet >= bribeCost);
-            }
         }
 
         /// <summary>Η αρχειοθετημένη κορδέλα δίπλα στο πορτρέτο (π.χ. «ΣΤΡΑΤΗΓΟΣ») παίρνει το σωστό αξίωμα.</summary>
@@ -942,77 +567,6 @@ namespace DemocracyWay.NewUI
                 if (label != null) label.text = text ?? "";
                 return;
             }
-        }
-
-        void SetButtonLabel(string key, string text)
-        {
-            var button = Get<Button>(key);
-            var label = button != null ? button.GetComponentInChildren<TMP_Text>(true) : null;
-            if (label != null) label.text = text;
-        }
-
-        void OfficialActionClick(int button)
-        {
-            if (!officialDetailCase || currentScreen != "official-detail") return;
-            if (officialAction == 0)
-            {
-                officialAction = button == 0 ? 1 : 2;
-                RenderCity();
-                return;
-            }
-            var side = button == 0 ? Agora.Side.A : Agora.Side.B;
-            int action = officialAction;
-            officialAction = 0;
-            if (action == 1) OfficialPersuade(side);
-            else OfficialBribe(side);
-        }
-
-        void OfficialPersuade(Agora.Side side)
-        {
-            bool ok = false, did = false;
-            string name = null;
-            if (!MutateAndSave(() =>
-            {
-                EnsureAgoraCaseStarted();
-                var stances = AgoraStances();
-                if (selectedCaseStance < 0 || selectedCaseStance >= stances.Count) return;
-                var target = stances[selectedCaseStance];
-                if (target.side != Agora.Side.None || target.weight <= 0) return;
-                if (!WeekFlowRules.MarkPrep(AgoraState, Agora.PrepAction.Persuade)) return;
-                ok = Agora.AssemblyRules.Persuade(target, State.citizen, side);   // η προσπάθεια καταναλώνει την ενέργεια
-                StoreAgoraStances(stances);
-                name = target.official.displayName;
-                did = true;
-            }) || !did) { RenderCity(); return; }
-            officialFeedback = ok
-                ? "Ο " + name + " σε άκουσε και θα στηρίξει την " + SideLabel(side) + "."
-                : "Ο " + name + " σε άκουσε ευγενικά και δεν άλλαξε γνώμη.";
-            AgoraFirestoreTelemetry.Send("persuade", AgoraEvent(("target", name), ("ok", ok), ("side", side)));
-            RenderCity();
-        }
-
-        void OfficialBribe(Agora.Side side)
-        {
-            bool ok = false, did = false, exposed = false;
-            string name = null;
-            if (!MutateAndSave(() =>
-            {
-                EnsureAgoraCaseStarted();
-                if (!WeekFlowRules.CanPrepare(AgoraState)) return;
-                var stances = AgoraStances();
-                if (selectedCaseStance < 0 || selectedCaseStance >= stances.Count) return;
-                var target = stances[selectedCaseStance];
-                if (!target.official.bribable || target.weight <= 0) return;
-                ok = Agora.AssemblyRules.Bribe(target, State.citizen, State.polis, AgoraCfg, side, agoraRng, out exposed);
-                if (ok) { WeekFlowRules.MarkPrep(AgoraState, Agora.PrepAction.Bribe); StoreAgoraStances(stances); }
-                name = target.official.displayName;
-                did = true;
-            }) || !did) { RenderCity(); return; }
-            officialFeedback = !ok ? "Δεν έχεις αρκετές δραχμές."
-                : exposed ? "Ο " + name + " πήρε τα χρήματα — αλλά το έμαθε η αγορά."
-                : "Ο " + name + " πήρε τα χρήματα. Κανείς δεν είδε τίποτα.";
-            AgoraFirestoreTelemetry.Send("bribe", AgoraEvent(("target", name), ("ok", ok), ("exposed", exposed), ("side", side)));
-            RenderCity();
         }
 
         static string SelectionLabel(Agora.SelectionMode mode) => mode switch

@@ -11,6 +11,5 @@ namespace DemocracyWay.NewUI
         public string caseId;
         public int vote = -1, majority = -1;
         public bool completed;
-        public bool complaintFiled, complaintConvicted;   // για το αρχείο καταγγελιών της πόλης
     }
 }

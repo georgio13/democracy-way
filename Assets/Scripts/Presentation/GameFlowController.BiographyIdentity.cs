@@ -138,9 +138,6 @@ namespace DemocracyWay.NewUI
             for (int i = 0; i < 5; i++) { SetActive(currentScreen + ".milestone." + i, i == milestone); SetText(currentScreen + ".milestone." + i + ".label", years[i]); }
             SetInteractable(currentScreen + ".primary", selected != null);
             RenderBiographyIdentity(step);
-            var previewCitizen = CitizenPreview();
-            int[] values = { previewCitizen.synepeia, previewCitizen.ethos, previewCitizen.Authority, previewCitizen.peitho, previewCitizen.parrhesia, previewCitizen.anagnorisimotita };
-            for (int i = 0; i < values.Length; i++) SetText(currentScreen + ".metric." + i, values[i].ToString());
             LayoutAuthoredBiographyMetrics();
             lastRenderedBioStep = step.id;
         }
@@ -207,8 +204,8 @@ namespace DemocracyWay.NewUI
             var citizen = CitizenPreview();
             var selected = State.choices.LastOrDefault(c => c.stepId == CurrentBioStep()?.id);
             string delta = selected != null ? MetricDeltas(selected.metrics) : "";
-            playerText.text = "<b>Ο πολίτης σου</b> · Πειθώ " + citizen.peitho + " · Ηθική " + citizen.ethos + " · Συνέπεια " + citizen.synepeia
-                + "\nΠαρρησία " + citizen.parrhesia + " · Αναγνωρισιμότητα " + citizen.anagnorisimotita + " · Πορτοφόλι " + citizen.wallet + " δρ."
+            playerText.text = "<b>Ο πολίτης σου</b> · Πειθώ " + citizen.peitho + " · Φήμη " + citizen.fame + " · Ηθική " + citizen.ethos
+                + "\nΠορτοφόλι " + citizen.wallet + " δρ."
                 + (string.IsNullOrEmpty(delta) ? "" : "\n<color=#D6BA7F>Η επιλογή σου: " + delta + "</color>");
         }
 

@@ -501,29 +501,25 @@ namespace DemocracyWay.NewUI
         {
             if (deltas == null)
                 return "";
-            // Σειρά και ονόματα του Agora: Πειθώ, Ηθική, Συνέπεια, Παρρησία, Αναγνωρισιμότητα, Πορτοφόλι.
+            // Η αντιστοίχιση του CitizenPreviewRules: Πειθώ, Ηθική (ήθος + συνέπεια), Φήμη (αναγνωρισιμότητα + παρρησία), Πορτοφόλι.
             string[] names =
             {
                 JsonContent.Copy("Copy_2c88568db2fddb62"),
                 JsonContent.Copy("Copy_44cbf197ce871c19"),
-                JsonContent.Copy("Copy_5c3117cb8ed2675b"),
-                JsonContent.Copy("Copy_cc950e76fab76b7a"),
-                JsonContent.Copy("Copy_c638883310aed0c3"),
+                JsonContent.Copy("Copy_3f8a1c6e2d9b7054"),
                 JsonContent.Copy("Copy_9e4f7a2b8c1d5063")
             };
             int[] values =
             {
                 deltas.peitho,
-                deltas.ethos,
-                deltas.synepeia,
-                deltas.parrhesia,
-                deltas.anagnorisimotita,
+                deltas.ethos + deltas.synepeia,
+                deltas.anagnorisimotita + deltas.parrhesia,
                 deltas.walletDrachmas
             };
             var parts = new List<string>();
             for (int i = 0; i < names.Length; i++)
                 if (values[i] != 0)
-                    parts.Add(names[i] + " " + (values[i] > 0 ? "+" : "") + values[i] + (i == 5 ? " δρ." : ""));
+                    parts.Add(names[i] + " " + (values[i] > 0 ? "+" : "") + values[i] + (i == 3 ? " δρ." : ""));
             return string.Join(" · ", parts);
         }
     }

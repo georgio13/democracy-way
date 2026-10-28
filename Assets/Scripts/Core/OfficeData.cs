@@ -19,8 +19,5 @@ namespace Agora
 
         [Header("Εκπαιδευτικό κείμενο (ΕΚ)")]
         [TextArea(3, 8)] public string description;
-
-        [Header("Βάρος όταν το σώμα παίρνει θέση σε υπόθεση")]
-        [Range(0, 15)] public int defaultWeight = 5;   // Βουλή/στρατηγοί 15, ταμειακά 10, δεκαμελείς 5
     }
 }

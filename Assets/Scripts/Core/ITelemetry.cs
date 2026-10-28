@@ -6,7 +6,7 @@ namespace Agora
     /// <summary>
     /// Ό,τι καταγράφεται για την έρευνα. Μία κλήση ανά γεγονός, flat key/value — εύκολο για Firestore.
     /// Το δικό σου Firestore component υλοποιεί αυτό το interface και συνδέεται στον GameSession από τον Inspector.
-    /// Γεγονότα: character_created, prytany_start, case_start, persuade, bribe, complaint, case_result, game_end.
+    /// Γεγονότα: character_created, prytany_start, case_start, game_end (η πλήρης καταγραφή: βήμα 9).
     /// </summary>
     public interface ITelemetry
     {

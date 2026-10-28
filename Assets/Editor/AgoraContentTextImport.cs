@@ -20,7 +20,6 @@ namespace Agora.EditorTools
             public int id;
             public string title, athPolRef, newsPeace, newsWar, ek1, speakerA, speechA, speakerB, speechB, ek3;
             public string optionA, optionB, argumentA, argumentB;
-            public string complaintCharge, complaintDefence, complaintVerdict;
         }
 
         [Serializable]
@@ -104,17 +103,6 @@ namespace Agora.EditorTools
                 if (c.speechB != null) c.speechB.text = Keep(texts.speechB, c.speechB.text);
                 warnings += CheckSpeaker(c, "Α", c.speechA, texts.speakerA);
                 warnings += CheckSpeaker(c, "Β", c.speechB, texts.speakerB);
-                if (c.complaint != null && c.complaint.available)
-                {
-                    c.complaint.charge = Keep(texts.complaintCharge, c.complaint.charge);
-                    c.complaint.defence = Keep(texts.complaintDefence, c.complaint.defence);
-                    c.complaint.verdictText = Keep(texts.complaintVerdict, c.complaint.verdictText);
-                }
-                else if (!string.IsNullOrWhiteSpace(texts.complaintCharge))
-                {
-                    Debug.LogWarning("Agora import: " + c.name + ": το έγγραφο έχει κείμενα καταγγελίας αλλά το asset δεν την έχει διαθέσιμη (complaint.available).", c);
-                    warnings++;
-                }
                 EditorUtility.SetDirty(c);
                 updated++;
             }

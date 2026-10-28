@@ -24,12 +24,7 @@ namespace Agora.Tests
         }
 
         /// <summary>Config με τα defaults του κώδικα (spec ενότητα Γ).</summary>
-        public static GameConfig Cfg(float noise = -1f)
-        {
-            var cfg = ScriptableObject.CreateInstance<GameConfig>();
-            if (noise >= 0f) cfg.noise = noise;
-            return cfg;
-        }
+        public static GameConfig Cfg() => ScriptableObject.CreateInstance<GameConfig>();
 
         public static CaseData Case(int id)
         {

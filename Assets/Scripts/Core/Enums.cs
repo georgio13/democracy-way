@@ -21,9 +21,6 @@ namespace Agora
     /// <summary>Πόσο δύσκολα πείθεται ο αναποφάσιστος. Η Πειθώ που χρειάζεται ορίζεται στο GameConfig.</summary>
     public enum Difficulty { Easy, Medium, Hard }
 
-    /// <summary>Η μία ενέργεια προπαρασκευής ανά υπόθεση.</summary>
-    public enum PrepAction { None, Persuade, Bribe, Complain }
-
     /// <summary>Φάσεις της ροής. Κάθε φάση = ένα προκατασκευασμένο panel στη σκηνή.</summary>
     public enum Phase
     {

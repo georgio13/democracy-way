@@ -12,7 +12,7 @@ namespace DemocracyWay.NewUI
     {
         public const int SlotCount = 4;
         public const string Format = "DemocracyWay.ApprovedUI";
-        public const int Version = 4;   // v4: ένα σύστημα δεικτών (BiographyDeltas αντί metrics/funds) — τα v3 saves απορρίπτονται
+        public const int Version = 5;   // v5: Agora_FINAL_DESIGN (Πειθώ, Φήμη, Ηθική· δίκη αντί καταγγελίας) — τα παλιότερα saves απορρίπτονται
 #if UNITY_EDITOR
         // Set only by isolated Editor integration tests; excluded from all player builds.
         public static string TestDirectory;
@@ -123,11 +123,6 @@ namespace DemocracyWay.NewUI
             if (state.phase != "prologue" && state.phase != "biography" && state.phase != "summary" && state.phase != "prytany-title" && state.phase != "lottery" && state.phase != "map-stela" && !CampaignRules.ValidPhase(state.phase))
                 return false;
             if (state.polis == null || state.citizen == null || state.agoraCase == null)
-                return false;
-            // Ροή εβδομάδας: δεσμευμένη καταγγελία δεν συνυπάρχει με κριμένη υπόθεση· αγορασμένος λόγος δείχνει λογογράφο 1..3.
-            if (state.agoraCase.complaintPending && state.agoraCase.resolved)
-                return false;
-            if (state.agoraCase.speechBought && state.agoraCase.logoIndex < 1)
                 return false;
             foreach (int value in new[] { state.polis.treasury, state.polis.food, state.polis.readiness, state.polis.trust, state.polis.demosPower })
                 if (value < 0 || value > 100)
