@@ -14,7 +14,9 @@ namespace DemocracyWay.NewUI
     /// </summary>
     public sealed partial class GameFlowController
     {
-        int marketPage, marketSelected;
+        int marketSelected;
+        readonly List<Button> marketRowButtons = new List<Button>();
+        ScrollRect marketScroll;
         int selectedOfficeIndex = -1;
         int selectedComplaintTurn = -1;
         readonly List<Button> officeRowButtons = new List<Button>();
@@ -46,16 +48,10 @@ namespace DemocracyWay.NewUI
             Bind("complaint-detail.choice.1", () => { if (complaintDetailCurrent) Show("complaints"); });
             Bind("official-detail.persuade", () => OfficialActionClick(0));
             Bind("official-detail.bribe", () => OfficialActionClick(1));
-            Bind("market.read", () => { marketPage++; RenderCity(); });
             for (int i = 0; i < 4; i++)
             {
                 int n = i;
-                Bind("market.row." + i, () =>
-                {
-                    int available = Mathf.Clamp(CampaignRules.Turn(State) + 1, 1, AgoraContent.cases.Count);
-                    marketSelected = Mathf.Max(0, available - 1 - (marketPage * 4 + n));
-                    RenderCity();
-                });
+                Bind("market.row." + i, () => SelectMarketRow(n));
             }
             for (int i = 0; i < 3; i++)
             {
@@ -93,32 +89,98 @@ namespace DemocracyWay.NewUI
                 State.marketVisitedTurn = CampaignRules.Turn(State);
                 EnsureAgoraCaseStarted();
             });
-            // Η Αγορά ανοίγει πάντα στη φρέσκια είδηση της εβδομάδας.
+            // Η Αγορά ανοίγει πάντα στη φρέσκια είδηση της εβδομάδας, με τη λίστα στην κορυφή.
             marketSelected = Mathf.Clamp(CampaignRules.Turn(State), 0, AgoraContent.cases.Count - 1);
-            marketPage = 0;
             Show("market");
+            if (marketScroll != null) marketScroll.verticalNormalizedPosition = 1f;
+        }
+
+        int MarketAvailableCases => Mathf.Clamp(CampaignRules.Turn(State) + 1, 1, AgoraContent.cases.Count);
+
+        void SelectMarketRow(int row)
+        {
+            marketSelected = Mathf.Max(0, MarketAvailableCases - 1 - row);   // νεότερες πρώτες
+            RenderCity();
+        }
+
+        const float MarketRowPitch = 140.4f;
+
+        /// <summary>Η σκηνή έχει 4 σειρές ειδήσεων με σελιδοποίηση· εδώ μπαίνουν σε κυλιόμενη λίστα
+        /// στην ίδια θέση και κλωνοποιούνται όσες ακόμη χρειάζονται (ίδιο μοτίβο με EnsureOfficeRows).</summary>
+        void EnsureMarketRows(int needed)
+        {
+            if (marketRowButtons.Count == 0)
+                for (int i = 0; i < 4; i++)
+                {
+                    var row = Get<Button>("market.row." + i);
+                    if (row != null) marketRowButtons.Add(row);
+                }
+            if (marketRowButtons.Count == 0) return;
+            if (marketScroll == null)
+            {
+                var parent = marketRowButtons[0].transform.parent;
+                marketScroll = CivicUIFactory.Scroll(parent, "News scroll", out var listContent, framed: false);
+                marketScroll.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHide;   // ράγα μόνο όταν χρειάζεται κύλιση
+                var rect = (RectTransform)marketScroll.transform;
+                rect.anchorMin = rect.anchorMax = new Vector2(0f, 1f);
+                rect.pivot = new Vector2(0f, 1f);
+                // Το viewport έχει περιθώριο 12 γύρω του: έτσι οι σειρές μένουν ακριβώς όπου ήταν,
+                // και η ράγα κύλισης στέκεται πριν τη διαχωριστική γραμμή της στήλης (x 604.8).
+                rect.anchoredPosition = new Vector2(-12f, -169.2f + 12f);
+                rect.sizeDelta = new Vector2(600f, 741.6f - 169.2f + 12f);
+                foreach (var row in marketRowButtons) row.transform.SetParent(listContent, false);
+            }
+            var template = marketRowButtons[0];
+            while (marketRowButtons.Count < needed)
+            {
+                int row = marketRowButtons.Count;
+                var clone = Instantiate(template.gameObject, template.transform.parent).GetComponent<Button>();
+                clone.name = "News " + row;
+                clone.onClick.RemoveAllListeners();
+                clone.onClick.AddListener(() => { PlayClick(); SelectMarketRow(row); });
+                marketRowButtons.Add(clone);
+            }
+            for (int i = 0; i < marketRowButtons.Count; i++)
+            {
+                var r = (RectTransform)marketRowButtons[i].transform;
+                r.anchorMin = r.anchorMax = new Vector2(0f, 1f);
+                r.pivot = new Vector2(0f, 1f);
+                r.anchoredPosition = new Vector2(0f, -i * MarketRowPitch);
+            }
+            marketScroll.content.sizeDelta = new Vector2(0f, Mathf.Max(1, needed) * MarketRowPitch);
+        }
+
+        /// <summary>Τα κείμενα μιας σειράς (date/title/meta): δεμένα για τις 4 της σκηνής, με όνομα για τους κλώνους.</summary>
+        void SetMarketRowText(int row, string part, string text)
+        {
+            TMP_Text label = row < 4 ? Get<TMP_Text>("market." + part + "." + row) : null;
+            if (label == null)
+                foreach (Transform child in marketRowButtons[row].transform)
+                    if (child.name.StartsWith("market." + part + ".", System.StringComparison.Ordinal)) { label = child.GetComponent<TMP_Text>(); break; }
+            if (label == null) return;
+            label.richText = false;
+            label.text = text ?? "";
         }
 
         void RenderMarketArchive()
         {
             EnsureAgoraReady();
-            int available = Mathf.Clamp(CampaignRules.Turn(State) + 1, 1, AgoraContent.cases.Count);
-            int pages = Mathf.Max(1, Mathf.CeilToInt(available / 4f));
-            marketPage = Mathf.Clamp(marketPage, 0, pages - 1);
+            int available = MarketAvailableCases;
             marketSelected = Mathf.Clamp(marketSelected, 0, available - 1);
             CampaignText("heading", "Η Αγορά — Ανταποκρίσεις");
-            CampaignText("page-heading", pages > 1 ? "Αγορά · " + (marketPage + 1) + "/" + pages : "Αγορά");
-            for (int i = 0; i < 4; i++)
+            CampaignText("page-heading", "Αγορά");
+            EnsureMarketRows(available);
+            for (int i = 0; i < marketRowButtons.Count; i++)
             {
-                int index = available - 1 - (marketPage * 4 + i);   // νεότερες πρώτες
+                int index = available - 1 - i;   // νεότερες πρώτες
                 bool exists = index >= 0;
-                SetActive("market.row." + i, exists);
+                marketRowButtons[i].gameObject.SetActive(exists);
                 if (!exists) continue;
                 var c = AgoraContent.cases[index];
-                SetText("market.title." + i, c.title);
-                SetText("market.date." + i, "Πρυτανεία " + (index / CampaignRules.CasesPerPrytany + 1) + " · Εβδομάδα " + (index % CampaignRules.CasesPerPrytany + 1));
-                SetText("market.meta." + i, c.inCouncil ? "Βουλευτήριο" : "Πνύκα");
-                PaintRow("market.row." + i, index == marketSelected);
+                SetMarketRowText(i, "title", c.title);
+                SetMarketRowText(i, "date", "Πρυτανεία " + (index / CampaignRules.CasesPerPrytany + 1) + " · Εβδομάδα " + (index % CampaignRules.CasesPerPrytany + 1));
+                SetMarketRowText(i, "meta", c.inCouncil ? "Βουλευτήριο" : "Πνύκα");
+                CivicUIFactory.PaintSelectable(marketRowButtons[i], index == marketSelected);
             }
             var selected = AgoraContent.cases[Mathf.Clamp(marketSelected, 0, available - 1)];
             CampaignText("kind", selected.inCouncil ? "Βουλευτήριο" : "Πνύκα");
@@ -130,8 +192,7 @@ namespace DemocracyWay.NewUI
             CampaignText("after", MarketStancesText(selected));
             CampaignText("unread", MarketComplaintNotice(selected));
             StackMarketColumn();
-            CampaignLabel("read", "Επόμενη σελίδα");
-            SetInteractable("market.read", pages > 1);
+            SetActive("market.read", false);   // η σελιδοποίηση αντικαταστάθηκε από κύλιση
         }
 
         /// <summary>Κείμενο-παιδί ενός δεμένου αντικειμένου, με το όνομά του στη σκηνή (π.χ. κάρτες με Name/Price).</summary>

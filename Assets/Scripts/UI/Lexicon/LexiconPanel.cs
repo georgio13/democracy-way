@@ -16,7 +16,7 @@ namespace DemocracyWay.NewUI
         public class Entry
         {
             public string id, title, category, text;
-            public string[] sources, aliases;
+            public string[] aliases;
         }
 
         public LexiconContent content;
