@@ -13,6 +13,7 @@ namespace DemocracyWay.NewUI
         public bool openFeedbackOptional = true;
         public string[] ratingLabels;
         public EvaluationQuestion[] onboarding, postTest;
+        public string knowledgeInstructions;
         public EvaluationRating[] experience, participationIntention;
         public DemographicsContent demographics;
         public TendencyItem[] tendencies;
@@ -76,6 +77,7 @@ namespace DemocracyWay.NewUI
         public EvaluationPoint baselineParticipationPoint, finalParticipationPoint;
         public string submissionId, openFeedback;
         public string[] experienceItemIds, intentionItemIds;
+        public string[] instructionsSeen = Array.Empty<string>();   // π.χ. "knowledge-pre": οι οδηγίες δείχνονται μία φορά ανά ερωτηματολόγιο
         public bool synthetic;
         public string syntheticScenario;
         public EvaluationSurveyArchive[] archivedSurveys;

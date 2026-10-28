@@ -30,7 +30,7 @@ namespace DemocracyWay.NewUI
                 e.startPoint = e.submitPoint = null; e.submissionId = null;
             }
             e.instrumentVersion = content.instrumentVersion;
-            e.administrationVersion = "prologue-demographics-knowledge-no-feedback-tendencies-20cases-v2";
+            e.administrationVersion = "prologue-knowledge-tendencies-participation-20cases-demographics-meega-v3";
             e.exposure = "after-prologue-before-character";
             if (string.IsNullOrEmpty(e.researchParticipantId)) e.researchParticipantId = Guid.NewGuid().ToString("N");
             e.baselineAnswers = Resize(e.baselineAnswers, content.onboarding.Length, 0, 3);

@@ -31,6 +31,7 @@ namespace DemocracyWay.NewUI
         public int prytany = 1;
         public int week = 1;
         public int marketVisitedTurn = -1;   // ο γύρος που ο παίκτης επισκέφθηκε την Αγορά — προϋπόθεση για την υπόθεση
+        public bool mapGuideSeen;            // ο οδηγός του χάρτη δείχνεται μία φορά, μετά την πρώτη κλήρωση
         public int currentTribe = -1;
         public List<int> drawnTribes = new List<int>();
         public CampaignState campaign = new CampaignState();

@@ -49,7 +49,7 @@ namespace DemocracyWay.NewUI
             }
             else
             {
-                State.phase = "demographics";
+                State.phase = "initial-knowledge";
                 SaveCheckpoint();
                 Show(State.phase);
             }

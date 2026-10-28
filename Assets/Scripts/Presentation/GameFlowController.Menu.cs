@@ -111,6 +111,13 @@ namespace DemocracyWay.NewUI
         {
             if (!modalOpen)
                 return;
+            if (mapGuideConfirmation)
+            {
+                State.mapGuideSeen = true;
+                SaveCheckpoint();
+                CancelModal();
+                return;
+            }
             if (marketGateConfirmation)
             {
                 CancelModal();
@@ -177,7 +184,7 @@ namespace DemocracyWay.NewUI
             SetText("modal.banner", marketGateConfirmation ? JsonContent.Copy("Copy_84b5d2f6a1c93e07") : returnToMenuConfirmation ? JsonContent.Copy("Copy_0fbdf139f32fbe03") : exitConfirmation ? JsonContent.Copy("Copy_9e9d8f4e2e474fdd") : JsonContent.Copy("Copy_dfa7abed718a9679"));
             SetText("modal.cancel.label", marketGateConfirmation ? JsonContent.Copy("Copy_b07f3c58d94a21e6") : returnToMenuConfirmation ? JsonContent.Copy("Copy_98fa5c1c9102ad29") : exitConfirmation ? JsonContent.Copy("Copy_c094b97741b41a20") : JsonContent.Copy("Copy_24281287fc92ad20"));
             SetText("modal.confirm.label", marketGateConfirmation ? JsonContent.Copy("Copy_c6d8e94f07b3a215") : returnToMenuConfirmation ? JsonContent.Copy("Copy_8394cf88f71e8118") : exitConfirmation ? JsonContent.Copy("Copy_6a5920d4ffad7a42") : JsonContent.Copy("Copy_650a9a115575ccac"));
-            bool gentle = exitConfirmation || returnToMenuConfirmation || marketGateConfirmation;
+            bool gentle = exitConfirmation || returnToMenuConfirmation || marketGateConfirmation || mapGuideConfirmation;
             Button confirm = Get<Button>("modal.confirm");
             if (confirm != null && confirm.GetComponent<PanelGraphic>() != null)
                 confirm.GetComponent<PanelGraphic>().color = gentle ? new Color32(185, 160, 102, 255) : new Color32(164, 86, 67, 255);
@@ -203,6 +210,9 @@ namespace DemocracyWay.NewUI
 
         public void CancelModal()
         {
+            if (mapGuideConfirmation)
+                RestoreModalLayout();
+            mapGuideConfirmation = false;
             SetActive("modal.root", false);
             if (modalBlockedGroup != null)
             {
@@ -217,6 +227,86 @@ namespace DemocracyWay.NewUI
             exitConfirmation = false;
             returnToMenuConfirmation = false;
             marketGateConfirmation = false;
+        }
+
+        // ---------- Οδηγός χάρτη: μία φορά, μετά την κλήρωση της πρώτης πρυτανείας ----------
+
+        readonly List<(RectTransform rect, Vector2 position, Vector2 size)> modalLayout = new List<(RectTransform, Vector2, Vector2)>();
+        (TextAlignmentOptions alignment, bool autoSize, float size, float min, float max, TextWrappingModes wrapping) modalMessageStyle;
+
+        /// <summary>Ο χάρτης της πρώτης πρυτανείας ανοίγει με τις οδηγίες του παιχνιδιού.</summary>
+        void ShowMapGuideIfNeeded()
+        {
+            if (modalOpen || State == null || State.mapGuideSeen || State.prytany != 1 || currentScreen != "map-stela")
+                return;
+            mapGuideConfirmation = true;
+            pendingDelete = -1;
+            OpenModal(JsonContent.Copy("Copy_8f3c6a1e52d09b74"));
+            SetText("modal.title", JsonContent.Copy("Copy_a52e7d90c3f1b486"));
+            SetText("modal.banner", JsonContent.Copy("Copy_e1b94f27d60a3c85"));
+            SetText("modal.confirm.label", JsonContent.Copy("Copy_7c05d3b8e9a24f61"));
+            EnlargeModalForGuide();
+        }
+
+        /// <summary>Το ConfirmationModal της σκηνής είναι φτιαγμένο για μία πρόταση (κείμενο 718×106):
+        /// για τον οδηγό μεγαλώνει προσωρινά, χωρίς «Ακύρωση», και επανέρχεται στο κλείσιμο.</summary>
+        void EnlargeModalForGuide()
+        {
+            var title = Get<TMP_Text>("modal.title");
+            var message = Get<TMP_Text>("modal.body");
+            var confirm = Get<Button>("modal.confirm");
+            var bannerLabel = Get<TMP_Text>("modal.banner");
+            if (title == null || message == null || confirm == null) return;
+            var content = title.rectTransform.parent as RectTransform;
+            var paper = content != null ? content.parent as RectTransform : null;
+            var artwork = paper != null ? paper.Find("Parchment artwork") as RectTransform : null;
+            var banner = bannerLabel != null ? bannerLabel.rectTransform.parent as RectTransform : null;
+            const float width = 1200f, height = 780f, inner = width - 86.4f;
+            modalLayout.Clear();
+            void Set(RectTransform rect, Vector2 position, Vector2 size)
+            {
+                if (rect == null) return;
+                modalLayout.Add((rect, rect.anchoredPosition, rect.sizeDelta));
+                rect.anchoredPosition = position;
+                rect.sizeDelta = size;
+            }
+            Set(paper, new Vector2((1920f - width) / 2f, -(1080f - height) / 2f), new Vector2(width, height));
+            Set(artwork, artwork != null ? artwork.anchoredPosition : Vector2.zero, new Vector2(width, height));
+            Set(content, content.anchoredPosition, new Vector2(inner, height - 86.4f));
+            Set(banner, banner != null ? new Vector2((inner - banner.sizeDelta.x) / 2f, banner.anchoredPosition.y) : Vector2.zero, banner != null ? banner.sizeDelta : Vector2.zero);
+            Set(title.rectTransform, title.rectTransform.anchoredPosition, new Vector2(inner, title.rectTransform.sizeDelta.y));
+            Set(message.rectTransform, new Vector2(0f, -84f), new Vector2(inner, 500f));
+            var confirmRect = (RectTransform)confirm.transform;
+            Set(confirmRect, new Vector2((inner - confirmRect.sizeDelta.x) / 2f, -610f), confirmRect.sizeDelta);
+            modalMessageStyle = (message.alignment, message.enableAutoSizing, message.fontSize, message.fontSizeMin, message.fontSizeMax, message.textWrappingMode);
+            message.alignment = TextAlignmentOptions.TopLeft;
+            message.textWrappingMode = TextWrappingModes.Normal;
+            message.enableAutoSizing = true;
+            message.fontSizeMin = 18f;
+            message.fontSizeMax = 26f;
+            SetActive("modal.cancel", false);
+        }
+
+        void RestoreModalLayout()
+        {
+            foreach (var (rect, position, size) in modalLayout)
+            {
+                if (rect == null) continue;
+                rect.anchoredPosition = position;
+                rect.sizeDelta = size;
+            }
+            modalLayout.Clear();
+            var message = Get<TMP_Text>("modal.body");
+            if (message != null)
+            {
+                message.alignment = modalMessageStyle.alignment;
+                message.textWrappingMode = modalMessageStyle.wrapping;
+                message.enableAutoSizing = modalMessageStyle.autoSize;
+                message.fontSize = modalMessageStyle.size;
+                message.fontSizeMin = modalMessageStyle.min;
+                message.fontSizeMax = modalMessageStyle.max;
+            }
+            SetActive("modal.cancel", true);
         }
 
         private void AskExit()

@@ -96,7 +96,7 @@ namespace DemocracyWay.NewUI
                 var knowledge = Library.knowledge;
                 var meega = Library.meega;
                 var tendencies = Library.tendencies;
-                result.onboarding = knowledge.pre; result.postTest = knowledge.post;
+                result.onboarding = knowledge.pre; result.postTest = knowledge.post; result.knowledgeInstructions = knowledge.instructions;
                 result.experience = meega.experience; result.participationIntention = Array.Empty<EvaluationRating>();
                 result.tendencies = tendencies.items; result.tendencyInstructions = tendencies.instructions; result.tendencyRatingLabels = tendencies.ratingLabels;
                 var participation = Library.participation;
@@ -118,7 +118,7 @@ namespace DemocracyWay.NewUI
     [Serializable] public sealed class TribeData { public string id, name, choiceText, emblemId, defaultDeme, defaultTrittys; public TrittysData[] trittyes; }
     [Serializable] public sealed class TrittysData { public string id, name, choiceText; public DemeData[] demes; }
     [Serializable] public sealed class DemeData { public string id, name, choiceText; }
-    [Serializable] public sealed class KnowledgeFile { public EvaluationQuestion[] pre, post; }
+    [Serializable] public sealed class KnowledgeFile { public string instructions; public EvaluationQuestion[] pre, post; }
     [Serializable] public sealed class TendenciesFile { public string instructions; public string[] ratingLabels; public TendencyItem[] items; }
     [Serializable] public sealed class InterfaceTextFile { public InterfaceTextEntry[] entries; }
     [Serializable] public sealed class InterfaceTextEntry { public string id, text; }

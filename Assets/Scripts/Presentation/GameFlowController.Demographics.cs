@@ -17,9 +17,12 @@ namespace DemocracyWay.NewUI
 
         void RenderDemographics()
         {
+            // Τα δημογραφικά ζητούνται στο τέλος: μετά την τελική συμμετοχή, ακριβώς πριν το MEEGA+.
+            // Παλιό save που σταμάτησε εδώ στην αρχή του παιχνιδιού συνεχίζει από τις γνώσεις.
+            if (!Evaluation.finalParticipationComplete) { GoCampaign(Evaluation.baselineComplete ? "map-stela" : "initial-knowledge"); return; }
             if (demographicsPanel == null) CreateDemographics();
             var data = DemographicsRules.Ensure(State, DemographicContent);
-            if (data.completed) { GoCampaign("initial-knowledge"); return; }
+            if (data.completed) { GoCampaign("final-survey"); return; }
             demographicsPanel.SetActive(true);
             foreach (var pair in demographicOptions)
             {
@@ -46,7 +49,7 @@ namespace DemocracyWay.NewUI
             foreach (var pair in demographicInputs)
                 DemographicsRules.Answer(State, DemographicContent, pair.Key, null, pair.Value.text, EvaluationPointNow());
             if (!DemographicsRules.Complete(State, DemographicContent)) return;
-            GoCampaign("initial-knowledge");
+            GoCampaign("final-survey");
         }
 
         void CreateDemographics()

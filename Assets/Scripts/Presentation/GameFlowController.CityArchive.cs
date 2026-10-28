@@ -167,8 +167,10 @@ namespace DemocracyWay.NewUI
             var unread = Get<TMP_Text>("market.unread");
             if (body == null || quote == null || after == null) return;
             var quotePanel = quote.rectTransform.parent as RectTransform;
-            const float left = 628.8f, width = 936f, topY = 308.4f, bottomY = 700f, gap = 14f;
-            const float quotePad = 40.8f, quoteInset = 52.8f;
+            // topY: αμέσως κάτω από τον τίτλο (heading: y 181.2 + ύψος κειμένου ~65) — το 308 άφηνε
+            // μεγάλο κενό ΚΑΙ στρίμωχνε τη στήλη τόσο που το πλαίσιο των προτάσεων έχανε τον Β ομιλητή.
+            const float left = 628.8f, width = 936f, topY = 252f, bottomY = 724f, gap = 14f;
+            const float quotePad = 56f, quoteInset = 52.8f;
             var labels = new[] { body, quote, after, unread };
             var heights = new float[labels.Length];
             for (int i = 0; i < labels.Length; i++)
@@ -180,7 +182,8 @@ namespace DemocracyWay.NewUI
                 label.enableAutoSizing = false;
                 label.fontSize = i == 0 ? 23f : 21f;
                 float w = label == quote ? width - quoteInset : width;
-                heights[i] = label.GetPreferredValues(label.text, w, 0).y + 6f;
+                // Το πλαίσιο προτάσεων παίρνει έξτρα buffer ώστε να μη χάνεται η τελευταία γραμμή (Β ομιλητής).
+                heights[i] = label.GetPreferredValues(label.text, w, 0).y + (label == quote ? 18f : 6f);
             }
             float total = heights[0] + heights[1] + heights[2] + heights[3] + (heights[1] > 0 ? quotePad : 0) + 3 * gap;
             float available = bottomY - topY;
@@ -333,7 +336,44 @@ namespace DemocracyWay.NewUI
             SetChildText(key, "Price", price);
             SetChildText(key, "Bonus", bonus);
             var description2 = ChildText(key, "Description");
-            if (description2 != null) { description2.enableAutoSizing = true; description2.fontSizeMin = 14; description2.fontSizeMax = 23; }
+            if (description2 != null)
+            {
+                description2.enableAutoSizing = true;
+                description2.fontSizeMin = 17;
+                description2.fontSizeMax = 23;
+                description2.verticalAlignment = TMPro.VerticalAlignmentOptions.Top;
+                description2.overflowMode = TMPro.TextOverflowModes.Truncate;
+            }
+        }
+
+        /// <summary>Οι κάρτες της σκηνής είχαν 79px για την περιγραφή — με τα γεμάτα βιογραφικά
+        /// δεν έφτανε. Οι κάρτες ανεβαίνουν κοντά στον τίτλο και ψηλώνουν, η περιγραφή παίρνει
+        /// τον έξτρα χώρο, και ό,τι είναι από κάτω της (τιμή, κουμπί) κατεβαίνει αντίστοιχα.</summary>
+        void StretchLogographerCards()
+        {
+            const float extra = 84f;   // κάρτα: -165.6 → -96 και +84 ύψος, περιγραφή 79.2 → 163.2
+            for (int i = 0; i < 3; i++)
+            {
+                var card = Get<GameObject>("logographers.card." + i);
+                if (card == null) continue;
+                var rect = (RectTransform)card.transform;
+                rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, -96f);
+                rect.sizeDelta = new Vector2(rect.sizeDelta.x, 484.8f + extra);
+                void Move(string child, float y)
+                {
+                    var t = card.transform.Find(child) as RectTransform;
+                    if (t != null) t.anchoredPosition = new Vector2(t.anchoredPosition.x, y);
+                }
+                var description = ChildText("logographers.card." + i, "Description");
+                if (description != null)
+                    description.rectTransform.sizeDelta = new Vector2(description.rectTransform.sizeDelta.x, 79.2f + extra);
+                Move("Price rule", -340.8f - extra);
+                Move("Price", -361.2f - extra);
+                Move("Bonus", -368.4f - extra);
+                var buy = Get<Button>("logographers.buy." + i);
+                if (buy != null)
+                    ((RectTransform)buy.transform).anchoredPosition = new Vector2(((RectTransform)buy.transform).anchoredPosition.x, -411.6f - extra);
+            }
         }
 
         /// <summary>Η μεσαία κάρτα είχε authored «προτεινόμενο» στυλ (κόκκινη κορδέλα, χρυσό κουμπί) —
@@ -373,6 +413,7 @@ namespace DemocracyWay.NewUI
         {
             EnsureAgoraReady();
             MatchLogographerStyle();
+            StretchLogographerCards();
             var c = CurrentAgoraCase;
             CampaignText("heading", "Λογογράφοι της πόλης");
             var pouch = BoughtLogographer;
@@ -430,8 +471,10 @@ namespace DemocracyWay.NewUI
             bool committed = ComplaintCommitted;
             int offset = live || committed ? 1 : 0;
             var filed = FiledComplaints();
-            CampaignText("heading", "Καταγγελίες");
-            CampaignText("page-heading", "");
+            CampaignText("page-heading", "Καταγγελίες");
+            SetText("complaints.banner", "Οι καταγγελίες σου");
+            CampaignText("heading", State.citizen.sycophantFlag ? "Συκοφάντης"
+                : live ? "Διαθέσιμη καταγγελία" : committed ? "Δεσμευμένη καταγγελία" : "Το ιστορικό σου");
             CampaignText("state", filed.Length == 0 ? "Δεν έχεις καταθέσει καμία καταγγελία." : filed.Length + " καταγγελίες");
             CampaignText("body", State.citizen.sycophantFlag
                 ? "Το δικαστήριο σε χαρακτήρισε συκοφάντη — δεν μπορείς να καταγγείλεις ξανά."
@@ -501,8 +544,32 @@ namespace DemocracyWay.NewUI
                 : entry.text.Split(new[] { "\n\n" }, System.StringSplitOptions.None)[0];
         }
 
+        /// <summary>Τα κουτιά της λεπτομέρειας καταγγελίας είναι σταθερά στη σκηνή — τα μακριά
+        /// κείμενα (κατηγορία, είδηση, λήμμα διαδικασίας) χωρούν με αυτόματη σμίκρυνση αντί
+        /// να ξεχειλίζουν το ένα πάνω στο άλλο.</summary>
+        void FitComplaintDetailTexts()
+        {
+            void Fit(string key, float min, float max)
+            {
+                var label = Get<TMP_Text>("complaint-detail." + key);
+                if (label == null) return;
+                label.textWrappingMode = TextWrappingModes.Normal;
+                label.verticalAlignment = TMPro.VerticalAlignmentOptions.Top;
+                label.overflowMode = TMPro.TextOverflowModes.Truncate;
+                label.enableAutoSizing = true;
+                label.fontSizeMin = min;
+                label.fontSizeMax = max;
+            }
+            Fit("intro", 15f, 23f);
+            Fit("body", 15f, 23f);
+            Fit("evidence.0", 14f, 20f);
+            Fit("evidence.1", 14f, 20f);
+            Fit("note", 14f, 21f);
+        }
+
         void RenderComplaintDetail()
         {
+            FitComplaintDetailTexts();
             if (complaintDetailCurrent) { RenderCurrentComplaint(); return; }
             if (selectedComplaintTurn < 0 || selectedComplaintTurn >= AgoraContent.cases.Count) { Show("complaints"); return; }
             var c = AgoraContent.cases[selectedComplaintTurn];
@@ -604,6 +671,16 @@ namespace DemocracyWay.NewUI
             // Χωρίς φίλτρα και αναζήτηση: ο κατάλογος φαίνεται ολόκληρος με κύλιση.
             for (int i = 0; i < 4; i++) SetActive("offices.filter." + i, false);
             SetActive("offices.search", false);
+            // Η κύλιση ανεβαίνει στη θέση των κρυμμένων φίλτρων (από -192 σε -100) και ψηλώνει ανάλογα.
+            var row0 = Get<GameObject>("offices.row.0");
+            var viewport = row0 != null ? row0.transform.parent.parent as RectTransform : null;
+            var scroll = viewport != null ? viewport.parent as RectTransform : null;
+            if (scroll != null && viewport != null)
+            {
+                scroll.anchoredPosition = new Vector2(scroll.anchoredPosition.x, -100f);
+                scroll.sizeDelta = new Vector2(scroll.sizeDelta.x, 584f);
+                viewport.sizeDelta = new Vector2(viewport.sizeDelta.x, 584f);
+            }
             int weekly = weeklyStanceRows.Length;
             int total = weekly + offices.Length;
             EnsureOfficeRows(total);
@@ -672,7 +749,7 @@ namespace DemocracyWay.NewUI
                 : personBio.Length == 0 ? office.description : office.description + "\n\n" + personBio);
             CampaignText("method", SelectionLabel(office.selection) + (office.payObols > 0 ? " · Μισθός " + office.payObols + " οβ." : "")
                 + (string.IsNullOrEmpty(office.athPolRef) ? "" : " · ΑΠ " + office.athPolRef));
-            CampaignText("influence", "Βάρος όταν παίρνει θέση σε υπόθεση: " + office.defaultWeight);
+            CampaignText("influence", "Βάρος θέσης: " + office.defaultWeight);
             CampaignText("relationship", "");
             CampaignText("access", "");
             CampaignText("priority", "");
@@ -689,6 +766,17 @@ namespace DemocracyWay.NewUI
         /// μέχρι τη γραμμή «Σχέση» και μικραίνει αυτόματα ώστε να χωρά.</summary>
         void StackOfficialCard()
         {
+            // Τα κουτιά τιμών δεξιά (270×36) είναι μονόγραμμα: ό,τι δεν χωρά μικραίνει, δεν τυλίγεται.
+            foreach (string key in new[] { "method", "influence", "priority", "access" })
+            {
+                var value = Get<TMP_Text>("official-detail." + key);
+                if (value == null) continue;
+                value.textWrappingMode = TextWrappingModes.NoWrap;
+                value.overflowMode = TMPro.TextOverflowModes.Truncate;
+                value.enableAutoSizing = true;
+                value.fontSizeMin = 12f;
+                value.fontSizeMax = 20f;
+            }
             var nameLabel = Get<TMP_Text>("official-detail.name");
             var bio = Get<TMP_Text>("official-detail.origin");
             if (nameLabel == null || bio == null) return;

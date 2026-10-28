@@ -23,6 +23,10 @@ namespace DemocracyWay.NewUI
             panel.anchoredPosition = new Vector2(rect.anchoredPosition.x - 24f, rect.anchoredPosition.y - rect.sizeDelta.y * 0.5f + 22f);
             panel.gameObject.SetActive(true);
             panel.SetAsLastSibling();
+            // Το πλαίσιο ακολουθεί το πλάτος της λέξης — όχι σταθερά 300 με κενό αριστερά.
+            // Η μέτρηση γίνεται με το panel ενεργό (σε ανενεργό TMP μπορεί να βγει μηδενική).
+            float width = display.GetPreferredValues(display.text).x + 36f;
+            panel.sizeDelta = new Vector2(Mathf.Max(120f, width), panel.sizeDelta.y);
         }
 
         public void OnPointerExit(PointerEventData eventData)

@@ -1,6 +1,6 @@
 {
-    "campaignFile": "CaseBanks/9.0.0-json-two-cases-3f4e8d733e803601a847e8bb526f7656.json",
-    "instrumentFile": "Instruments/campaign-final-meega-el-3-c203473c02cb4a105b701b5640737eef.json",
-    "instrumentVersion": "campaign-final-meega-el-3",
-    "contentVersion": "9.0.0-json-two-cases"
+    "campaignFile": "CaseBanks/agora-4-4f1350e06df4553c942543e002bb8227.json",
+    "instrumentFile": "Instruments/campaign-final-meega-el-4-cc6a8de83b0ea4d4133161be6fa6adde.json",
+    "instrumentVersion": "campaign-final-meega-el-4",
+    "contentVersion": "agora-4"
 }

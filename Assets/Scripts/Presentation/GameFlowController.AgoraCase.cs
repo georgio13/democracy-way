@@ -395,6 +395,7 @@ namespace DemocracyWay.NewUI
             SetActive("map.complaint.badge", complaintOpen);
             SetActive("map.complaint.count", complaintOpen);
             SetText("map.complaint.count", "1");
+            ShowMapGuideIfNeeded();
         }
 
         void RenderAgoraTrial(Agora.CaseData c)

@@ -43,6 +43,7 @@ namespace DemocracyWay.NewUI
         private bool settingsFromPause;
         private bool returnToMenuConfirmation;
         private bool marketGateConfirmation;
+        private bool mapGuideConfirmation;
         private bool narrativeFading;
         private string lastRenderedBioStep;
         private string saveWarning;
