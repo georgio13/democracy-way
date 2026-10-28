@@ -21,9 +21,7 @@ namespace DemocracyWay.NewUI
             }
 
             record.choiceId = choice.id;
-            record.metrics = choice.metrics != null ? choice.metrics.Copy() : new CharacterMetrics();
-            record.personalFunds = choice.personalFunds;
-            record.cityFunds = choice.cityFunds;
+            record.metrics = choice.metrics != null ? choice.metrics.Copy() : new BiographyDeltas();
             record.institutionalLean = choice.institutionalLean;
             record.economicClassIndex = choice.economicClassIndex;
             record.tribeIndex = choice.tribeIndex;
@@ -31,27 +29,20 @@ namespace DemocracyWay.NewUI
             record.playerName = choice.playerName;
             record.demeId = choice.demeId;
             record.trittysId = choice.trittysId;
-            record.cityMetrics = choice.cityMetrics?.Copy() ?? new CityMetricDelta();
             record.deme = choice.deme;
             record.trittys = choice.trittys;
             Recalculate(state);
         }
 
+        /// <summary>Αθροίζει τα δέλτα της βιογραφίας και την ταυτότητα. Η πόλη δεν αγγίζεται (METRICS_UNIFY).</summary>
         public static void Recalculate(GameState state)
         {
-            if (state == null || state.baseline == null || state.choices == null)
+            if (state == null || state.choices == null)
                 throw new ArgumentException("Incomplete game state.");
-            state.metrics = state.baseline.Copy();
-            state.personalFunds = state.basePersonalFunds;
-            state.cityFunds = state.baseCityFunds;
-            var cityChanges = new CityMetricDelta();
+            state.biographyDeltas = new BiographyDeltas();
             foreach (ChoiceRecord record in state.choices)
             {
-                state.metrics.Add(record.metrics);
-                state.metrics.Clamp();
-                state.personalFunds += record.personalFunds;
-                state.cityFunds += record.cityFunds;
-                if (record.cityMetrics != null) { cityChanges.food += record.cityMetrics.food; cityChanges.trust += record.cityMetrics.trust; cityChanges.readiness += record.cityMetrics.readiness; cityChanges.war += record.cityMetrics.war; }
+                state.biographyDeltas.Add(record.metrics);
                 if (!string.IsNullOrEmpty(record.playerName)) state.playerName = record.playerName;
                 if (!string.IsNullOrEmpty(record.demeId)) state.demeId = record.demeId;
                 if (!string.IsNullOrEmpty(record.trittysId)) state.trittysId = record.trittysId;
@@ -67,14 +58,7 @@ namespace DemocracyWay.NewUI
                     state.trittys = record.trittys;
             }
 
-            state.metrics.Clamp();
             if (state.campaign == null) state.campaign = new CampaignState();
-            var previous = state.biographyCityApplied ?? new CityMetricDelta();
-            state.campaign.foodSecurity = Math.Max(0, Math.Min(100, state.campaign.foodSecurity + cityChanges.food - previous.food));
-            state.campaign.legitimacy += cityChanges.trust - previous.trust;
-            state.campaign.readiness += cityChanges.readiness - previous.readiness;
-            state.campaign.war += cityChanges.war - previous.war;
-            state.biographyCityApplied = cityChanges;
         }
 
         public static bool Compatible(GameState state, GameConfiguration config)

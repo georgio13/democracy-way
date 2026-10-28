@@ -56,10 +56,7 @@ namespace DemocracyWay.NewUI
             var settings = content.settings;
             config.contentVersion = settings.contentVersion;
             config.playerAge = settings.playerAge;
-            config.startingPersonalFunds = settings.startingPersonalFunds;
-            config.startingCityFunds = settings.startingCityFunds;
             config.defaultProfession = settings.defaultProfession;
-            config.startingMetrics = settings.startingMetrics.Copy();
             config.prologue = content.prologuePages.ToList();
             config.prytanyQuotes = content.prytanyQuotes.ToList();
             var tribes = content.tribes;
@@ -115,9 +112,8 @@ namespace DemocracyWay.NewUI
     [Serializable] public sealed class NamedSprite { public string id; public Sprite sprite; }
     [Serializable] public sealed class GameSettings
     {
-        public int contentVersion, casesPerPrytany = 2, prytanyCount = 10, playerAge, startingPersonalFunds, startingCityFunds;
+        public int contentVersion, casesPerPrytany = 2, prytanyCount = 10, playerAge;
         public string defaultProfession;
-        public CharacterMetrics startingMetrics;
     }
     [Serializable] public sealed class TribeData { public string id, name, choiceText, emblemId, defaultDeme, defaultTrittys; public TrittysData[] trittyes; }
     [Serializable] public sealed class TrittysData { public string id, name, choiceText; public DemeData[] demes; }

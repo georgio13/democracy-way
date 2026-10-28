@@ -28,17 +28,18 @@ namespace DemocracyWay.NewUI
 
         // ---------- Χαρακτήρας (καλείται από FinishBio και από direct scene preview) ----------
 
+        /// <summary>Ο πολίτης όπως διαμορφώνεται από τη βιογραφία: αρχικές τιμές GameConfig + δέλτα + τάξη.
+        /// Ίδιος υπολογισμός στις οθόνες βιογραφίας, στη σύνοψη και στην είσοδο στην εκστρατεία.</summary>
+        Agora.PlayerState CitizenPreview()
+        {
+            var cls = (Agora.SocialClass)Mathf.Clamp(3 - State.economicClassIndex, 0, 3);   // αντίστροφη σειρά τάξεων
+            return CitizenPreviewRules.Preview(AgoraCfg, cls, State.playerName, State.biographyDeltas);
+        }
+
         void InitialiseAgoraCitizen()
         {
             var cfg = AgoraCfg;
-            var cls = (Agora.SocialClass)Mathf.Clamp(3 - State.economicClassIndex, 0, 3);   // αντίστροφη σειρά τάξεων
-            var citizen = new Agora.PlayerState(cfg, cls, State.playerName);
-            citizen.peitho = Agora.PlayerState.Clamp(citizen.peitho + State.metrics.persuasion - State.baseline.persuasion);
-            citizen.ethos = Agora.PlayerState.Clamp(citizen.ethos + State.metrics.ethics - State.baseline.ethics);
-            citizen.synepeia = Agora.PlayerState.Clamp(citizen.synepeia + State.metrics.consistency - State.baseline.consistency);
-            citizen.parrhesia = Agora.PlayerState.Clamp(citizen.parrhesia + State.metrics.parrhesia - State.baseline.parrhesia);
-            citizen.anagnorisimotita = Agora.PlayerState.Clamp(citizen.anagnorisimotita + State.metrics.recognition - State.baseline.recognition);
-            State.citizen = citizen;
+            State.citizen = CitizenPreview();
             State.polis = new Agora.CityState(cfg.cityStart);   // η πόλη ξεκινά ΠΑΝΤΑ από το cityStart (spec ΣΤ.1)
             State.agoraCase = new AgoraCaseState();
             Agora.AssemblyRules.StartPrytany(State.polis, State.citizen, cfg, State.prytany);
@@ -324,9 +325,41 @@ namespace DemocracyWay.NewUI
             c.complaint.available && c.complaint.target != null && !State.citizen.sycophantFlag
             && !AgoraCaseResolved && !(AgoraCaseCurrent && AgoraState.prepDone);
 
+        bool mapHintsWired;
+
+        /// <summary>Tooltips στα εικονίδια της πόλης: ένα κοινό πλαίσιο, χειριστές hover στα υπάρχοντα κουμπιά.</summary>
+        void WireMapIconHints()
+        {
+            if (mapHintsWired || lexicon == null || lexicon.tools == null) return;
+            var font = Get<TMPro.TMP_Text>("map.city") != null ? Get<TMPro.TMP_Text>("map.city").font : null;
+            var panel = CivicUIFactory.Panel(lexicon.tools, "Icon hint", new Color32(24, 46, 50, 240));
+            var rect = panel.rectTransform;
+            rect.anchorMin = rect.anchorMax = new Vector2(0, 1);
+            rect.pivot = new Vector2(1f, 0.5f);
+            rect.sizeDelta = new Vector2(300f, 52f);
+            var label = CivicUIFactory.Text(panel.transform, "Icon hint label", "", font, 26, new Color32(238, 228, 203, 255));
+            CivicUIFactory.Fill(label.rectTransform, new Vector2(16, 8), new Vector2(16, 8));
+            label.alignment = TMPro.TextAlignmentOptions.Right;
+            panel.gameObject.SetActive(false);
+            void Attach(Component target, string text)
+            {
+                if (target == null) return;
+                var hint = target.GetComponent<MapIconHint>();
+                if (hint == null) hint = target.gameObject.AddComponent<MapIconHint>();
+                hint.label = text; hint.panel = rect; hint.display = label;
+            }
+            Attach(lexicon.open, "Ευρετήριο");
+            Attach(Get<UnityEngine.UI.Button>("map.market"), "Αγορά");
+            Attach(Get<UnityEngine.UI.Button>("map.speech"), "Λογογράφοι");
+            Attach(Get<UnityEngine.UI.Button>("map.complaint"), "Καταγγελίες");
+            Attach(Get<UnityEngine.UI.Button>("map.offices"), "Αξιωματούχοι");
+            mapHintsWired = true;
+        }
+
         void RenderAgoraMap()
         {
             EnsureAgoraReady();
+            WireMapIconHints();
             var c = CurrentAgoraCase;
             bool done = AgoraCaseResolved;
             bool informed = State.marketVisitedTurn == CampaignRules.Turn(State);
@@ -353,7 +386,7 @@ namespace DemocracyWay.NewUI
             }
             // Τα chips δείχνουν ΜΟΝΟ μία σύντομη τιμή — οι τέσσερις δείκτες ζουν στο City indicators HUD.
             SetText("map.city", State.polis.treasury + " / 100");
-            SetText("map.personal", "Πορτοφόλι " + State.citizen.wallet + " δρ.");
+            SetText("map.personal", State.citizen.wallet + " δρ.");
             // Ενδείξεις εκκρεμοτήτων: Αγορά όσο δεν έχεις περάσει, Καταγγελίες όσο υπάρχει διαθέσιμη.
             bool complaintOpen = !done && AgoraComplaintAvailable(c);
             SetActive("map.market.badge", !informed && !done);

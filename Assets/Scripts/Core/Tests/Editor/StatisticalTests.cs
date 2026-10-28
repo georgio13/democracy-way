@@ -98,29 +98,20 @@ namespace Agora.Tests
         static void InRange(double value, double min, double max, string label) =>
             Assert.IsTrue(value >= min && value <= max, label + " = " + value.ToString("0.##") + " εκτός [" + min + ", " + max + "]");
 
-        // Οι γνωστές αποκλίσεις από τον πίνακα Ε (βλ. Tools/Research/VERIFICATION-REPORT.md) δηλώνονται
-        // ως Inconclusive — ΟΧΙ Passed, ΟΧΙ Failed — μέχρι να συγκριθεί ο προσομοιωτής Python.
-        static void ReportKnownDeviations(List<string> issues)
-        {
-            if (issues.Count > 0)
-                Assert.Inconclusive("Γνωστή απόκλιση από τον πίνακα Ε του spec (εκκρεμεί ο προσομοιωτής): " + string.Join(" · ", issues));
-        }
-
-        static void Check(List<string> issues, bool ok, string label, double value)
-        {
-            if (!ok) issues.Add(label + " = " + value.ToString("0.##"));
-        }
+        // Στόχοι: REBALANCE.md (σταθερά πρόσωπα, noise 6, νέες βάσεις).
+        // Ανοχές: ±8 μονάδες στα ποσοστά τελών, ±0,05 στην Α-έγκριση, ±1,5 στα flips, ±5 στους μέσους δείκτες.
 
         [Test]
         public void E_Silent()
         {
             var s = Run(Strategy.Silent);
-            InRange(s.ARate, 0.50, 0.60, "Α-έγκριση");
-            InRange(s.CityPct(CityEnding.Counterfactual), 30, 50, "Π4 Counterfactual %");
-            InRange(s.CityPct(CityEnding.GarrisonOnly), 50, 70, "Π5 GarrisonOnly %");
-            Assert.LessOrEqual(s.CityPct(CityEnding.PropertyLimit) + s.CityPct(CityEnding.Stasis), 3.0, "Π2+Π3 %");
-            InRange(s.sumId / Games, 44, 52, "τελικό ΙΔ");
-            InRange(s.sumEm / Games, 46, 54, "τελικό Εμ");
+            InRange(s.ARate, 0.51, 0.61, "Α-έγκριση");
+            InRange(s.CityPct(CityEnding.Counterfactual), 37, 53, "Π4 Counterfactual %");
+            InRange(s.CityPct(CityEnding.GarrisonOnly), 47, 63, "Π5 GarrisonOnly %");
+            Assert.LessOrEqual(s.CityPct(CityEnding.PropertyLimit) + s.CityPct(CityEnding.Stasis), 8.0, "Π2+Π3 %");
+            InRange(s.sumId / Games, 45, 55, "τελικό ΙΔ");
+            InRange(s.sumEm / Games, 47, 57, "τελικό Εμ");
+            Assert.AreEqual(0, s.totalFlips, "flips σιωπηλού (δεν μιλά ποτέ)");
             Assert.LessOrEqual(s.sumAnagn / Games, 0.5, "τελική Αναγνωρισιμότητα (αναμένεται 0)");
         }
 
@@ -128,7 +119,7 @@ namespace Agora.Tests
         public void E_Silent_PerCaseApprovalRates()
         {
             var s = Run(Strategy.Silent);
-            int[] expected = { 0, 100, 74, 15, 70, 98, 74, 47, 60, 95, 13, 24, 70, 18, 25, 17, 66, 97, 96, 18, 34 };
+            int[] expected = { 0, 100, 60, 28, 52, 100, 52, 55, 61, 88, 29, 51, 52, 33, 42, 35, 61, 92, 75, 22, 41 };
             var failures = new List<string>();
             for (int id = 1; id <= 20; id++)
             {
@@ -136,42 +127,42 @@ namespace Agora.Tests
                 if (Math.Abs(actual - expected[id]) > 8)
                     failures.Add("υπόθεση " + id + ": " + actual.ToString("0.#") + "% (αναμενόταν " + expected[id] + "±8)");
             }
-            ReportKnownDeviations(failures);
+            if (failures.Count > 0)
+                Assert.Fail("Απόκλιση από τον πίνακα Ε του REBALANCE.md: " + string.Join(" · ", failures));
         }
 
         [Test]
         public void E_DemocratOrator()
         {
             var s = Run(Strategy.DemocratOrator);
-            var issues = new List<string>();
-            Check(issues, s.ARate >= 0.70 && s.ARate <= 0.78, "Α-έγκριση (0,70–0,78)", s.ARate);
-            Check(issues, s.CityPct(CityEnding.Counterfactual) >= 95.0, "Π4 % (≥95)", s.CityPct(CityEnding.Counterfactual));
-            Check(issues, s.MeanFlips >= 4.5 && s.MeanFlips <= 6.0, "μέσα flips (4,5–6)", s.MeanFlips);
-            Check(issues, s.sumId / Games >= 65 && s.sumId / Games <= 78, "τελικό ΙΔ (65–78)", s.sumId / Games);
-            Check(issues, s.sumSynepeia / Games >= 99.9, "Συνέπεια (100)", s.sumSynepeia / Games);
-            ReportKnownDeviations(issues);
+            InRange(s.ARate, 0.90, 1.00, "Α-έγκριση");
+            Assert.GreaterOrEqual(s.CityPct(CityEnding.Counterfactual), 92.0, "Π4 %");
+            InRange(s.MeanFlips, 10.6, 13.6, "μέσα flips");
+            InRange(s.sumId / Games, 88, 98, "τελικό ΙΔ");
+            InRange(s.sumEm / Games, 85, 95, "τελικό Εμ");
+            Assert.GreaterOrEqual(s.sumSynepeia / Games, 99.9, "Συνέπεια (100)");
         }
 
         [Test]
         public void E_OligarchOrator()
         {
             var s = Run(Strategy.OligarchOrator);
-            var issues = new List<string>();
-            Check(issues, s.ARate >= 0.28 && s.ARate <= 0.36, "Α-έγκριση (0,28–0,36)", s.ARate);
-            Check(issues, s.CityPct(CityEnding.PropertyLimit) >= 55.0, "Π2 % (≥55)", s.CityPct(CityEnding.PropertyLimit));
-            Check(issues, s.sumId / Games <= 28.0, "τελικό ΙΔ (≤28)", s.sumId / Games);
-            ReportKnownDeviations(issues);
+            InRange(s.ARate, 0.08, 0.18, "Α-έγκριση");
+            Assert.GreaterOrEqual(s.CityPct(CityEnding.PropertyLimit), 92.0, "Π2 %");
+            InRange(s.MeanFlips, 10.5, 13.5, "μέσα flips");
+            Assert.LessOrEqual(s.sumId / Games, 9.0, "τελικό ΙΔ");
+            InRange(s.sumEm / Games, 6, 16, "τελικό Εμ");
         }
 
         [Test]
         public void E_DemocratBriber()
         {
             var s = Run(Strategy.DemocratBriber);
-            var issues = new List<string>();
-            Check(issues, s.sumEthos / Games <= 0.5, "τελική Ηθική (0)", s.sumEthos / Games);
-            Check(issues, s.PersonalPct(PersonalEnding.HarpalusMan) >= 90.0, "ΠΡ3 HarpalusMan % (≥90)", s.PersonalPct(PersonalEnding.HarpalusMan));
-            Check(issues, s.CityPct(CityEnding.Stasis) >= 15 && s.CityPct(CityEnding.Stasis) <= 35, "Π3 Stasis % (15–35)", s.CityPct(CityEnding.Stasis));
-            ReportKnownDeviations(issues);
+            Assert.LessOrEqual(s.sumEthos / Games, 0.5, "τελική Ηθική (0)");
+            Assert.GreaterOrEqual(s.CityPct(CityEnding.Counterfactual), 91.0, "Π4 %");
+            InRange(s.MeanFlips, 6.5, 9.5, "μέσα flips");
+            InRange(s.sumId / Games, 63, 79, "τελικό ΙΔ");
+            InRange(s.sumEm / Games, 45, 61, "τελικό Εμ");
         }
     }
 }

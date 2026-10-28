@@ -15,11 +15,9 @@ namespace DemocracyWay.NewUI
     public sealed partial class GameFlowController
     {
         int marketPage, marketSelected;
-        int officesFilter;                 // 0 όλα, 1 κλήρωση, 2 εκλογή, 3 λοιπά
-        string officesQuery = "";
         int selectedOfficeIndex = -1;
         int selectedComplaintTurn = -1;
-        bool officesSearchWired;
+        readonly List<Button> officeRowButtons = new List<Button>();
         int logographerSelected = -1;      // 1..3 όσο διαλέγει πλευρά για παραγγελία
         bool complaintDetailCurrent;       // το complaint-detail δείχνει τη ζωντανή καταγγελία της εβδομάδας
         bool officialDetailCase;           // το official-detail δείχνει πρόσωπο της τρέχουσας υπόθεσης
@@ -69,11 +67,6 @@ namespace DemocracyWay.NewUI
                 int n = i;
                 Bind("offices.row." + i, () => OpenOfficeDetail(n));
             }
-            for (int i = 0; i < 4; i++)
-            {
-                int n = i;
-                Bind("offices.filter." + i, () => { officesFilter = n; RenderCity(); });
-            }
         }
 
         void RenderCity()
@@ -114,7 +107,7 @@ namespace DemocracyWay.NewUI
             marketPage = Mathf.Clamp(marketPage, 0, pages - 1);
             marketSelected = Mathf.Clamp(marketSelected, 0, available - 1);
             CampaignText("heading", "Η Αγορά — Ανταποκρίσεις");
-            CampaignText("page-heading", "Σελίδα " + (marketPage + 1) + " / " + pages);
+            CampaignText("page-heading", pages > 1 ? "Αγορά · " + (marketPage + 1) + "/" + pages : "Αγορά");
             for (int i = 0; i < 4; i++)
             {
                 int index = available - 1 - (marketPage * 4 + i);   // νεότερες πρώτες
@@ -183,6 +176,9 @@ namespace DemocracyWay.NewUI
                 var label = labels[i];
                 if (label == null || string.IsNullOrEmpty(label.text)) continue;
                 label.textWrappingMode = TextWrappingModes.Normal;
+                // Σταθερό, ευανάγνωστο μέγεθος — το ύψος του κουτιού ακολουθεί το κείμενο.
+                label.enableAutoSizing = false;
+                label.fontSize = i == 0 ? 23f : 21f;
                 float w = label == quote ? width - quoteInset : width;
                 heights[i] = label.GetPreferredValues(label.text, w, 0).y + 6f;
             }
@@ -194,9 +190,9 @@ namespace DemocracyWay.NewUI
                 var label = labels[i];
                 if (label == null || heights[i] <= 0) continue;
                 heights[i] *= squeeze;
-                // Όταν στριμώχνεται, η γραμματοσειρά μικραίνει αυτόματα ώστε το κείμενο να χωρέσει στο κουτί του.
+                // Αν παρ' όλα αυτά δεν χωρά, η γραμματοσειρά μικραίνει αυτόματα — αλλά όχι κάτω από 18.
                 label.enableAutoSizing = squeeze < 1f;
-                if (squeeze < 1f) { label.fontSizeMin = 13f; label.fontSizeMax = 24f; }
+                if (squeeze < 1f) { label.fontSizeMin = 18f; label.fontSizeMax = i == 0 ? 23f : 21f; }
             }
             float y = topY;
             void Place(RectTransform rect, float height)
@@ -340,9 +336,43 @@ namespace DemocracyWay.NewUI
             if (description2 != null) { description2.enableAutoSizing = true; description2.fontSizeMin = 14; description2.fontSizeMax = 23; }
         }
 
+        /// <summary>Η μεσαία κάρτα είχε authored «προτεινόμενο» στυλ (κόκκινη κορδέλα, χρυσό κουμπί) —
+        /// όλες οι κάρτες παίρνουν το στυλ της πρώτης ώστε καμία να μη μοιάζει προεπιλεγμένη.</summary>
+        void MatchLogographerStyle()
+        {
+            var referenceCard = Get<GameObject>("logographers.card.0");
+            var referenceBuy = Get<Button>("logographers.buy.0");
+            if (referenceCard == null || referenceBuy == null) return;
+            var referencePerk = referenceCard.transform.Find("Perk") != null ? referenceCard.transform.Find("Perk").GetComponent<UnityEngine.UI.Graphic>() : null;
+            var referencePerkLabel = ChildText("logographers.card.0", "Perk/Perk label");
+            var referenceBuyShape = referenceBuy.GetComponent<UnityEngine.UI.Graphic>();
+            var referenceBuyLabel = referenceBuy.GetComponentInChildren<TMP_Text>(true);
+            for (int i = 1; i < 3; i++)
+            {
+                var card = Get<GameObject>("logographers.card." + i);
+                var buy = Get<Button>("logographers.buy." + i);
+                if (card != null)
+                {
+                    var perk = card.transform.Find("Perk") != null ? card.transform.Find("Perk").GetComponent<UnityEngine.UI.Graphic>() : null;
+                    if (perk != null && referencePerk != null) perk.color = referencePerk.color;
+                    var perkLabel = ChildText("logographers.card." + i, "Perk/Perk label");
+                    if (perkLabel != null && referencePerkLabel != null) perkLabel.color = referencePerkLabel.color;
+                }
+                if (buy != null)
+                {
+                    var shape = buy.GetComponent<UnityEngine.UI.Graphic>();
+                    if (shape != null && referenceBuyShape != null) shape.color = referenceBuyShape.color;
+                    var label = buy.GetComponentInChildren<TMP_Text>(true);
+                    if (label != null && referenceBuyLabel != null) label.color = referenceBuyLabel.color;
+                    buy.colors = referenceBuy.colors;
+                }
+            }
+        }
+
         void RenderLogographerRoster()
         {
             EnsureAgoraReady();
+            MatchLogographerStyle();
             var c = CurrentAgoraCase;
             CampaignText("heading", "Λογογράφοι της πόλης");
             var pouch = BoughtLogographer;
@@ -400,7 +430,7 @@ namespace DemocracyWay.NewUI
             bool committed = ComplaintCommitted;
             int offset = live || committed ? 1 : 0;
             var filed = FiledComplaints();
-            CampaignText("heading", "Οι καταγγελίες σου");
+            CampaignText("heading", "Καταγγελίες");
             CampaignText("page-heading", "");
             CampaignText("state", filed.Length == 0 ? "Δεν έχεις καταθέσει καμία καταγγελία." : filed.Length + " καταγγελίες");
             CampaignText("body", State.citizen.sycophantFlag
@@ -515,17 +545,40 @@ namespace DemocracyWay.NewUI
             }
         }
 
-        // ---------- Αξιώματα: ο κατάλογος της Αθηναίων Πολιτείας ----------
+        // ---------- Αξιωματούχοι: πρώτα οι φωνές της εβδομάδας, μετά ολόκληρος ο κατάλογος ----------
 
-        Agora.OfficeData[] FilteredOffices()
+        Agora.OfficeData[] AllOffices() => AgoraContent.offices.Where(o => o != null).ToArray();
+
+        /// <summary>Η σκηνή έχει 6 κάρτες — για τον πλήρη κατάλογο κλωνοποιούνται στο ίδιο πλέγμα
+        /// (ίδιο μοτίβο με το SetupEvaluationUI: επέκταση υπάρχοντος προτύπου, όχι νέο UI).</summary>
+        void EnsureOfficeRows(int needed)
         {
-            var offices = AgoraContent.offices.Where(o => o != null);
-            if (officesFilter == 1) offices = offices.Where(o => o.selection == Agora.SelectionMode.Lot);
-            else if (officesFilter == 2) offices = offices.Where(o => o.selection == Agora.SelectionMode.Election);
-            else if (officesFilter == 3) offices = offices.Where(o => o.selection != Agora.SelectionMode.Lot && o.selection != Agora.SelectionMode.Election);
-            if (!string.IsNullOrWhiteSpace(officesQuery))
-                offices = offices.Where(o => (o.displayName + " " + o.displayNameWithCount).ToLowerInvariant().Contains(officesQuery.ToLowerInvariant()));
-            return offices.ToArray();
+            if (officeRowButtons.Count == 0)
+                for (int i = 0; i < 6; i++)
+                {
+                    var existing = Get<Button>("offices.row." + i);
+                    if (existing != null) officeRowButtons.Add(existing);
+                }
+            if (officeRowButtons.Count == 0) return;
+            var template = officeRowButtons[0];
+            while (officeRowButtons.Count < needed)
+            {
+                int index = officeRowButtons.Count;
+                var clone = Instantiate(template.gameObject, template.transform.parent).GetComponent<Button>();
+                clone.name = "Official " + index;
+                clone.onClick.RemoveAllListeners();
+                clone.onClick.AddListener(() => { PlayClick(); OpenOfficeDetail(index); });
+                targets["offices.row." + index] = clone;
+                officeRowButtons.Add(clone);
+            }
+            // Πλέγμα 3 στηλών, όπως οι αυθεντικές κάρτες, και ύψος περιεχομένου για το scroll.
+            for (int i = 0; i < officeRowButtons.Count; i++)
+            {
+                var rect = (RectTransform)officeRowButtons[i].transform;
+                rect.anchoredPosition = new Vector2(i % 3 * 520.8f, -(i / 3) * 372f);
+            }
+            var content = (RectTransform)template.transform.parent;
+            content.sizeDelta = new Vector2(content.sizeDelta.x, Mathf.Max(720f, Mathf.CeilToInt(needed / 3f) * 372f + 12f));
         }
 
         /// <summary>Οι στάσεις της υπόθεσης της εβδομάδας (ζωντανές αν έχει ξεκινήσει, αλλιώς οι αρχικές).</summary>
@@ -538,67 +591,56 @@ namespace DemocracyWay.NewUI
         void RenderOfficesCatalogue()
         {
             EnsureAgoraReady();
-            WireOfficesSearch();
             var c = CurrentAgoraCase;
             var stances = WeeklyStances(c);
             weeklyStanceRows = Enumerable.Range(0, stances.Count)
                 .Where(i => stances[i] != null && stances[i].official != null && stances[i].weight > 0).ToArray();
-            var filtered = FilteredOffices();
-            CampaignText("heading", "Αξιώματα (" + filtered.Length + ") — πρώτα οι φωνές της εβδομάδας");
+            var offices = AllOffices();
+            CampaignText("heading", "Αξιωματούχοι");
             var heading = Get<TMP_Text>("offices.heading");
             if (heading != null) heading.raycastTarget = false;
             var close = Get<Button>("offices.close");
             if (close != null) close.transform.SetAsLastSibling();   // πάνω από ό,τι κι αν το σκεπάζει
-            string[] filters = { "Όλα", "Κλήρωση", "Εκλογή", "Λοιπά" };
-            for (int i = 0; i < 4; i++)
+            // Χωρίς φίλτρα και αναζήτηση: ο κατάλογος φαίνεται ολόκληρος με κύλιση.
+            for (int i = 0; i < 4; i++) SetActive("offices.filter." + i, false);
+            SetActive("offices.search", false);
+            int weekly = weeklyStanceRows.Length;
+            int total = weekly + offices.Length;
+            EnsureOfficeRows(total);
+            for (int i = 0; i < officeRowButtons.Count; i++)
             {
-                CampaignLabel("filter." + i, filters[i]);
-                PaintRow("offices.filter." + i, officesFilter == i);
-            }
-            int weekly = Mathf.Min(weeklyStanceRows.Length, 6);
-            for (int i = 0; i < 6; i++)
-            {
-                bool isWeekly = i < weekly;
-                bool exists = isWeekly || i - weekly < filtered.Length;
+                bool exists = i < total;
                 SetActive("offices.row." + i, exists);
                 if (!exists) continue;
                 // Η κάρτα έχει δικά της παιδιά: Office banner/Office, Name, Origin, Method, Meet.
                 string key = "offices.row." + i;
-                if (isWeekly)
+                if (i < weekly)
                 {
                     var s = stances[weeklyStanceRows[i]];
                     SetChildText(key, "Office banner/Office", "Αυτή την εβδομάδα — " + c.title);
                     SetChildText(key, "Name", s.official.FullName);
                     SetChildText(key, "Origin", StanceLine(s) + " · βάρος " + s.weight);
-                    SetChildText(key, "Method", s.official.office != null ? SelectionLabel(s.official.office.selection) : "");
+                    SetChildText(key, "Method", s.official.office != null ? SelectionLabel(s.official.office.selection) : "Χωρίς αξίωμα");
                     SetChildText(key, "Meet", "Γνωριμία ›");
                 }
                 else
                 {
-                    var office = filtered[i - weekly];
-                    SetChildText(key, "Office banner/Office", "Κατάλογος αξιωμάτων");
+                    var office = offices[i - weekly];
+                    var persons = AgoraContent.officials.Where(p => p != null && p.office == office).Select(p => p.FullName).ToArray();
+                    SetChildText(key, "Office banner/Office", SelectionLabel(office.selection));
                     SetChildText(key, "Name", office.displayNameWithCount);
-                    SetChildText(key, "Origin", SelectionLabel(office.selection));
-                    SetChildText(key, "Method", office.payObols > 0 ? "Μισθός " + office.payObols + " οβ." : "");
+                    SetChildText(key, "Origin", persons.Length > 0 ? string.Join(" · ", persons) : "Χωρίς επώνυμο πρόσωπο στο παιχνίδι");
+                    SetChildText(key, "Method", office.payObols > 0 ? "Μισθός " + office.payObols + " οβ." : "Χωρίς μισθό");
                     SetChildText(key, "Meet", "Άνοιγμα ›");
                 }
             }
-        }
-
-        void WireOfficesSearch()
-        {
-            if (officesSearchWired) return;
-            var search = Get<TMP_InputField>("offices.search");
-            if (search == null) return;
-            search.onValueChanged.AddListener(value => { officesQuery = value ?? ""; if (currentScreen == "offices") RenderCity(); });
-            officesSearchWired = true;
         }
 
         void OpenOfficeDetail(int row)
         {
             officialAction = 0;
             officialFeedback = "";
-            int weekly = Mathf.Min(weeklyStanceRows.Length, 6);
+            int weekly = weeklyStanceRows.Length;
             if (row < weekly)
             {
                 officialDetailCase = true;
@@ -606,11 +648,11 @@ namespace DemocracyWay.NewUI
                 Show("official-detail");
                 return;
             }
-            var filtered = FilteredOffices();
+            var offices = AllOffices();
             int index = row - weekly;
-            if (index >= filtered.Length) return;
+            if (index >= offices.Length) return;
             officialDetailCase = false;
-            selectedOfficeIndex = AgoraContent.offices.IndexOf(filtered[index]);
+            selectedOfficeIndex = AgoraContent.offices.IndexOf(offices[index]);
             Show("official-detail");
         }
 
@@ -622,9 +664,12 @@ namespace DemocracyWay.NewUI
             var persons = AgoraContent.officials.Where(p => p != null && p.office == office).ToArray();
             CampaignText("heading", office.displayNameWithCount);
             SetOfficialBanner(office.displayName);
-            CampaignText("office", office.description);
+            // Το «office» binding είναι το label ΜΕΣΑ στην κορδέλα (168×19) — δεν χωρά περιγραφή.
+            // Η περιγραφή του αξιώματος μπαίνει μαζί με το βιογραφικό στο στοιβαγμένο κουτί.
             CampaignText("name", persons.Length == 0 ? "" : "Στο παιχνίδι: " + string.Join(" · ", persons.Select(p => p.FullName)));
-            CampaignText("origin", persons.Length == 0 || string.IsNullOrEmpty(persons[0].bio) ? "" : persons[0].bio);
+            string personBio = persons.Length == 0 || string.IsNullOrEmpty(persons[0].bio) ? "" : persons[0].bio;
+            CampaignText("origin", string.IsNullOrEmpty(office.description) ? personBio
+                : personBio.Length == 0 ? office.description : office.description + "\n\n" + personBio);
             CampaignText("method", SelectionLabel(office.selection) + (office.payObols > 0 ? " · Μισθός " + office.payObols + " οβ." : "")
                 + (string.IsNullOrEmpty(office.athPolRef) ? "" : " · ΑΠ " + office.athPolRef));
             CampaignText("influence", "Βάρος όταν παίρνει θέση σε υπόθεση: " + office.defaultWeight);
@@ -635,6 +680,47 @@ namespace DemocracyWay.NewUI
             CampaignText("status", "");
             SetActive("official-detail.persuade", false);
             SetActive("official-detail.bribe", false);
+            StackOfficialCard();
+        }
+
+        /// <summary>Στοιβάζει την αριστερή κάρτα του αξιωματούχου. Με τα γεμάτα πια βιογραφικά,
+        /// τα σταθερά κουτιά της σκηνής (79px για το bio, κεντρική στοίχιση) υπερχείλιζαν
+        /// πάνω στο πορτρέτο και στα διακοσμητικά. Το bio παίρνει ό,τι χώρο απομένει
+        /// μέχρι τη γραμμή «Σχέση» και μικραίνει αυτόματα ώστε να χωρά.</summary>
+        void StackOfficialCard()
+        {
+            var nameLabel = Get<TMP_Text>("official-detail.name");
+            var bio = Get<TMP_Text>("official-detail.origin");
+            if (nameLabel == null || bio == null) return;
+            var parent = nameLabel.rectTransform.parent;
+            RectTransform banner = null;
+            foreach (Transform sibling in parent)
+            {
+                if (sibling.name.StartsWith("Banner ", System.StringComparison.Ordinal)) banner = (RectTransform)sibling;
+                else if (sibling.name == "Rule" || sibling.name == "Quote") sibling.gameObject.SetActive(false);
+            }
+            const float width = 403.2f, bottom = 637f, gap = 10f;
+            float y = 264f;   // κάτω από το πορτρέτο, όπως στη σκηνή
+            nameLabel.textWrappingMode = TextWrappingModes.Normal;
+            nameLabel.enableAutoSizing = false;
+            nameLabel.overflowMode = TMPro.TextOverflowModes.Truncate;
+            float nameHeight = Mathf.Min(110f, nameLabel.GetPreferredValues(nameLabel.text, width, 0).y + 4f);
+            nameLabel.rectTransform.anchoredPosition = new Vector2(nameLabel.rectTransform.anchoredPosition.x, -y);
+            nameLabel.rectTransform.sizeDelta = new Vector2(nameLabel.rectTransform.sizeDelta.x, nameHeight);
+            y += nameHeight + gap;
+            if (banner != null && banner.gameObject.activeSelf)
+            {
+                banner.anchoredPosition = new Vector2(banner.anchoredPosition.x, -y);
+                y += banner.sizeDelta.y + gap;
+            }
+            bio.textWrappingMode = TextWrappingModes.Normal;
+            bio.verticalAlignment = TMPro.VerticalAlignmentOptions.Top;
+            bio.overflowMode = TMPro.TextOverflowModes.Truncate;
+            bio.enableAutoSizing = true;
+            bio.fontSizeMin = 14f;
+            bio.fontSizeMax = 20f;
+            bio.rectTransform.anchoredPosition = new Vector2(bio.rectTransform.anchoredPosition.x, -y);
+            bio.rectTransform.sizeDelta = new Vector2(bio.rectTransform.sizeDelta.x, Mathf.Max(60f, bottom - y));
         }
 
         /// <summary>Πρόσωπο της υπόθεσης της εβδομάδας: εδώ γίνεται το Πείθω / Δωροδοκώ (η ΜΙΑ ενέργεια).</summary>
@@ -648,14 +734,15 @@ namespace DemocracyWay.NewUI
             var person = s.official;
             var office = person.office;
             CampaignText("heading", person.FullName);
-            CampaignText("office", office != null ? office.displayNameWithCount + " — " + office.description : "");
             CampaignText("name", StanceLine(s) + " · βάρος " + s.weight);
             SetOfficialBanner(office != null ? office.displayName : "");
             bool canAct = !AgoraCaseResolved && WeekFlowRules.CanPrepare(AgoraCaseCurrent ? AgoraState : new AgoraCaseState());
             int bribeCost = AgoraCfg.bribeCostPerWeight * s.weight;
             bool canPersuade = canAct && s.side == Agora.Side.None && s.weight > 0;
             bool canBribe = canAct && person.bribable && s.weight > 0;
-            CampaignText("origin", string.IsNullOrEmpty(person.bio) ? "" : person.bio);
+            string officeLine = office != null ? office.displayNameWithCount + " — " + office.description : "";
+            CampaignText("origin", string.IsNullOrEmpty(person.bio) ? officeLine
+                : officeLine.Length == 0 ? person.bio : person.bio + "\n\n" + officeLine);
             CampaignText("method", office != null ? SelectionLabel(office.selection) : "");
             CampaignText("influence", "Βάρος " + s.weight);
             CampaignText("relationship", "");
@@ -665,6 +752,7 @@ namespace DemocracyWay.NewUI
                 : canBribe ? "Δωροδοκώ — " + bribeCost + " δρ."
                 : AgoraCaseCurrent && AgoraState.prepDone ? "Η ενέργεια έγινε" : "—");
             CampaignText("result", officialFeedback);
+            StackOfficialCard();
             if (officialAction != 0)
             {
                 // Δεύτερο βήμα: η πλευρά. Το «πίσω» ακυρώνει.

@@ -17,7 +17,7 @@ MonoBehaviour:
   emergencyBonus: 10
   reaction: 4
   trustSensitivityCap: 2
-  noise: 4
+  noise: 6
   passThreshold: 50
   peaceTreasury: 3
   peaceFood: 2

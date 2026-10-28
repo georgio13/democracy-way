@@ -9,15 +9,12 @@ namespace DemocracyWay.NewUI
     {
         public string stepId;
         public string choiceId;
-        public CharacterMetrics metrics;
-        public int personalFunds;
-        public int cityFunds;
+        public BiographyDeltas metrics;    // δέλτα πολίτη — ένα σύστημα δεικτών (METRICS_UNIFY)
         public string institutionalLean;
         public int economicClassIndex = -1;
         public int tribeIndex = -1;
         public string profession;
         public string playerName, demeId, trittysId;
-        public CityMetricDelta cityMetrics = new CityMetricDelta();
         public string deme;
         public string trittys;
     }

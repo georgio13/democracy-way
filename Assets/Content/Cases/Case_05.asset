@@ -120,7 +120,7 @@ MonoBehaviour:
     \u03C4\u03B7 \u03BB\u03AD\u03BE\u03B7 \xAB\u03B4\u03B7\u03BC\u03BF\u03BA\u03C1\u03B1\u03C4\u03AF\u03B1\xBB.
     (\u0391\u03A0 43.6\xB7 \u0397\u03C1\u03B4. 5.78)"
   visibleMetrics: 
-  baseSupport: 68
+  baseSupport: 58
   sensitivities:
   - metric: 3
     perTen: 2

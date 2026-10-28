@@ -20,10 +20,7 @@ namespace DemocracyWay.NewUI
         // Γεμίζουν πάντα από το ContentLibrary μέσω του JsonContent.Configuration — ποτέ defaults στον κώδικα.
         [System.NonSerialized] public int contentVersion;
         [System.NonSerialized] public int playerAge;
-        [System.NonSerialized] public int startingPersonalFunds;
-        [System.NonSerialized] public int startingCityFunds;
         [System.NonSerialized] public string defaultProfession;
-        [System.NonSerialized] public CharacterMetrics startingMetrics;
         [System.NonSerialized] public List<ProloguePage> prologue = new List<ProloguePage>();
         [System.NonSerialized] public List<BiographyStep> biography = new List<BiographyStep>();
         [System.NonSerialized] public List<TribeDefinition> tribes = new List<TribeDefinition>();
@@ -39,7 +36,7 @@ namespace DemocracyWay.NewUI
         public bool Validate(out string error)
         {
             error = "";
-            if (contentVersion < 1 || prologue == null || prologue.Count == 0 || biography == null || biography.Count == 0 || tribes == null || tribes.Count != 10 || economicClasses == null || economicClasses.Count != 4 || startingMetrics == null)
+            if (contentVersion < 1 || prologue == null || prologue.Count == 0 || biography == null || biography.Count == 0 || tribes == null || tribes.Count != 10 || economicClasses == null || economicClasses.Count != 4)
             {
                 error = "Το GameConfiguration χρειάζεται πρόλογο, βιογραφία, δέκα φυλές και τέσσερις οικονομικές τάξεις.";
                 return false;

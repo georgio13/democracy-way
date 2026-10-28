@@ -17,16 +17,7 @@ MonoBehaviour:
     casesPerPrytany: 2
     prytanyCount: 10
     playerAge: 30
-    startingPersonalFunds: 120
-    startingCityFunds: 10000
     defaultProfession: 
-    startingMetrics:
-      consistency: 50
-      ethics: 50
-      authority: 35
-      persuasion: 35
-      parrhesia: 35
-      recognition: 10
   prologuePages:
   - id: memory
     title: "\u0397 \u03C0\u03CC\u03BB\u03B7 \u03BA\u03B1\u03B9 \u03B7 \u03BC\u03BD\u03AE\u03BC\u03B7
@@ -361,14 +352,12 @@ MonoBehaviour:
         \u03BA\u03B1\u03B9 \u03BD\u03B1 \u03C3\u03C5\u03B3\u03BA\u03B5\u03BD\u03C4\u03C1\u03C9\u03B8\u03BF\u03CD\u03BD
         \u03B1\u03C0\u03BF\u03B8\u03AD\u03BC\u03B1\u03C4\u03B1."
       metrics:
-        consistency: 0
-        ethics: 0
-        authority: 0
-        persuasion: 0
+        peitho: 0
+        ethos: 0
+        synepeia: 0
         parrhesia: 0
-        recognition: 0
-      personalFunds: 0
-      cityFunds: -70
+        anagnorisimotita: 0
+        walletDrachmas: 0
       economicClassIndex: -1
       tribeIndex: -1
       profession: 
@@ -378,11 +367,6 @@ MonoBehaviour:
       requireTribe: -1
       requireClass: -1
       requireTrittys: 
-      cityMetrics:
-        food: 5
-        trust: 1
-        readiness: 0
-        war: 0
       deme: 
       trittys: 
       institutionalLean: mixed
@@ -392,14 +376,12 @@ MonoBehaviour:
         \u03C4\u03B7\u03BD \u03B1\u03BC\u03C5\u03BD\u03C4\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03B5\u03C4\u03BF\u03B9\u03BC\u03B1\u03C3\u03AF\u03B1
         \u03C4\u03B7\u03C2 \u03C0\u03CC\u03BB\u03B7\u03C2."
       metrics:
-        consistency: 0
-        ethics: 0
-        authority: 0
-        persuasion: 0
+        peitho: 0
+        ethos: 0
+        synepeia: 0
         parrhesia: 0
-        recognition: 0
-      personalFunds: 0
-      cityFunds: -60
+        anagnorisimotita: 0
+        walletDrachmas: 0
       economicClassIndex: -1
       tribeIndex: -1
       profession: 
@@ -409,11 +391,6 @@ MonoBehaviour:
       requireTribe: -1
       requireClass: -1
       requireTrittys: 
-      cityMetrics:
-        food: 0
-        trust: 0
-        readiness: 4
-        war: 0
       deme: 
       trittys: 
       institutionalLean: mixed
@@ -423,14 +400,12 @@ MonoBehaviour:
         \u03BA\u03B1\u03B9 \u03BD\u03B1 \u03C3\u03C5\u03BD\u03B5\u03C1\u03B3\u03AC\u03B6\u03BF\u03BD\u03C4\u03B1\u03B9
         \u03BC\u03B5\u03C4\u03B1\u03BE\u03CD \u03C4\u03BF\u03C5\u03C2."
       metrics:
-        consistency: 0
-        ethics: 0
-        authority: 0
-        persuasion: 0
+        peitho: 0
+        ethos: 0
+        synepeia: 0
         parrhesia: 0
-        recognition: 0
-      personalFunds: 0
-      cityFunds: 0
+        anagnorisimotita: 0
+        walletDrachmas: 0
       economicClassIndex: -1
       tribeIndex: -1
       profession: 
@@ -440,11 +415,6 @@ MonoBehaviour:
       requireTribe: -1
       requireClass: -1
       requireTrittys: 
-      cityMetrics:
-        food: 0
-        trust: 4
-        readiness: 0
-        war: 0
       deme: 
       trittys: 
       institutionalLean: mixed
@@ -455,14 +425,12 @@ MonoBehaviour:
         \u03C3\u03C4\u03B9\u03C2 \u03B1\u03BD\u03AC\u03B3\u03BA\u03B5\u03C2 \u03C0\u03BF\u03C5
         \u03B8\u03B1 \u03B1\u03BA\u03BF\u03BB\u03BF\u03C5\u03B8\u03AE\u03C3\u03BF\u03C5\u03BD."
       metrics:
-        consistency: 0
-        ethics: 0
-        authority: 0
-        persuasion: 0
+        peitho: 0
+        ethos: 0
+        synepeia: 0
         parrhesia: 0
-        recognition: 0
-      personalFunds: 0
-      cityFunds: 70
+        anagnorisimotita: 0
+        walletDrachmas: 0
       economicClassIndex: -1
       tribeIndex: -1
       profession: 
@@ -472,11 +440,6 @@ MonoBehaviour:
       requireTribe: -1
       requireClass: -1
       requireTrittys: 
-      cityMetrics:
-        food: -2
-        trust: -1
-        readiness: 0
-        war: 0
       deme: 
       trittys: 
       institutionalLean: mixed
@@ -522,14 +485,12 @@ MonoBehaviour:
         \u03B4\u03B7\u03BC\u03CC\u03C3\u03B9\u03B1 \u03CC\u03C3\u03BF\u03B9 \u03B1\u03BD\u03B1\u03BB\u03B1\u03BC\u03B2\u03AC\u03BD\u03BF\u03C5\u03BD
         \u03B5\u03C5\u03B8\u03CD\u03BD\u03B7."
       metrics:
-        consistency: 5
-        ethics: 4
-        authority: 1
-        persuasion: 0
+        peitho: 0
+        ethos: 4
+        synepeia: 5
         parrhesia: 0
-        recognition: 0
-      personalFunds: 0
-      cityFunds: 0
+        anagnorisimotita: 1
+        walletDrachmas: 0
       economicClassIndex: -1
       tribeIndex: -1
       profession: 
@@ -539,11 +500,6 @@ MonoBehaviour:
       requireTribe: -1
       requireClass: -1
       requireTrittys: 
-      cityMetrics:
-        food: 0
-        trust: 0
-        readiness: 0
-        war: 0
       deme: 
       trittys: 
       institutionalLean: mixed
@@ -553,14 +509,12 @@ MonoBehaviour:
         \u03C3\u03B5 \u03B5\u03BC\u03AD\u03BD\u03B1, \u03B1\u03BA\u03CC\u03BC\u03B7
         \u03BA\u03B9 \u03CC\u03C4\u03B1\u03BD \u03B4\u03C5\u03C3\u03BA\u03BF\u03BB\u03B5\u03CD\u03BF\u03BC\u03B1\u03B9."
       metrics:
-        consistency: 4
-        ethics: 4
-        authority: 0
-        persuasion: 1
+        peitho: 1
+        ethos: 4
+        synepeia: 4
         parrhesia: 0
-        recognition: 0
-      personalFunds: 0
-      cityFunds: 0
+        anagnorisimotita: 0
+        walletDrachmas: 0
       economicClassIndex: -1
       tribeIndex: -1
       profession: 
@@ -570,11 +524,6 @@ MonoBehaviour:
       requireTribe: -1
       requireClass: -1
       requireTrittys: 
-      cityMetrics:
-        food: 0
-        trust: 0
-        readiness: 0
-        war: 0
       deme: 
       trittys: 
       institutionalLean: mixed
@@ -585,14 +534,12 @@ MonoBehaviour:
         \u03B5\u03AF\u03BD\u03B1\u03B9 \u03B5\u03C5\u03C7\u03AC\u03C1\u03B9\u03C3\u03C4\u03B1
         \u03C3\u03B5 \u03CC\u03BB\u03BF\u03C5\u03C2."
       metrics:
-        consistency: 0
-        ethics: 0
-        authority: 0
-        persuasion: 3
+        peitho: 3
+        ethos: 0
+        synepeia: 0
         parrhesia: 5
-        recognition: 1
-      personalFunds: 0
-      cityFunds: 0
+        anagnorisimotita: 1
+        walletDrachmas: 0
       economicClassIndex: -1
       tribeIndex: -1
       profession: 
@@ -602,11 +549,6 @@ MonoBehaviour:
       requireTribe: -1
       requireClass: -1
       requireTrittys: 
-      cityMetrics:
-        food: 0
-        trust: 0
-        readiness: 0
-        war: 0
       deme: 
       trittys: 
       institutionalLean: mixed
@@ -617,14 +559,12 @@ MonoBehaviour:
         \u03C6\u03B1\u03AF\u03BD\u03B5\u03C4\u03B1\u03B9 \u03C3\u03C4\u03B9\u03C2
         \u03C0\u03C1\u03AC\u03BE\u03B5\u03B9\u03C2."
       metrics:
-        consistency: 3
-        ethics: 0
-        authority: 5
-        persuasion: 0
+        peitho: 0
+        ethos: 0
+        synepeia: 3
         parrhesia: 0
-        recognition: 1
-      personalFunds: 0
-      cityFunds: 0
+        anagnorisimotita: 6
+        walletDrachmas: 0
       economicClassIndex: -1
       tribeIndex: -1
       profession: 
@@ -634,11 +574,6 @@ MonoBehaviour:
       requireTribe: -1
       requireClass: -1
       requireTrittys: 
-      cityMetrics:
-        food: 0
-        trust: 0
-        readiness: 0
-        war: 0
       deme: 
       trittys: 
       institutionalLean: mixed
@@ -678,14 +613,12 @@ MonoBehaviour:
         \u03C0\u03C1\u03AD\u03C0\u03B5\u03B9 \u03BD\u03B1 \u03BA\u03C1\u03B1\u03C4\u03AE\u03C3\u03B5\u03B9
         \u03C4\u03B7 \u03B2\u03AC\u03C1\u03B4\u03B9\u03B1."
       metrics:
-        consistency: 5
-        ethics: 0
-        authority: 3
-        persuasion: 0
+        peitho: 0
+        ethos: 0
+        synepeia: 5
         parrhesia: 0
-        recognition: 0
-      personalFunds: 0
-      cityFunds: 0
+        anagnorisimotita: 3
+        walletDrachmas: 0
       economicClassIndex: -1
       tribeIndex: -1
       profession: 
@@ -695,11 +628,6 @@ MonoBehaviour:
       requireTribe: -1
       requireClass: -1
       requireTrittys: 
-      cityMetrics:
-        food: 0
-        trust: 0
-        readiness: 0
-        war: 0
       deme: 
       trittys: 
       institutionalLean: mixed
@@ -711,14 +639,12 @@ MonoBehaviour:
         \u03BC\u03AD\u03C1\u03BF\u03C2 \u03C4\u03B7\u03C2 \u03B5\u03C5\u03B8\u03CD\u03BD\u03B7\u03C2
         \u03C4\u03BF\u03C5."
       metrics:
-        consistency: 3
-        ethics: 4
-        authority: 0
-        persuasion: 0
+        peitho: 0
+        ethos: 4
+        synepeia: 3
         parrhesia: 0
-        recognition: 1
-      personalFunds: 0
-      cityFunds: 0
+        anagnorisimotita: 1
+        walletDrachmas: 0
       economicClassIndex: -1
       tribeIndex: -1
       profession: 
@@ -728,11 +654,6 @@ MonoBehaviour:
       requireTribe: -1
       requireClass: -1
       requireTrittys: 
-      cityMetrics:
-        food: 0
-        trust: 0
-        readiness: 0
-        war: 0
       deme: 
       trittys: 
       institutionalLean: mixed
@@ -742,14 +663,12 @@ MonoBehaviour:
         \u03C3\u03C5\u03BD\u03B5\u03BD\u03BD\u03CC\u03B7\u03C3\u03AE \u03BC\u03B1\u03C2,
         \u03C0\u03C1\u03B9\u03BD \u03C7\u03B1\u03B8\u03B5\u03AF \u03B7 \u03B5\u03BC\u03C0\u03B9\u03C3\u03C4\u03BF\u03C3\u03CD\u03BD\u03B7."
       metrics:
-        consistency: 0
-        ethics: 0
-        authority: 3
-        persuasion: 4
+        peitho: 4
+        ethos: 0
+        synepeia: 0
         parrhesia: 0
-        recognition: 2
-      personalFunds: 0
-      cityFunds: 0
+        anagnorisimotita: 5
+        walletDrachmas: 0
       economicClassIndex: -1
       tribeIndex: -1
       profession: 
@@ -759,11 +678,6 @@ MonoBehaviour:
       requireTribe: -1
       requireClass: -1
       requireTrittys: 
-      cityMetrics:
-        food: 0
-        trust: 0
-        readiness: 0
-        war: 0
       deme: 
       trittys: 
       institutionalLean: mixed
@@ -774,14 +688,12 @@ MonoBehaviour:
         \u03B4\u03B7\u03BC\u03CC\u03C3\u03B9\u03B1 \u03C4\u03B7\u03BD \u03AD\u03BD\u03C3\u03C4\u03B1\u03C3\u03AE
         \u03BC\u03BF\u03C5 \u03BA\u03B1\u03B9 \u03C4\u03B7\u03BD \u03B5\u03BE\u03B7\u03B3\u03CE."
       metrics:
-        consistency: -1
-        ethics: 0
-        authority: 0
-        persuasion: 2
+        peitho: 2
+        ethos: 0
+        synepeia: -1
         parrhesia: 5
-        recognition: 0
-      personalFunds: 0
-      cityFunds: 0
+        anagnorisimotita: 0
+        walletDrachmas: 0
       economicClassIndex: -1
       tribeIndex: -1
       profession: 
@@ -791,11 +703,6 @@ MonoBehaviour:
       requireTribe: -1
       requireClass: -1
       requireTrittys: 
-      cityMetrics:
-        food: 0
-        trust: 0
-        readiness: 0
-        war: 0
       deme: 
       trittys: 
       institutionalLean: mixed
@@ -867,14 +774,12 @@ MonoBehaviour:
         \u03BC\u03B1\u03B6\u03AF \u03BC\u03B5 \u03C4\u03BF\u03C5\u03C2 \u03C3\u03C5\u03BC\u03C0\u03BF\u03BB\u03AF\u03C4\u03B5\u03C2
         \u03BC\u03BF\u03C5."
       metrics:
-        consistency: 0
-        ethics: 0
-        authority: 0
-        persuasion: 0
+        peitho: 0
+        ethos: 0
+        synepeia: 0
         parrhesia: 0
-        recognition: 0
-      personalFunds: 0
-      cityFunds: 0
+        anagnorisimotita: 0
+        walletDrachmas: 0
       economicClassIndex: -1
       tribeIndex: -1
       profession: 
@@ -884,11 +789,6 @@ MonoBehaviour:
       requireTribe: -1
       requireClass: -1
       requireTrittys: 
-      cityMetrics:
-        food: 0
-        trust: 0
-        readiness: 0
-        war: 0
       deme: 
       trittys: 
       institutionalLean: mixed
@@ -1545,14 +1445,12 @@ MonoBehaviour:
       \u03BC\u03B1\u03B6\u03AF \u03C4\u03B7\u03C2 \u03AD\u03C1\u03C7\u03BF\u03BD\u03C4\u03B1\u03B9
       \u03BA\u03B1\u03B9 \u03BC\u03B5\u03B3\u03AC\u03BB\u03B5\u03C2 \u03C5\u03C0\u03BF\u03C7\u03C1\u03B5\u03CE\u03C3\u03B5\u03B9\u03C2."
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 80
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: 0
     tribeIndex: -1
     profession: 
@@ -1562,11 +1460,6 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: -1
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
@@ -1576,14 +1469,12 @@ MonoBehaviour:
       \u03C4\u03BF \u03C3\u03C0\u03AF\u03C4\u03B9 \u03BD\u03B1 \u03C3\u03C5\u03BD\u03C4\u03B7\u03C1\u03B5\u03AF
       \u03BA\u03B1\u03B9 \u03AF\u03C0\u03C0\u03BF."
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 40
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: 1
     tribeIndex: -1
     profession: 
@@ -1593,11 +1484,6 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: -1
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
@@ -1608,14 +1494,12 @@ MonoBehaviour:
       \u03BF\u03B9 \u03AF\u03B4\u03B9\u03BF\u03B9 \u03B3\u03B9\u03B1 \u03BD\u03B1
       \u03C4\u03B7 \u03C3\u03C4\u03B7\u03C1\u03AF\u03BE\u03BF\u03C5\u03BC\u03B5."
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 0
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: 2
     tribeIndex: -1
     profession: 
@@ -1625,11 +1509,6 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: -1
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
@@ -1640,14 +1519,12 @@ MonoBehaviour:
       \u03B3\u03B9\u03B1 \u03C4\u03B7\u03BD \u03B5\u03C0\u03CC\u03BC\u03B5\u03BD\u03B7
       \u03BC\u03AD\u03C1\u03B1."
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: -50
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: 3
     tribeIndex: -1
     profession: 
@@ -1657,11 +1534,6 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: -1
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
@@ -1669,14 +1541,12 @@ MonoBehaviour:
   - id: name-0
     text: "\u039D\u03B9\u03BA\u03CC\u03BC\u03B1\u03C7\u03BF\u03C2"
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 0
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: -1
     tribeIndex: -1
     profession: 
@@ -1686,25 +1556,18 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: -1
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
   - id: name-1
     text: "\u0394\u03B7\u03BC\u03AE\u03C4\u03C1\u03B9\u03BF\u03C2"
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 0
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: -1
     tribeIndex: -1
     profession: 
@@ -1714,25 +1577,18 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: -1
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
   - id: name-2
     text: "\u03A6\u03B9\u03BB\u03CC\u03B4\u03B7\u03BC\u03BF\u03C2"
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 0
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: -1
     tribeIndex: -1
     profession: 
@@ -1742,25 +1598,18 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: -1
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
   - id: name-3
     text: "\u039B\u03C5\u03C3\u03AF\u03BC\u03B1\u03C7\u03BF\u03C2"
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 0
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: -1
     tribeIndex: -1
     profession: 
@@ -1770,11 +1619,6 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: -1
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
@@ -1785,14 +1629,12 @@ MonoBehaviour:
       \u03BC\u03B5\u03B3\u03AC\u03BB\u03B7\u03C2 \u03B3\u03B5\u03C9\u03C1\u03B3\u03B9\u03BA\u03AE\u03C2
       \u03C0\u03B5\u03C1\u03B9\u03BF\u03C5\u03C3\u03AF\u03B1\u03C2."
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 0
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: -1
     tribeIndex: -1
     profession: "\u039C\u03B5\u03B3\u03AC\u03BB\u03BF\u03C2 \u03B3\u03B1\u03B9\u03BF\u03BA\u03C4\u03AE\u03BC\u03BF\u03BD\u03B1\u03C2"
@@ -1802,11 +1644,6 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: 0
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
@@ -1815,14 +1652,12 @@ MonoBehaviour:
       \u03BC\u03BF\u03C5 \u03C3\u03B5 \u03AD\u03BD\u03B1 \u03B5\u03C1\u03B3\u03B1\u03C3\u03C4\u03AE\u03C1\u03B9\u03BF
       \u03BA\u03B1\u03C4\u03B1\u03C3\u03BA\u03B5\u03C5\u03AE\u03C2 \u03CC\u03C0\u03BB\u03C9\u03BD."
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 0
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: -1
     tribeIndex: -1
     profession: "\u039A\u03AC\u03C4\u03BF\u03C7\u03BF\u03C2 \u03B5\u03C1\u03B3\u03B1\u03C3\u03C4\u03B7\u03C1\u03AF\u03BF\u03C5
@@ -1833,11 +1668,6 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: 0
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
@@ -1846,14 +1676,12 @@ MonoBehaviour:
       \u03B5\u03C1\u03B3\u03B1\u03C3\u03C4\u03AE\u03C1\u03B9\u03BF \u03C0\u03BF\u03C5
       \u03BA\u03B1\u03C4\u03B1\u03C3\u03BA\u03B5\u03C5\u03AC\u03B6\u03B5\u03B9 \u03AD\u03C0\u03B9\u03C0\u03BB\u03B1."
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 0
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: -1
     tribeIndex: -1
     profession: "\u039A\u03AC\u03C4\u03BF\u03C7\u03BF\u03C2 \u03B5\u03C1\u03B3\u03B1\u03C3\u03C4\u03B7\u03C1\u03AF\u03BF\u03C5
@@ -1864,11 +1692,6 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: 0
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
@@ -1878,14 +1701,12 @@ MonoBehaviour:
       \u03B1\u03BD\u03B1\u03BB\u03B1\u03BC\u03B2\u03AC\u03BD\u03C9 \u03C4\u03BF \u03BA\u03CC\u03C3\u03C4\u03BF\u03C2
       \u03C4\u03B7\u03C2."
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 0
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: -1
     tribeIndex: -1
     profession: "\u039C\u03B9\u03C3\u03B8\u03C9\u03C4\u03AE\u03C2 \u03BC\u03B5\u03C4\u03B1\u03BB\u03BB\u03B5\u03C5\u03C4\u03B9\u03BA\u03AE\u03C2
@@ -1896,11 +1717,6 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: 0
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
@@ -1909,14 +1725,12 @@ MonoBehaviour:
       \u03C4\u03B7\u03C2 \u03BF\u03B9\u03BA\u03BF\u03B3\u03AD\u03BD\u03B5\u03B9\u03B1\u03C2
       \u03C9\u03C2 \u03B3\u03B1\u03B9\u03BF\u03BA\u03C4\u03AE\u03BC\u03BF\u03BD\u03B1\u03C2."
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 0
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: -1
     tribeIndex: -1
     profession: "\u0393\u03B1\u03B9\u03BF\u03BA\u03C4\u03AE\u03BC\u03BF\u03BD\u03B1\u03C2"
@@ -1926,11 +1740,6 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: 1
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
@@ -1939,14 +1748,12 @@ MonoBehaviour:
       \u03B4\u03C1\u03CC\u03BC\u03BF\u03C5\u03C2 \u03C4\u03BF\u03C5 \u03B5\u03BC\u03C0\u03BF\u03C1\u03AF\u03BF\u03C5
       \u03C4\u03C9\u03BD \u03C3\u03B9\u03C4\u03B7\u03C1\u03CE\u03BD."
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 0
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: -1
     tribeIndex: -1
     profession: "\u0388\u03BC\u03C0\u03BF\u03C1\u03BF\u03C2 \u03C3\u03B9\u03C4\u03B7\u03C1\u03CE\u03BD"
@@ -1956,11 +1763,6 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: 1
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
@@ -1969,14 +1771,12 @@ MonoBehaviour:
       \u03BB\u03B5\u03B9\u03C4\u03BF\u03C5\u03C1\u03B3\u03AF\u03B1 \u03B5\u03BD\u03CC\u03C2
       \u03B5\u03C1\u03B3\u03B1\u03C3\u03C4\u03B7\u03C1\u03AF\u03BF\u03C5 \u03BA\u03B5\u03C1\u03B1\u03BC\u03B9\u03BA\u03AE\u03C2."
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 0
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: -1
     tribeIndex: -1
     profession: "\u039A\u03AC\u03C4\u03BF\u03C7\u03BF\u03C2 \u03B5\u03C1\u03B3\u03B1\u03C3\u03C4\u03B7\u03C1\u03AF\u03BF\u03C5
@@ -1987,11 +1787,6 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: 1
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
@@ -1999,14 +1794,12 @@ MonoBehaviour:
     text: "\u03A3\u03C4\u03C1\u03AD\u03C6\u03BF\u03BC\u03B1\u03B9 \u03C3\u03C4\u03BF
       \u03B5\u03BC\u03C0\u03CC\u03C1\u03B9\u03BF \u03C4\u03BF\u03C5 \u03BB\u03B1\u03B4\u03B9\u03BF\u03CD."
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 0
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: -1
     tribeIndex: -1
     profession: "\u0388\u03BC\u03C0\u03BF\u03C1\u03BF\u03C2 \u03BB\u03B1\u03B4\u03B9\u03BF\u03CD"
@@ -2016,11 +1809,6 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: 1
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
@@ -2028,14 +1816,12 @@ MonoBehaviour:
     text: "\u039A\u03B1\u03BB\u03BB\u03B9\u03B5\u03C1\u03B3\u03CE \u03BF \u03AF\u03B4\u03B9\u03BF\u03C2
       \u03C4\u03B7 \u03B3\u03B7 \u03BC\u03BF\u03C5."
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 0
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: -1
     tribeIndex: -1
     profession: "\u0391\u03C5\u03C4\u03BF\u03C5\u03C1\u03B3\u03CC\u03C2 \u03B3\u03B5\u03C9\u03C1\u03B3\u03CC\u03C2"
@@ -2045,11 +1831,6 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: 2
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
@@ -2058,14 +1839,12 @@ MonoBehaviour:
       \u03B1\u03B3\u03B3\u03B5\u03AF\u03B1 \u03BA\u03B1\u03B9 \u03B6\u03C9 \u03B1\u03C0\u03CC
       \u03C4\u03B7\u03BD \u03C4\u03AD\u03C7\u03BD\u03B7 \u03BC\u03BF\u03C5."
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 0
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: -1
     tribeIndex: -1
     profession: "\u0391\u03B3\u03B3\u03B5\u03B9\u03BF\u03C0\u03BB\u03AC\u03C3\u03C4\u03B7\u03C2"
@@ -2075,11 +1854,6 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: 2
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
@@ -2087,14 +1861,12 @@ MonoBehaviour:
     text: "\u0394\u03BF\u03C5\u03BB\u03B5\u03CD\u03C9 \u03C4\u03BF \u03BC\u03AD\u03C4\u03B1\u03BB\u03BB\u03BF
       \u03BA\u03B1\u03B9 \u03B6\u03C9 \u03B1\u03C0\u03CC \u03CC\u03C3\u03B1 \u03BA\u03B1\u03C4\u03B1\u03C3\u03BA\u03B5\u03C5\u03AC\u03B6\u03C9."
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 0
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: -1
     tribeIndex: -1
     profession: "\u039C\u03B5\u03C4\u03B1\u03BB\u03BB\u03BF\u03C4\u03B5\u03C7\u03BD\u03AF\u03C4\u03B7\u03C2"
@@ -2104,11 +1876,6 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: 2
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
@@ -2117,14 +1884,12 @@ MonoBehaviour:
       \u03BA\u03B1\u03B9 \u03B1\u03BD\u03B1\u03BB\u03B1\u03BC\u03B2\u03AC\u03BD\u03C9
       \u03BE\u03C5\u03BB\u03BF\u03C5\u03C1\u03B3\u03B9\u03BA\u03AD\u03C2 \u03B5\u03C1\u03B3\u03B1\u03C3\u03AF\u03B5\u03C2."
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 0
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: -1
     tribeIndex: -1
     profession: "\u039E\u03C5\u03BB\u03BF\u03C5\u03C1\u03B3\u03CC\u03C2"
@@ -2134,11 +1899,6 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: 2
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
@@ -2148,14 +1908,12 @@ MonoBehaviour:
       \u03C3\u03C5\u03BD\u03C4\u03B7\u03C1\u03CE \u03C4\u03BF \u03C3\u03C0\u03AF\u03C4\u03B9
       \u03BC\u03BF\u03C5."
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 0
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: -1
     tribeIndex: -1
     profession: "\u039C\u03B9\u03C3\u03B8\u03C9\u03C4\u03CC\u03C2 \u03B5\u03C1\u03B3\u03AC\u03C4\u03B7\u03C2"
@@ -2165,11 +1923,6 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: 3
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
@@ -2178,14 +1931,12 @@ MonoBehaviour:
       \u03BC\u03BF\u03C5 \u03C9\u03C2 \u03BD\u03B1\u03CD\u03C4\u03B7\u03C2 \u03BA\u03B1\u03B9
       \u03BA\u03C9\u03C0\u03B7\u03BB\u03AC\u03C4\u03B7\u03C2."
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 0
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: -1
     tribeIndex: -1
     profession: "\u039D\u03B1\u03CD\u03C4\u03B7\u03C2 \u03BA\u03B1\u03B9 \u03BA\u03C9\u03C0\u03B7\u03BB\u03AC\u03C4\u03B7\u03C2"
@@ -2195,11 +1946,6 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: 3
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
@@ -2209,14 +1955,12 @@ MonoBehaviour:
       \u03CC\u03C0\u03BF\u03C5 \u03C6\u03C4\u03AC\u03BD\u03BF\u03C5\u03BD \u03C4\u03B1
       \u03C6\u03BF\u03C1\u03C4\u03AF\u03B1."
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 0
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: -1
     tribeIndex: -1
     profession: "\u0395\u03C1\u03B3\u03AC\u03C4\u03B7\u03C2 \u03C4\u03BF\u03C5 \u03BB\u03B9\u03BC\u03B1\u03BD\u03B9\u03BF\u03CD"
@@ -2226,11 +1970,6 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: 3
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
@@ -2239,14 +1978,12 @@ MonoBehaviour:
       \u03B4\u03AF\u03C0\u03BB\u03B1 \u03C3\u03C4\u03BF\u03C5\u03C2 \u03AC\u03BB\u03BB\u03BF\u03C5\u03C2
       \u03B5\u03C1\u03B3\u03AC\u03C4\u03B5\u03C2."
     metrics:
-      consistency: 0
-      ethics: 0
-      authority: 0
-      persuasion: 0
+      peitho: 0
+      ethos: 0
+      synepeia: 0
       parrhesia: 0
-      recognition: 0
-    personalFunds: 0
-    cityFunds: 0
+      anagnorisimotita: 0
+      walletDrachmas: 0
     economicClassIndex: -1
     tribeIndex: -1
     profession: "\u0395\u03C1\u03B3\u03AC\u03C4\u03B7\u03C2 \u03BF\u03B9\u03BA\u03BF\u03B4\u03BF\u03BC\u03CE\u03BD"
@@ -2256,11 +1993,6 @@ MonoBehaviour:
     requireTribe: -1
     requireClass: 3
     requireTrittys: 
-    cityMetrics:
-      food: 0
-      trust: 0
-      readiness: 0
-      war: 0
     deme: 
     trittys: 
     institutionalLean: mixed
@@ -3235,6 +2967,8 @@ MonoBehaviour:
     text: "\u0393\u03C1\u03B1\u03C6\u03AE \u03C0\u03B1\u03C1\u03B1\u03BD\u03CC\u03BC\u03C9\u03BD"
   - id: Copy_5f91d2c7a43e80b6
     text: "\u03A4\u03B9 \u03BF\u03C1\u03AF\u03B6\u03B5\u03B9 \u03BF \u03BD\u03CC\u03BC\u03BF\u03C2"
+  - id: Copy_9e4f7a2b8c1d5063
+    text: "\u03A0\u03BF\u03C1\u03C4\u03BF\u03C6\u03CC\u03BB\u03B9"
   protocol:
     schemaVersion: 3
     minimumCompletedCases: 20

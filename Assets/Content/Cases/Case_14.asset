@@ -141,7 +141,7 @@ MonoBehaviour:
     \u039E\u03B5\u03BD. \u0395\u03BB\u03BB. 1.7.15\xB7 \u03A0\u03BB\u03AC\u03C4.
     \u0391\u03C0\u03BF\u03BB. 32b)"
   visibleMetrics: 
-  baseSupport: 45
+  baseSupport: 55
   sensitivities:
   - metric: 3
     perTen: 2

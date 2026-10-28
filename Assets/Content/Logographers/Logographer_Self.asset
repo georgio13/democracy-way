@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84e745610d90f324c9836a56e3f328f0, type: 3}
   m_Name: Logographer_Self
   m_EditorClassIdentifier: Assembly-CSharp::Agora.LogographerData
-  displayName: "Χωρίς λογογράφο"
+  displayName: "\u039c\u03b9\u03bb\u03ce \u03bc\u03cc\u03bd\u03bf\u03c2"
   quality: 0
   costDrachmas: 0
-  bio:
+  bio: ""

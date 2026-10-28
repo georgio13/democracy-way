@@ -303,14 +303,17 @@ namespace DemocracyWay.NewUI
             }
 
             SetInteractable(currentScreen + ".primary", selected != null);
+            // Ένα σύστημα δεικτών: οι θέσεις της σκηνής (Συνέπεια, Ηθική, Αυθεντία, Πειθώ, Παρρησία, Αναγν.)
+            // δείχνουν τον πολίτη όπως θα μπει στην εκστρατεία.
+            var previewCitizen = CitizenPreview();
             int[] metricValues =
             {
-                State.metrics.consistency,
-                State.metrics.ethics,
-                State.metrics.authority,
-                State.metrics.persuasion,
-                State.metrics.parrhesia,
-                State.metrics.recognition
+                previewCitizen.synepeia,
+                previewCitizen.ethos,
+                previewCitizen.Authority,
+                previewCitizen.peitho,
+                previewCitizen.parrhesia,
+                previewCitizen.anagnorisimotita
             };
             for (int i = 0; i < 6; i++)
                 SetText(currentScreen + ".metric." + i, metricValues[i].ToString());
@@ -344,14 +347,17 @@ namespace DemocracyWay.NewUI
                 identity.verticalAlignment = VerticalAlignmentOptions.Top;
             }
             SetImage("summary.emblem", config.tribes[State.tribeIndex].emblem);
+            var citizen = CitizenPreview();
+            SetText("summary.identity.1", State.profession + "\n" + config.economicClasses[Mathf.Clamp(State.economicClassIndex, 0, config.economicClasses.Count - 1)]
+                + "\nΠορτοφόλι: " + citizen.wallet + " δρ.");
             int[] values =
             {
-                State.metrics.consistency,
-                State.metrics.ethics,
-                State.metrics.authority,
-                State.metrics.persuasion,
-                State.metrics.parrhesia,
-                State.metrics.recognition
+                citizen.synepeia,
+                citizen.ethos,
+                citizen.Authority,
+                citizen.peitho,
+                citizen.parrhesia,
+                citizen.anagnorisimotita
             };
             for (int i = 0; i < values.Length; i++)
             {
@@ -455,9 +461,11 @@ namespace DemocracyWay.NewUI
         private void RenderProfile()
         {
             EnsureState();
+            EnsureAgoraReady();
             SetText("profile.heading", State.playerName);
             SetText("profile.name", State.playerName);
-            SetText("profile.age", State.playerAge + JsonContent.Copy("Copy_b0ff9eb7a58bf3d6") + State.profession);
+            SetText("profile.age", State.playerAge + JsonContent.Copy("Copy_b0ff9eb7a58bf3d6") + State.profession
+                + " · " + State.citizen.wallet + " δρ.");
             SetText("profile.origin", State.deme + " · " + TribeName(State.tribeIndex));
             SetImage("profile.emblem", config.tribes[State.tribeIndex].emblem);
             string[] identity =

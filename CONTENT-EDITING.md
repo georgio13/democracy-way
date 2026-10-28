@@ -41,10 +41,10 @@
 
 ## Επιλογές και δείκτες
 
-Μία επιλογή έχει `id`, `text`, `metrics`, `personalFunds`, `cityFunds` και `cityMetrics`. Οι έξι προσωπικοί δείκτες είναι `consistency`, `ethics`, `authority`, `persuasion`, `parrhesia`, `recognition`. Θετικός αριθμός προσθέτει, αρνητικός αφαιρεί. Για παράδειγμα:
+Ένα σύστημα δεικτών (METRICS_UNIFY): μία επιλογή βιογραφίας έχει `id`, `text` και `metrics` — **δέλτα** πάνω στις αρχικές τιμές του πολίτη από το `GameConfig`. Τα πεδία είναι του Agora: `peitho`, `ethos`, `synepeia`, `parrhesia`, `anagnorisimotita`, `walletDrachmas` (δραχμές). Η Αυθεντία υπολογίζεται, δεν γράφεται. Η βιογραφία ΔΕΝ αγγίζει την πόλη — δεν υπάρχουν πια `cityFunds`/`cityMetrics`, και το πορτοφόλι της τάξης έρχεται από το `GameConfig.ClassMoney`. Για παράδειγμα:
 
 ```json
-{"id":"example-choice","text":"Το κείμενο της επιλογής.","metrics":{"ethics":2,"authority":-1},"personalFunds":-3,"cityFunds":0}
+{"id":"example-choice","text":"Το κείμενο της επιλογής.","metrics":{"ethos":2,"anagnorisimotita":-1,"walletDrachmas":-1}}
 ```
 
 Τα γεωγραφικά βήματα αντλούν επιλογές από την ιεραρχία των φυλών. Δεν χρειάζεται να επαναλάβεις τις τριττύες και τους δήμους στο `Biography.json`. Άλλαξε τόσο το `name` όσο και το `choiceText` όταν μετονομάζεις μια εμφανιζόμενη επιλογή. Διατήρησε τα IDs σταθερά.

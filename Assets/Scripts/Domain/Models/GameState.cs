@@ -23,16 +23,10 @@ namespace DemocracyWay.NewUI
         public int playerAge = 30;
         public string profession;
         public string demeId, trittysId;
-        public CityMetricDelta biographyCityApplied = new CityMetricDelta();
         public string trittys = "Δεν έχει οριστεί";
         public string deme = "Δεν έχει οριστεί";
         public string offices = "Βουλευτής · Λογιστής της Βουλής";
-        public CharacterMetrics baseline = new CharacterMetrics();
-        public CharacterMetrics metrics = new CharacterMetrics();
-        public int basePersonalFunds;
-        public int baseCityFunds;
-        public int personalFunds;
-        public int cityFunds;
+        public BiographyDeltas biographyDeltas = new BiographyDeltas();   // αθροισμένα δέλτα των επιλογών βιογραφίας
         public List<ChoiceRecord> choices = new List<ChoiceRecord>();
         public int prytany = 1;
         public int week = 1;

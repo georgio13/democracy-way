@@ -83,6 +83,9 @@ namespace DemocracyWay.NewUI
         public void SetOpen(bool value)
         {
             panel.gameObject.SetActive(value);
+            // Οι οθόνες της πόλης μπήκαν στο Canvas ΜΕΤΑ το ευρετήριο, άρα σχεδιάζονται από πάνω του.
+            // Όταν ανοίγει, το panel έρχεται τελευταίο αδελφάκι για να φαίνεται πάνω από οποιαδήποτε οθόνη.
+            if (value) panel.SetAsLastSibling();
             foreach (var ribbon in panel.GetComponentsInChildren<RectTransform>(true).Where(r => r.name.StartsWith("Banner ", StringComparison.Ordinal)))
             {
                 ribbon.gameObject.SetActive(true);

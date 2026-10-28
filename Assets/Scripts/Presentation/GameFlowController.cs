@@ -362,13 +362,8 @@ namespace DemocracyWay.NewUI
                 runId = Guid.NewGuid().ToString("N"),
                 contentVersion = config.contentVersion,
                 playerAge = config.playerAge,
-                profession = config.defaultProfession,
-                baseline = config.startingMetrics.Copy(),
-                metrics = config.startingMetrics.Copy(),
-                basePersonalFunds = config.startingPersonalFunds,
-                personalFunds = config.startingPersonalFunds,
-                baseCityFunds = config.startingCityFunds,
-                cityFunds = config.startingCityFunds
+                profession = config.defaultProfession
+                // Οι αρχικές τιμές του πολίτη ζουν ΜΟΝΟ στο GameConfig — η βιογραφία κρατά δέλτα (METRICS_UNIFY).
             };
         }
 
@@ -501,32 +496,33 @@ namespace DemocracyWay.NewUI
                 selectable.interactable = enabled;
         }
 
-        private static string MetricDeltas(CharacterMetrics metrics)
+        private static string MetricDeltas(BiographyDeltas deltas)
         {
-            if (metrics == null)
+            if (deltas == null)
                 return "";
+            // Σειρά και ονόματα του Agora: Πειθώ, Ηθική, Συνέπεια, Παρρησία, Αναγνωρισιμότητα, Πορτοφόλι.
             string[] names =
             {
-                JsonContent.Copy("Copy_5c3117cb8ed2675b"),
-                JsonContent.Copy("Copy_44cbf197ce871c19"),
-                JsonContent.Copy("Copy_2b3515f2ecd7824a"),
                 JsonContent.Copy("Copy_2c88568db2fddb62"),
+                JsonContent.Copy("Copy_44cbf197ce871c19"),
+                JsonContent.Copy("Copy_5c3117cb8ed2675b"),
                 JsonContent.Copy("Copy_cc950e76fab76b7a"),
-                JsonContent.Copy("Copy_c638883310aed0c3")
+                JsonContent.Copy("Copy_c638883310aed0c3"),
+                JsonContent.Copy("Copy_9e4f7a2b8c1d5063")
             };
             int[] values =
             {
-                metrics.consistency,
-                metrics.ethics,
-                metrics.authority,
-                metrics.persuasion,
-                metrics.parrhesia,
-                metrics.recognition
+                deltas.peitho,
+                deltas.ethos,
+                deltas.synepeia,
+                deltas.parrhesia,
+                deltas.anagnorisimotita,
+                deltas.walletDrachmas
             };
             var parts = new List<string>();
             for (int i = 0; i < names.Length; i++)
                 if (values[i] != 0)
-                    parts.Add(names[i] + " " + (values[i] > 0 ? "+" : "") + values[i]);
+                    parts.Add(names[i] + " " + (values[i] > 0 ? "+" : "") + values[i] + (i == 5 ? " δρ." : ""));
             return string.Join(" · ", parts);
         }
     }

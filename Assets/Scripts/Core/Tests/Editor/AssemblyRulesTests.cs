@@ -13,19 +13,19 @@ namespace Agora.Tests
         // πόλη: T, Ep, Et, Em, ID, war — αναμενόμενο S0 από το spec
         static readonly object[][] D1 =
         {
-            new object[] { 1, 1, new[] { 50, 50, 50, 50, 50 }, false, false, 70f },
-            new object[] { 2, 1, new[] { 50, 50, 50, 50, 70 }, false, false, 62f },
-            new object[] { 3, 1, new[] { 50, 50, 50, 80, 50 }, false, false, 76f },
-            new object[] { 4, 12, new[] { 45, 50, 50, 50, 50 }, true, false, 50f },
-            new object[] { 5, 12, new[] { 45, 50, 50, 50, 50 }, false, false, 60f },
+            new object[] { 1, 1, new[] { 50, 50, 50, 50, 50 }, false, false, 60f },
+            new object[] { 2, 1, new[] { 50, 50, 50, 50, 70 }, false, false, 52f },
+            new object[] { 3, 1, new[] { 50, 50, 50, 80, 50 }, false, false, 66f },
+            new object[] { 4, 12, new[] { 45, 50, 50, 50, 50 }, true, false, 45f },
+            new object[] { 5, 12, new[] { 45, 50, 50, 50, 50 }, false, false, 55f },
             new object[] { 6, 18, new[] { 50, 50, 50, 35, 40 }, true, false, 43f },
-            new object[] { 7, 18, new[] { 50, 50, 50, 45, 50 }, true, false, 55f },
+            new object[] { 7, 18, new[] { 50, 50, 50, 45, 50 }, true, false, 43f },
             new object[] { 8, 20, new[] { 25, 50, 50, 50, 50 }, false, false, 40f },
-            new object[] { 9, 20, new[] { 50, 50, 50, 50, 50 }, true, true, 33f },
-            new object[] { 10, 19, new[] { 50, 50, 30, 50, 50 }, true, false, 53f },
+            new object[] { 9, 20, new[] { 50, 50, 50, 50, 50 }, true, true, 38f },
+            new object[] { 10, 19, new[] { 50, 50, 30, 50, 50 }, true, false, 52f },
             new object[] { 12, 7, new[] { 50, 50, 50, 50, 50 }, false, false, 48f },
-            new object[] { 13, 3, new[] { 50, 50, 10, 50, 50 }, false, false, 29f },
-            new object[] { 14, 5, new[] { 50, 50, 50, 50, 0 }, false, false, 88f },
+            new object[] { 13, 3, new[] { 50, 50, 10, 50, 50 }, false, false, 35f },
+            new object[] { 14, 5, new[] { 50, 50, 50, 50, 0 }, false, false, 78f },
         };
 
         [TestCaseSource(nameof(D1))]
@@ -48,7 +48,7 @@ namespace Agora.Tests
             var target = stances.First(s => s.official == c.complaint.target);
             target.weight = 0;
             float s0 = AssemblyRules.ComputeS0(c, TestWorld.City(50, 50, 50, 50, 50, war: true), TestWorld.Cfg(), stances);
-            Assert.AreEqual(60f, s0, Tolerance);
+            Assert.AreEqual(61f, s0, Tolerance);
         }
 
         // ---------- Δ2 SpeechPower ----------

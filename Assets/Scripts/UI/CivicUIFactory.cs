@@ -111,8 +111,17 @@ namespace DemocracyWay.NewUI
                 var image = button.GetComponent<Image>();
                 if (image != null) image.color = selected ? Teal : Paper;
             }
-            var label = button.GetComponentInChildren<TMPro.TMP_Text>(true);
-            if (label != null) label.color = selected ? Paper : Ink;
+            // ΟΛΑ τα κείμενα της γραμμής αλλάζουν μαζί (τίτλος, ημερομηνία, μετα-στοιχεία),
+            // αλλιώς στα επιλεγμένα/hover σκούρα φόντα μένουν σκούρα γράμματα — αόρατα.
+            foreach (var label in button.GetComponentsInChildren<TMPro.TMP_Text>(true))
+                label.color = selected ? Paper : Ink;
+            // Ήπιο hover πάνω στο δικό μας χρώμα, όχι το αυθεντικό σκούρο tint που έκρυβε το περιεχόμενο.
+            var colors = button.colors;
+            colors.normalColor = Color.white;
+            colors.selectedColor = Color.white;
+            colors.highlightedColor = new Color(0.93f, 0.90f, 0.83f);
+            colors.pressedColor = new Color(0.84f, 0.79f, 0.70f);
+            button.colors = colors;
         }
     }
 }
