@@ -84,7 +84,9 @@ namespace DemocracyWay.NewUI
             Bind("week-report.primary", AgoraAdvanceWeek);
             Bind("prytany-transition.primary", AgoraAdvancePrytany);
             Bind("ending-city.primary", () => GoCampaign("ending-personal"));
-            Bind("ending-personal.primary", () => GoCampaign("complete"));
+            // Μετά το τέλος του παίκτη: τα τελικά ερωτηματολόγια — ή η ολοκλήρωση, αν έχουν ήδη δοθεί
+            // (π.χ. όταν ο παίκτης ξαναβλέπει τα τέλη από την οθόνη ολοκλήρωσης).
+            Bind("ending-personal.primary", () => GoCampaign(Evaluation.completed ? "complete" : "final-knowledge"));
         }
 
         /// <summary>Αρχικοποίηση της υπόθεσης της εβδομάδας — καλείται ΜΕΣΑ σε MutateAndSave.</summary>
@@ -234,7 +236,7 @@ namespace DemocracyWay.NewUI
                     personalEnding = Agora.EndingRules.Personal(State.citizen, cityEnding, AgoraCfg);
                     Campaign.cityEnding = cityEnding.ToString();
                     Campaign.personalEnding = personalEnding.ToString();
-                    next = "final-knowledge";   // το τέλος ΔΕΙΧΝΕΤΑΙ μετά τα ερωτηματολόγια (spec ΣΤ.2)
+                    next = "ending-city";   // πρώτα το τέλος (πόλη, παίκτης), μετά τα τελικά ερωτηματολόγια
                 }
                 else
                 {

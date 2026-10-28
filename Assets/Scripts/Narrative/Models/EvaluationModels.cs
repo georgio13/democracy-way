@@ -8,7 +8,7 @@ namespace DemocracyWay.NewUI
         public int schemaVersion, minimumCompletedCases = 20, offerAtPrytany = 10;
         public string instrumentVersion, language, offerTitle, offerBody, offerNow, offerLater;
         public string questionnaireStatus, knowledgeDesignNote;
-        public string questionnaireInstructions, notApplicableLabel, openFeedbackPrompt;
+        public string questionnaireInstructions, openFeedbackPrompt;
         public int openFeedbackMaxLength = 1000;
         public bool openFeedbackOptional = true;
         public string[] ratingLabels;
@@ -38,12 +38,9 @@ namespace DemocracyWay.NewUI
     [Serializable]
     public sealed class EvaluationRating
     {
-        public string id, construct, prompt, sourceRef;
-        public string group, section, instrumentSection, officialItemId;
-        public bool reverse, allowNotApplicable;
-        public string orientation;
-        public float analysisWeight = 1;
-        public bool required = true;
+        public string id;        // αποθήκευση απαντήσεων
+        public string prompt;    // το κείμενο που βλέπει ο παίκτης
+        public string section;   // η ομάδα (τίτλος ενότητας) στο ερωτηματολόγιο
     }
 
     [Serializable]

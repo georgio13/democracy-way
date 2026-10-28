@@ -6,6 +6,10 @@ namespace DemocracyWay.NewUI {
             var e=state.evaluation ?? (state.evaluation=new EvaluationState());
             var d=e.demographics ?? (e.demographics=new DemographicsState());
             d.answers=d.answers ?? Array.Empty<DemographicAnswer>();
+            // Μετά από save/load το JsonUtility δίνει ΚΕΝΟ point αντί για null: χωρίς αυτό το
+            // «d.point ?? point» δεν το συμπλήρωνε ποτέ και το Complete αποτύγχανε σιωπηλά.
+            if(d.point!=null&&string.IsNullOrEmpty(d.point.utc))d.point=null;
+            if(d.completedPoint!=null&&string.IsNullOrEmpty(d.completedPoint.utc))d.completedPoint=null;
             return d;
         }
         public static bool Answer(GameState state,DemographicsContent content,string id,string optionId,string text,EvaluationPoint point) {
@@ -26,7 +30,11 @@ namespace DemocracyWay.NewUI {
             return content.questions.Where(q=>q.required).All(q=>d.answers.Any(a=>a.questionId==q.id&&(q.kind=="choice"?q.options.Any(o=>o.id==a.optionId):!string.IsNullOrWhiteSpace(a.value))));
         }
         public static bool Complete(GameState state,DemographicsContent content) {
-            var d=Ensure(state,content);if(d.completed||!Ready(state,content)||!EvaluationRules.HasPoint(d.point))return false;d.completed=true;d.completedPoint=EvaluationRules.Point(state,CampaignRules.CaseIdForTurn(CampaignRules.Turn(state)),JsonContent.Settings.contentVersion.ToString());return true;
+            var d=Ensure(state,content);if(d.completed||!Ready(state,content))return false;
+            var now=EvaluationRules.Point(state,CampaignRules.CaseIdForTurn(CampaignRules.Turn(state)),JsonContent.Settings.contentVersion.ToString());
+            if(!EvaluationRules.HasPoint(d.point))d.point=now;   // saves που κόλλησαν με κενό point πριν τη διόρθωση
+            if(!EvaluationRules.HasPoint(d.point))return false;
+            d.completed=true;d.completedPoint=now;return true;
         }
         public static bool Valid(DemographicsState d) {
             if(d==null)return true;if(d.answers==null||d.answers.Length>20)return false;

@@ -51,17 +51,6 @@ namespace DemocracyWay.NewUI
             Bind("final-survey.primary", FinishSurvey);
             Bind("complete.primary", () => Show("main-menu"));
             Bind("complete.review", () => GoCampaign("ending-city"));
-            for (int row = 0; row < 2; row++)
-                for (int i = 0; i < 7; i++)
-                {
-                    int r = row, n = i;
-                    Bind("final-survey.rating." + row + "." + i, () =>
-                    {
-                        Campaign.survey[r] = n + 1;
-                        SaveCheckpoint();
-                        RenderCampaign();
-                    });
-                }
         }
 
         void GoCampaign(string id)
@@ -144,7 +133,12 @@ namespace DemocracyWay.NewUI
         {
             string id = currentScreen;
             if (TryRenderEvaluationQuestion()) return;
-            if (id == "final-survey" && RenderEvaluationSurvey()) return;
+            if (id == "final-survey")
+            {
+                // Το MEEGA+ ξεκινά από τις τελικές γνώσεις· χωρίς αυτές (π.χ. παλιό save) πάμε εκεί.
+                if (!RenderEvaluationSurvey()) GoCampaign("final-knowledge");
+                return;
+            }
             if (TryRenderAgoraCase()) return;
 
             if (id == "week-transition" || id == "prytany-transition")
@@ -161,17 +155,12 @@ namespace DemocracyWay.NewUI
                         t.color = i == State.week - 1 ? new Color32(171, 151, 99, 255) : new Color32(35, 61, 64, 255);
                     }
                 }
+                // Τα δύο πλαίσια «Handover» της σκηνής (πάνω από το κουμπί) δεν δένονται με δεδομένα — κρύβονται.
+                if (id == "prytany-transition" && roots.TryGetValue(id, out var transitionRoot))
+                    foreach (Transform child in transitionRoot.transform)
+                        if (child.name.StartsWith("Handover ", System.StringComparison.Ordinal)) child.gameObject.SetActive(false);
                 CampaignText("source", GameSession.Slot < 0 ? JsonContent.Copy("Copy_72b41a8f13543b93") : JsonContent.Copy("Copy_e15e406bba032b98"));
                 CampaignLabel("primary", id == "week-transition" ? JsonContent.Copy("Copy_7825116e6db6a24f") : State.prytany == JsonContent.Settings.prytanyCount ? JsonContent.Copy("Copy_d654bb1a20dc6e0e") : JsonContent.Copy("Copy_df6d19377abefd11"));
-                return;
-            }
-
-            if (id == "final-survey")
-            {
-                for (int row = 0; row < 2; row++)
-                    for (int i = 0; i < 7; i++)
-                        PaintRow("final-survey.rating." + row + "." + i, Campaign.survey[row] == i + 1);
-                SetInteractable("final-survey.primary", Campaign.survey.All(x => x >= 1));
                 return;
             }
 

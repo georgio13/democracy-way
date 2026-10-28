@@ -29,11 +29,10 @@ namespace DemocracyWay.NewUI
         [Header("Κείμενα διεπαφής")]
         public InterfaceTextEntry[] interfaceText;
 
-        [Header("Όργανα έρευνας (πρώην Assessments/*.json)")]
-        public EvaluationContent protocol;
+        [Header("Όργανα έρευνας")]
         public DemographicsContent demographics;
         public KnowledgeFile knowledge;
-        public EvaluationContent meega;
+        public MeegaFile meega;
         public TendenciesFile tendencies;
         public TendenciesFile participation;
     }

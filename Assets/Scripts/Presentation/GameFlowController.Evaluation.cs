@@ -12,7 +12,6 @@ namespace DemocracyWay.NewUI
         EvaluationContent evaluationData;
         readonly HashSet<string> evaluationQuizLayouts = new HashSet<string>();
         readonly List<Button[]> evaluationRatingRows = new List<Button[]>();
-        readonly Dictionary<int, Button> evaluationNotApplicableButtons = new Dictionary<int, Button>();
         TMP_InputField evaluationFeedback;
         GameObject evaluationSurveyPanel, evaluationDialog;
         Button evaluationSubmitButton, evaluationDialogConfirm, evaluationDialogCancel;
@@ -257,11 +256,6 @@ namespace DemocracyWay.NewUI
                     CivicUIFactory.PaintSelectable(button, values[row] == value + 1);
                     button.interactable = !evaluation.completed;
                 }
-            foreach (var pair in evaluationNotApplicableButtons)
-            {
-                CivicUIFactory.PaintSelectable(pair.Value, values[pair.Key] == 0);
-                pair.Value.interactable = !evaluation.completed;
-            }
             if (evaluationFeedback != null)
             {
                 if (!evaluationFeedback.isFocused) evaluationFeedback.SetTextWithoutNotify(evaluation.openFeedback ?? "");
@@ -310,7 +304,7 @@ namespace DemocracyWay.NewUI
                 var item = items[i]; var row = CivicUIFactory.Panel(evaluationSurveyContent, "Statement " + i, new Color32(236, 227, 204, 255));
                 float questionWidth = width * .45f;
                 var prompt = CivicUIFactory.Text(row.transform, "Statement prompt", (i + 1) + ". " + item.prompt, font, 26, CivicUIFactory.Ink);
-                float rowHeight = Mathf.Max(item.allowNotApplicable ? 205 : 148, prompt.GetPreferredValues(prompt.text, questionWidth - 30, 0).y + 42);
+                float rowHeight = Mathf.Max(148, prompt.GetPreferredValues(prompt.text, questionWidth - 30, 0).y + 42);
                 CivicUIFactory.Box(row.rectTransform, 0, y, width, rowHeight);
                 CivicUIFactory.Box(prompt.rectTransform, 20, 20, questionWidth - 30, rowHeight - 36);
                 float cellWidth = (width - questionWidth - 25) / 5;
@@ -326,17 +320,6 @@ namespace DemocracyWay.NewUI
                     var label = b.GetComponentInChildren<TMP_Text>(); label.fontSizeMin = 16; label.fontSizeMax = 22;
                     buttons[j] = b; targets["evaluation.rating." + i + "." + j] = b;
                     targets["evaluation.ratingValue." + i + "." + value] = b;
-                }
-                if (item.allowNotApplicable)
-                {
-                    bool intention = i >= EvaluationData.experience.Length;
-                    int index = intention ? i - EvaluationData.experience.Length : i;
-                    var notApplicable = CivicUIFactory.Button(row.transform, "Cannot judge", EvaluationData.notApplicableLabel ?? "Δεν μπορώ να κρίνω", font,
-                        () => RecordEvaluationRating(intention, index, 0), this);
-                    notApplicable.transition = Selectable.Transition.None;
-                    CivicUIFactory.Box((RectTransform)notApplicable.transform, questionWidth, 134, width - questionWidth - 25, 54);
-                    evaluationNotApplicableButtons[i] = notApplicable;
-                    targets["evaluation.notApplicable." + i] = notApplicable;
                 }
                 evaluationRatingRows.Add(buttons); y += rowHeight + 16;
             }
@@ -388,8 +371,8 @@ namespace DemocracyWay.NewUI
         void ReturnFromEvaluation()
         {
             HideEvaluationDialog();
-            // Το τέλος δείχνεται ΜΕΤΑ τα ερωτηματολόγια (spec ΣΤ.2).
-            GoCampaign(!string.IsNullOrEmpty(Campaign.cityEnding) ? "ending-city" : "complete");
+            // Τα τέλη έχουν ήδη δειχτεί πριν τα ερωτηματολόγια· μετά το MEEGA+ μένει η ολοκλήρωση.
+            GoCampaign("complete");
         }
 
         bool HandleEvaluationEscape()

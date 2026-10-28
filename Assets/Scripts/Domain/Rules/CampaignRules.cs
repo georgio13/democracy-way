@@ -32,9 +32,7 @@ namespace DemocracyWay.NewUI
         {
             if (campaign == null)
                 return true;
-            if (campaign.cases == null || campaign.cases.Count > TotalCases || campaign.survey == null || campaign.survey.Length != 2)
-                return false;
-            if (campaign.survey.Any(a => a != -1 && (a < 1 || a > 7)))
+            if (campaign.cases == null || campaign.cases.Count > TotalCases)
                 return false;
             var seen = new System.Collections.Generic.HashSet<int>();
             foreach (var record in campaign.cases)

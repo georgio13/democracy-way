@@ -26,6 +26,17 @@ namespace Agora
         PostTest, AttitudePost, Meega, Epilogue
     }
 
+    /// <summary>Οι όροι της ψηφοφορίας στη συνέλευση: S = Βάση + Πίεση + Πόλεμος + Άρειος + Δίκη + Αξιωματούχος + Λόγος + Διάθεση.</summary>
+    public enum VoteTerm { Base, Pressure, War, Areopagus, Trial, Official, Speech, Mood }
+
+    /// <summary>Οι όροι της ψηφοφορίας στη δίκη: D = Στοιχεία + Κατηγορία + Διάθεση.</summary>
+    public enum TrialTerm { Evidence, Accusation, Mood }
+
+    public enum TrialVenue { Heliaia, Areopagus }
+
+    /// <summary>Τα στοιχεία μιας δίκης όπως τα βλέπει ο παίκτης πριν αποφασίσει.</summary>
+    public enum EvidenceStrength { Weak, Doubtful, Strong }
+
     public enum CityEnding { Famine, PropertyLimit, Stasis, Counterfactual, GarrisonOnly }
     public enum PersonalEnding { Hypereides, Demades, HarpalusMan, Lycurgus, Anonymous, Stratocles }
 }

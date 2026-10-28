@@ -90,8 +90,8 @@ namespace DemocracyWay.NewUI
         {
             get
             {
-                // Βαθύ αντίγραφο: το asset της βιβλιοθήκης δεν πρέπει να μεταλλάσσεται σε runtime.
-                var result = JsonUtility.FromJson<EvaluationContent>(JsonUtility.ToJson(Library.protocol));
+                // Οι ερωτήσεις δεν αλλάζουν έκδοση: σταθερό εσωτερικό αναγνωριστικό, μόνο για την ετικέτα των δεδομένων.
+                var result = new EvaluationContent { instrumentVersion = EvaluationRules.CurrentInstrumentVersion };
                 result.demographics = Library.demographics;
                 var knowledge = Library.knowledge;
                 var meega = Library.meega;
@@ -101,9 +101,9 @@ namespace DemocracyWay.NewUI
                 result.tendencies = tendencies.items; result.tendencyInstructions = tendencies.instructions; result.tendencyRatingLabels = tendencies.ratingLabels;
                 var participation = Library.participation;
                 result.participation = participation.items; result.participationInstructions = participation.instructions; result.participationRatingLabels = participation.ratingLabels;
-                result.ratingLabels = meega.ratingLabels; result.questionnaireStatus = meega.questionnaireStatus;
-                result.questionnaireInstructions = meega.questionnaireInstructions; result.notApplicableLabel = meega.notApplicableLabel;
-                result.openFeedbackPrompt = meega.openFeedbackPrompt; result.openFeedbackOptional = meega.openFeedbackOptional; result.openFeedbackMaxLength = meega.openFeedbackMaxLength;
+                result.ratingLabels = meega.ratingLabels;
+                result.questionnaireInstructions = meega.questionnaireInstructions;
+                result.openFeedbackPrompt = meega.openFeedbackPrompt; result.openFeedbackMaxLength = meega.openFeedbackMaxLength;
                 return result;
             }
         }
@@ -120,6 +120,13 @@ namespace DemocracyWay.NewUI
     [Serializable] public sealed class DemeData { public string id, name, choiceText; }
     [Serializable] public sealed class KnowledgeFile { public string instructions; public EvaluationQuestion[] pre, post; }
     [Serializable] public sealed class TendenciesFile { public string instructions; public string[] ratingLabels; public TendencyItem[] items; }
+    [Serializable] public sealed class MeegaFile
+    {
+        public string questionnaireInstructions, openFeedbackPrompt;
+        public int openFeedbackMaxLength = 1000;
+        public string[] ratingLabels;
+        public EvaluationRating[] experience;
+    }
     [Serializable] public sealed class InterfaceTextFile { public InterfaceTextEntry[] entries; }
     [Serializable] public sealed class InterfaceTextEntry { public string id, text; }
 }

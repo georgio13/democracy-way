@@ -2993,48 +2993,6 @@ MonoBehaviour:
       \u03C4\u03B7\u03BD \u03C0\u03CC\u03BB\u03B7 (\u03B4\u03B5\u03AF\u03BA\u03C4\u03B5\u03C2
       \u03B5\u03C0\u03AC\u03BD\u03C9) \u03BA\u03B1\u03B9 \u03C4\u03BF\u03BD \u03B4\u03B9\u03BA\u03CC
       \u03C3\u03BF\u03C5 \u03C0\u03BF\u03BB\u03AF\u03C4\u03B7."
-  protocol:
-    schemaVersion: 3
-    minimumCompletedCases: 20
-    offerAtPrytany: 10
-    instrumentVersion: campaign-final-meega-el-4
-    language: el
-    offerTitle: 
-    offerBody: 
-    offerNow: 
-    offerLater: 
-    questionnaireStatus: 
-    knowledgeDesignNote: "\u0394\u03B7\u03BC\u03BF\u03B3\u03C1\u03B1\u03C6\u03B9\u03BA\u03AC
-      \u03BC\u03B5\u03C4\u03AC \u03C4\u03BF\u03BD \u03C0\u03C1\u03CC\u03BB\u03BF\u03B3\u03BF,
-      \u03B1\u03C1\u03C7\u03B9\u03BA\u03AD\u03C2 \u03B3\u03BD\u03CE\u03C3\u03B5\u03B9\u03C2
-      \u03C7\u03C9\u03C1\u03AF\u03C2 \u03B1\u03BD\u03B1\u03C4\u03C1\u03BF\u03C6\u03BF\u03B4\u03CC\u03C4\u03B7\u03C3\u03B7
-      \u03BA\u03B1\u03B9 \u03B1\u03C1\u03C7\u03B9\u03BA\u03AD\u03C2 \u03C4\u03AC\u03C3\u03B5\u03B9\u03C2
-      \u03C0\u03C1\u03B9\u03BD \u03B1\u03C0\u03CC \u03C4\u03BF\u03BD \u03C7\u03B1\u03C1\u03B1\u03BA\u03C4\u03AE\u03C1\u03B1.
-      \u03A4\u03B5\u03BB\u03B9\u03BA\u03AD\u03C2 \u03B3\u03BD\u03CE\u03C3\u03B5\u03B9\u03C2
-      \u03C7\u03C9\u03C1\u03AF\u03C2 \u03B1\u03BD\u03B1\u03C4\u03C1\u03BF\u03C6\u03BF\u03B4\u03CC\u03C4\u03B7\u03C3\u03B7,
-      \u03C4\u03B5\u03BB\u03B9\u03BA\u03AD\u03C2 \u03C4\u03AC\u03C3\u03B5\u03B9\u03C2
-      \u03BA\u03B1\u03B9 MEEGA+ \u03BC\u03B5\u03C4\u03AC \u03C4\u03B9\u03C2 20 \u03C5\u03C0\u03BF\u03B8\u03AD\u03C3\u03B5\u03B9\u03C2."
-    questionnaireInstructions: 
-    notApplicableLabel: 
-    openFeedbackPrompt: 
-    openFeedbackMaxLength: 1000
-    openFeedbackOptional: 1
-    ratingLabels: []
-    onboarding: []
-    postTest: []
-    knowledgeInstructions: 
-    experience: []
-    participationIntention: []
-    demographics:
-      instructions: 
-      questions: []
-    tendencies: []
-    tendencyInstructions: 
-    tendencyRatingLabels: []
-    participation: []
-    participationInstructions: 
-    participationRatingLabels: []
-    sources: []
   demographics:
     instructions: "\u03A4\u03B1 \u03C0\u03B1\u03C1\u03B1\u03BA\u03AC\u03C4\u03C9
       \u03B1\u03C6\u03BF\u03C1\u03BF\u03CD\u03BD \u03B5\u03C3\u03AD\u03BD\u03B1,
@@ -3690,38 +3648,6 @@ MonoBehaviour:
         text: "\u038C\u03BB\u03BF\u03B9 \u03BF\u03B9 \u03B5\u03BD\u03AE\u03BB\u03B9\u03BA\u03BF\u03B9
           \u03BA\u03AC\u03C4\u03BF\u03B9\u03BA\u03BF\u03B9 \u03C4\u03B7\u03C2 \u0391\u03C4\u03C4\u03B9\u03BA\u03AE\u03C2"
   meega:
-    schemaVersion: 0
-    minimumCompletedCases: 20
-    offerAtPrytany: 10
-    instrumentVersion: 
-    language: 
-    offerTitle: 
-    offerBody: 
-    offerNow: 
-    offerLater: 
-    questionnaireStatus: "\u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE
-      \u03C4\u03BF\u03C5 MEEGA+ \u03B3\u03B9\u03B1 \u03B1\u03C4\u03BF\u03BC\u03B9\u03BA\u03CC
-      \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9 \u03B9\u03C3\u03C4\u03BF\u03C1\u03B9\u03BA\u03AE\u03C2
-      \u03BA\u03B1\u03B9 \u03C0\u03BF\u03BB\u03B9\u03C4\u03B9\u03BA\u03AE\u03C2 \u03B5\u03BA\u03C0\u03B1\u03AF\u03B4\u03B5\u03C5\u03C3\u03B7\u03C2.
-      \u03A7\u03C1\u03B7\u03C3\u03B9\u03BC\u03BF\u03C0\u03BF\u03B9\u03BF\u03CD\u03BD\u03C4\u03B1\u03B9
-      28 \u03B5\u03C6\u03B1\u03C1\u03BC\u03CC\u03C3\u03B9\u03BC\u03B5\u03C2 \u03B4\u03B7\u03BB\u03CE\u03C3\u03B5\u03B9\u03C2
-      \u03C4\u03BF\u03C5 \u03B5\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF\u03C5 \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03BF\u03CD
-      kit \u03BA\u03B1\u03B9 3 \u03B5\u03B9\u03B4\u03B9\u03BA\u03BF\u03AF \u03BC\u03B1\u03B8\u03B7\u03C3\u03B9\u03B1\u03BA\u03BF\u03AF
-      \u03C3\u03C4\u03CC\u03C7\u03BF\u03B9. \u039F\u03B9 3 \u03B4\u03B7\u03BB\u03CE\u03C3\u03B5\u03B9\u03C2
-      \u03BA\u03BF\u03B9\u03BD\u03C9\u03BD\u03B9\u03BA\u03AE\u03C2 \u03B1\u03BB\u03BB\u03B7\u03BB\u03B5\u03C0\u03AF\u03B4\u03C1\u03B1\u03C3\u03B7\u03C2
-      \u03B5\u03BE\u03B1\u03B9\u03C1\u03BF\u03CD\u03BD\u03C4\u03B1\u03B9 \u03C4\u03B5\u03BA\u03BC\u03B7\u03C1\u03B9\u03C9\u03BC\u03AD\u03BD\u03B1.
-      \u03A4\u03B1 3 \u03B5\u03B9\u03B4\u03B9\u03BA\u03AC \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03B1
-      \u03C4\u03BF\u03C5 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD
-      \u03BA\u03B1\u03B9 \u03BF\u03B9 2 \u03B4\u03B7\u03BB\u03CE\u03C3\u03B5\u03B9\u03C2
-      \u03C0\u03BF\u03BB\u03B9\u03C4\u03B9\u03BA\u03AE\u03C2 \u03C0\u03C1\u03CC\u03B8\u03B5\u03C3\u03B7\u03C2
-      \u03B1\u03BD\u03B1\u03BB\u03CD\u03BF\u03BD\u03C4\u03B1\u03B9 \u03C7\u03C9\u03C1\u03B9\u03C3\u03C4\u03AC.
-      \u0394\u03B5\u03BD \u03B1\u03C0\u03BF\u03C4\u03B5\u03BB\u03B5\u03AF \u03C3\u03C4\u03B1\u03B8\u03BC\u03B9\u03C3\u03BC\u03AD\u03BD\u03B7
-      \u03B5\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03AD\u03BA\u03B4\u03BF\u03C3\u03B7
-      \u03AE \u03B5\u03C0\u03B9\u03BA\u03C5\u03C1\u03C9\u03BC\u03AD\u03BD\u03B7 \u03C3\u03CD\u03BD\u03C4\u03BF\u03BC\u03B7
-      \u03BC\u03BF\u03C1\u03C6\u03AE \u03BA\u03B1\u03B9 \u03B4\u03B5\u03BD \u03C0\u03B1\u03C1\u03AC\u03B3\u03B5\u03B9
-      \u03C4\u03C5\u03C0\u03BF\u03C0\u03BF\u03B9\u03B7\u03BC\u03AD\u03BD\u03BF MEEGA+
-      \u03AE SUS score."
-    knowledgeDesignNote: 
     questionnaireInstructions: "\u0391\u03C0\u03AC\u03BD\u03C4\u03B7\u03C3\u03B5
       \u03BC\u03B5 \u03B2\u03AC\u03C3\u03B7 \u03C4\u03BF \u03C4\u03BC\u03AE\u03BC\u03B1
       \u03C4\u03BF\u03C5 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD
@@ -3742,14 +3668,11 @@ MonoBehaviour:
       \u03C4\u03B7\u03BD \u03BF\u03C5\u03B4\u03AD\u03C4\u03B5\u03C1\u03B7 \u03B1\u03C0\u03AC\u03BD\u03C4\u03B7\u03C3\u03B7
       \xAB\u039F\u03CD\u03C4\u03B5 \u03C3\u03C5\u03BC\u03C6\u03C9\u03BD\u03CE \u03BF\u03CD\u03C4\u03B5
       \u03B4\u03B9\u03B1\u03C6\u03C9\u03BD\u03CE\xBB."
-    notApplicableLabel: "\u0394\u03B5\u03BD \u03BC\u03C0\u03BF\u03C1\u03CE \u03BD\u03B1
-      \u03BA\u03C1\u03AF\u03BD\u03C9"
     openFeedbackPrompt: "\u03A4\u03B9 \u03C3\u03B5 \u03B4\u03C5\u03C3\u03BA\u03CC\u03BB\u03B5\u03C8\u03B5
       \u03C0\u03B5\u03C1\u03B9\u03C3\u03C3\u03CC\u03C4\u03B5\u03C1\u03BF \u03BA\u03B1\u03B9
       \u03C4\u03B9 \u03B8\u03B1 \u03AC\u03BB\u03BB\u03B1\u03B6\u03B5\u03C2 \u03C3\u03C4\u03BF
       \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9;"
     openFeedbackMaxLength: 1000
-    openFeedbackOptional: 1
     ratingLabels:
     - "\u0394\u03B9\u03B1\u03C6\u03C9\u03BD\u03CE \u03B1\u03C0\u03CC\u03BB\u03C5\u03C4\u03B1"
     - "\u0394\u03B9\u03B1\u03C6\u03C9\u03BD\u03CE"
@@ -3757,760 +3680,236 @@ MonoBehaviour:
       \u03B4\u03B9\u03B1\u03C6\u03C9\u03BD\u03CE"
     - "\u03A3\u03C5\u03BC\u03C6\u03C9\u03BD\u03CE"
     - "\u03A3\u03C5\u03BC\u03C6\u03C9\u03BD\u03CE \u03B1\u03C0\u03CC\u03BB\u03C5\u03C4\u03B1"
-    onboarding: []
-    postTest: []
-    knowledgeInstructions: 
     experience:
     - id: meega-01
-      construct: aesthetics
       prompt: "\u0397 \u03C3\u03C7\u03B5\u03B4\u03AF\u03B1\u03C3\u03B7 \u03C4\u03BF\u03C5
         \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD \u03B5\u03AF\u03BD\u03B1\u03B9
         \u03B5\u03BB\u03BA\u03C5\u03C3\u03C4\u03B9\u03BA\u03AE (\u03C0\u03B5\u03C1\u03B9\u03B2\u03AC\u03BB\u03BB\u03BF\u03BD
         \u03C7\u03C1\u03AE\u03C3\u03B7\u03C2, \u03B3\u03C1\u03B1\u03C6\u03B9\u03BA\u03AC
         \u03BA.\u03BB\u03C0.)."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        1. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: usability
       section: "\u0395\u03C5\u03C7\u03C1\u03B7\u03C3\u03C4\u03AF\u03B1"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-01
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-02
-      construct: aesthetics
       prompt: "\u0397 \u03B3\u03C1\u03B1\u03BC\u03BC\u03B1\u03C4\u03BF\u03C3\u03B5\u03B9\u03C1\u03AC
         \u03BA\u03B1\u03B9 \u03C4\u03B1 \u03C7\u03C1\u03CE\u03BC\u03B1\u03C4\u03B1
         \u03C4\u03C9\u03BD \u03BA\u03B5\u03B9\u03BC\u03AD\u03BD\u03C9\u03BD \u03C3\u03C5\u03BD\u03B4\u03C5\u03AC\u03B6\u03BF\u03BD\u03C4\u03B1\u03B9
         \u03B1\u03C1\u03BC\u03BF\u03BD\u03B9\u03BA\u03AC \u03BA\u03B1\u03B9 \u03C7\u03C1\u03B7\u03C3\u03B9\u03BC\u03BF\u03C0\u03BF\u03B9\u03BF\u03CD\u03BD\u03C4\u03B1\u03B9
         \u03BC\u03B5 \u03C3\u03C5\u03BD\u03AD\u03C0\u03B5\u03B9\u03B1."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        2. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: usability
       section: "\u0395\u03C5\u03C7\u03C1\u03B7\u03C3\u03C4\u03AF\u03B1"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-02
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-03
-      construct: learnability
       prompt: "\u03A7\u03C1\u03B5\u03B9\u03AC\u03C3\u03C4\u03B7\u03BA\u03B5 \u03BD\u03B1
         \u03BC\u03AC\u03B8\u03C9 \u03BB\u03AF\u03B3\u03B1 \u03C0\u03C1\u03AC\u03B3\u03BC\u03B1\u03C4\u03B1
         \u03C0\u03C1\u03BF\u03C4\u03BF\u03CD \u03BC\u03C0\u03BF\u03C1\u03AD\u03C3\u03C9
         \u03BD\u03B1 \u03C0\u03B1\u03AF\u03BE\u03C9 \u03C4\u03BF \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        3. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: usability
       section: "\u0395\u03C5\u03C7\u03C1\u03B7\u03C3\u03C4\u03AF\u03B1"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-03
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-04
-      construct: learnability
       prompt: "\u039C\u03BF\u03C5 \u03AE\u03C4\u03B1\u03BD \u03B5\u03CD\u03BA\u03BF\u03BB\u03BF
         \u03BD\u03B1 \u03BC\u03AC\u03B8\u03C9 \u03C0\u03CE\u03C2 \u03BD\u03B1 \u03C0\u03B1\u03AF\u03B6\u03C9
         \u03B1\u03C5\u03C4\u03CC \u03C4\u03BF \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        4. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: usability
       section: "\u0395\u03C5\u03C7\u03C1\u03B7\u03C3\u03C4\u03AF\u03B1"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-04
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-05
-      construct: learnability
       prompt: "\u03A0\u03B9\u03C3\u03C4\u03B5\u03CD\u03C9 \u03CC\u03C4\u03B9 \u03BF\u03B9
         \u03C0\u03B5\u03C1\u03B9\u03C3\u03C3\u03CC\u03C4\u03B5\u03C1\u03BF\u03B9
         \u03AC\u03BD\u03B8\u03C1\u03C9\u03C0\u03BF\u03B9 \u03B8\u03B1 \u03BC\u03AC\u03B8\u03B1\u03B9\u03BD\u03B1\u03BD
         \u03C0\u03BF\u03BB\u03CD \u03B3\u03C1\u03AE\u03B3\u03BF\u03C1\u03B1 \u03C0\u03CE\u03C2
         \u03BD\u03B1 \u03C0\u03B1\u03AF\u03B6\u03BF\u03C5\u03BD \u03B1\u03C5\u03C4\u03CC
         \u03C4\u03BF \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        5. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: usability
       section: "\u0395\u03C5\u03C7\u03C1\u03B7\u03C3\u03C4\u03AF\u03B1"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-05
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-06
-      construct: operability
       prompt: "\u03A0\u03B9\u03C3\u03C4\u03B5\u03CD\u03C9 \u03CC\u03C4\u03B9 \u03C4\u03BF
         \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9 \u03B5\u03AF\u03BD\u03B1\u03B9
         \u03B5\u03CD\u03BA\u03BF\u03BB\u03BF \u03C3\u03C4\u03BF\u03BD \u03C7\u03B5\u03B9\u03C1\u03B9\u03C3\u03BC\u03CC
         \u03C4\u03BF\u03C5."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        6. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: usability
       section: "\u0395\u03C5\u03C7\u03C1\u03B7\u03C3\u03C4\u03AF\u03B1"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-06
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-07
-      construct: operability
       prompt: "\u039F\u03B9 \u03BA\u03B1\u03BD\u03CC\u03BD\u03B5\u03C2 \u03C4\u03BF\u03C5
         \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD \u03B5\u03AF\u03BD\u03B1\u03B9
         \u03C3\u03B1\u03C6\u03B5\u03AF\u03C2 \u03BA\u03B1\u03B9 \u03BA\u03B1\u03C4\u03B1\u03BD\u03BF\u03B7\u03C4\u03BF\u03AF."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        7. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: usability
       section: "\u0395\u03C5\u03C7\u03C1\u03B7\u03C3\u03C4\u03AF\u03B1"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-07
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-08
-      construct: accessibility
       prompt: "\u039F\u03B9 \u03B3\u03C1\u03B1\u03BC\u03BC\u03B1\u03C4\u03BF\u03C3\u03B5\u03B9\u03C1\u03AD\u03C2
         \u03C4\u03BF\u03C5 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD,
         \u03C9\u03C2 \u03C0\u03C1\u03BF\u03C2 \u03C4\u03BF \u03BC\u03AD\u03B3\u03B5\u03B8\u03BF\u03C2
         \u03BA\u03B1\u03B9 \u03C4\u03B7 \u03BC\u03BF\u03C1\u03C6\u03AE \u03C4\u03BF\u03C5\u03C2,
         \u03B4\u03B9\u03B1\u03B2\u03AC\u03B6\u03BF\u03BD\u03C4\u03B1\u03B9 \u03B5\u03CD\u03BA\u03BF\u03BB\u03B1."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        8. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: usability
       section: "\u0395\u03C5\u03C7\u03C1\u03B7\u03C3\u03C4\u03AF\u03B1"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-08
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-09
-      construct: accessibility
       prompt: "\u03A4\u03B1 \u03C7\u03C1\u03CE\u03BC\u03B1\u03C4\u03B1 \u03C0\u03BF\u03C5
         \u03C7\u03C1\u03B7\u03C3\u03B9\u03BC\u03BF\u03C0\u03BF\u03B9\u03BF\u03CD\u03BD\u03C4\u03B1\u03B9
         \u03C3\u03C4\u03BF \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9 \u03AD\u03C7\u03BF\u03C5\u03BD
         \u03C3\u03B1\u03C6\u03AD\u03C2 \u03BD\u03CC\u03B7\u03BC\u03B1."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        9. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: usability
       section: "\u0395\u03C5\u03C7\u03C1\u03B7\u03C3\u03C4\u03AF\u03B1"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-09
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-10
-      construct: confidence
       prompt: "\u03A4\u03BF \u03C0\u03B5\u03C1\u03B9\u03B5\u03C7\u03CC\u03BC\u03B5\u03BD\u03BF
         \u03BA\u03B1\u03B9 \u03B7 \u03B4\u03BF\u03BC\u03AE \u03C4\u03BF\u03C5 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD
         \u03BC\u03B5 \u03AD\u03BA\u03B1\u03BD\u03B1\u03BD \u03BD\u03B1 \u03C0\u03B9\u03C3\u03C4\u03AD\u03C8\u03C9
         \u03CC\u03C4\u03B9 \u03B8\u03B1 \u03BC\u03C0\u03BF\u03C1\u03BF\u03CD\u03C3\u03B1
         \u03BD\u03B1 \u03BC\u03AC\u03B8\u03C9 \u03BC\u03AD\u03C3\u03B1 \u03B1\u03C0\u03CC
         \u03B1\u03C5\u03C4\u03CC."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        10. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: player-experience
       section: "\u0395\u03BC\u03C0\u03B5\u03B9\u03C1\u03AF\u03B1 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-10
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-11
-      construct: challenge
       prompt: "\u03A4\u03BF \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9 \u03AD\u03C7\u03B5\u03B9
         \u03B3\u03B9\u03B1 \u03BC\u03AD\u03BD\u03B1 \u03BA\u03B1\u03C4\u03AC\u03BB\u03BB\u03B7\u03BB\u03BF
         \u03B2\u03B1\u03B8\u03BC\u03CC \u03C0\u03C1\u03CC\u03BA\u03BB\u03B7\u03C3\u03B7\u03C2."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        11. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: player-experience
       section: "\u0395\u03BC\u03C0\u03B5\u03B9\u03C1\u03AF\u03B1 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-11
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-12
-      construct: challenge
       prompt: "\u03A4\u03BF \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9 \u03C0\u03B1\u03C1\u03BF\u03C5\u03C3\u03B9\u03AC\u03B6\u03B5\u03B9
         \u03BD\u03AD\u03B5\u03C2 \u03C0\u03C1\u03BF\u03BA\u03BB\u03AE\u03C3\u03B5\u03B9\u03C2,
         \u03BA\u03B1\u03C4\u03B1\u03C3\u03C4\u03AC\u03C3\u03B5\u03B9\u03C2 \u03AE
         \u03C0\u03B1\u03C1\u03B1\u03BB\u03BB\u03B1\u03B3\u03AD\u03C2 \u03BC\u03B5
         \u03BA\u03B1\u03C4\u03AC\u03BB\u03BB\u03B7\u03BB\u03BF \u03C1\u03C5\u03B8\u03BC\u03CC."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        12. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: player-experience
       section: "\u0395\u03BC\u03C0\u03B5\u03B9\u03C1\u03AF\u03B1 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-12
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-13
-      construct: challenge
       prompt: "\u03A4\u03BF \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9 \u03B4\u03B5\u03BD
         \u03B3\u03AF\u03BD\u03B5\u03C4\u03B1\u03B9 \u03BC\u03BF\u03BD\u03CC\u03C4\u03BF\u03BD\u03BF
         \u03BA\u03B1\u03B8\u03CE\u03C2 \u03C0\u03C1\u03BF\u03C7\u03C9\u03C1\u03AC,
         \u03BC\u03B5 \u03B5\u03C0\u03B1\u03BD\u03B1\u03BB\u03B1\u03BC\u03B2\u03B1\u03BD\u03CC\u03BC\u03B5\u03BD\u03B5\u03C2
         \u03AE \u03B2\u03B1\u03C1\u03B5\u03C4\u03AD\u03C2 \u03B5\u03BD\u03AD\u03C1\u03B3\u03B5\u03B9\u03B5\u03C2."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        13. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: player-experience
       section: "\u0395\u03BC\u03C0\u03B5\u03B9\u03C1\u03AF\u03B1 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-13
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-14
-      construct: satisfaction
       prompt: "\u0397 \u03BF\u03BB\u03BF\u03BA\u03BB\u03AE\u03C1\u03C9\u03C3\u03B7
         \u03C4\u03C9\u03BD \u03B4\u03C1\u03B1\u03C3\u03C4\u03B7\u03C1\u03B9\u03BF\u03C4\u03AE\u03C4\u03C9\u03BD
         \u03C4\u03BF\u03C5 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD
         \u03BC\u03BF\u03CD \u03AD\u03B4\u03C9\u03C3\u03B5 \u03AD\u03BD\u03B1 \u03B5\u03C5\u03C7\u03AC\u03C1\u03B9\u03C3\u03C4\u03BF
         \u03B1\u03AF\u03C3\u03B8\u03B7\u03BC\u03B1 \u03B5\u03C0\u03AF\u03C4\u03B5\u03C5\u03BE\u03B7\u03C2."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        14. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: player-experience
       section: "\u0395\u03BC\u03C0\u03B5\u03B9\u03C1\u03AF\u03B1 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-14
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-15
-      construct: satisfaction
       prompt: "\u03A7\u03AC\u03C1\u03B7 \u03C3\u03C4\u03B7 \u03B4\u03B9\u03BA\u03AE
         \u03BC\u03BF\u03C5 \u03C0\u03C1\u03BF\u03C3\u03C0\u03AC\u03B8\u03B5\u03B9\u03B1
         \u03BA\u03B1\u03C4\u03AC\u03C6\u03B5\u03C1\u03B1 \u03BD\u03B1 \u03C0\u03C1\u03BF\u03C7\u03C9\u03C1\u03AE\u03C3\u03C9
         \u03C3\u03C4\u03BF \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        15. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: player-experience
       section: "\u0395\u03BC\u03C0\u03B5\u03B9\u03C1\u03AF\u03B1 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-15
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-16
-      construct: satisfaction
       prompt: "\u0395\u03AF\u03BC\u03B1\u03B9 \u03B9\u03BA\u03B1\u03BD\u03BF\u03C0\u03BF\u03B9\u03B7\u03BC\u03AD\u03BD\u03BF\u03C2/\u03B7
         \u03B1\u03C0\u03CC \u03CC\u03C3\u03B1 \u03AD\u03BC\u03B1\u03B8\u03B1 \u03BC\u03AD\u03C3\u03B1
         \u03B1\u03C0\u03CC \u03C4\u03BF \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        16. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: player-experience
       section: "\u0395\u03BC\u03C0\u03B5\u03B9\u03C1\u03AF\u03B1 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-16
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-17
-      construct: satisfaction
       prompt: "\u0398\u03B1 \u03C0\u03C1\u03CC\u03C4\u03B5\u03B9\u03BD\u03B1 \u03B1\u03C5\u03C4\u03CC
         \u03C4\u03BF \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9 \u03C3\u03B5
         \u03AC\u03BB\u03BB\u03B1 \u03AC\u03C4\u03BF\u03BC\u03B1."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        17. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: player-experience
       section: "\u0395\u03BC\u03C0\u03B5\u03B9\u03C1\u03AF\u03B1 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-17
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-21
-      construct: fun
       prompt: "\u0394\u03B9\u03B1\u03C3\u03BA\u03AD\u03B4\u03B1\u03C3\u03B1 \u03BC\u03B5
         \u03C4\u03BF \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        21. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: player-experience
       section: "\u0395\u03BC\u03C0\u03B5\u03B9\u03C1\u03AF\u03B1 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-21
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-22
-      construct: fun
       prompt: "\u039A\u03AC\u03C4\u03B9 \u03C0\u03BF\u03C5 \u03C3\u03C5\u03BD\u03AD\u03B2\u03B7
         \u03BC\u03AD\u03C3\u03B1 \u03C3\u03C4\u03BF \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9
         \u03BC\u03B5 \u03AD\u03BA\u03B1\u03BD\u03B5 \u03BD\u03B1 \u03C7\u03B1\u03BC\u03BF\u03B3\u03B5\u03BB\u03AC\u03C3\u03C9."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        22. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: player-experience
       section: "\u0395\u03BC\u03C0\u03B5\u03B9\u03C1\u03AF\u03B1 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-22
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-23
-      construct: focused-attention
       prompt: "\u03A5\u03C0\u03AE\u03C1\u03C7\u03B5 \u03BA\u03AC\u03C4\u03B9 \u03B5\u03BD\u03B4\u03B9\u03B1\u03C6\u03AD\u03C1\u03BF\u03BD
         \u03C3\u03C4\u03B7\u03BD \u03B1\u03C1\u03C7\u03AE \u03C4\u03BF\u03C5 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD
         \u03C0\u03BF\u03C5 \u03C4\u03C1\u03AC\u03B2\u03B7\u03BE\u03B5 \u03C4\u03B7\u03BD
         \u03C0\u03C1\u03BF\u03C3\u03BF\u03C7\u03AE \u03BC\u03BF\u03C5."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        23. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: player-experience
       section: "\u0395\u03BC\u03C0\u03B5\u03B9\u03C1\u03AF\u03B1 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-23
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-24
-      construct: focused-attention
       prompt: "\u0391\u03C0\u03BF\u03C1\u03C1\u03BF\u03C6\u03AE\u03B8\u03B7\u03BA\u03B1
         \u03C4\u03CC\u03C3\u03BF \u03C0\u03BF\u03BB\u03CD \u03B1\u03C0\u03CC \u03C4\u03BF
         \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9 \u03CE\u03C3\u03C4\u03B5
         \u03AD\u03C7\u03B1\u03C3\u03B1 \u03C4\u03B7\u03BD \u03B1\u03AF\u03C3\u03B8\u03B7\u03C3\u03B7
         \u03C4\u03BF\u03C5 \u03C7\u03C1\u03CC\u03BD\u03BF\u03C5."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        24. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: player-experience
       section: "\u0395\u03BC\u03C0\u03B5\u03B9\u03C1\u03AF\u03B1 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-24
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-25
-      construct: focused-attention
       prompt: "\u038C\u03C3\u03BF \u03AD\u03C0\u03B1\u03B9\u03B6\u03B1 \u03B1\u03C5\u03C4\u03CC
         \u03C4\u03BF \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9, \u03BE\u03B5\u03C7\u03BD\u03BF\u03CD\u03C3\u03B1
         \u03CC\u03C3\u03B1 \u03C3\u03C5\u03BD\u03AD\u03B2\u03B1\u03B9\u03BD\u03B1\u03BD
         \u03B3\u03CD\u03C1\u03C9 \u03BC\u03BF\u03C5."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        25. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: player-experience
       section: "\u0395\u03BC\u03C0\u03B5\u03B9\u03C1\u03AF\u03B1 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-25
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-26
-      construct: relevance
       prompt: "\u03A4\u03BF \u03C0\u03B5\u03C1\u03B9\u03B5\u03C7\u03CC\u03BC\u03B5\u03BD\u03BF
         \u03C4\u03BF\u03C5 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD
         \u03C3\u03C7\u03B5\u03C4\u03AF\u03B6\u03B5\u03C4\u03B1\u03B9 \u03BC\u03B5
         \u03C4\u03B1 \u03B5\u03BD\u03B4\u03B9\u03B1\u03C6\u03AD\u03C1\u03BF\u03BD\u03C4\u03AC
         \u03BC\u03BF\u03C5."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        26. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: player-experience
       section: "\u0395\u03BC\u03C0\u03B5\u03B9\u03C1\u03AF\u03B1 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-26
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-27
-      construct: relevance
       prompt: "\u039C\u03BF\u03C5 \u03B5\u03AF\u03BD\u03B1\u03B9 \u03C3\u03B1\u03C6\u03AD\u03C2
         \u03C0\u03CE\u03C2 \u03C4\u03BF \u03C0\u03B5\u03C1\u03B9\u03B5\u03C7\u03CC\u03BC\u03B5\u03BD\u03BF
         \u03C4\u03BF\u03C5 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD
         \u03C3\u03C5\u03BD\u03B4\u03AD\u03B5\u03C4\u03B1\u03B9 \u03BC\u03B5 \u03C4\u03B7\u03BD
         \u03B5\u03BA\u03BC\u03AC\u03B8\u03B7\u03C3\u03B7 \u03C4\u03B7\u03C2 \u03B1\u03B8\u03B7\u03BD\u03B1\u03CA\u03BA\u03AE\u03C2
         \u03B4\u03B7\u03BC\u03BF\u03BA\u03C1\u03B1\u03C4\u03AF\u03B1\u03C2."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        27. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: player-experience
       section: "\u0395\u03BC\u03C0\u03B5\u03B9\u03C1\u03AF\u03B1 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-27
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-28
-      construct: relevance
       prompt: "\u0391\u03C5\u03C4\u03CC \u03C4\u03BF \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9
         \u03B1\u03C0\u03BF\u03C4\u03B5\u03BB\u03B5\u03AF \u03BA\u03B1\u03C4\u03AC\u03BB\u03BB\u03B7\u03BB\u03BF
         \u03C4\u03C1\u03CC\u03C0\u03BF \u03B4\u03B9\u03B4\u03B1\u03C3\u03BA\u03B1\u03BB\u03AF\u03B1\u03C2
         \u03B3\u03B9\u03B1 \u03C4\u03B7\u03BD \u03B1\u03B8\u03B7\u03BD\u03B1\u03CA\u03BA\u03AE
         \u03B4\u03B7\u03BC\u03BF\u03BA\u03C1\u03B1\u03C4\u03AF\u03B1."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        28. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: player-experience
       section: "\u0395\u03BC\u03C0\u03B5\u03B9\u03C1\u03AF\u03B1 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-28
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-29
-      construct: relevance
       prompt: "\u03A0\u03C1\u03BF\u03C4\u03B9\u03BC\u03CE \u03BD\u03B1 \u03BC\u03B1\u03B8\u03B1\u03AF\u03BD\u03C9
         \u03BC\u03B5 \u03B1\u03C5\u03C4\u03CC \u03C4\u03BF \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9
         \u03C0\u03B1\u03C1\u03AC \u03BC\u03B5 \u03AC\u03BB\u03BB\u03BF\u03C5\u03C2
         \u03C4\u03C1\u03CC\u03C0\u03BF\u03C5\u03C2 \u03BC\u03AC\u03B8\u03B7\u03C3\u03B7\u03C2."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        29. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: player-experience
       section: "\u0395\u03BC\u03C0\u03B5\u03B9\u03C1\u03AF\u03B1 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-29
-      reverse: 0
-      allowNotApplicable: 1
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-30
-      construct: perceived-learning
       prompt: "\u03A4\u03BF \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9 \u03C3\u03C5\u03BD\u03AD\u03B2\u03B1\u03BB\u03B5
         \u03C3\u03C4\u03B7 \u03BC\u03AC\u03B8\u03B7\u03C3\u03AE \u03BC\u03BF\u03C5
         \u03C3\u03C7\u03B5\u03C4\u03B9\u03BA\u03AC \u03BC\u03B5 \u03C4\u03B7\u03BD
         \u03B1\u03B8\u03B7\u03BD\u03B1\u03CA\u03BA\u03AE \u03B4\u03B7\u03BC\u03BF\u03BA\u03C1\u03B1\u03C4\u03AF\u03B1."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        30. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: player-experience
       section: "\u0395\u03BC\u03C0\u03B5\u03B9\u03C1\u03AF\u03B1 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-30
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-31
-      construct: perceived-learning
       prompt: "\u03A4\u03BF \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9 \u03BC\u03BF\u03CD
         \u03B5\u03C0\u03AD\u03C4\u03C1\u03B5\u03C8\u03B5 \u03BD\u03B1 \u03BC\u03B1\u03B8\u03B1\u03AF\u03BD\u03C9
         \u03B1\u03C0\u03BF\u03B4\u03BF\u03C4\u03B9\u03BA\u03AC \u03C3\u03B5 \u03C3\u03CD\u03B3\u03BA\u03C1\u03B9\u03C3\u03B7
         \u03BC\u03B5 \u03AC\u03BB\u03BB\u03B5\u03C2 \u03BC\u03B1\u03B8\u03B7\u03C3\u03B9\u03B1\u03BA\u03AD\u03C2
         \u03B4\u03C1\u03B1\u03C3\u03C4\u03B7\u03C1\u03B9\u03CC\u03C4\u03B7\u03C4\u03B5\u03C2
         \u03B3\u03B9\u03B1 \u03C4\u03BF \u03AF\u03B4\u03B9\u03BF \u03B1\u03BD\u03C4\u03B9\u03BA\u03B5\u03AF\u03BC\u03B5\u03BD\u03BF."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u0395\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF
-        \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03CC kit, \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF
-        31. \u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AE \u03C0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE."
-      group: player-experience
       section: "\u0395\u03BC\u03C0\u03B5\u03B9\u03C1\u03AF\u03B1 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD"
-      instrumentSection: meega-core
-      officialItemId: MEEGA-31
-      reverse: 0
-      allowNotApplicable: 1
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-goal-institutions
-      construct: perceived-learning-goal
       prompt: "\u03A4\u03BF \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9 \u03BC\u03B5
         \u03B2\u03BF\u03AE\u03B8\u03B7\u03C3\u03B5 \u03BD\u03B1 \u03BA\u03B1\u03C4\u03B1\u03BD\u03BF\u03AE\u03C3\u03C9
         \u03C4\u03BF\u03BD \u03C1\u03CC\u03BB\u03BF \u03C4\u03C9\u03BD \u03B8\u03B5\u03C3\u03BC\u03CE\u03BD
         \u03C4\u03B7\u03C2 \u03B1\u03B8\u03B7\u03BD\u03B1\u03CA\u03BA\u03AE\u03C2
         \u03B4\u03B7\u03BC\u03BF\u03BA\u03C1\u03B1\u03C4\u03AF\u03B1\u03C2 \u03C0\u03BF\u03C5
         \u03C3\u03C5\u03BD\u03AC\u03BD\u03C4\u03B7\u03C3\u03B1."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u03A0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE
-        \u03C4\u03BF\u03C5 \u03C0\u03C1\u03CC\u03C3\u03B8\u03B5\u03C4\u03BF\u03C5
-        \u03C0\u03C1\u03BF\u03C4\u03CD\u03C0\u03BF\u03C5 \u03B1\u03BD\u03AC \u03BC\u03B1\u03B8\u03B7\u03C3\u03B9\u03B1\u03BA\u03CC
-        \u03C3\u03C4\u03CC\u03C7\u03BF \u03C4\u03BF\u03C5 \u03B5\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF\u03C5
-        kit."
-      group: learning-goals
       section: "\u0391\u03BD\u03C4\u03B9\u03BB\u03B1\u03BC\u03B2\u03B1\u03BD\u03CC\u03BC\u03B5\u03BD\u03B7
         \u03BC\u03AC\u03B8\u03B7\u03C3\u03B7 \u03C3\u03C5\u03B3\u03BA\u03B5\u03BA\u03C1\u03B9\u03BC\u03AD\u03BD\u03C9\u03BD
         \u03C3\u03C4\u03CC\u03C7\u03C9\u03BD"
-      instrumentSection: meega-learning-goal
-      officialItemId: MEEGA-LEARNING-GOAL-TEMPLATE
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-goal-procedures
-      construct: perceived-learning-goal
       prompt: "\u03A4\u03BF \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9 \u03BC\u03B5
         \u03B2\u03BF\u03AE\u03B8\u03B7\u03C3\u03B5 \u03BD\u03B1 \u03BA\u03B1\u03C4\u03B1\u03BD\u03BF\u03AE\u03C3\u03C9
         \u03C0\u03CE\u03C2 \u03BB\u03B1\u03BC\u03B2\u03AC\u03BD\u03BF\u03BD\u03C4\u03B1\u03B9
         \u03C3\u03C5\u03BB\u03BB\u03BF\u03B3\u03B9\u03BA\u03AD\u03C2 \u03B1\u03C0\u03BF\u03C6\u03AC\u03C3\u03B5\u03B9\u03C2
         \u03C3\u03C4\u03B9\u03C2 \u03B4\u03B9\u03B1\u03B4\u03B9\u03BA\u03B1\u03C3\u03AF\u03B5\u03C2
         \u03C0\u03BF\u03C5 \u03C3\u03C5\u03BD\u03AC\u03BD\u03C4\u03B7\u03C3\u03B1."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u03A0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE
-        \u03C4\u03BF\u03C5 \u03C0\u03C1\u03CC\u03C3\u03B8\u03B5\u03C4\u03BF\u03C5
-        \u03C0\u03C1\u03BF\u03C4\u03CD\u03C0\u03BF\u03C5 \u03B1\u03BD\u03AC \u03BC\u03B1\u03B8\u03B7\u03C3\u03B9\u03B1\u03BA\u03CC
-        \u03C3\u03C4\u03CC\u03C7\u03BF \u03C4\u03BF\u03C5 \u03B5\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF\u03C5
-        kit."
-      group: learning-goals
       section: "\u0391\u03BD\u03C4\u03B9\u03BB\u03B1\u03BC\u03B2\u03B1\u03BD\u03CC\u03BC\u03B5\u03BD\u03B7
         \u03BC\u03AC\u03B8\u03B7\u03C3\u03B7 \u03C3\u03C5\u03B3\u03BA\u03B5\u03BA\u03C1\u03B9\u03BC\u03AD\u03BD\u03C9\u03BD
         \u03C3\u03C4\u03CC\u03C7\u03C9\u03BD"
-      instrumentSection: meega-learning-goal
-      officialItemId: MEEGA-LEARNING-GOAL-TEMPLATE
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: meega-goal-rights
-      construct: perceived-learning-goal
       prompt: "\u03A4\u03BF \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9 \u03BC\u03B5
         \u03B2\u03BF\u03AE\u03B8\u03B7\u03C3\u03B5 \u03BD\u03B1 \u03B1\u03BD\u03B1\u03B3\u03BD\u03C9\u03C1\u03AF\u03B6\u03C9
         \u03B4\u03B9\u03BA\u03B1\u03B9\u03CE\u03BC\u03B1\u03C4\u03B1 \u03BA\u03B1\u03B9
         \u03C5\u03C0\u03BF\u03C7\u03C1\u03B5\u03CE\u03C3\u03B5\u03B9\u03C2 \u03C4\u03BF\u03C5
         \u0391\u03B8\u03B7\u03BD\u03B1\u03AF\u03BF\u03C5 \u03C0\u03BF\u03BB\u03AF\u03C4\u03B7
         \u03C0\u03BF\u03C5 \u03C0\u03B1\u03C1\u03BF\u03C5\u03C3\u03B9\u03AC\u03C3\u03C4\u03B7\u03BA\u03B1\u03BD."
-      sourceRef: "Petri, G., Gresse von Wangenheim, C., & Borgatto, A. F. (2019).
-        MEEGA+: A Model for the Evaluation of Educational Games for Computing Education.
-        Revista Brasileira de Inform\xE1tica na Educa\xE7\xE3o, 27(3), 52\u201381.
-        https://doi.org/10.5753/rbie.2019.27.03.52 \u03A0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE
-        \u03C4\u03BF\u03C5 \u03C0\u03C1\u03CC\u03C3\u03B8\u03B5\u03C4\u03BF\u03C5
-        \u03C0\u03C1\u03BF\u03C4\u03CD\u03C0\u03BF\u03C5 \u03B1\u03BD\u03AC \u03BC\u03B1\u03B8\u03B7\u03C3\u03B9\u03B1\u03BA\u03CC
-        \u03C3\u03C4\u03CC\u03C7\u03BF \u03C4\u03BF\u03C5 \u03B5\u03C0\u03AF\u03C3\u03B7\u03BC\u03BF\u03C5
-        kit."
-      group: learning-goals
       section: "\u0391\u03BD\u03C4\u03B9\u03BB\u03B1\u03BC\u03B2\u03B1\u03BD\u03CC\u03BC\u03B5\u03BD\u03B7
         \u03BC\u03AC\u03B8\u03B7\u03C3\u03B7 \u03C3\u03C5\u03B3\u03BA\u03B5\u03BA\u03C1\u03B9\u03BC\u03AD\u03BD\u03C9\u03BD
         \u03C3\u03C4\u03CC\u03C7\u03C9\u03BD"
-      instrumentSection: meega-learning-goal
-      officialItemId: MEEGA-LEARNING-GOAL-TEMPLATE
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: ux-agency
-      construct: agency
       prompt: "\u039A\u03B1\u03C4\u03AC\u03BB\u03B1\u03B2\u03B1 \u03C0\u03CE\u03C2
         \u03B7 \u03C0\u03C1\u03BF\u03B5\u03C4\u03BF\u03B9\u03BC\u03B1\u03C3\u03AF\u03B1
         \u03BC\u03BF\u03C5 \u03BC\u03C0\u03BF\u03C1\u03BF\u03CD\u03C3\u03B5 \u03BD\u03B1
         \u03B5\u03C0\u03B7\u03C1\u03B5\u03AC\u03C3\u03B5\u03B9 \u03BC\u03B9\u03B1
         \u03C3\u03C5\u03BB\u03BB\u03BF\u03B3\u03B9\u03BA\u03AE \u03B1\u03C0\u03CC\u03C6\u03B1\u03C3\u03B7."
-      sourceRef: "\u0395\u03B9\u03B4\u03B9\u03BA\u03CC \u03B5\u03C1\u03B5\u03C5\u03BD\u03B7\u03C4\u03B9\u03BA\u03CC
-        \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF \u03B3\u03B9\u03B1 \u03C4\u03BF
-        \u03C0\u03B1\u03C1\u03CC\u03BD \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9\xB7
-        \u03BC\u03B7 \u03C3\u03C4\u03B1\u03B8\u03BC\u03B9\u03C3\u03BC\u03AD\u03BD\u03BF."
-      group: game-specific
       section: "\u0395\u03B9\u03B4\u03B9\u03BA\u03AC \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03B1
         \u03C4\u03BF\u03C5 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD"
-      instrumentSection: game-specific
-      officialItemId: 
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: ux-consequences
-      construct: consequence-clarity
       prompt: "\u039A\u03B1\u03C4\u03AC\u03BB\u03B1\u03B2\u03B1 \u03B3\u03B9\u03B1\u03C4\u03AF
         \u03B7 \u03C0\u03C1\u03CC\u03C4\u03B1\u03C3\u03B7 \u03C0\u03BF\u03C5 \u03C5\u03C0\u03BF\u03C3\u03C4\u03AE\u03C1\u03B9\u03BE\u03B1
         \u03B5\u03C0\u03B9\u03BA\u03C1\u03AC\u03C4\u03B7\u03C3\u03B5 \u03AE \u03B1\u03C0\u03BF\u03C1\u03C1\u03AF\u03C6\u03B8\u03B7\u03BA\u03B5."
-      sourceRef: "\u0395\u03B9\u03B4\u03B9\u03BA\u03CC \u03B5\u03C1\u03B5\u03C5\u03BD\u03B7\u03C4\u03B9\u03BA\u03CC
-        \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF \u03B3\u03B9\u03B1 \u03C4\u03BF
-        \u03C0\u03B1\u03C1\u03CC\u03BD \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9\xB7
-        \u03BC\u03B7 \u03C3\u03C4\u03B1\u03B8\u03BC\u03B9\u03C3\u03BC\u03AD\u03BD\u03BF."
-      group: game-specific
       section: "\u0395\u03B9\u03B4\u03B9\u03BA\u03AC \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03B1
         \u03C4\u03BF\u03C5 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD"
-      instrumentSection: game-specific
-      officialItemId: 
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
     - id: ux-role
-      construct: role-clarity
       prompt: "\u0389\u03C4\u03B1\u03BD \u03C3\u03B1\u03C6\u03AD\u03C2 \u03C0\u03CC\u03C4\u03B5
         \u03B4\u03C1\u03BF\u03CD\u03C3\u03B1 \u03C9\u03C2 \u03C0\u03BF\u03BB\u03AF\u03C4\u03B7\u03C2
         \u03AE \u03B2\u03BF\u03C5\u03BB\u03B5\u03C5\u03C4\u03AE\u03C2 \u03BA\u03B1\u03B9
         \u03C0\u03CC\u03C4\u03B5 \u03C0\u03B1\u03C1\u03B1\u03BA\u03BF\u03BB\u03BF\u03C5\u03B8\u03BF\u03CD\u03C3\u03B1
         \u03BC\u03B9\u03B1 \u03B4\u03B9\u03B1\u03B4\u03B9\u03BA\u03B1\u03C3\u03AF\u03B1."
-      sourceRef: "\u0395\u03B9\u03B4\u03B9\u03BA\u03CC \u03B5\u03C1\u03B5\u03C5\u03BD\u03B7\u03C4\u03B9\u03BA\u03CC
-        \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03BF \u03B3\u03B9\u03B1 \u03C4\u03BF
-        \u03C0\u03B1\u03C1\u03CC\u03BD \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9\xB7
-        \u03BC\u03B7 \u03C3\u03C4\u03B1\u03B8\u03BC\u03B9\u03C3\u03BC\u03AD\u03BD\u03BF."
-      group: game-specific
       section: "\u0395\u03B9\u03B4\u03B9\u03BA\u03AC \u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03B1
         \u03C4\u03BF\u03C5 \u03C0\u03B1\u03B9\u03C7\u03BD\u03B9\u03B4\u03B9\u03BF\u03CD"
-      instrumentSection: game-specific
-      officialItemId: 
-      reverse: 0
-      allowNotApplicable: 0
-      orientation: 
-      analysisWeight: 1
-      required: 1
-    participationIntention: []
-    demographics:
-      instructions: 
-      questions: []
-    tendencies: []
-    tendencyInstructions: 
-    tendencyRatingLabels: []
-    participation: []
-    participationInstructions: 
-    participationRatingLabels: []
-    sources: []
   tendencies:
     instructions: "\u0398\u03B1 \u03B4\u03B5\u03B9\u03C2 \u03BC\u03B5\u03C1\u03B9\u03BA\u03AD\u03C2
       \u03C6\u03C1\u03AC\u03C3\u03B5\u03B9\u03C2 \u03B3\u03B9\u03B1 \u03C4\u03B7

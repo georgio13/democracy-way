@@ -7,7 +7,9 @@ namespace DemocracyWay.NewUI
     /// <summary>Separate pre/post knowledge, pre/post tendencies, and final experience responses.</summary>
     public static class EvaluationRules
     {
-        public const string CurrentInstrumentVersion = "campaign-final-meega-el-4";
+        // Σταθερό αναγνωριστικό των ερωτηματολογίων (δεν υπάρχει πια Protocol/έκδοση στο περιεχόμενο):
+        // το χρειάζονται η τηλεμετρία και η εξαγωγή για να ταιριάζουν τις απαντήσεις με τις ερωτήσεις.
+        public const string CurrentInstrumentVersion = "campaign-final-meega-el-5";
         static int[] Resize(int[] values, int length, int min, int max)
         {
             var result = Enumerable.Repeat(-1, length).ToArray();
@@ -30,7 +32,7 @@ namespace DemocracyWay.NewUI
                 e.startPoint = e.submitPoint = null; e.submissionId = null;
             }
             e.instrumentVersion = content.instrumentVersion;
-            e.administrationVersion = "prologue-knowledge-tendencies-participation-20cases-demographics-meega-v3";
+            e.administrationVersion = "prologue-knowledge-tendencies-participation-20cases-endings-post-demographics-meega-v4";
             e.exposure = "after-prologue-before-character";
             if (string.IsNullOrEmpty(e.researchParticipantId)) e.researchParticipantId = Guid.NewGuid().ToString("N");
             e.baselineAnswers = Resize(e.baselineAnswers, content.onboarding.Length, 0, 3);
@@ -41,10 +43,9 @@ namespace DemocracyWay.NewUI
             e.baselineParticipationAnswers = Resize(e.baselineParticipationAnswers, content.participation.Length, 1, 5);
             e.finalParticipationAnswers = Resize(e.finalParticipationAnswers, content.participation.Length, 1, 5);
             e.participationItemIds = content.participation.Select(x => x.id).ToArray();
-            e.experienceAnswers = Resize(e.experienceAnswers, content.experience.Length, 0, 5);
+            e.experienceAnswers = Resize(e.experienceAnswers, content.experience.Length, 1, 5);   // παλιά «0 = δεν μπορώ να κρίνω» → αναπάντητο
             e.intentionAnswers = Array.Empty<int>(); e.intentionItemIds = Array.Empty<string>();
             e.experienceItemIds = content.experience.Select(x => x.id).ToArray();
-            for (int i = 0; i < e.experienceAnswers.Length; i++) if (e.experienceAnswers[i] == 0 && !content.experience[i].allowNotApplicable) e.experienceAnswers[i] = -1;
             e.baselinePoint = Normalise(e.baselinePoint); e.postPoint = Normalise(e.postPoint);
             e.startPoint = Normalise(e.startPoint); e.submitPoint = Normalise(e.submitPoint);
             e.baselineTendencyPoint = Normalise(e.baselineTendencyPoint); e.finalTendencyPoint = Normalise(e.finalTendencyPoint);
@@ -144,7 +145,7 @@ namespace DemocracyWay.NewUI
             e.postAnswers[e.postIndex++] = answer; e.postComplete = e.postIndex == content.postTest.Length;
             e.postTestStatus = e.postComplete ? "complete" : "partial"; return true;
         }
-        public static bool ValidRating(EvaluationRating item, int value) => value >= 1 && value <= 5 || value == 0 && item.allowNotApplicable;
+        public static bool ValidRating(EvaluationRating item, int value) => value >= 1 && value <= 5;
         public static bool QuestionnaireAnswered(EvaluationState e, EvaluationContent content) => e.experienceAnswers.Length == content.experience.Length && content.experience.Select((x, i) => ValidRating(x, e.experienceAnswers[i])).All(x => x);
         static bool Ready(EvaluationState e) => HasPoint(e.startPoint) && e.postComplete && e.finalTendencyComplete;
         public static bool Rate(GameState state, EvaluationContent content, bool intention, int index, int value)

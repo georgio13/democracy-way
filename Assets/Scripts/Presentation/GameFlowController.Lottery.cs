@@ -42,7 +42,7 @@ namespace DemocracyWay.NewUI
             SetText("lottery.result", JsonContent.Copy("Copy_77a67d0477966069"));
             for (int step = 0; step < 18; step++)
             {
-                int index = available[step % available.Count];
+                int index = available[UnityEngine.Random.Range(0, available.Count)];
                 for (int i = 0; i < config.tribes.Count; i++)
                     SetActive("lottery.tribe." + i + ".selected", i == index);
                 float elapsed = 0f;
@@ -53,10 +53,9 @@ namespace DemocracyWay.NewUI
                 }
             }
 
-            // Η σειρά πρυτανειών είναι σταθερή (GameContent.prytanyTribes) — η κλήρωση είναι σκηνικό.
-            int fixedTribe = Mathf.Clamp(State.prytany - 1, 0, config.tribes.Count - 1);
-            State.currentTribe = fixedTribe;
-            if (!State.drawnTribes.Contains(fixedTribe)) State.drawnTribes.Add(fixedTribe);
+            // Πραγματική κλήρωση ανάμεσα στις φυλές που δεν έχουν πρυτανεύσει ακόμη (καθεμία μία φορά στις 10).
+            // Η φυλή είναι μόνο σκηνικό: κανένας κανόνας ούτε υπόθεση δεν εξαρτάται από αυτήν.
+            GameRules.DrawTribe(State, Mathf.Min(10, config.tribes.Count), UnityEngine.Random.Range(0, available.Count));
             drawingLottery = false;
             SaveCheckpoint();
             RenderLottery();

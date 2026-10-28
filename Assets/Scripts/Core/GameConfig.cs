@@ -61,6 +61,23 @@ namespace Agora
         public int maxOfficialWeight = 15;          // ανώτατο βάρος σώματος
         public int sycophantFine = 60;              // = 1.000 δραχμές στην κλίμακα του παιχνιδιού
 
+        [Header("Κανόνας ψηφοφορίας συνέλευσης (S ≥ passThreshold → περνά η Α)")]
+        public int pressureBelow = 35;              // ο δείκτης πίεσης κάτω από αυτό → Πίεση
+        public int pressurePoints = 5;
+        public int warEmergencyPoints = 10;         // −, υποθέσεις έκτακτης ανάγκης σε πόλεμο
+        public int areopagusPoints = 5;             // −, υπ. 19–20 αν στην 18 πέρασε η Β
+        public int trialPoints = 4;                 // ± από την ετυμηγορία της δίκης της εβδομάδας
+        public int officialPoints = 4;              // ± ο αναποφάσιστος που κέρδισε ο παίκτης
+        public int speechPeithoDivisor = 10;        // λόγος = Πειθώ ÷ 10 (ακέραιο)
+        public int speechPeithoMax = 70;            // ανώτατη Πειθώ
+        public int logographerPoints = 3;           // + στον λόγο για την πλευρά που παραγγέλθηκε
+        public int moodRange = 10;                  // διάθεση του πλήθους ∈ [−moodRange, +moodRange]
+
+        [Header("Κανόνας δίκης (D ≥ guiltyThreshold → ένοχος)")]
+        public int guiltyThreshold = 50;
+        public int sycophantBelow = 20;             // κατήγορος με D κάτω από αυτό → συκοφάντης
+        public int evidenceStrongFrom = 55, evidenceDoubtfulFrom = 35;
+
         [Header("Τέλη πόλης")]
         public int famineFood = 15, famineReadiness = 15;
         public int coupDemosPower = 25;
