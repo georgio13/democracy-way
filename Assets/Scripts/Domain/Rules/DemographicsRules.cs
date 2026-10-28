@@ -6,7 +6,6 @@ namespace DemocracyWay.NewUI {
             var e=state.evaluation ?? (state.evaluation=new EvaluationState());
             var d=e.demographics ?? (e.demographics=new DemographicsState());
             d.answers=d.answers ?? Array.Empty<DemographicAnswer>();
-            if(string.IsNullOrEmpty(d.version))d.version=content.version;
             return d;
         }
         public static bool Answer(GameState state,DemographicsContent content,string id,string optionId,string text,EvaluationPoint point) {
@@ -27,12 +26,12 @@ namespace DemocracyWay.NewUI {
             return content.questions.Where(q=>q.required).All(q=>d.answers.Any(a=>a.questionId==q.id&&(q.kind=="choice"?q.options.Any(o=>o.id==a.optionId):!string.IsNullOrWhiteSpace(a.value))));
         }
         public static bool Complete(GameState state,DemographicsContent content) {
-            var d=Ensure(state,content);if(d.completed||!Ready(state,content)||!EvaluationRules.HasPoint(d.point))return false;d.completed=true;d.completedPoint=EvaluationRules.Point(state,CampaignRules.CaseIdForTurn(CampaignRules.Turn(state)),JsonContent.Plan.contentVersion);return true;
+            var d=Ensure(state,content);if(d.completed||!Ready(state,content)||!EvaluationRules.HasPoint(d.point))return false;d.completed=true;d.completedPoint=EvaluationRules.Point(state,CampaignRules.CaseIdForTurn(CampaignRules.Turn(state)),JsonContent.Settings.contentVersion.ToString());return true;
         }
         public static bool Valid(DemographicsState d) {
             if(d==null)return true;if(d.answers==null||d.answers.Length>20)return false;
             if(d.answers.Any(a=>a==null||string.IsNullOrWhiteSpace(a.questionId)||a.questionId.Length>64||a.value==null||a.value.Length>100||a.optionIndex< -1||a.optionIndex>10)||d.answers.Select(a=>a.questionId).Distinct().Count()!=d.answers.Length)return false;
-            return !d.completed||!string.IsNullOrEmpty(d.version)&&d.answers.Length>0&&EvaluationRules.HasPoint(d.point);
+            return !d.completed||d.answers.Length>0&&EvaluationRules.HasPoint(d.point);
         }
     }
 }

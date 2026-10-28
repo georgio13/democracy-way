@@ -17,8 +17,6 @@ namespace DemocracyWay.NewUI
         public int tribeIndex = -1;
         public string profession;
         public string playerName, demeId, trittysId;
-        public int requireTribe = -1, requireClass = -1;
-        public string requireTrittys;
         public CityMetricDelta cityMetrics = new CityMetricDelta();
         public string deme;
         public string trittys;

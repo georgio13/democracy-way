@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84e745610d90f324c9836a56e3f328f0, type: 3}
+  m_Name: Logographer_Tier3
+  m_EditorClassIdentifier: Assembly-CSharp::Agora.LogographerData
+  displayName: "\u03A5\u03C0\u03B5\u03C1\u03B5\u03AF\u03B4\u03B7\u03C2 (\u03BA\u03B1\u03C4' \u03B5\u03BE\u03B1\u03AF\u03C1\u03B5\u03C3\u03B7)"
+  quality: 9
+  costDrachmas: 150
+  bio: 

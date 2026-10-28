@@ -1,0 +1,43 @@
+#dw-kairos-new .ks-lexicon .ks-tablet{left:18%;right:8%;top:19%;bottom:7%}
+#dw-kairos-new .attic-lex-layout{position:absolute;left:7%;right:8%;top:16%;bottom:22%;display:grid;grid-template-columns:31% 1fr;gap:3cqw}
+#dw-kairos-new .attic-terms{display:flex;flex-direction:column;gap:.7cqw;padding-right:2cqw;border-right:1px solid #a68d5755}
+#dw-kairos-new .attic-terms button{padding:.9cqw .65cqw;color:#756343;font-size:1.45cqw;line-height:1.3;text-align:left;background:linear-gradient(145deg,#eee1c1,#e0d0aa);border:1px solid #b69c6688;box-shadow:inset 0 1px #fff5d5;clip-path:polygon(2% 0,100% 0,100% 95%,98% 100%,0 100%,0 5%)}
+#dw-kairos-new .attic-terms button[aria-pressed=true]{background:linear-gradient(145deg,#344960,#22354a);border-color:#b49557;color:#f0e2bc;box-shadow:inset 0 0 0 1px #c4a76d55}
+#dw-kairos-new .attic-definition .attic-icon{width:3.5cqw;height:4.3cqw;float:right;margin-left:1cqw}
+#dw-kairos-new .attic-definition h2{font-size:2.15cqw;line-height:1.25;margin:.5cqw 0 1.6cqw}
+#dw-kairos-new .attic-definition p{font-size:1.65cqw;line-height:1.65;color:#555743;margin:0}
+#dw-kairos-new .ks-lexicon .ks-tablet-footer{left:7%;right:8%;bottom:12%}
+#dw-kairos-new .ks-settings .ks-tablet{left:29%;right:18%;top:18%;bottom:7%}
+#dw-kairos-new .attic-settings-body{top:16%;left:11%;right:11%;bottom:25%}
+#dw-kairos-new .attic-settings-body h2{font-size:2.1cqw;margin-bottom:1.8cqw}
+#dw-kairos-new .attic-range-label{display:flex;align-items:center;justify-content:space-between;font-size:1.55cqw;color:#5a543d;margin:1cqw 0 .6cqw}
+#dw-kairos-new .attic-range-label output{font-size:1.2cqw;color:#85724b;font-variant-numeric:tabular-nums}
+#dw-kairos-new .attic-range{appearance:none;width:100%;height:.48cqw;background:linear-gradient(#b7a078,#d8c79b);border-top:1px solid #82683e;box-shadow:0 1px #fff4d4;margin:1cqw 0 1.7cqw}
+#dw-kairos-new .attic-range::-webkit-slider-thumb{appearance:none;width:1.5cqw;height:2.3cqw;background:linear-gradient(135deg,#ddc28c,#aa8746 60%,#80622f);border:1px solid #8c6b32;clip-path:polygon(50% 0,100% 30%,83% 50%,100% 70%,50% 100%,0 70%,17% 50%,0 30%);cursor:ew-resize}
+#dw-kairos-new .attic-check{display:flex;align-items:center;gap:1cqw;font-size:1.4cqw;line-height:1.4;color:#645b40;margin:1.1cqw 0}
+#dw-kairos-new .attic-check input{appearance:none;width:1.6cqw;height:1.6cqw;min-width:1.6cqw;background:#f0e4c5;border:1px solid #a28b58;box-shadow:inset 0 0 0 .15cqw #f9efd6,0 1px 1px #7b623533;position:relative;margin:0}
+#dw-kairos-new .attic-check input:checked{background:linear-gradient(140deg,#d3b77b,#a48543)}
+#dw-kairos-new .attic-check input:checked:after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#f8e9bf;font-size:1.2cqw}
+#dw-kairos-new .ks-settings .ks-tablet-footer{left:11%;right:11%;bottom:12%}
+#dw-kairos-new .ks-settings .ks-action{min-width:17cqw}
+@media(max-width:600px){
+#dw-kairos-new .ks-lexicon .ks-tablet,#dw-kairos-new .ks-settings .ks-tablet{left:1%;right:1%;top:155px;bottom:15px}
+#dw-kairos-new .attic-lex-layout{left:10%;right:10%;top:15%;bottom:24%;grid-template-columns:1fr;gap:24px}
+#dw-kairos-new .attic-terms{flex-direction:row;flex-wrap:wrap;border:0;border-bottom:1px solid #a68d5755;padding:0 0 18px;gap:7px}
+#dw-kairos-new .attic-terms button{font-size:14px;padding:9px 10px;min-height:44px}
+#dw-kairos-new .attic-definition .attic-icon{width:36px;height:45px}
+#dw-kairos-new .attic-definition h2{font-size:23px;margin:0 0 20px}
+#dw-kairos-new .attic-definition p{font-size:16px;line-height:1.6}
+#dw-kairos-new .ks-lexicon .ks-tablet-footer{left:10%;right:10%;bottom:13%}
+#dw-kairos-new .attic-settings-body{top:16%;left:12%;right:12%;bottom:28%}
+#dw-kairos-new .attic-settings-body h2{font-size:23px;margin-bottom:30px}
+#dw-kairos-new .attic-range-label{font-size:17px;margin:18px 0 10px}
+#dw-kairos-new .attic-range-label output{font-size:14px}
+#dw-kairos-new .attic-range{height:6px;margin:12px 0 28px}
+#dw-kairos-new .attic-range::-webkit-slider-thumb{width:20px;height:30px}
+#dw-kairos-new .attic-check{font-size:16px;gap:12px;margin:23px 0;min-height:44px}
+#dw-kairos-new .attic-check input{width:22px;height:22px;min-width:22px}
+#dw-kairos-new .attic-check input:checked:after{font-size:17px}
+#dw-kairos-new .ks-settings .ks-tablet-footer{left:12%;right:12%;bottom:14%}
+#dw-kairos-new .ks-settings .ks-action{min-width:160px}
+}

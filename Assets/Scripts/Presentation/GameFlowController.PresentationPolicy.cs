@@ -11,16 +11,16 @@ namespace DemocracyWay.NewUI
 
         void CleanPresentation()
         {
-            string scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-            bool keepApprovedBanners = true;
             foreach (var binding in targets.ToArray())
             {
                 string key = binding.Key.ToLowerInvariant();
-                bool mapMoney = key.StartsWith("map.", StringComparison.Ordinal);
-                bool keepBanner = keepApprovedBanners;
+                // Το πορτοφόλι μένει ορατό στον χάρτη και στις οθόνες όπου ξοδεύονται χρήματα.
+                bool keepFunds = key.StartsWith("map.", StringComparison.Ordinal)
+                    || key.StartsWith("case-prep.", StringComparison.Ordinal)
+                    || key.StartsWith("speech.", StringComparison.Ordinal);
                 if (key.EndsWith(".banner")) { var banner = Get<GameObject>(binding.Key); if (banner != null) banner.SetActive(true); }
-                if (key.EndsWith(".footer") || key.Contains(".eyebrow") || key.EndsWith(".source") || (!keepBanner && key.EndsWith(".banner")) ||
-                    (!mapMoney && (key.EndsWith(".funds") || key.Contains("treasuries"))))
+                if (key.EndsWith(".footer") || key.Contains(".eyebrow") || key.EndsWith(".source") ||
+                    (!keepFunds && (key.EndsWith(".funds") || key.Contains("treasuries"))))
                 {
                     var go = Get<GameObject>(binding.Key);
                     if (go != null) go.SetActive(false);
@@ -34,12 +34,12 @@ namespace DemocracyWay.NewUI
                 {
                     if (timeline != null && (item == timeline || item.IsChildOf(timeline))) continue;
                     string name = item.name.ToLowerInvariant();
-                    if (keepApprovedBanners && name.StartsWith("banner ", StringComparison.Ordinal))
+                    if (name.StartsWith("banner ", StringComparison.Ordinal))
                     {
                         item.gameObject.SetActive(true);
                         continue;
                     }
-                    bool decoration = name.StartsWith("banner ", StringComparison.Ordinal) || name.Contains("eyebrow") || name.Contains("footer") || name.Contains("vertical");
+                    bool decoration = name.Contains("eyebrow") || name.Contains("footer") || name.Contains("vertical");
                     if (decoration && item.GetComponentInChildren<UnityEngine.UI.Selectable>(true) == null)
                         item.gameObject.SetActive(false);
                 }
@@ -52,11 +52,6 @@ namespace DemocracyWay.NewUI
                         (root != mapRoot && name.Contains("treasur"));
                     if (vertical || clutter) text.gameObject.SetActive(false);
                 }
-            }
-            if (currentScreen == "knowledge")
-            {
-                var heading = Get<TMP_Text>("knowledge.heading");
-                if (heading != null) { heading.enableAutoSizing = true; heading.fontSizeMin = 28; heading.fontSizeMax = 36; }
             }
         }
 
@@ -73,11 +68,10 @@ namespace DemocracyWay.NewUI
                 cityMetricsHUD.alignment = TextAlignmentOptions.Center;
                 targets["map.city-metrics"] = cityMetricsHUD;
             }
-            var previous = Campaign.cases.Where(c => c.completed).OrderByDescending(c => c.turn).FirstOrDefault();
-            string foodChange = previous != null && previous.foodDelta != 0 ? " (" + Signed(previous.foodDelta) + ")" : "";
-            string trustChange = previous != null && previous.trustDelta != 0 ? " (" + Signed(previous.trustDelta) + ")" : "";
-            cityMetricsHUD.text = "Επισιτισμός " + Campaign.foodSecurity + "/100" + foodChange + "  ·  Ετοιμότητα " + Signed(Campaign.readiness)
-                + "\nΘεσμική εμπιστοσύνη " + Signed(Campaign.legitimacy) + trustChange + "  ·  Πολεμική εντολή " + Signed(Campaign.war);
+            // Οι 4 ορατοί δείκτες της πόλης — το ΙΔ δεν εμφανίζεται ποτέ (spec ΣΤ.6).
+            cityMetricsHUD.text = "Ταμείο " + State.polis.treasury + "/100  ·  Επισιτισμός " + State.polis.food + "/100"
+                + "\nΕτοιμότητα " + State.polis.readiness + "/100  ·  Εμπιστοσύνη " + State.polis.trust + "/100"
+                + (State.polis.war ? "  ·  Πόλεμος" : "");
         }
     }
 }

@@ -59,7 +59,6 @@ namespace DemocracyWay.NewUI
                 pointer.app = this;
             }
 
-            SetActive("settings.resolutionRow", !IsWeb);
             RefreshVolumeLabels();
         }
 
@@ -106,7 +105,7 @@ namespace DemocracyWay.NewUI
         private void SetupAudio()
         {
             AudioClip music = SceneManager.GetActiveScene().name == "Introduction" ? config.introductionMusic : SceneManager.GetActiveScene().name == "Gameplay" ? config.MusicForPrytany(State?.prytany ?? 1) : config.mainMenuMusic;
-            audioSettings = new AudioSettingsService(Get<AudioSource>("app.music"), Get<AudioSource>("app.sfx"), music, Get<AudioClip>("app.click") ?? config.clickSound, Get<AudioClip>("app.hover") ?? config.hoverSound);
+            audioSettings = new AudioSettingsService(Get<AudioSource>("app.music"), Get<AudioSource>("app.sfx"), music, config.clickSound, config.hoverSound);
         }
 
         public void PlayClick()

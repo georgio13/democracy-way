@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c359138b437fa7f49be192be74e9be5b, type: 3}
+  m_Name: Official_Mnesitheos
+  m_EditorClassIdentifier: Assembly-CSharp::Agora.OfficialData
+  displayName: "\u039C\u03BD\u03B7\u03C3\u03AF\u03B8\u03B5\u03BF\u03C2"
+  demotic: "\u03A0\u03B5\u03B9\u03C1\u03B1\u03B9\u03B5\u03CD\u03C2"
+  office: {fileID: 11400000, guid: 146a839e8e2946c49bf9efcd15867385, type: 2}
+  isHistorical: 0
+  bribable: 0
+  tendency: 60
+  bio: 
+  portrait: {fileID: 0}

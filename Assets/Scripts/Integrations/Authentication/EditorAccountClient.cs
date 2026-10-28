@@ -23,8 +23,6 @@ namespace DemocracyWay.NewUI
 
         public bool Busy { get; private set; }
         public bool HasError { get; private set; }
-        public bool IsSignedIn => auth != null;
-        public bool ResearchConsent => profile != null && profile.researchConsent;
         public string Status { get; private set; } = "";
         public string Email { get; private set; } = "";
         public event Action StateChanged;

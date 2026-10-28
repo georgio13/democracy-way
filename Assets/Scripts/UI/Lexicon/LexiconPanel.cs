@@ -19,13 +19,7 @@ namespace DemocracyWay.NewUI
             public string[] sources, aliases;
         }
 
-        [Serializable]
-        public class Book
-        {
-            public List<Entry> gameEntries;
-        }
-
-        public TextAsset data;
+        public LexiconContent content;
         public RectTransform world, panel, funds, tools;
         public RectTransform[] sites;
         public TMP_InputField search;
@@ -41,12 +35,8 @@ namespace DemocracyWay.NewUI
         bool catalogue, fullEntry;
         void Awake()
         {
-            if (data != null)
-            {
-                var book = JsonUtility.FromJson<Book>(data.text);
-                if (book != null && book.gameEntries != null)
-                    entries = book.gameEntries.OrderBy(e => e.title, StringComparer.Create(CultureInfo.GetCultureInfo("el-GR"), false)).ToList();
-            }
+            if (content != null && content.entries != null)
+                entries = content.entries.OrderBy(e => e.title, StringComparer.Create(CultureInfo.GetCultureInfo("el-GR"), false)).ToList();
 
             selected = Mathf.Max(0, entries.FindIndex(e => Normalize(e.title).StartsWith("βουλη των")));
             open.onClick.AddListener(() => SetOpen(!IsOpen));
@@ -104,6 +94,16 @@ namespace DemocracyWay.NewUI
                         child.sizeDelta = new Vector2(Mathf.Max(200, width - Mathf.Max(0, child.anchoredPosition.x)), child.sizeDelta.y);
             }
             if (value) close.transform.SetAsLastSibling();
+            // Το panel μπορεί πια να ανοίξει και πάνω από την Αγορά: η αναδιάταξη του χάρτη
+            // τρέχει μόνο όταν οι αναφορές του υπάρχουν (κι ας είναι ο χάρτης ανενεργός).
+            if (world == null || funds == null || tools == null)
+            {
+                if (value) Render();
+                if (EventSystem.current != null)
+                    EventSystem.current.SetSelectedGameObject(null);
+                return;
+            }
+
             foreach (var city in world.parent.GetComponentsInChildren<RectTransform>(true).Where(r => r.name == "City indicators"))
                 CivicUIFactory.Box(city, value ? 340 : 690, 154, value ? 620 : 720, 64);
             float q = 1.2f, w = value ? 1060 : 1600;
@@ -159,6 +159,17 @@ namespace DemocracyWay.NewUI
                 EventSystem.current.SetSelectedGameObject(null);
         }
 
+        /// <summary>Ανοίγει το ευρετήριο κατευθείαν σε λήμμα με βάση το Entry.id (π.χ. "lexicon_001").</summary>
+        public bool OpenEntry(string entryId)
+        {
+            int i = entries.FindIndex(e => e.id == entryId);
+            if (i < 0)
+                return false;
+            SetOpen(true);
+            SelectLink(i.ToString());
+            return true;
+        }
+
         public void SelectLink(string id)
         {
             int i;
@@ -172,7 +183,7 @@ namespace DemocracyWay.NewUI
             }
         }
 
-        static string Normalize(string value)
+        internal static string Normalize(string value)
         {
             var b = new StringBuilder();
             foreach (char c in (value ?? "").ToLowerInvariant().Normalize(NormalizationForm.FormD))

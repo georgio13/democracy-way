@@ -11,14 +11,14 @@ namespace DemocracyWay.NewUI
     {
         public TMP_InputField email, password;
         public RectTransform card;
-        public TMP_Text title, message, submitLabel, information, profileText;
+        public TMP_Text title, message, submitLabel, profileText;
         public PanelGraphic messagePanel;
-        public GameObject tabs, form, passwordRow, statusRoot, informationRoot, profileRoot, researchRoot;
-        public Button loginTab, registerTab, submit, resetLink, informationLink, informationBack;
+        public GameObject tabs, form, passwordRow, statusRoot, profileRoot, researchRoot;
+        public Button loginTab, registerTab, submit, resetLink;
         public Button profileBack, signOut, researchPreferences, researchYes, researchNo;
         public EventSystem events;
-        enum View { Login, Register, Reset, Information, Profile, Research }
-        View view, returnView;
+        enum View { Login, Register, Reset, Profile, Research }
+        View view;
         EventSystem[] previousEvents;
         bool restorePreviousEvents;
         bool leaving;
@@ -47,8 +47,6 @@ namespace DemocracyWay.NewUI
             resetLink.onClick.AddListener(() => ChangeView(view == View.Reset ? View.Login : View.Reset));
             submit.onClick.AddListener(Submit);
             email.onSubmit.AddListener(_ => Submit()); password.onSubmit.AddListener(_ => Submit());
-            informationLink.onClick.AddListener(() => { returnView = view; view = View.Information; Refresh(); });
-            informationBack.onClick.AddListener(() => { view = returnView; Refresh(); });
             profileBack.onClick.AddListener(AccountBridge.CloseAccount);
             signOut.onClick.AddListener(() => { email.text = password.text = ""; AccountBridge.SignOut(); });
             researchPreferences.onClick.AddListener(() => { view = View.Research; AccountBridge.ClearStatus(); Refresh(); });
@@ -123,12 +121,12 @@ namespace DemocracyWay.NewUI
         {
             if (!isActiveAndEnabled || leaving) return;
             bool ready = AccountBridge.IsReady;
-            if (ready && !AccountBridge.ShowingAccount && view != View.Information)
+            if (ready && !AccountBridge.ShowingAccount)
             {
                 if (AccountBridge.OfferResearch) view = View.Research;
                 else { if (!AccountBridge.IsBusy) Leave(); return; }
             }
-            if (ready && AccountBridge.ShowingAccount && view != View.Information && view != View.Research) view = View.Profile;
+            if (ready && AccountBridge.ShowingAccount && view != View.Research) view = View.Profile;
             bool showForm = view == View.Login || view == View.Register || view == View.Reset;
             bool reset = view == View.Reset;
             card.sizeDelta = new Vector2(640, reset ? 650 : 820);
@@ -138,19 +136,16 @@ namespace DemocracyWay.NewUI
             ((RectTransform)resetLink.transform).anchoredPosition = new Vector2(40, reset ? -552 : -710);
             tabs.SetActive(showForm && !reset); form.SetActive(showForm);
             passwordRow.SetActive(view != View.Reset);
-            informationRoot.SetActive(view == View.Information);
-            informationBack.gameObject.SetActive(view == View.Information);
             profileRoot.SetActive(view == View.Profile);
             researchRoot.SetActive(view == View.Research);
             submit.gameObject.SetActive(showForm);
             resetLink.gameObject.SetActive(view == View.Login || reset);
             resetLink.GetComponentInChildren<TMP_Text>().text = reset ? "Επιστροφή στη σύνδεση" : "Ξέχασα τον κωδικό";
-            informationLink.gameObject.SetActive(false);
-            title.text = view == View.Information ? "Ενημέρωση λογαριασμού" : view == View.Profile ? "Ο λογαριασμός σου" : view == View.Research ? "Συμμετοχή στην έρευνα" : view == View.Reset ? "Επαναφορά κωδικού" : "Είσοδος στην πόλη";
+            title.text = view == View.Profile ? "Ο λογαριασμός σου" : view == View.Research ? "Συμμετοχή στην έρευνα" : view == View.Reset ? "Επαναφορά κωδικού" : "Είσοδος στην πόλη";
             submitLabel.text = AccountBridge.IsBusy ? "Περίμενε…" : view == View.Register ? "Εγγραφή" : view == View.Reset ? "Αποστολή οδηγιών" : "Σύνδεση";
             StyleTab(loginTab, view != View.Register); StyleTab(registerTab, view == View.Register);
             bool hasStatus = !string.IsNullOrWhiteSpace(AccountBridge.StatusMessage);
-            statusRoot.SetActive(hasStatus && view != View.Information && view != View.Research && !ready);
+            statusRoot.SetActive(hasStatus && view != View.Research && !ready);
             message.text = AccountBridge.StatusMessage;
             message.color = AccountBridge.HasError ? new Color32(255, 222, 213, 255) : Paper;
             messagePanel.color = AccountBridge.HasError ? new Color32(71, 34, 40, 255) : new Color32(29, 55, 61, 255);

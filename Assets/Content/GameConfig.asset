@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0e43759e7871f946b82061bdb4a491b, type: 3}
+  m_Name: GameConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Agora.GameConfig
+  cityStart: 50
+  warStartsAtPrytany: 5
+  emergencyBonus: 10
+  reaction: 4
+  trustSensitivityCap: 2
+  noise: 4
+  passThreshold: 50
+  peaceTreasury: 3
+  peaceFood: 2
+  peaceReadiness: -3
+  warTreasury: -3
+  warFood: -4
+  warReadiness: -1
+  scaleDemosPowerA: 1
+  scaleDemosPowerB: 1
+  scaleTrustA: 1
+  scaleTrustB: 1
+  garrisonDemosPowerLossMultiplier: 1.5
+  areopagusBonusB: 5
+  auditFineTreasury: 6
+  startPeitho: 30
+  startEthos: 60
+  startSynepeia: 50
+  startParrhesia: 40
+  startAnagnorisimotita: 10
+  wallet_Thes: 60
+  income_Thes: 30
+  wallet_Zeug: 150
+  income_Zeug: 60
+  wallet_Hipp: 300
+  income_Hipp: 120
+  wallet_Pent: 600
+  income_Pent: 250
+  assemblyPayPerPrytany: 10
+  speechCap: 12
+  peithoPerSpeech: 2
+  peithoCap: 80
+  anagnPerSpeech: 2
+  anagnPerWin: 2
+  anagnLossAfterTwoSilences: 2
+  synepeiaVoteMatch: 2
+  synepeiaVoteMismatch: -8
+  synepeiaSameDirection: 1
+  parrhesiaAgainstMajority: 4
+  bribeCostPerWeight: 6
+  bribeEthosLoss: 10
+  exposureAnagnGain: 10
+  exposureTrustLoss: 5
+  complaintWinAnagn: 4
+  complaintWinParrhesia: 4
+  complaintWinEthos: 3
+  complaintWinTrust: 2
+  complaintWinTreasury: 2
+  complaintLoseAnagn: -3
+  complaintParrhesiaAlways: 2
+  complaintAcquittedWeightBonus: 5
+  sycophantFine: 60
+  famineFood: 15
+  famineReadiness: 15
+  coupDemosPower: 25
+  stasisTrust: 35
+  enduresMinAll: 25

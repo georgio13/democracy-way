@@ -35,10 +35,8 @@ namespace DemocracyWay.NewUI
             else if (currentScreen == "map-stela")
             {
                 RenderMap();
-                RenderCityBadges();
                 RenderCampaignMap();
                 RenderCityMetricsHUD();
-
             }
             else if (IsCityScreen(currentScreen))
                 RenderCity();
@@ -161,7 +159,6 @@ namespace DemocracyWay.NewUI
             ProloguePage page = config.prologue[State.prologueIndex];
             SetText("prologue.title", page.title);
             SetText("prologue.body", page.body);
-            SetText("prologue.step", (State.prologueIndex + 1) + " / " + config.prologue.Count);
             for (int i = 0; i < config.prologue.Count; i++)
                 SetActive("prologue.page." + i, i == State.prologueIndex);
             TMP_Text narrative = Get<TMP_Text>("prologue.body");
@@ -331,8 +328,6 @@ namespace DemocracyWay.NewUI
         private void RenderSummary()
         {
             EnsureState();
-            SetText("summary.body", State.playerName + "\n" + State.playerAge + JsonContent.Copy("Copy_b0ff9eb7a58bf3d6") + TribeName(State.tribeIndex) + "\n" + config.economicClasses[Mathf.Clamp(State.economicClassIndex, 0, config.economicClasses.Count - 1)] + JsonContent.Copy("Copy_72b5e49b1563ea57") + State.deme + JsonContent.Copy("Copy_a90744770635bb27") + TrittysLabel() + "\n" + State.profession + "\n" + State.offices);
-            SetText("summary.metrics", State.metrics.ToGreekLines());
             SetText("summary.name", State.playerName);
             SetText("summary.age", JsonContent.Copy("Copy_d27fcffa71ab967e") + State.playerAge + JsonContent.Copy("Copy_750d677c988d9482"));
             SetText("summary.identity.0", "Φυλή: " + TribeName(State.tribeIndex) + "\nΔήμος: " + State.deme + "\nΤριττύα: " + TrittysLabel());
@@ -430,27 +425,21 @@ namespace DemocracyWay.NewUI
                 if (fade != null)
                     fade.alpha = State.drawnTribes.Contains(i) && State.currentTribe != i ? .45f : 1f;
                 SetActive("lottery.tribe." + i + ".selected", State.currentTribe == i);
-                SetActive("lottery.tribe." + i + ".used", State.drawnTribes.Contains(i) && State.currentTribe != i);
             }
 
             SetText("lottery.result", State.currentTribe >= 0 ? TribeName(State.currentTribe) + JsonContent.Copy("Copy_cebe6ca122c440f7") : JsonContent.Copy("Copy_83229ddd6f5397d0"));
             SetText("lottery.primary.label", State.currentTribe >= 0 ? JsonContent.Copy("Copy_f3fc4caef743a68e") : JsonContent.Copy("Copy_7e810e5a6a10a819"));
             SetInteractable("lottery.primary", State.currentTribe >= 0 || State.drawnTribes.Count < 10);
-            SetInteractable("lottery.begin", State.currentTribe >= 0);
         }
 
         private void RenderMap()
         {
             EnsureState();
-            SetText("map.status", JsonContent.Copy("Copy_0008e0f7f5eda78f") + State.prytany + JsonContent.Copy("Copy_8ba8e7d0292e8747") + State.week + " / " + CampaignRules.CasesPerPrytany);
             SetText("map.week", State.week + " / " + CampaignRules.CasesPerPrytany);
             SetText("map.identity", State.playerName);
             SetText("map.office.label", State.offices);
-            SetText("map.city", State.cityFunds.ToString("N0") + " οβ.");
-            SetText("map.personal", State.personalFunds.ToString("N0") + " οβ.");
             string[] prytanyNumerals = { "Α΄", "Β΄", "Γ΄", "Δ΄", "Ε΄", "ΣΤ΄", "Ζ΄", "Η΄", "Θ΄", "Ι΄" };
             SetText("map.prytany", prytanyNumerals[Mathf.Clamp(State.prytany - 1, 0, 9)] + "\nπρυτανεία");
-            SetText("map.week", State.week + " / " + CampaignRules.CasesPerPrytany);
             for (int i = 0; i < 10; i++)
             {
                 var tick = Get<PanelGraphic>("map.tick." + i);
@@ -458,20 +447,9 @@ namespace DemocracyWay.NewUI
                     tick.color = i == State.prytany - 1 ? new Color32(23, 43, 48, 255) : i < State.prytany - 1 ? new Color32(115, 128, 93, 255) : new Color32(181, 178, 139, 255);
             }
 
-            for (int i = 0; i < 5; i++)
-            {
-                var tick = Get<PanelGraphic>("map.bead." + i);
-                if (tick != null) {
-                    tick.gameObject.SetActive(i < CampaignRules.CasesPerPrytany);
-                    tick.color = i == State.week - 1 ? new Color32(232, 223, 203, 255) : i < State.week - 1 ? new Color32(180, 154, 98, 255) : new Color32(66, 93, 83, 255);
-                }
-            }
-
-            SetText("map.funds", JsonContent.Copy("Copy_047651c755e3bfc4") + State.cityFunds.ToString("N0") + JsonContent.Copy("Copy_a056bcffd38f7391") + State.personalFunds.ToString("N0") + " οβ.");
             SetText("map.tribe", TribeName(State.currentTribe));
             SetImage("map.tribe.emblem", State.currentTribe >= 0 ? config.tribes[State.currentTribe].emblem : null);
             SetImage("map.player.emblem", config.tribes[State.tribeIndex].emblem);
-            SetText("map.notice", JsonContent.Copy("Copy_2aede956f376db8b"));
         }
 
         private void RenderProfile()
@@ -482,7 +460,6 @@ namespace DemocracyWay.NewUI
             SetText("profile.age", State.playerAge + JsonContent.Copy("Copy_b0ff9eb7a58bf3d6") + State.profession);
             SetText("profile.origin", State.deme + " · " + TribeName(State.tribeIndex));
             SetImage("profile.emblem", config.tribes[State.tribeIndex].emblem);
-            SetText("profile.funds", JsonContent.Copy("Copy_9fd25730f3bc1ab9") + State.cityFunds.ToString("N0") + JsonContent.Copy("Copy_9bc90cc634c1c0ff") + State.personalFunds.ToString("N0") + " οβ.");
             string[] identity =
             {
                 TribeName(State.tribeIndex),
@@ -495,14 +472,16 @@ namespace DemocracyWay.NewUI
             string[] offices = (State.offices ?? "").Split(new[] { " · " }, StringSplitOptions.None);
             for (int i = 0; i < 2; i++)
                 SetText("profile.office." + i, i < offices.Length ? offices[i] : "—");
+            // Το προφίλ δείχνει τον ζωντανό πολίτη του ενιαίου συστήματος, όχι τις παγωμένες μετρικές της βιογραφίας.
+            EnsureAgoraReady();
             int[] metrics =
             {
-                State.metrics.consistency,
-                State.metrics.ethics,
-                State.metrics.authority,
-                State.metrics.persuasion,
-                State.metrics.parrhesia,
-                State.metrics.recognition
+                State.citizen.synepeia,
+                State.citizen.ethos,
+                State.citizen.Authority,
+                State.citizen.peitho,
+                State.citizen.parrhesia,
+                State.citizen.anagnorisimotita
             };
             for (int i = 0; i < 6; i++)
             {

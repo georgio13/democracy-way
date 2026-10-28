@@ -36,9 +36,14 @@ namespace DemocracyWay.NewUI
         public List<ChoiceRecord> choices = new List<ChoiceRecord>();
         public int prytany = 1;
         public int week = 1;
+        public int marketVisitedTurn = -1;   // ο γύρος που ο παίκτης επισκέφθηκε την Αγορά — προϋπόθεση για την υπόθεση
         public int currentTribe = -1;
         public List<int> drawnTribes = new List<int>();
-        public CityState city = new CityState();
         public CampaignState campaign = new CampaignState();
+
+        // Ενιαίο σύστημα: η πόλη και ο πολίτης του Agora ζουν μέσα στο ίδιο save.
+        public Agora.CityState polis = new Agora.CityState();
+        public Agora.PlayerState citizen = new Agora.PlayerState();
+        public AgoraCaseState agoraCase = new AgoraCaseState();
     }
 }

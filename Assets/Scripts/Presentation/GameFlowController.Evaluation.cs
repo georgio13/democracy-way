@@ -22,11 +22,16 @@ namespace DemocracyWay.NewUI
         CanvasGroup evaluationBlockedGroup;
         bool evaluationPreviousInteractable, evaluationPreviousRaycasts;
         Action evaluationDialogEscape;
+        int[] knowledgeAnswerOrder;      // θέση εμφάνισης → πραγματική θέση στο content (νέα σειρά ανά εμφάνιση ερώτησης)
+        string knowledgeAnswerOrderKey;
+
+        int KnowledgeAnswerAt(int display) =>
+            knowledgeAnswerOrder != null && display >= 0 && display < knowledgeAnswerOrder.Length ? knowledgeAnswerOrder[display] : -1;
 
         EvaluationContent EvaluationData => evaluationData ?? (evaluationData = JsonContent.Evaluation);
 
         EvaluationState Evaluation => EvaluationRules.Ensure(State, EvaluationData);
-        EvaluationPoint EvaluationPointNow() => EvaluationRules.Point(State, Case.id, CampaignData.contentVersion);
+        EvaluationPoint EvaluationPointNow() => EvaluationRules.Point(State, CampaignRules.CaseIdForTurn(CampaignRules.Turn(State)), State.contentVersion.ToString());
 
         void SetupEvaluationUI()
         {
@@ -60,25 +65,26 @@ namespace DemocracyWay.NewUI
             if (tendency)
             {
                 bool post = screen == "final-tendencies";
-                if (!EvaluationRules.AnswerTendency(State, EvaluationData, post, answer + 1, EvaluationPointNow())) return true;
-                if (post && Evaluation.finalTendencyComplete) { GoCampaign("final-survey"); return true; }
-                if (!post && Evaluation.baselineTendencyComplete)
+                // Στην ίδια οθόνη: πρώτα οι τάσεις, μετά οι ερωτήσεις συμμετοχής.
+                if (post ? Evaluation.finalTendencyComplete : Evaluation.baselineTendencyComplete)
                 {
-                    State.biographyIndex = 0; State.phase = "biography"; SaveCheckpoint(); ShowBiography(); return true;
+                    if (!EvaluationRules.AnswerParticipation(State, EvaluationData, post, answer + 1, EvaluationPointNow())) return true;
+                    if (post && Evaluation.finalParticipationComplete) { GoCampaign("final-survey"); return true; }
+                    if (!post && Evaluation.baselineParticipationComplete)
+                    {
+                        State.biographyIndex = 0; State.phase = "biography"; SaveCheckpoint(); ShowBiography(); return true;
+                    }
                 }
+                else if (!EvaluationRules.AnswerTendency(State, EvaluationData, post, answer + 1, EvaluationPointNow())) return true;
             }
             else if (initial)
             {
-                if (Evaluation.baselineFeedbackPending)
-                {
-                    if (answer != 0 || !EvaluationRules.ContinueBaseline(State, EvaluationData)) return true;
-                }
-                else if (!EvaluationRules.AnswerBaseline(State, EvaluationData, answer, EvaluationPointNow())) return true;
+                if (!EvaluationRules.AnswerBaseline(State, EvaluationData, KnowledgeAnswerAt(answer), EvaluationPointNow())) return true;
                 if (Evaluation.baselineComplete) { GoCampaign("initial-tendencies"); return true; }
             }
             else
             {
-                if (!EvaluationRules.BeginPost(State, EvaluationData, EvaluationPointNow()) || !EvaluationRules.AnswerPost(State, EvaluationData, answer)) return true;
+                if (!EvaluationRules.BeginPost(State, EvaluationData, EvaluationPointNow()) || !EvaluationRules.AnswerPost(State, EvaluationData, KnowledgeAnswerAt(answer))) return true;
                 if (Evaluation.postComplete) { GoCampaign("final-tendencies"); return true; }
             }
             SaveCheckpoint(); RenderCampaign(); ClearSelection(); return true;
@@ -97,21 +103,35 @@ namespace DemocracyWay.NewUI
             if (baseline && e.baselineComplete) { GoCampaign("initial-tendencies"); return true; }
             if (post && e.postComplete) { GoCampaign("final-tendencies"); return true; }
             bool finalTendency = currentScreen == "final-tendencies";
-            if (tendency && (finalTendency ? e.finalTendencyComplete : e.baselineTendencyComplete))
+            // Η οθόνη τάσεων φιλοξενεί δύο διαδοχικές ομάδες: τάσεις και έπειτα συμμετοχή.
+            bool participation = tendency && (finalTendency ? e.finalTendencyComplete : e.baselineTendencyComplete);
+            if (participation && (finalTendency ? e.finalParticipationComplete : e.baselineParticipationComplete))
             {
                 if (finalTendency) GoCampaign("final-survey");
                 else { State.biographyIndex = 0; State.phase = "biography"; SaveCheckpoint(); ShowBiography(); }
                 return true;
             }
             if (tendency && (finalTendency ? !e.postComplete : !e.baselineComplete)) { GoCampaign(finalTendency ? "final-knowledge" : "initial-knowledge"); return true; }
-            int index = tendency ? finalTendency ? e.finalTendencyIndex : e.baselineTendencyIndex : baseline ? e.baselineIndex : e.postIndex;
+            var likertItems = !tendency ? null : participation ? EvaluationData.participation : EvaluationData.tendencies;
+            int index = tendency ? participation ? finalTendency ? e.finalParticipationIndex : e.baselineParticipationIndex : finalTendency ? e.finalTendencyIndex : e.baselineTendencyIndex : baseline ? e.baselineIndex : e.postIndex;
             var questions = baseline ? EvaluationData.onboarding : EvaluationData.postTest;
             var question = tendency ? null : questions[index];
-            int count = tendency ? EvaluationData.tendencies.Length : questions.Length;
-            string prompt = tendency ? EvaluationData.tendencies[index].prompt : question.prompt;
+            if (!tendency)
+            {
+                // Νέο ανακάτεμα των απαντήσεων σε κάθε εμφάνιση ερώτησης· το κλικ μεταφράζεται
+                // πίσω στην πραγματική θέση μέσω του KnowledgeAnswerAt.
+                string orderKey = currentScreen + ":" + index;
+                if (knowledgeAnswerOrderKey != orderKey)
+                {
+                    knowledgeAnswerOrder = Enumerable.Range(0, question.answers.Length).OrderBy(_ => UnityEngine.Random.value).ToArray();
+                    knowledgeAnswerOrderKey = orderKey;
+                }
+            }
+            int count = tendency ? likertItems.Length : questions.Length;
+            string prompt = tendency ? likertItems[index].prompt : question.prompt;
             CampaignText("heading", (index+1)+"/"+count+" · "+prompt);
-            CampaignText("banner", tendency ? finalTendency ? "Τελικές τάσεις" : "Αρχικές τάσεις" : baseline ? "Αρχικές γνώσεις" : "Τελικές γνώσεις");
-            CampaignText("body", tendency ? EvaluationData.tendencyInstructions : "Επίλεξε μία από τις τέσσερις απαντήσεις.");
+            CampaignText("banner", tendency ? participation ? finalTendency ? "Τελική συμμετοχή" : "Αρχική συμμετοχή" : finalTendency ? "Τελικές τάσεις" : "Αρχικές τάσεις" : baseline ? "Αρχικές γνώσεις" : "Τελικές γνώσεις");
+            CampaignText("body", tendency ? participation ? EvaluationData.participationInstructions : EvaluationData.tendencyInstructions : "Επίλεξε μία από τις τέσσερις απαντήσεις.");
             HideEvaluationChrome(currentScreen);
             var heading=Get<TMP_Text>(currentScreen+".heading");var body=Get<TMP_Text>(currentScreen+".body");
             if(heading!=null){CivicUIFactory.Box(heading.rectTransform,0,88,1058.4f,124);heading.enableAutoSizing=true;heading.fontSizeMin=25;heading.fontSizeMax=38;heading.color=CivicUIFactory.Ink;}
@@ -121,7 +141,7 @@ namespace DemocracyWay.NewUI
                 button.gameObject.SetActive(i<(tendency?5:4));button.interactable=true;
                 CivicUIFactory.Box((RectTransform)button.transform,0,296+i*68,1058.4f,62);
                 var label=button.GetComponentInChildren<TMP_Text>(true);
-                if(label!=null){CivicUIFactory.Fill(label.rectTransform,new Vector2(24,8),new Vector2(24,8));label.text=tendency?(i+1)+"   "+EvaluationData.tendencyRatingLabels[i]:(char)('Α'+i)+"   "+(i<4?question.answers[i]:"");label.enableAutoSizing=true;label.fontSizeMin=20;label.fontSizeMax=27;label.alignment=TextAlignmentOptions.Left;}
+                if(label!=null){CivicUIFactory.Fill(label.rectTransform,new Vector2(24,8),new Vector2(24,8));label.text=tendency?(i+1)+"   "+(participation?EvaluationData.participationRatingLabels:EvaluationData.tendencyRatingLabels)[i]:(char)('Α'+i)+"   "+(i<question.answers.Length?question.answers[knowledgeAnswerOrder[i]].text:"");label.enableAutoSizing=true;label.fontSizeMin=20;label.fontSizeMax=27;label.alignment=TextAlignmentOptions.Left;}
             }
             ClearSelection(); return true;
         }
@@ -132,19 +152,7 @@ namespace DemocracyWay.NewUI
             {
                 var item = Get<GameObject>(screen + "." + key); if (item == null) continue;
                 item.SetActive(false);
-                if (key == "banner" && item.transform.parent != null)
-                {
-                    var parent = item.transform.parent;
-                    if (parent.GetComponent<Graphic>() != null && parent.childCount <= 3) parent.gameObject.SetActive(false);
-                }
             }
-        }
-
-        public void StartEvaluation()
-        {
-            HideEvaluationDialog();
-            if (!EvaluationRules.Begin(State, EvaluationData, EvaluationPointNow(), "complete")) return;
-            GoCampaign(!Evaluation.postComplete ? "final-knowledge" : !Evaluation.finalTendencyComplete ? "final-tendencies" : "final-survey");
         }
 
         public void RecordEvaluationRating(bool intention, int index, int value)
@@ -163,16 +171,13 @@ namespace DemocracyWay.NewUI
             for (int row = 0; row < evaluationRatingRows.Count; row++)
                 for (int value = 0; value < 5; value++)
                 {
-                    var button = evaluationRatingRows[row][value]; bool selected = values[row] == value + 1;
-                    button.GetComponent<PanelGraphic>().color = selected ? CivicUIFactory.Teal : CivicUIFactory.Paper;
-                    button.GetComponentInChildren<TMP_Text>().color = selected ? CivicUIFactory.Paper : CivicUIFactory.Ink;
+                    var button = evaluationRatingRows[row][value];
+                    CivicUIFactory.PaintSelectable(button, values[row] == value + 1);
                     button.interactable = !evaluation.completed;
                 }
             foreach (var pair in evaluationNotApplicableButtons)
             {
-                bool selected = values[pair.Key] == 0;
-                pair.Value.GetComponent<PanelGraphic>().color = selected ? CivicUIFactory.Teal : CivicUIFactory.Paper;
-                pair.Value.GetComponentInChildren<TMP_Text>().color = selected ? CivicUIFactory.Paper : CivicUIFactory.Ink;
+                CivicUIFactory.PaintSelectable(pair.Value, values[pair.Key] == 0);
                 pair.Value.interactable = !evaluation.completed;
             }
             if (evaluationFeedback != null)
@@ -301,7 +306,8 @@ namespace DemocracyWay.NewUI
         void ReturnFromEvaluation()
         {
             HideEvaluationDialog();
-            GoCampaign("complete");
+            // Το τέλος δείχνεται ΜΕΤΑ τα ερωτηματολόγια (spec ΣΤ.2).
+            GoCampaign(!string.IsNullOrEmpty(Campaign.cityEnding) ? "ending-city" : "complete");
         }
 
         bool HandleEvaluationEscape()
@@ -357,7 +363,6 @@ namespace DemocracyWay.NewUI
             evaluationDialogBody.enableAutoSizing = true; evaluationDialogBody.fontSizeMin = 24; evaluationDialogBody.fontSizeMax = 29;
             evaluationDialogConfirm = CivicUIFactory.Button(panel.transform, "Evaluate now or continue", "", font, null, this); CivicUIFactory.Box((RectTransform)evaluationDialogConfirm.transform, 44, 408, 620, 92);
             evaluationDialogCancel = CivicUIFactory.Button(panel.transform, "Evaluate later", "", font, null, this); CivicUIFactory.Box((RectTransform)evaluationDialogCancel.transform, 704, 408, 672, 92);
-            targets["evaluation.offer.now"] = evaluationDialogConfirm; targets["evaluation.offer.later"] = evaluationDialogCancel;
             targets["evaluation.complete.continue"] = evaluationDialogConfirm;
             evaluationDialog.SetActive(false);
         }

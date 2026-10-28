@@ -70,7 +70,7 @@ namespace DemocracyWay.NewUI
             state.metrics.Clamp();
             if (state.campaign == null) state.campaign = new CampaignState();
             var previous = state.biographyCityApplied ?? new CityMetricDelta();
-            state.campaign.foodSecurity = PoliticalCaseRules.Clamp(state.campaign.foodSecurity + cityChanges.food - previous.food, 0, 100);
+            state.campaign.foodSecurity = Math.Max(0, Math.Min(100, state.campaign.foodSecurity + cityChanges.food - previous.food));
             state.campaign.legitimacy += cityChanges.trust - previous.trust;
             state.campaign.readiness += cityChanges.readiness - previous.readiness;
             state.campaign.war += cityChanges.war - previous.war;
@@ -91,40 +91,7 @@ namespace DemocracyWay.NewUI
                     continue;
                 }
 
-                var match = System.Text.RegularExpressions.Regex.Match(record.stepId, @"^case-(\d{1,2})-(speech|vote)$");
-                if (match.Success)
-                {
-                    int turn = int.Parse(match.Groups[1].Value);
-                    var entry = state.campaign?.cases?.Find(x => x.turn == turn);
-                    if (entry == null)
-                        return false;
-                    if (match.Groups[2].Value == "speech")
-                    {
-                        if (entry.politicalVersion == PoliticalCaseRules.Version)
-                        {
-                            string expected = entry.speech == 2 ? "silent" : "speech-" + entry.speech + "-" + entry.speechApproachId;
-                            if (entry.speech < 0 || entry.speech > 2 || record.choiceId != expected) return false;
-                            continue;
-                        }
-                        if (entry.speech < 0 || entry.speech > 2 || record.choiceId != new[]
-                        {
-                            "public-accountability",
-                            "restricted-authority",
-                            "silent"
-                        }[entry.speech])
-                            return false;
-                    }
-                    else if (entry.vote < 0 || entry.vote > 2 || (record.choiceId != "vote-" + entry.vote && record.choiceId != "reflection-" + entry.vote))
-                        return false;
-                    continue;
-                }
-
-                if (System.Text.RegularExpressions.Regex.IsMatch(record.stepId, @"^city-logographer-\d+$"))
-                    continue;
-                if (System.Text.RegularExpressions.Regex.IsMatch(record.stepId, @"^city-complaint-[0-2]-\d+$") && (record.choiceId == "referred-to-boule" || System.Text.RegularExpressions.Regex.IsMatch(record.choiceId, @"^recommendation-[0-2]$")))
-                    continue;
-                if (System.Text.RegularExpressions.Regex.IsMatch(record.stepId, @"^city-official-[0-5]-\d+$") && (record.choiceId == "public-argument" || record.choiceId == "private-offer"))
-                    continue;
+                // Στο ενιαίο σύστημα τα choices προέρχονται μόνο από τη βιογραφία.
                 return false;
             }
 

@@ -6,7 +6,7 @@
 
 ## Εκδόσεις
 
-Το περιεχόμενο του παιχνιδιού βρίσκεται στο `Assets/Resources/Content/Assessments`. Το `Tools → Content → Validate JSON` και το prebuild check παγώνουν αυτόματα το ακριβές runtime ερωτηματολόγιο στο `Instruments/<version>-<hash>.json`. Η τηλεμετρία και η εξαγωγή χρησιμοποιούν το ίδιο hash. Διατήρησε αυτά τα στιγμιότυπα μαζί με τις εξαγωγές και το build. Τα `EvaluationContent.json` και `EvaluationContent.legacy.json` αφορούν παλαιότερες εκδόσεις και παραμένουν μόνο για συμβατή ανάγνωση ιστορικών εγγραφών.
+Τα όργανα έρευνας βρίσκονται στο `Assets/Content/ContentLibrary.asset` (ενότητα «Όργανα έρευνας»). Το `Tools → Content → Validate Content` και το prebuild check παγώνουν αυτόματα το ακριβές runtime ερωτηματολόγιο στο `Instruments/<version>-<hash>.json`. Η τηλεμετρία και η εξαγωγή χρησιμοποιούν το ίδιο hash. Διατήρησε αυτά τα στιγμιότυπα μαζί με τις εξαγωγές και το build. Τα `EvaluationContent.json` και `EvaluationContent.legacy.json` αφορούν παλαιότερες εκδόσεις και παραμένουν μόνο για συμβατή ανάγνωση ιστορικών εγγραφών.
 
 ## Ανάκτηση
 

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb203c2ef78e9ca4288a42eb0fea867f, type: 3}
+  m_Name: Office_Metronomoi
+  m_EditorClassIdentifier: Assembly-CSharp::Agora.OfficeData
+  displayName: "\u039C\u03B5\u03C4\u03C1\u03BF\u03BD\u03CC\u03BC\u03BF\u03B9"
+  displayNameWithCount: "\u039F\u03B9 \u03B4\u03AD\u03BA\u03B1 \u03BC\u03B5\u03C4\u03C1\u03BF\u03BD\u03CC\u03BC\u03BF\u03B9"
+  count: 10
+  selection: 0
+  payObols: 0
+  athPolRef: 51.2
+  description: 
+  defaultWeight: 5

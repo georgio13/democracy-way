@@ -10,12 +10,12 @@
 
 Πρόλογος → αρχικές γνώσεις → αρχικές τάσεις → χαρακτήρας → δέκα πρυτανείες με δύο υποθέσεις η καθεμιά → τέλη → τελικές γνώσεις → τελικές τάσεις → MEEGA+. Δεν υπάρχουν ερωτήσεις πριν από κάθε υπόθεση ή αξιολόγηση μετά την πρώτη πρυτανεία.
 
-Η συγγραφή γίνεται απευθείας σε χωριστά JSON στο `Assets/Resources/Content`. Δεν υπάρχει εξάρτηση από articy. Δες το [CONTENT-EDITING.md](CONTENT-EDITING.md) για διαδρομές, παραδείγματα και εκδόσεις.
+Η συγγραφή γίνεται σε ScriptableObjects στο `Assets/Content` (υποθέσεις/πρόσωπα/αξιώματα στα επιμέρους assets, αφηγηματικό και ερευνητικό περιεχόμενο στο `ContentLibrary.asset`, λεξικό στο `LexiconContent.asset`), μέσα από τον Inspector. Δες το [CONTENT-EDITING.md](CONTENT-EDITING.md).
 
 ## Δομή
 
 - `Assets/Scenes`: Boot, Login, MainMenu, Introduction, Assessment, Gameplay.
-- `Assets/Resources/Content`: περιεχόμενο ανά οντότητα και ερευνητικό εργαλείο.
+- `Assets/Content`: όλο το περιεχόμενο ως assets (υποθέσεις, πρόσωπα, βιβλιοθήκη κειμένων, λεξικό, ρυθμίσεις).
 - `Assets/Data/Introduction`: αναφορές πολυμέσων της κοινής ρύθμισης.
 - `Assets/Art`, `Fonts`, `Audio`: γραφικά, γραμματοσειρές και ήχοι.
 - `Assets/Scripts/Domain`: μοντέλα, αμιγείς αριθμητικοί κανόνες και μεταβάσεις.
@@ -30,7 +30,7 @@
 
 ## Έλεγχος και Web
 
-Εκτέλεσε `Tools → Content → Validate JSON` πριν από build. Το ίδιο γίνεται αυτόματα ως prebuild check. Στο Build Profile Web συμπεριλαμβάνονται οι έξι σκηνές με πρώτη την Boot. Το Web template παραμένει το προσαρμοσμένο template του project. Το περιεχόμενο φορτώνεται από Resources και δεν απαιτεί ξεχωριστό fetch ή articy export στο itch.io.
+Εκτέλεσε `Tools → Content → Validate Content` (και `Agora → Validate Content` για τις υποθέσεις) πριν από build. Το πρώτο τρέχει αυτόματα ως prebuild check. Στο Build Profile Web συμπεριλαμβάνονται οι έξι σκηνές με πρώτη την Boot. Το Web template παραμένει το προσαρμοσμένο template του project.
 
 ## Δεδομένα έρευνας
 

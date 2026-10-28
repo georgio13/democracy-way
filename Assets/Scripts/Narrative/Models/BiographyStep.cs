@@ -16,7 +16,6 @@ namespace DemocracyWay.NewUI
         public string body;
         public string backgroundId;
         [NonSerialized] public Sprite background;
-        public bool editEconomicClass = true;
         public List<NarrativeChoice> choices = new List<NarrativeChoice>();
     }
 }

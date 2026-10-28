@@ -12,7 +12,7 @@ namespace DemocracyWay.NewUI
     {
         public const int SlotCount = 4;
         public const string Format = "DemocracyWay.ApprovedUI";
-        public const int Version = 1;
+        public const int Version = 2;   // v2: προσθήκη Agora polis/citizen/agoraCase — τα v1 saves απορρίπτονται
 #if UNITY_EDITOR
         // Set only by isolated Editor integration tests; excluded from all player builds.
         public static string TestDirectory;
@@ -82,7 +82,10 @@ namespace DemocracyWay.NewUI
             try
             {
                 SaveEnvelope envelope = JsonUtility.FromJson<SaveEnvelope>(json);
-                if (envelope == null || envelope.format != Format || envelope.version != Version || envelope.slot != slot || string.IsNullOrWhiteSpace(envelope.payloadJson) || envelope.checksum != Checksum(envelope.payloadJson) || !DateTime.TryParse(envelope.savedAtUtc, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out _))
+                // Save παλαιότερης έκδοσης = κενή θέση (επανεγγράψιμη), όχι «μη συμβατή».
+                if (envelope != null && envelope.format == Format && envelope.version != Version)
+                    return new SaveSlotResult { status = SaveSlotStatus.Empty };
+                if (envelope == null || envelope.format != Format || envelope.slot != slot || string.IsNullOrWhiteSpace(envelope.payloadJson) || envelope.checksum != Checksum(envelope.payloadJson) || !DateTime.TryParse(envelope.savedAtUtc, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out _))
                     return new SaveSlotResult
                     {
                         status = SaveSlotStatus.Invalid,
@@ -119,6 +122,11 @@ namespace DemocracyWay.NewUI
                 return false;
             if (state.phase != "prologue" && state.phase != "biography" && state.phase != "summary" && state.phase != "prytany-title" && state.phase != "lottery" && state.phase != "map-stela" && !CampaignRules.ValidPhase(state.phase))
                 return false;
+            if (state.polis == null || state.citizen == null || state.agoraCase == null)
+                return false;
+            foreach (int value in new[] { state.polis.treasury, state.polis.food, state.polis.readiness, state.polis.trust, state.polis.demosPower })
+                if (value < 0 || value > 100)
+                    return false;
             var seenTribes = new System.Collections.Generic.HashSet<int>();
             foreach (int tribe in state.drawnTribes)
                 if (tribe < 0 || tribe >= 10 || !seenTribes.Add(tribe))
@@ -144,7 +152,8 @@ namespace DemocracyWay.NewUI
             try
             {
                 SaveSlotResult previous = Read(slot);
-                if (previous.status == SaveSlotStatus.Unavailable || previous.status == SaveSlotStatus.Invalid)
+                // Save παλαιότερης έκδοσης δεν είναι «κατεστραμμένο»: η θέση ξαναγράφεται ελεύθερα.
+                if (previous.status == SaveSlotStatus.Unavailable || (previous.status == SaveSlotStatus.Invalid && !StaleVersion(slot)))
                 {
                     error = "Η θέση δεν είναι διαθέσιμη για εγγραφή. Χρησιμοποίησε άλλη θέση ή διέγραψέ την από τη Φόρτωση.";
                     return false;
@@ -190,6 +199,18 @@ namespace DemocracyWay.NewUI
             }
         }
 
+        private static bool StaleVersion(int slot)
+        {
+            try
+            {
+                string path = FilePath(slot);
+                if (!File.Exists(path)) return false;
+                var envelope = JsonUtility.FromJson<SaveEnvelope>(File.ReadAllText(path));
+                return envelope != null && envelope.format == Format && envelope.version != Version;
+            }
+            catch { return false; }
+        }
+
         public static bool Delete(int slot, out string error)
         {
             error = "";
@@ -228,20 +249,7 @@ namespace DemocracyWay.NewUI
         }
 
         // Integrity check for accidental damage; not a security or anti-tampering mechanism.
-        private static string Checksum(string text)
-        {
-            unchecked
-            {
-                uint value = 2166136261;
-                foreach (byte b in Encoding.UTF8.GetBytes(text))
-                {
-                    value ^= b;
-                    value *= 16777619;
-                }
-
-                return value.ToString("X8", CultureInfo.InvariantCulture);
-            }
-        }
+        private static string Checksum(string text) => Hashing.Fnv1a(text);
 
         private static bool StorageException(Exception ex)
         {

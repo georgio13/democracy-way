@@ -14,6 +14,7 @@ namespace DemocracyWay.NewUI
     public sealed partial class GameFlowController : MonoBehaviour
     {
         public GameConfiguration config;
+        public LexiconPanel lexicon;   // ζει σε πάντα-ενεργό host ώστε να ανοίγει και πάνω από την Αγορά
         public List<UIScreen> screens = new List<UIScreen>();
         public List<UIBinding> bindings = new List<UIBinding>();
         public string defaultScreen = "main-menu";
@@ -41,6 +42,7 @@ namespace DemocracyWay.NewUI
         private string profileReturnScreen = "map-stela";
         private bool settingsFromPause;
         private bool returnToMenuConfirmation;
+        private bool marketGateConfirmation;
         private bool narrativeFading;
         private string lastRenderedBioStep;
         private string saveWarning;
@@ -65,13 +67,14 @@ namespace DemocracyWay.NewUI
 
         private void Awake()
         {
-            if (config == null)
+            if (config == null || config.agoraContent == null || config.library == null)
             {
-                Debug.LogError("GameFlowController requires an authored GameConfiguration asset.", this);
+                Debug.LogError("GameFlowController: χρειάζεται GameConfiguration με συνδεδεμένα agoraContent και library.", this);
                 enabled = false;
                 return;
             }
 
+            JsonContent.Bind(config);
             config = JsonContent.Configuration(config);
 
             foreach (UIBinding binding in bindings)
@@ -201,11 +204,10 @@ namespace DemocracyWay.NewUI
 
         private void WireButtons()
         {
+            WireAgoraCaseButtons();   // προηγείται: στα κοινά κουμπιά κερδίζει ο νέος χειριστής (ενιαίο σύστημα)
             WireCityButtons();
             WireCampaignButtons();
             Bind("map.profile", OpenProfile);
-            Bind("map.pause", OpenPause);
-            Bind("profile.back", CloseProfile);
             Bind("profile.close", CloseProfile);
             Bind("pause.primary", ResumeGame);
             Bind("pause.settings", PauseSettings);
@@ -214,18 +216,7 @@ namespace DemocracyWay.NewUI
             Bind("main.load", LoadMenu);
             Bind("main.settings", Settings);
             Bind("main.exit", AskExit);
-            foreach (string id in new[]
-            {
-                "slots-new",
-                "slots-load",
-                "settings",
-                "prologue",
-                "prytany-title",
-                "lottery",
-                "map-stela"
-            }
-
-            )
+            foreach (string id in new[] { "slots-new", "slots-load", "settings" })
                 Bind(id + ".back", Back);
             Bind("slots-new.primary", StartSelectedSlot);
             Bind("slots-load.primary", StartSelectedSlot);
@@ -251,21 +242,12 @@ namespace DemocracyWay.NewUI
                 else
                     DrawNext();
             });
-            Bind("lottery.begin", BeginPrytany);
             Bind("modal.confirm", ConfirmDelete);
             Bind("modal.cancel", CancelModal);
             for (int i = 0; i < 10; i++)
             {
                 int choice = i;
-                Bind("bio.option." + choice, () => ChooseBio(choice));
-                foreach (string id in new[]
-                {
-                    "bio-family",
-                    "bio-choice",
-                    "bio-oath"
-                }
-
-                )
+                foreach (string id in new[] { "bio-family", "bio-choice", "bio-oath" })
                     Bind(id + ".option." + choice, () => ChooseBio(choice));
             }
 
@@ -328,6 +310,8 @@ namespace DemocracyWay.NewUI
                     item.SetActive(false);
             root.SetActive(true);
             currentScreen = id;
+            if (lexicon != null && lexicon.IsOpen && id != "map-stela" && !IsCityScreen(id))
+                lexicon.SetOpen(false);   // το panel δεν κλείνει πια μόνο του όταν κρύβεται ο χάρτης
             SetText("app.status", "");
             SetText(id + ".status", "");
             Render();
@@ -395,8 +379,7 @@ namespace DemocracyWay.NewUI
                 GameSession.State = NewState();
                 GameSession.Slot = -1;
             }
-            // Upgrade the old generic placeholder, preserving any existing custom name.
-            if (string.IsNullOrWhiteSpace(State.playerName) || State.playerName == "Αθηναίος")
+            if (string.IsNullOrWhiteSpace(State.playerName))
                 State.playerName = GameState.DefaultPlayerName;
         }
 
@@ -480,6 +463,17 @@ namespace DemocracyWay.NewUI
             if (label == null)
                 return;
             label.richText = false;
+            label.text = value ?? "";
+        }
+
+        /// <summary>Για κείμενα με TMP markup (π.χ. υπογραμμισμένες λέξεις ευρετηρίου) που δέχονται κλικ.</summary>
+        private void SetRichText(string key, string value)
+        {
+            TMP_Text label = Get<TMP_Text>(key);
+            if (label == null)
+                return;
+            label.richText = true;
+            label.raycastTarget = true;
             label.text = value ?? "";
         }
 

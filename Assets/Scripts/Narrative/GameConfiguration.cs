@@ -15,30 +15,19 @@ namespace DemocracyWay.NewUI
         public Texture2D cursorTexture;
         public Vector2 cursorHotspot;
         public List<NamedSprite> contentSprites = new List<NamedSprite>();
-        [System.NonSerialized] public int contentVersion = 1;
-        [System.NonSerialized] public int playerAge = 30;
-        [System.NonSerialized] public int startingPersonalFunds = 120;
-        [System.NonSerialized] public int startingCityFunds = 10000;
-        [System.NonSerialized] public string defaultProfession = "Τεχνίτης";
-        [System.NonSerialized] public CharacterMetrics startingMetrics = new CharacterMetrics
-        {
-            consistency = 50,
-            ethics = 50,
-            authority = 35,
-            persuasion = 35,
-            parrhesia = 35,
-            recognition = 10
-        };
+        public Agora.GameContent agoraContent;   // το περιεχόμενο του ενιαίου συστήματος (υποθέσεις, κανόνες, λογογράφοι)
+        public ContentLibrary library;           // αφηγηματικό/ερευνητικό περιεχόμενο (πρώην JSON του Resources)
+        // Γεμίζουν πάντα από το ContentLibrary μέσω του JsonContent.Configuration — ποτέ defaults στον κώδικα.
+        [System.NonSerialized] public int contentVersion;
+        [System.NonSerialized] public int playerAge;
+        [System.NonSerialized] public int startingPersonalFunds;
+        [System.NonSerialized] public int startingCityFunds;
+        [System.NonSerialized] public string defaultProfession;
+        [System.NonSerialized] public CharacterMetrics startingMetrics;
         [System.NonSerialized] public List<ProloguePage> prologue = new List<ProloguePage>();
         [System.NonSerialized] public List<BiographyStep> biography = new List<BiographyStep>();
         [System.NonSerialized] public List<TribeDefinition> tribes = new List<TribeDefinition>();
-        [System.NonSerialized] public List<string> economicClasses = new List<string>
-        {
-            "Πεντακοσιομέδιμνοι",
-            "Ιππείς",
-            "Ζευγίτες",
-            "Θήτες"
-        };
+        [System.NonSerialized] public List<string> economicClasses = new List<string>();
         [System.NonSerialized] public List<DemocracyQuote> prytanyQuotes = new List<DemocracyQuote>();
         public AudioClip MusicForPrytany(int prytany)
         {

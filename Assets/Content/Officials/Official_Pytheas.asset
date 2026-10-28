@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c359138b437fa7f49be192be74e9be5b, type: 3}
+  m_Name: Official_Pytheas
+  m_EditorClassIdentifier: Assembly-CSharp::Agora.OfficialData
+  displayName: "\u03A0\u03C5\u03B8\u03AD\u03B1\u03C2"
+  demotic: "\u0391\u03BB\u03C9\u03C0\u03B5\u03BA\u03AE\u03B8\u03B5\u03BD"
+  office: {fileID: 11400000, guid: 61ff039834bf7bf419a6cbae65f4780f, type: 2}
+  isHistorical: 1
+  bribable: 1
+  tendency: 25
+  bio: 
+  portrait: {fileID: 0}

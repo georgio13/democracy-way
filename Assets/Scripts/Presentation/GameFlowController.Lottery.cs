@@ -16,7 +16,7 @@ namespace DemocracyWay.NewUI
         {
             if (modalOpen || State == null || State.phase != "prytany-title")
                 return;
-            State.phase = StoryRoutes.Next("PrytanyTitleContinue",State);
+            State.phase = "lottery";
             SaveCheckpoint();
             Show(State.phase);
         }
@@ -53,7 +53,10 @@ namespace DemocracyWay.NewUI
                 }
             }
 
-            GameRules.DrawTribe(State, config.tribes.Count, UnityEngine.Random.Range(0, available.Count));
+            // Η σειρά πρυτανειών είναι σταθερή (GameContent.prytanyTribes) — η κλήρωση είναι σκηνικό.
+            int fixedTribe = Mathf.Clamp(State.prytany - 1, 0, config.tribes.Count - 1);
+            State.currentTribe = fixedTribe;
+            if (!State.drawnTribes.Contains(fixedTribe)) State.drawnTribes.Add(fixedTribe);
             drawingLottery = false;
             SaveCheckpoint();
             RenderLottery();
@@ -63,7 +66,7 @@ namespace DemocracyWay.NewUI
         {
             if (modalOpen || drawingLottery || State == null || State.phase != "lottery" || State.currentTribe < 0)
                 return;
-            State.phase = StoryRoutes.Next("LotteryContinue",State);
+            State.phase = "map-stela";
             if (!SaveCheckpoint())
                 return;
             Show(State.phase);

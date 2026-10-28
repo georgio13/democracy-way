@@ -7,7 +7,7 @@ namespace DemocracyWay.NewUI
     /// <summary>Separate pre/post knowledge, pre/post tendencies, and final experience responses.</summary>
     public static class EvaluationRules
     {
-        public const string CurrentInstrumentVersion = "campaign-final-meega-el-3";
+        public const string CurrentInstrumentVersion = "campaign-final-meega-el-4";
         static int[] Resize(int[] values, int length, int min, int max)
         {
             var result = Enumerable.Repeat(-1, length).ToArray();
@@ -32,13 +32,15 @@ namespace DemocracyWay.NewUI
             e.instrumentVersion = content.instrumentVersion;
             e.administrationVersion = "prologue-demographics-knowledge-no-feedback-tendencies-20cases-v2";
             e.exposure = "after-prologue-before-character";
-            e.tendencyVersion = content.tendencyVersion;
             if (string.IsNullOrEmpty(e.researchParticipantId)) e.researchParticipantId = Guid.NewGuid().ToString("N");
             e.baselineAnswers = Resize(e.baselineAnswers, content.onboarding.Length, 0, 3);
             e.postAnswers = Resize(e.postAnswers, content.postTest.Length, 0, 3);
             e.baselineTendencyAnswers = Resize(e.baselineTendencyAnswers, content.tendencies.Length, 1, 5);
             e.finalTendencyAnswers = Resize(e.finalTendencyAnswers, content.tendencies.Length, 1, 5);
             e.tendencyItemIds = content.tendencies.Select(x => x.id).ToArray();
+            e.baselineParticipationAnswers = Resize(e.baselineParticipationAnswers, content.participation.Length, 1, 5);
+            e.finalParticipationAnswers = Resize(e.finalParticipationAnswers, content.participation.Length, 1, 5);
+            e.participationItemIds = content.participation.Select(x => x.id).ToArray();
             e.experienceAnswers = Resize(e.experienceAnswers, content.experience.Length, 0, 5);
             e.intentionAnswers = Array.Empty<int>(); e.intentionItemIds = Array.Empty<string>();
             e.experienceItemIds = content.experience.Select(x => x.id).ToArray();
@@ -46,10 +48,7 @@ namespace DemocracyWay.NewUI
             e.baselinePoint = Normalise(e.baselinePoint); e.postPoint = Normalise(e.postPoint);
             e.startPoint = Normalise(e.startPoint); e.submitPoint = Normalise(e.submitPoint);
             e.baselineTendencyPoint = Normalise(e.baselineTendencyPoint); e.finalTendencyPoint = Normalise(e.finalTendencyPoint);
-            // Consume an already-recorded answer from an older feedback screen without revealing its key.
-            if(e.baselineFeedbackPending && !content.showBaselineFeedback) {
-                e.baselineFeedbackPending=false;e.baselineIndex=Math.Min(e.baselineIndex+1,content.onboarding.Length);e.baselineComplete=e.baselineIndex==content.onboarding.Length;Mirror(state,e);
-            }
+            e.baselineParticipationPoint = Normalise(e.baselineParticipationPoint); e.finalParticipationPoint = Normalise(e.finalParticipationPoint);
             e.postTestStatus = e.postComplete ? "complete" : e.postIndex > 0 ? "partial" : HasPoint(e.postPoint) ? "in_progress" : "not_started";
             return e;
         }
@@ -76,19 +75,11 @@ namespace DemocracyWay.NewUI
         public static bool AnswerBaseline(GameState state, EvaluationContent content, int answer, EvaluationPoint point)
         {
             var e = Ensure(state, content);
-            if (e.baselineComplete || e.baselineFeedbackPending || answer < 0 || answer > 3 || e.baselineIndex >= content.onboarding.Length || !HasPoint(point)) return false;
+            if (e.baselineComplete || answer < 0 || answer > 3 || e.baselineIndex >= content.onboarding.Length || !HasPoint(point)) return false;
             e.baselinePoint = e.baselinePoint ?? point;
             e.baselineAnswers[e.baselineIndex] = answer;
-            if (content.showBaselineFeedback) e.baselineFeedbackPending = true;
-            else { e.baselineIndex++; e.baselineComplete = e.baselineIndex == content.onboarding.Length; }
-            Mirror(state, e); return true;
-        }
-        public static bool ContinueBaseline(GameState state, EvaluationContent content)
-        {
-            var e = Ensure(state, content);
-            if (!e.baselineFeedbackPending || e.baselineComplete) return false;
-            e.baselineFeedbackPending = false; e.baselineIndex++; e.baselineComplete = e.baselineIndex == content.onboarding.Length;
-            Mirror(state, e); return true;
+            e.baselineIndex++; e.baselineComplete = e.baselineIndex == content.onboarding.Length;
+            return true;
         }
         public static bool AnswerTendency(GameState state, EvaluationContent content, bool final, int answer, EvaluationPoint point)
         {
@@ -110,24 +101,40 @@ namespace DemocracyWay.NewUI
             }
             return true;
         }
+        public static bool AnswerParticipation(GameState state, EvaluationContent content, bool final, int answer, EvaluationPoint point)
+        {
+            var e = Ensure(state, content);
+            if (answer < 1 || answer > 5 || !HasPoint(point)) return false;
+            if (final)
+            {
+                if (!FullCampaignComplete(state) || !e.finalTendencyComplete || e.finalParticipationComplete || e.finalParticipationIndex >= content.participation.Length) return false;
+                e.finalParticipationPoint = e.finalParticipationPoint ?? point;
+                e.finalParticipationAnswers[e.finalParticipationIndex++] = answer;
+                e.finalParticipationComplete = e.finalParticipationIndex == content.participation.Length;
+            }
+            else
+            {
+                if (!e.baselineTendencyComplete || e.baselineParticipationComplete || e.baselineParticipationIndex >= content.participation.Length) return false;
+                e.baselineParticipationPoint = e.baselineParticipationPoint ?? point;
+                e.baselineParticipationAnswers[e.baselineParticipationIndex++] = answer;
+                e.baselineParticipationComplete = e.baselineParticipationIndex == content.participation.Length;
+            }
+            return true;
+        }
         public static bool FullCampaignComplete(GameState state) => (state?.campaign?.cases?.Count(c => c.completed) ?? 0) == CampaignRules.TotalCases;
         public static bool Available(GameState state, EvaluationContent content) => Ensure(state, content).baselineComplete && state.evaluation.baselineTendencyComplete && FullCampaignComplete(state);
-        public static bool Begin(GameState state, EvaluationContent content, EvaluationPoint point, string returnPhase)
+        public static bool Begin(GameState state, EvaluationContent content, EvaluationPoint point)
         {
             if (!Available(state, content) || !HasPoint(point)) return false;
             var e = state.evaluation;
-            e.startPoint = e.startPoint ?? point; e.returnPhase = "complete";
+            e.startPoint = e.startPoint ?? point;
             if (string.IsNullOrEmpty(e.submissionId)) e.submissionId = Guid.NewGuid().ToString("N");
             return true;
         }
         public static bool BeginPost(GameState state, EvaluationContent content, EvaluationPoint point)
         {
-            if (!Begin(state, content, point, "complete")) return false;
+            if (!Begin(state, content, point)) return false;
             var e = state.evaluation; e.postPoint = e.postPoint ?? point;
-            // Consume an already-recorded answer from an older feedback screen without revealing its key.
-            if(e.baselineFeedbackPending && !content.showBaselineFeedback) {
-                e.baselineFeedbackPending=false;e.baselineIndex=Math.Min(e.baselineIndex+1,content.onboarding.Length);e.baselineComplete=e.baselineIndex==content.onboarding.Length;Mirror(state,e);
-            }
             e.postTestStatus = e.postComplete ? "complete" : "in_progress"; return true;
         }
         public static bool AnswerPost(GameState state, EvaluationContent content, int answer)
@@ -135,11 +142,7 @@ namespace DemocracyWay.NewUI
             var e = Ensure(state, content);
             if (!FullCampaignComplete(state) || !HasPoint(e.postPoint) || e.postComplete || e.postIndex >= content.postTest.Length || answer < 0 || answer > 3) return false;
             e.postAnswers[e.postIndex++] = answer; e.postComplete = e.postIndex == content.postTest.Length;
-            // Consume an already-recorded answer from an older feedback screen without revealing its key.
-            if(e.baselineFeedbackPending && !content.showBaselineFeedback) {
-                e.baselineFeedbackPending=false;e.baselineIndex=Math.Min(e.baselineIndex+1,content.onboarding.Length);e.baselineComplete=e.baselineIndex==content.onboarding.Length;Mirror(state,e);
-            }
-            e.postTestStatus = e.postComplete ? "complete" : "partial"; Mirror(state, e); return true;
+            e.postTestStatus = e.postComplete ? "complete" : "partial"; return true;
         }
         public static bool ValidRating(EvaluationRating item, int value) => value >= 1 && value <= 5 || value == 0 && item.allowNotApplicable;
         public static bool QuestionnaireAnswered(EvaluationState e, EvaluationContent content) => e.experienceAnswers.Length == content.experience.Length && content.experience.Select((x, i) => ValidRating(x, e.experienceAnswers[i])).All(x => x);
@@ -160,13 +163,7 @@ namespace DemocracyWay.NewUI
         {
             var e = Ensure(state, content);
             if (e.completed || !Ready(e) || !HasPoint(point) || !FullCampaignComplete(state) || !QuestionnaireAnswered(e, content)) return false;
-            e.completed = e.surveyComplete = true; e.submitPoint = point; Mirror(state, e); return true;
-        }
-        static void Mirror(GameState s, EvaluationState e)
-        {
-            s.campaign.initialAnswers = (int[])e.baselineAnswers.Clone(); s.campaign.initialIndex = e.baselineIndex; s.campaign.initialComplete = e.baselineComplete;
-            s.campaign.finalAnswers = (int[])e.postAnswers.Clone(); s.campaign.finalIndex = e.postIndex; s.campaign.finalComplete = e.postComplete;
-            s.campaign.surveyComplete = e.surveyComplete;
+            e.completed = e.surveyComplete = true; e.submitPoint = point; return true;
         }
         public static bool Valid(EvaluationState e)
         {
@@ -174,10 +171,12 @@ namespace DemocracyWay.NewUI
             if (!DemographicsRules.Valid(e.demographics)) return false;
             bool Answers(int[] a, int min, int max) => a != null && a.Length <= 200 && a.All(x => x == -1 || x >= min && x <= max);
             if (!Answers(e.baselineAnswers, 0, 3) || !Answers(e.postAnswers, 0, 3) || !Answers(e.experienceAnswers, 0, 5) || !Answers(e.intentionAnswers, 1, 5) ||
-                !Answers(e.baselineTendencyAnswers, 1, 5) || !Answers(e.finalTendencyAnswers, 1, 5)) return false;
+                !Answers(e.baselineTendencyAnswers, 1, 5) || !Answers(e.finalTendencyAnswers, 1, 5) ||
+                !Answers(e.baselineParticipationAnswers, 1, 5) || !Answers(e.finalParticipationAnswers, 1, 5)) return false;
             if (e.baselineIndex < 0 || e.baselineIndex > e.baselineAnswers.Length || e.postIndex < 0 || e.postIndex > e.postAnswers.Length ||
-                e.baselineTendencyIndex < 0 || e.baselineTendencyIndex > e.baselineTendencyAnswers.Length || e.finalTendencyIndex < 0 || e.finalTendencyIndex > e.finalTendencyAnswers.Length) return false;
-            foreach (var p in new[] { e.baselinePoint, e.postPoint, e.startPoint, e.submitPoint, e.baselineTendencyPoint, e.finalTendencyPoint }) if (Normalise(p) != null && !HasPoint(p)) return false;
+                e.baselineTendencyIndex < 0 || e.baselineTendencyIndex > e.baselineTendencyAnswers.Length || e.finalTendencyIndex < 0 || e.finalTendencyIndex > e.finalTendencyAnswers.Length ||
+                e.baselineParticipationIndex < 0 || e.baselineParticipationIndex > e.baselineParticipationAnswers.Length || e.finalParticipationIndex < 0 || e.finalParticipationIndex > e.finalParticipationAnswers.Length) return false;
+            foreach (var p in new[] { e.baselinePoint, e.postPoint, e.startPoint, e.submitPoint, e.baselineTendencyPoint, e.finalTendencyPoint, e.baselineParticipationPoint, e.finalParticipationPoint }) if (Normalise(p) != null && !HasPoint(p)) return false;
             return !e.completed || e.surveyComplete && Ready(e) && HasPoint(e.submitPoint) && e.experienceAnswers.All(x => x >= 0);
         }
     }

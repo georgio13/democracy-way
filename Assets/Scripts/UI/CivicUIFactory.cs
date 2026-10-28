@@ -99,11 +99,20 @@ namespace DemocracyWay.NewUI
             var bar = track.gameObject.AddComponent<Scrollbar>(); bar.direction = Scrollbar.Direction.BottomToTop; bar.handleRect = handle; bar.targetGraphic = image;
             bar.navigation = new Navigation { mode = Navigation.Mode.None }; scroll.verticalScrollbar = bar; return scroll;
         }
-        internal static RawImage Portrait(Transform parent, string name, Texture texture, int index)
+
+        /// <summary>Ενιαίο βάψιμο «επιλεγμένου» κουμπιού (Teal/Paper), μία υλοποίηση για όλα τα ερωτηματολόγια.</summary>
+        internal static void PaintSelectable(Button button, bool selected)
         {
-            var r = Rect(parent, name); r.gameObject.AddComponent<CanvasRenderer>(); var image = r.gameObject.AddComponent<RawImage>();
-            image.texture = texture; image.raycastTarget = false; index = Mathf.Clamp(index, 0, 19);
-            image.uvRect = new Rect((index % 4) * .25f, 1 - (index / 4 + 1) * .2f, .25f, .2f); return image;
+            if (button == null) return;
+            var shape = button.GetComponent<PanelGraphic>();
+            if (shape != null) shape.color = selected ? Teal : Paper;
+            else
+            {
+                var image = button.GetComponent<Image>();
+                if (image != null) image.color = selected ? Teal : Paper;
+            }
+            var label = button.GetComponentInChildren<TMPro.TMP_Text>(true);
+            if (label != null) label.color = selected ? Paper : Ink;
         }
     }
 }

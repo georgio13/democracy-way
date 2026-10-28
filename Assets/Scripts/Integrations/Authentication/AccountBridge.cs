@@ -43,7 +43,6 @@ namespace DemocracyWay.NewUI
         [DllImport("__Internal")] static extern void DW_AccountFailed();
         [DllImport("__Internal")] static extern void DW_AccountUpload(int slot, string envelope);
         [DllImport("__Internal")] static extern void DW_AccountDelete(int slot);
-        [DllImport("__Internal")] static extern void DW_AccountOpen();
         [DllImport("__Internal")] static extern void DW_AccountLogin(string email, string password);
         [DllImport("__Internal")] static extern void DW_AccountCreate(string email, string password);
         [DllImport("__Internal")] static extern void DW_AccountReset(string email);
@@ -195,7 +194,12 @@ namespace DemocracyWay.NewUI
                 // Namespace is established before reconciliation; local newer writes
                 // must be allowed back into that same account's upload queue.
                 IsReady = true; AuthenticationResolved = true;
-                foreach (var slot in packet.slots ?? Array.Empty<CloudSlot>()) Reconcile(slot);
+                // Cloud-wins: στο login το Firestore είναι η μοναδική αλήθεια. Θέσεις που δεν
+                // υπάρχουν στο cloud σβήνονται και τοπικά — τα τοπικά αρχεία είναι μόνο cache.
+                var covered = new System.Collections.Generic.HashSet<int>();
+                foreach (var slot in packet.slots ?? Array.Empty<CloudSlot>()) { Reconcile(slot); covered.Add(slot.slot); }
+                for (int i = 0; i < SaveStore.SlotCount; i++)
+                    if (!covered.Contains(i)) DeleteLocal(i);
                 GameSession.State = null; GameSession.Slot = -1; CloudStatus = "ready";
                 SaveStore.FlushWebStorage();
                 StateChanged?.Invoke();
@@ -209,28 +213,31 @@ namespace DemocracyWay.NewUI
 #endif
             }
         }
+        // Cloud-wins: ό,τι λέει το Firestore στο login επιβάλλεται στα τοπικά.
+        // Τίποτα τοπικό δεν ανεβαίνει στο login και τίποτα τοπικό δεν «ανασταίνει» διαγραμμένη θέση.
         static void Reconcile(CloudSlot slot)
         {
             if (slot.slot < 0 || slot.slot >= SaveStore.SlotCount) throw new InvalidDataException("Invalid cloud slot.");
+            if (slot.deleted || string.IsNullOrEmpty(slot.envelope)) { DeleteLocal(slot.slot); return; }
+            var cloud = JsonUtility.FromJson<SaveEnvelope>(slot.envelope);
+            // Cloud save παλαιότερης έκδοσης = ανύπαρκτη θέση, όχι σφάλμα.
+            if (cloud != null && (cloud.format != SaveStore.Format || cloud.version != SaveStore.Version)) { DeleteLocal(slot.slot); return; }
+            if (cloud == null || cloud.slot != slot.slot || string.IsNullOrEmpty(cloud.payloadJson) || cloud.checksum != EnvelopeChecksum(cloud.payloadJson)) throw new InvalidDataException("Cloud save validation failed.");
             string path = Path.Combine(LocalDirectory, "slot-" + (slot.slot + 1) + ".json");
             string local = File.Exists(path) ? File.ReadAllText(path) : null;
-            if (slot.deleted)
-            {
-                if (local != null && Date(slot.updatedUtc) >= EnvelopeDate(local)) { File.Delete(path); if (File.Exists(path + ".bak")) File.Delete(path + ".bak"); }
-                else if (local != null) UploadSlot(slot.slot, local);
-                return;
-            }
-            if (string.IsNullOrEmpty(slot.envelope)) { if (local != null) UploadSlot(slot.slot, local); return; }
-            var cloud = JsonUtility.FromJson<SaveEnvelope>(slot.envelope);
-            if (cloud == null || cloud.slot != slot.slot || cloud.format != SaveStore.Format || cloud.version != SaveStore.Version || string.IsNullOrEmpty(cloud.payloadJson) || cloud.checksum != EnvelopeChecksum(cloud.payloadJson)) throw new InvalidDataException("Cloud save validation failed.");
-            if (local != null && EnvelopeDate(local) > EnvelopeDate(slot.envelope)) { UploadSlot(slot.slot, local); return; }
             if (local != null && local != slot.envelope) File.WriteAllText(path + ".bak", local, new UTF8Encoding(false));
             File.WriteAllText(path + ".tmp", slot.envelope, new UTF8Encoding(false)); File.Copy(path + ".tmp", path, true); File.Delete(path + ".tmp");
         }
-        static DateTime EnvelopeDate(string json) { try { return Date(JsonUtility.FromJson<SaveEnvelope>(json)?.savedAtUtc); } catch { return DateTime.MinValue; } }
-        static DateTime Date(string text) => DateTime.TryParse(text, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var date) ? date.ToUniversalTime() : DateTime.MinValue;
-        static string Digest(string text) { using var sha = SHA256.Create(); return BitConverter.ToString(sha.ComputeHash(Encoding.UTF8.GetBytes(text))).Replace("-", "").ToLowerInvariant(); }
-        static string EnvelopeChecksum(string text) { unchecked { uint value = 2166136261; foreach (byte b in Encoding.UTF8.GetBytes(text)) { value ^= b; value *= 16777619; } return value.ToString("X8", CultureInfo.InvariantCulture); } }
+
+        static void DeleteLocal(int slot)
+        {
+            string path = Path.Combine(LocalDirectory, "slot-" + (slot + 1) + ".json");
+            foreach (string suffix in new[] { "", ".bak", ".tmp" })
+                if (File.Exists(path + suffix)) File.Delete(path + suffix);
+        }
+
+        static string Digest(string text) => Hashing.Sha256Hex(text);
+        static string EnvelopeChecksum(string text) => Hashing.Fnv1a(text);
         public void OnCloudStatus(string json) { var status = JsonUtility.FromJson<SyncStatus>(json); CloudStatus = status != null && status.ok && status.pending == 0 ? "synced" : "pending"; }
         public void OnResearchConsent(string consent) { ResearchConsent = consent == "true"; StateChanged?.Invoke(); }
         public void OnAccountSignedOut(string ignored)

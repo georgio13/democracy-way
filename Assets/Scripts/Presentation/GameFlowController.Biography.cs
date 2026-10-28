@@ -140,6 +140,7 @@ namespace DemocracyWay.NewUI
             State.biographyComplete = true;
             State.phase = "prytany-title";
             RecalculateMetrics();
+            InitialiseAgoraCitizen();   // τάξη + bonuses από τη βιογραφία, πόλη πάντα από cityStart (ΣΤ.1)
             SaveCheckpoint();
             Show(State.phase);
         }

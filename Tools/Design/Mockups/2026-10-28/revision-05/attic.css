@@ -1,0 +1,82 @@
+#dw-kairos-new{--attic-icons:__ICONS__}
+#dw-kairos-new .attic-icon{display:inline-block;flex:none;width:2.5cqw;height:3.1cqw;background-image:var(--attic-icons);background-repeat:no-repeat;vertical-align:middle}
+#dw-kairos-new .ks-location{gap:1cqw;align-items:center}
+#dw-kairos-new .ks-location .attic-icon{width:3.5cqw;height:4.2cqw;filter:drop-shadow(0 .1cqw .2cqw #19293b66)}
+#dw-kairos-new .ks-location-text{border-bottom:1px solid #d0ac6688;padding-bottom:.7cqw}
+#dw-kairos-new .ks-location-text strong{letter-spacing:.01em}
+#dw-kairos-new .ks-location-text span{color:#f0dec0}
+#dw-kairos-new .ks-round{background:linear-gradient(145deg,#bd9c59,#7b6235);border:1px solid #d2b77e;box-shadow:inset 0 0 0 1px #5b4a2988,inset 0 1px #f7df9a44;clip-path:polygon(9% 0,100% 0,100% 91%,91% 100%,0 100%,0 9%);color:#f3e5bb}
+#dw-kairos-new .attic-pause{font-size:1.7cqw;font-weight:400;letter-spacing:.1em;line-height:1}
+#dw-kairos-new .ks-tablet{top:17%;bottom:7%}
+#dw-kairos-new .ks-body{top:14%;bottom:23%;left:8.5%;right:9%}
+#dw-kairos-new .ks-eyebrow{text-transform:none;letter-spacing:.07em;font-size:1.02cqw;color:#817259;margin-bottom:.7cqw}
+#dw-kairos-new .ks-eyebrow span{display:inline-flex;align-items:center;gap:.3cqw}
+#dw-kairos-new .ks-eyebrow .ks-current{color:#5f5138}
+#dw-kairos-new h2{font-size:2.35cqw;color:#2d3c43}
+#dw-kairos-new .ks-speaker-tabs button{position:relative;display:flex;align-items:center;justify-content:center;gap:.6cqw;padding:.35cqw .6cqw;border:1px solid #b49a65;box-shadow:inset 0 0 0 1px #f9eed388,inset 0 1px #fff4d4;background:linear-gradient(145deg,#e9dcc0,#d9c9a3);clip-path:polygon(1.5% 0,100% 0,100% 90%,98.5% 100%,0 100%,0 10%);color:#5f533a;font-size:1.2cqw}
+#dw-kairos-new .ks-speaker-tabs button[aria-pressed=true]{background:linear-gradient(145deg,#31475b,#20364b);border-color:#bc9c57;box-shadow:inset 0 0 0 1px #ceb77a55;color:#f4e5be}
+#dw-kairos-new .ks-speaker-tabs .attic-icon{width:1.7cqw;height:2cqw;opacity:.85}
+#dw-kairos-new .ks-speaker h3{font-size:1.55cqw;color:#3a423b}
+#dw-kairos-new .ks-speaker{border-bottom:1px solid #aa916555}
+#dw-kairos-new .ks-portrait-ring{padding:.22cqw;background:linear-gradient(140deg,#d5ba75,#8d733c);box-shadow:inset 0 0 0 1px #d5bc87}
+#dw-kairos-new .ks-copy{color:#3e463f}
+#dw-kairos-new .ks-tablet-footer{bottom:11%;align-items:center}
+#dw-kairos-new .ks-action{height:3.6cqw;background-size:100% 290%;font-size:1.25cqw;padding:.7cqw 3cqw;min-width:21cqw;color:#352c1b;letter-spacing:.01em;font-weight:600}
+#dw-kairos-new .ks-secondary{font-size:1.2cqw;color:#776345;gap:.55cqw;padding:0}
+#dw-kairos-new .ks-secondary .attic-icon{width:2.2cqw;height:2.7cqw}
+#dw-kairos-new .ks-vote .ks-tablet{left:21%;right:20%;top:18%;bottom:6%}
+#dw-kairos-new .ks-vote .ks-body{top:15%;bottom:28%;left:9%;right:9%}
+#dw-kairos-new .ks-vote .ks-question{display:flex;align-items:center;justify-content:center;gap:.65cqw;margin-bottom:1.1cqw}
+#dw-kairos-new .ks-question .attic-icon{width:1.7cqw;height:2.1cqw}
+#dw-kairos-new .ks-ballot{border:1px solid #ab8e56;background:linear-gradient(145deg,#f2e8ce,#e5d4b0);box-shadow:inset 0 0 0 .15cqw #f9edd2,inset 0 0 0 .23cqw #ba9c65;clip-path:polygon(2% 0,100% 0,100% 96%,98% 100%,0 100%,0 4%);gap:.7cqw;padding:1.1cqw .8cqw 1.5cqw}
+#dw-kairos-new .ks-ballot .ks-round{background:linear-gradient(145deg,#f4e8c7,#d0b779);color:#6c532c;border:1px solid #9c7c3e;box-shadow:inset 0 0 0 1px #f6e7bb}
+#dw-kairos-new .ks-ballot:after{content:'';position:absolute;bottom:.5cqw;left:20%;right:20%;height:.23cqw;border-top:1px solid #a58b5344;border-bottom:1px solid #a58b5344}
+#dw-kairos-new .ks-ballot[aria-pressed=true]{background:linear-gradient(145deg,#e5e8ce,#bccdbc);border-color:#607e69;box-shadow:inset 0 0 0 .15cqw #f0e4c1,inset 0 0 0 .25cqw #6d886f}
+#dw-kairos-new .ks-vote .ks-tablet-footer{bottom:12.5%}
+#dw-kairos-new .ks-vote .ks-action{height:3.6cqw;min-width:26cqw;font-size:1.35cqw}
+#dw-kairos-new .ks-menu .ks-tablet{top:7%;bottom:6%;left:5%;right:44%}
+#dw-kairos-new .ks-menu .ks-body{top:14%;bottom:15%;left:10%;right:10%}
+#dw-kairos-new .ks-menu-logo{width:85%;margin-bottom:1.1cqw;background:linear-gradient(145deg,#34495f,#203247);border:1px solid #b19458;clip-path:polygon(1.5% 0,100% 0,100% 97%,98.5% 100%,0 100%,0 3%)}
+#dw-kairos-new .ks-menu-tag{font-size:1.15cqw;margin-bottom:1.4cqw;color:#746a50}
+#dw-kairos-new .ks-menu-actions{gap:.65cqw;padding:0 2.3cqw}
+#dw-kairos-new .ks-menu-actions .ks-action{height:3.7cqw;font-size:1.6cqw}
+#dw-kairos-new .ks-newgame{height:3.7cqw;background:linear-gradient(145deg,#f4e8ca,#dfcaa0);border:1px solid #b49a65;box-shadow:inset 0 0 0 1px #fff0cd88;color:#6d5934;font-size:1.5cqw;clip-path:polygon(1.5% 0,100% 0,100% 96%,98.5% 100%,0 100%,0 4%)}
+#dw-kairos-new .ks-newgame{background:var(--bronze-button) center/100% 290% no-repeat;border:0;box-shadow:none;filter:saturate(.25) brightness(1.24);padding:.7cqw 3cqw;color:#3c3928;clip-path:none}
+#dw-kairos-new .ks-menu-options{gap:2.2cqw;margin-top:.7cqw}
+#dw-kairos-new .ks-menu-options .attic-icon{width:2.1cqw;height:2.6cqw}
+@media(max-width:600px){
+#dw-kairos-new .ks-location{gap:10px;top:20px;left:18px}
+#dw-kairos-new .ks-location .attic-icon{width:34px;height:44px}
+#dw-kairos-new .ks-location-text{padding-bottom:7px}
+#dw-kairos-new .ks-location-text strong{font-size:20px}
+#dw-kairos-new .ks-location-text span{font-size:10px}
+#dw-kairos-new .ks-top-right{top:101px}
+#dw-kairos-new .attic-pause{font-size:22px}
+#dw-kairos-new .ks-tablet,#dw-kairos-new .ks-vote .ks-tablet{left:1%;right:1%;top:155px;bottom:15px}
+#dw-kairos-new .ks-body{top:15%;bottom:25%;left:10%;right:10%}
+#dw-kairos-new .ks-eyebrow{font-size:11px;letter-spacing:.03em;margin-bottom:12px}
+#dw-kairos-new .ks-eyebrow span{gap:3px}
+#dw-kairos-new h2{font-size:24px}
+#dw-kairos-new .ks-speaker-tabs button{font-size:14px;padding:8px 6px;gap:6px}
+#dw-kairos-new .ks-speaker-tabs .attic-icon{width:17px;height:23px}
+#dw-kairos-new .ks-speaker h3{font-size:16px}
+#dw-kairos-new .ks-tablet-footer{bottom:13%;gap:12px;left:10%;right:10%}
+#dw-kairos-new .ks-action{height:44px;font-size:14px;min-width:190px;padding:10px 28px}
+#dw-kairos-new .ks-secondary{font-size:13px;gap:7px}
+#dw-kairos-new .ks-secondary .attic-icon{width:25px;height:30px}
+#dw-kairos-new .ks-vote .ks-body{top:15%;bottom:28%;left:10%;right:10%}
+#dw-kairos-new .ks-vote .ks-question{font-size:15px;gap:8px;margin-bottom:20px}
+#dw-kairos-new .ks-question .attic-icon{width:22px;height:28px}
+#dw-kairos-new .ks-ballot{padding:15px 18px;gap:4px 14px}
+#dw-kairos-new .ks-ballot:after{height:3px;bottom:5px}
+#dw-kairos-new .ks-vote .ks-action{height:44px;min-width:220px;font-size:14px}
+#dw-kairos-new .ks-vote .ks-tablet-footer{bottom:14%}
+#dw-kairos-new .ks-menu .ks-tablet{left:1%;right:1%;top:45px;bottom:40px}
+#dw-kairos-new .ks-menu .ks-body{top:15%;bottom:15%;left:11%;right:11%}
+#dw-kairos-new .ks-menu-logo{width:100%;margin-bottom:25px}
+#dw-kairos-new .ks-menu-tag{font-size:16px;margin-bottom:30px}
+#dw-kairos-new .ks-menu-actions{gap:13px;padding:0 8px}
+#dw-kairos-new .ks-menu-actions .ks-action,#dw-kairos-new .ks-newgame{height:46px;font-size:17px}
+#dw-kairos-new .ks-menu-options{gap:13px;margin-top:22px}
+#dw-kairos-new .ks-menu-options .attic-icon{width:25px;height:31px}
+}

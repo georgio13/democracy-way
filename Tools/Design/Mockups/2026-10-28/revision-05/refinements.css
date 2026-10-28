@@ -1,0 +1,94 @@
+#dw-kairos-new .ks-scene:after{background:linear-gradient(120deg,#172c4444,transparent 40%),linear-gradient(180deg,#172b4333,transparent 25%,transparent 70%,#142a3b22)}
+#dw-kairos-new .ks-location{left:4.2%;top:5%;height:auto;filter:none}
+#dw-kairos-new .ks-location-text{margin:0;padding:0 0 .7cqw;background:none;border:0;border-bottom:1px solid #e8cd8b88;clip-path:none;text-shadow:0 .15cqw .3cqw #12273c;max-width:37cqw}
+#dw-kairos-new .ks-location-text strong{font-size:2.1cqw;font-weight:600}
+#dw-kairos-new .ks-location-text span{font-size:.95cqw;letter-spacing:.12em;margin-top:.5cqw}
+#dw-kairos-new .ks-top-right{top:5%;right:4%}
+#dw-kairos-new .ks-chapter{background:#1a2c43d9;box-shadow:inset 0 1px #cbb68255;clip-path:polygon(0 0,97% 0,100% 20%,100% 100%,3% 100%,0 80%);padding:.65cqw 1.2cqw;font-size:1.1cqw}
+#dw-kairos-new .ks-round{border-radius:0;border:1px solid #b09a6577;background:linear-gradient(145deg,#33465e,#1c3048);box-shadow:inset 0 1px #ecddbe22,0 1px 2px #14243733;color:#ece1c4;clip-path:polygon(12% 0,100% 0,100% 88%,88% 100%,0 100%,0 12%);width:2.8cqw;height:2.8cqw;padding:.6cqw}
+#dw-kairos-new .ks-tablet{left:45%;right:3%;top:18%;bottom:8%;filter:drop-shadow(.15cqw .35cqw .3cqw #16223044)}
+#dw-kairos-new .ks-body{left:8.5%;right:9%;top:11%;bottom:21%}
+#dw-kairos-new .ks-eyebrow{font-size:.95cqw;letter-spacing:.06em;color:#72735f;margin-bottom:.9cqw}
+#dw-kairos-new .ks-eyebrow span+span:before{content:' / ';padding:0 .65cqw;color:#a69c81}
+#dw-kairos-new .ks-eyebrow .ks-current{color:#354b54;font-weight:600}
+#dw-kairos-new h2{font-size:2.35cqw;margin-bottom:1.2cqw}
+#dw-kairos-new .ks-speaker-tabs{margin:.8cqw 0 1.3cqw;gap:.7cqw}
+#dw-kairos-new .ks-speaker-tabs button{background:#e8dfc6;box-shadow:inset 0 1px #fff9e8;border:1px solid #b7a78288;padding:.65cqw .5cqw;font-size:1.2cqw;clip-path:polygon(3% 0,100% 0,100% 80%,97% 100%,0 100%,0 20%)}
+#dw-kairos-new .ks-speaker-tabs button[aria-pressed=true]{background:linear-gradient(160deg,#33475d,#22364b);box-shadow:inset 0 1px #e4c78b77;border-color:#8c825f;color:#f1e6ca}
+#dw-kairos-new .ks-speaker{gap:1.1cqw;padding-bottom:1.2cqw}
+#dw-kairos-new .ks-portrait-ring{width:5cqw;height:5cqw;padding:.18cqw;background:linear-gradient(135deg,#ccba87,#8d805e);clip-path:polygon(15% 0,100% 0,100% 85%,85% 100%,0 100%,0 15%)}
+#dw-kairos-new .ks-speaker h3{font-size:1.55cqw}
+#dw-kairos-new .ks-copy{font-size:1.6cqw;line-height:1.5;margin-top:1.2cqw}
+#dw-kairos-new .ks-tablet-footer{left:8.5%;right:9%;bottom:9%;gap:1cqw}
+#dw-kairos-new .ks-action{height:3.3cqw;min-width:19.5cqw;padding:.65cqw 1.7cqw;background-size:100% 290%;font-size:1.3cqw;font-weight:600;filter:drop-shadow(0 .08cqw .08cqw #4b381f33)}
+#dw-kairos-new .ks-action:hover{filter:brightness(1.06) drop-shadow(0 .08cqw .08cqw #4b381f33)}
+#dw-kairos-new .ks-secondary{color:#586056;font-size:1.2cqw;gap:.55cqw}
+#dw-kairos-new .ks-secondary .ks-round{background:none;box-shadow:none;border:0;clip-path:none;color:#7b795c;width:2cqw;height:2cqw;padding:.15cqw}
+#dw-kairos-new .ks-left-caption{width:30%;background:linear-gradient(90deg,#172d4388,transparent);border-left:1px solid #c9b07888;padding:.8cqw 1cqw;font-size:1.3cqw;bottom:7%}
+#dw-kairos-new .ks-vote .ks-tablet{left:22%;right:21%;top:19%;bottom:7%}
+#dw-kairos-new .ks-vote .ks-body{left:9%;right:9%;top:12%;bottom:25%}
+#dw-kairos-new .ks-vote .ks-body h2{font-size:2.4cqw}
+#dw-kairos-new .ks-question{font-size:1.4cqw;margin:.7cqw 0 1.6cqw}
+#dw-kairos-new .ks-ballots{gap:1.3cqw}
+#dw-kairos-new .ks-ballot{padding:1.3cqw 1cqw;gap:.65cqw;border:1px solid #b4a37b;background:linear-gradient(140deg,#f4edda,#e4d9bb);box-shadow:inset 0 1px #fff9e8,0 .1cqw .15cqw #79683e22;clip-path:polygon(5% 0,100% 0,100% 91%,95% 100%,0 100%,0 9%)}
+#dw-kairos-new .ks-ballot .ks-round{width:3cqw;height:3cqw;background:none;color:#6d6c54;border:1px solid #ad9b6c;box-shadow:none;font-size:1.8cqw}
+#dw-kairos-new .ks-ballot strong{font-size:1.6cqw}
+#dw-kairos-new .ks-ballot small{font-size:1.15cqw;max-width:15cqw}
+#dw-kairos-new .ks-ballot[aria-pressed=true]{background:linear-gradient(140deg,#e0e8d6,#c6d6c7);box-shadow:inset 0 0 0 1px #597b70;border-color:#668276}
+#dw-kairos-new .ks-vote .ks-tablet-footer{left:9%;right:9%;bottom:11%}
+#dw-kairos-new .ks-vote .ks-action{height:3.4cqw;min-width:25cqw;font-size:1.4cqw}
+#dw-kairos-new .ks-vote-status{font-size:1.1cqw;min-height:1.5cqw;margin-top:1cqw}
+#dw-kairos-new .ks-menu .ks-tablet{left:5%;right:44%;top:7%;bottom:7%}
+#dw-kairos-new .ks-menu .ks-body{left:10%;right:10%;top:11%;bottom:13%}
+#dw-kairos-new .ks-menu-logo{width:89%;margin-bottom:1.2cqw;padding:.9cqw 1.6cqw;border-bottom:1px solid #bca26a;clip-path:polygon(3% 0,100% 0,100% 95%,97% 100%,0 100%,0 5%);filter:none}
+#dw-kairos-new .ks-menu-tag{font-size:1.2cqw;margin-bottom:1.5cqw;line-height:1.5}
+#dw-kairos-new .ks-menu-actions{padding:0 2.3cqw;gap:.8cqw}
+#dw-kairos-new .ks-menu-actions .ks-action{height:3.7cqw;font-size:1.65cqw}
+#dw-kairos-new .ks-newgame{height:3.7cqw;font-size:1.55cqw;box-shadow:inset 0 1px #fffae8;border:1px solid #b5a37c;background:linear-gradient(145deg,#f5edda,#e0d3b5)}
+#dw-kairos-new .ks-menu-options{gap:2.5cqw;margin-top:.6cqw}
+#dw-kairos-new .ks-menu-options .ks-secondary{font-size:1.1cqw}
+@media(max-width:600px){
+#dw-kairos-new .ks-screen{min-height:800px}
+#dw-kairos-new .ks-location{left:20px;top:22px;height:auto}
+#dw-kairos-new .ks-location-text{max-width:none;padding:0 0 10px}
+#dw-kairos-new .ks-location-text strong{font-size:22px}
+#dw-kairos-new .ks-location-text span{font-size:11px;margin-top:7px}
+#dw-kairos-new .ks-top-right{top:95px;left:20px;right:20px}
+#dw-kairos-new .ks-round{width:36px;height:36px;padding:8px}
+#dw-kairos-new .ks-chapter{font-size:12px;padding:8px 12px}
+#dw-kairos-new .ks-tablet,#dw-kairos-new .ks-vote .ks-tablet{left:1%;right:1%;top:155px;bottom:15px}
+#dw-kairos-new .ks-body{left:10%;right:10%;top:11%;bottom:26%}
+#dw-kairos-new .ks-eyebrow{font-size:11px;margin-bottom:14px}
+#dw-kairos-new .ks-eyebrow span+span:before{padding:0 5px}
+#dw-kairos-new h2{font-size:24px;margin-bottom:18px}
+#dw-kairos-new .ks-speaker-tabs{gap:8px;margin:10px 0 18px}
+#dw-kairos-new .ks-speaker-tabs button{font-size:14px;padding:9px;min-height:44px}
+#dw-kairos-new .ks-speaker{gap:12px;padding-bottom:17px}
+#dw-kairos-new .ks-portrait-ring{width:52px;height:52px;padding:2px}
+#dw-kairos-new .ks-speaker h3{font-size:17px}
+#dw-kairos-new .ks-copy{font-size:16px;line-height:1.5;margin-top:18px}
+#dw-kairos-new .ks-tablet-footer{left:10%;right:10%;bottom:11%;flex-direction:row;gap:10px;align-items:center;flex-wrap:wrap}
+#dw-kairos-new .ks-action{font-size:14px;height:44px;min-width:175px;padding:10px 14px}
+#dw-kairos-new .ks-secondary{font-size:13px;gap:6px}
+#dw-kairos-new .ks-secondary .ks-round{width:23px;height:23px;padding:2px}
+#dw-kairos-new .ks-vote .ks-body{left:10%;right:10%;top:12%;bottom:25%}
+#dw-kairos-new .ks-vote .ks-body h2{font-size:24px}
+#dw-kairos-new .ks-question{font-size:16px;margin:12px 0 20px}
+#dw-kairos-new .ks-ballots{gap:12px}
+#dw-kairos-new .ks-ballot{gap:4px 14px;padding:16px}
+#dw-kairos-new .ks-ballot .ks-round{width:34px;height:34px;font-size:20px}
+#dw-kairos-new .ks-ballot strong{font-size:17px}
+#dw-kairos-new .ks-ballot small{font-size:13px;max-width:none}
+#dw-kairos-new .ks-vote-status{font-size:13px;margin-top:18px}
+#dw-kairos-new .ks-vote .ks-action{height:44px;min-width:210px;font-size:15px}
+#dw-kairos-new .ks-vote .ks-tablet-footer{left:10%;right:10%;bottom:12%}
+#dw-kairos-new .ks-menu .ks-tablet{left:1%;right:1%;top:45px;bottom:45px}
+#dw-kairos-new .ks-menu .ks-body{left:11%;right:11%;top:13%;bottom:12%}
+#dw-kairos-new .ks-menu-logo{width:100%;padding:10px 15px;margin-bottom:26px}
+#dw-kairos-new .ks-menu-tag{font-size:16px;margin-bottom:28px}
+#dw-kairos-new .ks-menu-actions{padding:0 8px;gap:12px}
+#dw-kairos-new .ks-menu-actions .ks-action,#dw-kairos-new .ks-newgame{font-size:18px;height:46px}
+#dw-kairos-new .ks-menu-options{gap:10px;margin-top:20px}
+#dw-kairos-new .ks-menu-options .ks-secondary{font-size:15px}
+}
+@media(max-width:400px){#dw-kairos-new .ks-screen{min-height:900px}}

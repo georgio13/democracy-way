@@ -15,20 +15,24 @@ namespace DemocracyWay.NewUI
         public EvaluationQuestion[] onboarding, postTest;
         public EvaluationRating[] experience, participationIntention;
         public DemographicsContent demographics;
-        public EvaluationRating[] tendencies;
-        public string knowledgeVersion, tendencyVersion, tendencyInstructions, tendencyStatus;
+        public TendencyItem[] tendencies;
+        public string tendencyInstructions;
         public string[] tendencyRatingLabels;
-        public bool showBaselineFeedback;
+        public TendencyItem[] participation;
+        public string participationInstructions;
+        public string[] participationRatingLabels;
         public EvaluationSource[] sources;
     }
 
     [Serializable]
     public sealed class EvaluationQuestion
     {
-        public string id, construct, prompt, feedback, identityTemplate, sourceRef, sourceUrl;
-        public string[] answers;
-        public int correctIndex;
+        public string id, prompt, correctId;
+        public KnowledgeAnswer[] answers;
     }
+
+    [Serializable]
+    public sealed class KnowledgeAnswer { public string id, text; }
 
     [Serializable]
     public sealed class EvaluationRating
@@ -40,6 +44,9 @@ namespace DemocracyWay.NewUI
         public float analysisWeight = 1;
         public bool required = true;
     }
+
+    [Serializable]
+    public sealed class TendencyItem { public string id, prompt; public bool reverse; }
 
     [Serializable]
     public sealed class EvaluationSource { public string id, citation, url; }
@@ -57,12 +64,16 @@ namespace DemocracyWay.NewUI
     {
         public DemographicsState demographics = new DemographicsState();
         public string instrumentVersion, researchParticipantId;
-        public string tendencyVersion;
         public string[] tendencyItemIds;
         public int[] baselineTendencyAnswers = Array.Empty<int>(), finalTendencyAnswers = Array.Empty<int>();
         public int baselineTendencyIndex, finalTendencyIndex;
         public bool baselineTendencyComplete, finalTendencyComplete;
         public EvaluationPoint baselineTendencyPoint, finalTendencyPoint;
+        public string[] participationItemIds;
+        public int[] baselineParticipationAnswers = Array.Empty<int>(), finalParticipationAnswers = Array.Empty<int>();
+        public int baselineParticipationIndex, finalParticipationIndex;
+        public bool baselineParticipationComplete, finalParticipationComplete;
+        public EvaluationPoint baselineParticipationPoint, finalParticipationPoint;
         public string submissionId, openFeedback;
         public string[] experienceItemIds, intentionItemIds;
         public bool synthetic;
@@ -71,11 +82,10 @@ namespace DemocracyWay.NewUI
         public string exposure = "biography+baseline-feedback";
         public string administrationVersion = "experience-only-midcampaign-v2";
         public string postTestStatus = "not_started";
-        public string returnPhase = "map-stela";
         public int baselineIndex, postIndex;
         public int[] baselineAnswers = Empty(8), postAnswers = Empty(8);
         public int[] experienceAnswers = Empty(12), intentionAnswers = Empty(2);
-        public bool baselineFeedbackPending, baselineComplete, postComplete, surveyComplete, onboardingHelpSeen;
+        public bool baselineComplete, postComplete, surveyComplete, onboardingHelpSeen;
         public bool offered, deferred, completed;
         public EvaluationPoint baselinePoint, offerPoint, startPoint, submitPoint, postPoint;
         static int[] Empty(int length) { var a = new int[length]; for (int i = 0; i < length; i++) a[i] = -1; return a; }

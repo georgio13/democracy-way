@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c359138b437fa7f49be192be74e9be5b, type: 3}
+  m_Name: Official_Lykourgos
+  m_EditorClassIdentifier: Assembly-CSharp::Agora.OfficialData
+  displayName: "\u039B\u03C5\u03BA\u03BF\u03CD\u03C1\u03B3\u03BF\u03C2"
+  demotic: "\u0392\u03BF\u03C5\u03C4\u03AC\u03B4\u03B7\u03C2"
+  office: {fileID: 11400000, guid: c86d501e7c4a176459af1637f96b58b2, type: 2}
+  isHistorical: 1
+  bribable: 0
+  tendency: 75
+  bio: 
+  portrait: {fileID: 0}

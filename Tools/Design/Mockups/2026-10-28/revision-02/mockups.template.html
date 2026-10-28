@@ -1,0 +1,80 @@
+<style>
+@font-face{font-family:DWKargo;src:url('__REGULAR__') format('truetype');font-weight:400;font-display:block}
+@font-face{font-family:DWKargo;src:url('__SEMIBOLD__') format('truetype');font-weight:600;font-display:block}
+#dw-authentic{--dw-paper:__PAPER__;--dw-choice:__CHOICE__;--dw-banner:__BANNER__;--dw-assembly:__ASSEMBLY__;--dw-menu:__MENU__;--dw-ink:#233b3d;--dw-gold:#b2975c;--dw-cream:#f1e6ca;font-family:DWKargo,sans-serif}
+#dw-authentic *{box-sizing:border-box}
+#dw-authentic .dw-stage{container-type:inline-size;background:#223d42;color:var(--dw-cream);font-family:DWKargo,sans-serif;aspect-ratio:16/9;position:relative;isolation:isolate;overflow:hidden}
+#dw-authentic button{font-family:inherit;cursor:pointer}
+#dw-authentic .dw-bg{position:absolute;inset:0;background-image:var(--dw-assembly);background-size:cover;background-position:center;z-index:-2}
+#dw-authentic .dw-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(17,35,39,.18),rgba(17,35,39,.02) 40%,rgba(17,35,39,.45));z-index:-1}
+#dw-authentic .dw-logo{width:100%;height:auto;display:block;filter:drop-shadow(0 3px 4px #152a2b88)}
+#dw-authentic .dw-menu .dw-bg{background-image:var(--dw-menu)}
+#dw-authentic .dw-menu .dw-shade{background:linear-gradient(90deg,rgba(15,33,38,.87),rgba(15,33,38,.48) 37%,transparent 69%)}
+#dw-authentic .dw-brand{position:absolute;left:4.5%;top:8%;width:35%}
+#dw-authentic .dw-tag{font-size:1.65cqw;line-height:1.5;text-align:center;margin:1cqw 0 2cqw}
+#dw-authentic .dw-menu-list{position:absolute;left:9%;top:52%;width:27%;display:grid;gap:.7cqw}
+#dw-authentic .dw-menu-item{border:0;background:none;color:var(--dw-cream);text-align:left;padding:.5cqw 1cqw;font-size:2.35cqw;display:flex;gap:1.4cqw;align-items:center;min-height:3.5cqw;text-shadow:0 2px 2px #10262d}
+#dw-authentic .dw-menu-item img{width:1.2cqw;height:1.2cqw;object-fit:contain;visibility:hidden}
+#dw-authentic .dw-menu-item:first-child img,#dw-authentic .dw-menu-item:hover img{visibility:visible}
+#dw-authentic .dw-menu-item:first-child{color:#ddc792}
+#dw-authentic .dw-place{position:absolute;bottom:4.3%;left:7.5%;font-size:1.35cqw;color:#dcc799;letter-spacing:.09em}
+#dw-authentic .dw-top{position:absolute;left:4%;top:3%;right:4%;display:flex;align-items:center;justify-content:space-between;gap:2cqw}
+#dw-authentic .dw-banner{background-image:var(--dw-banner);background-size:100% 100%;width:47%;min-height:5.2cqw;display:flex;align-items:center;justify-content:center;padding:.6cqw 3cqw;font-size:2.2cqw;font-weight:600;text-align:center}
+#dw-authentic .dw-context{font-size:1.6cqw;text-shadow:0 2px 3px #12292e}
+#dw-authentic .dw-icon-button{border:0;background:none;color:var(--dw-cream);padding:0;display:flex;align-items:center;gap:.65cqw;font-size:1.55cqw}
+#dw-authentic .dw-icon-button img{width:3.4cqw;height:3.4cqw;object-fit:contain}
+#dw-authentic .dw-paper{border:2.2cqw solid transparent;border-image:var(--dw-paper) 136 fill / 2.2cqw / 0 stretch;color:var(--dw-ink);padding:1cqw 1.6cqw;position:relative}
+#dw-authentic .dw-paper h2{font-size:2.6cqw;line-height:1.15;margin:0 0 1.2cqw;font-weight:600}
+#dw-authentic .dw-paper p{font-size:1.75cqw;line-height:1.5;margin:.5cqw 0}
+#dw-authentic .dw-paper h3{font-size:1.9cqw;line-height:1.3;margin:0 0 .6cqw;font-weight:600}
+#dw-authentic .dw-divider{height:1.3cqw;width:75%;object-fit:fill;display:block;margin:1.2cqw auto}
+#dw-authentic .dw-choice{border:1cqw solid transparent;border-image:var(--dw-choice) 44 fill / 1cqw / 0 stretch;color:var(--dw-cream);background:none;font-size:1.8cqw;line-height:1.2;min-height:4.6cqw;padding:.65cqw 1.4cqw}
+#dw-authentic .dw-choice:hover{filter:brightness(1.13)}
+#dw-authentic .dw-primary{font-size:1.85cqw}
+#dw-authentic .dw-toolbar{position:absolute;left:4.5%;bottom:3.5%;right:4.5%;display:flex;justify-content:space-between;align-items:center}
+#dw-authentic .dw-toolbar .dw-choice{min-width:22%}
+#dw-authentic .dw-split-panel{position:absolute;right:4.5%;top:17%;bottom:15%;width:51%}
+#dw-authentic .dw-speaker-tabs{display:flex;gap:1cqw;margin-bottom:1.5cqw;border-bottom:1px solid #b2975c99}
+#dw-authentic .dw-speaker-tabs button{color:var(--dw-ink);padding:.4cqw .7cqw .65cqw;border:0;border-bottom:.25cqw solid transparent;background:none;font-size:1.8cqw}
+#dw-authentic .dw-speaker-tabs button[aria-pressed=true]{border-bottom-color:#8c7341;font-weight:600}
+#dw-authentic .dw-speaker-tabs button:hover{background:#b2975c22}
+#dw-authentic .dw-speaker-title{display:flex;gap:1.5cqw;align-items:center;margin-bottom:1.4cqw}
+#dw-authentic .dw-bust{width:7cqw;height:7cqw;flex:none;background-image:__PORTRAITS__;background-size:400% 500%;background-position:0% 0%;background-repeat:no-repeat;border:1px solid #b2975c99}
+#dw-authentic .dw-speaker-title h3{margin:0}
+#dw-authentic .dw-small{font-size:1.35cqw;opacity:.78}
+#dw-authentic .dw-caption{font-size:1.45cqw;display:block;color:#dcc799;text-shadow:0 2px 3px #12292e}
+#dw-authentic .dw-parallel-panel{position:absolute;left:4.5%;right:4.5%;bottom:15%;height:45%}
+#dw-authentic .dw-parallel-panel h2{text-align:center;font-size:2.4cqw;margin-bottom:1.6cqw}
+#dw-authentic .dw-columns{display:grid;grid-template-columns:1fr 1fr;gap:3cqw}
+#dw-authentic .dw-columns article+article{border-left:1px solid #b2975c99;padding-left:3cqw}
+#dw-authentic .dw-columns p{font-size:1.65cqw;margin:0}
+#dw-authentic .dw-columns h3{font-size:1.9cqw}
+#dw-authentic .dw-vote .dw-shade{background:rgba(18,38,42,.46)}
+#dw-authentic .dw-vote-panel{position:absolute;left:20%;right:20%;top:19%;bottom:15%;text-align:center;padding-top:1.9cqw}
+#dw-authentic .dw-vote-panel h2{font-size:2.6cqw;margin-bottom:1.2cqw}
+#dw-authentic .dw-vote-options{display:grid;grid-template-columns:1fr 1fr;gap:2cqw;margin-top:2.3cqw}
+#dw-authentic .dw-vote-options .dw-choice{font-size:2cqw;padding:1.5cqw 1cqw;min-height:9cqw}
+#dw-authentic .dw-vote-options small{font-size:1.35cqw;display:block;margin-top:.8cqw;font-weight:400}
+#dw-authentic .dw-vote-status{font-size:1.45cqw;min-height:2cqw;margin-top:1.2cqw}
+#dw-authentic .dw-selected{filter:brightness(1.3);outline:2px solid #b2975c;outline-offset:.2cqw}
+@media(max-width:600px){#dw-authentic .dw-stage{aspect-ratio:auto;min-height:650px}#dw-authentic .dw-top{flex-wrap:wrap;top:20px;gap:8px}#dw-authentic .dw-banner{width:100%;font-size:22px;min-height:62px}#dw-authentic .dw-context{font-size:15px}#dw-authentic .dw-top .dw-icon-button{margin-left:auto}#dw-authentic .dw-icon-button{font-size:15px}#dw-authentic .dw-icon-button img{width:30px;height:30px}#dw-authentic .dw-split-panel,#dw-authentic .dw-parallel-panel,#dw-authentic .dw-vote-panel{left:4%;right:4%;top:155px;bottom:100px;width:auto;height:auto}#dw-authentic .dw-paper{border-width:16px;border-image-width:16px;padding:12px}#dw-authentic .dw-paper h2,#dw-authentic .dw-vote-panel h2{font-size:25px}#dw-authentic .dw-paper p,#dw-authentic .dw-columns p{font-size:16px;line-height:1.45}#dw-authentic .dw-paper h3,#dw-authentic .dw-columns h3{font-size:18px}#dw-authentic .dw-speaker-tabs button{font-size:16px;padding:8px}#dw-authentic .dw-bust{width:65px;height:65px}#dw-authentic .dw-small{font-size:13px}#dw-authentic .dw-speaker-title{gap:12px;margin-bottom:14px}#dw-authentic .dw-choice,#dw-authentic .dw-primary{font-size:16px;min-height:44px;padding:10px 15px;border-image-width:8px}#dw-authentic .dw-caption{display:none}#dw-authentic .dw-columns{grid-template-columns:1fr;gap:15px}#dw-authentic .dw-columns article+article{border:0;border-top:1px solid #b2975c99;padding:12px 0 0}#dw-authentic .dw-parallel-panel h2{margin-bottom:16px}#dw-authentic .dw-vote-options{gap:12px;margin-top:25px}#dw-authentic .dw-vote-options .dw-choice{font-size:19px;min-height:115px}#dw-authentic .dw-vote-options small{font-size:14px;margin-top:10px}#dw-authentic .dw-vote-status{font-size:14px;margin-top:15px}#dw-authentic .dw-brand{width:74%;left:13%;top:8%}#dw-authentic .dw-tag{font-size:17px;margin-top:20px}#dw-authentic .dw-menu-list{left:17%;top:49%;width:65%;gap:10px}#dw-authentic .dw-menu-item{font-size:26px;min-height:46px;gap:17px}#dw-authentic .dw-menu-item img{width:13px;height:13px}#dw-authentic .dw-place{font-size:13px;left:17%}}
+@media(max-width:600px){#dw-authentic .dw-stage:not(.dw-menu){min-height:840px}}
+</style>
+<div id="dw-authentic">
+<div class="viz-carousel" aria-label="Μακέτες με την ταυτότητα της Οδού Δημοκρατίας" data-previous-label="Προηγούμενη" data-next-label="Επόμενη">
+<section data-variant="Κύριο μενού" aria-label="Πρόταση κύριου μενού">
+<div class="dw-stage dw-menu"><div class="dw-bg"></div><div class="dw-shade"></div><div class="dw-brand"><img class="dw-logo" src="__LOGO__" alt="Οδός Δημοκρατίας"><p class="dw-tag">Η ΠΟΛΗ ΑΠΟΦΑΣΙΖΕΙ.<br>ΕΣΥ ΠΑΙΡΝΕΙΣ ΘΕΣΗ.</p></div><nav class="dw-menu-list" aria-label="Κύριο μενού"><button class="dw-menu-item" type="button"><img src="__DIAMOND__" alt="">Συνέχεια</button><button class="dw-menu-item" type="button"><img src="__DIAMOND__" alt="">Νέο παιχνίδι</button><button class="dw-menu-item" type="button"><img src="__DIAMOND__" alt="">Φόρτωση</button><button class="dw-menu-item" type="button"><img src="__DIAMOND__" alt="">Ρυθμίσεις</button></nav><div class="dw-place">ΑΘΗΝΑ · 323/322 π.Χ.</div></div>
+</section>
+<section data-variant="Διαβούλευση · εστιασμένη" aria-label="Διαβούλευση με εστιασμένη ανάγνωση" hidden>
+<div class="dw-stage"><div class="dw-bg"></div><div class="dw-shade"></div><header class="dw-top"><div class="dw-banner">Εκκλησία του Δήμου</div><div class="dw-context">Πρυτανεία 3 / 10</div><button class="dw-icon-button" type="button" aria-label="Παύση"><img src="__PAUSE__" alt=""></button></header><main class="dw-paper dw-split-panel"><h2>Ο ανεφοδιασμός της πόλης</h2><div class="dw-speaker-tabs" aria-label="Ομιλητές"><button type="button" aria-pressed="true" data-speaker="a">Πρόταση Α</button><button type="button" aria-pressed="false" data-speaker="b">Πρόταση Β</button></div><div class="dw-speaker-title"><div class="dw-bust" role="img" aria-label="Πορτρέτο ομιλητή"></div><div><h3 class="dw-speech-heading">Στήριξη της παραγωγής</h3><span class="dw-small">Ο λόγος του εισηγητή</span></div></div><p class="dw-speech-copy">Η πόλη χρειάζεται σταθερό εφοδιασμό. Ας στηρίξουμε τους γεωργούς της Αττικής και ας ενισχύσουμε την παραγωγή μας.</p><p class="dw-speech-copy-last">Έτσι θα περιορίσουμε την εξάρτησή μας από τις εισαγωγές.</p></main><footer class="dw-toolbar"><button class="dw-icon-button" type="button"><img src="__LEXICON__" alt="">Λεξικό</button><span class="dw-caption">Άκουσε και τις δύο προτάσεις.</span><button class="dw-choice dw-primary" type="button">Στην ψηφοφορία</button></footer></div>
+</section>
+<section data-variant="Διαβούλευση · παράλληλη" aria-label="Διαβούλευση με παράλληλη ανάγνωση" hidden>
+<div class="dw-stage"><div class="dw-bg"></div><div class="dw-shade"></div><header class="dw-top"><div class="dw-banner">Εκκλησία του Δήμου</div><div class="dw-context">Πρυτανεία 3 / 10</div><button class="dw-icon-button" type="button" aria-label="Παύση"><img src="__PAUSE__" alt=""></button></header><main class="dw-paper dw-parallel-panel"><h2>Ο ανεφοδιασμός της πόλης</h2><div class="dw-columns"><article><h3>Πρόταση Α · Παραγωγή</h3><p>Να στηρίξουμε τους γεωργούς της Αττικής και να ενισχύσουμε την παραγωγή μας, ώστε να περιορίσουμε την εξάρτηση από τις εισαγωγές.</p></article><article><h3>Πρόταση Β · Εμπόριο</h3><p>Να εξασφαλίσουμε σιτηρά με εμπορικές συμφωνίες και να ενισχύσουμε τον εφοδιασμό της πόλης από άλλες περιοχές.</p></article></div></main><footer class="dw-toolbar"><button class="dw-icon-button" type="button"><img src="__LEXICON__" alt="">Λεξικό</button><button class="dw-choice dw-primary" type="button">Στην ψηφοφορία</button></footer></div>
+</section>
+<section data-variant="Ψηφοφορία" aria-label="Πρόταση οθόνης ψηφοφορίας" hidden>
+<div class="dw-stage dw-vote"><div class="dw-bg"></div><div class="dw-shade"></div><header class="dw-top"><div class="dw-banner">Η ψήφος σου</div><div class="dw-context">Πρυτανεία 3 / 10</div><button class="dw-icon-button" type="button" aria-label="Παύση"><img src="__PAUSE__" alt=""></button></header><main class="dw-paper dw-vote-panel"><h2>Ο ανεφοδιασμός της πόλης</h2><p>Ποια από τις δύο προτάσεις υποστηρίζεις;</p><div class="dw-vote-options"><button class="dw-choice" type="button" data-vote="Α" aria-pressed="false">Πρόταση Α<small>Στήριξη της παραγωγής</small></button><button class="dw-choice" type="button" data-vote="Β" aria-pressed="false">Πρόταση Β<small>Εμπορικές συμφωνίες</small></button></div><div class="dw-vote-status" aria-live="polite"></div></main><footer class="dw-toolbar"><button class="dw-icon-button" type="button"><img src="__LEXICON__" alt="">Λεξικό</button><button class="dw-choice dw-primary" type="button" data-confirm-vote>Καταχώριση ψήφου</button></footer></div>
+</section>
+</div></div>
+<script>
+(()=>{const root=document.getElementById('dw-authentic');const focused=root.querySelector('[data-variant="Διαβούλευση · εστιασμένη"]');const copy={a:['Στήριξη της παραγωγής','Η πόλη χρειάζεται σταθερό εφοδιασμό. Ας στηρίξουμε τους γεωργούς της Αττικής και ας ενισχύσουμε την παραγωγή μας.','Έτσι θα περιορίσουμε την εξάρτησή μας από τις εισαγωγές.'],b:['Εμπορικές συμφωνίες','Η πόλη χρειάζεται σιτηρά. Ας εξασφαλίσουμε τον εφοδιασμό με εμπορικές συμφωνίες από άλλες περιοχές.','Έτσι θα καλύψουμε τις ανάγκες των πολιτών.']};focused.querySelectorAll('[data-speaker]').forEach(btn=>btn.addEventListener('click',()=>{focused.querySelectorAll('[data-speaker]').forEach(b=>b.setAttribute('aria-pressed',String(b===btn)));const c=copy[btn.dataset.speaker];focused.querySelector('.dw-speech-heading').textContent=c[0];focused.querySelector('.dw-speech-copy').textContent=c[1];focused.querySelector('.dw-speech-copy-last').textContent=c[2];focused.querySelector('.dw-bust').style.backgroundPosition=btn.dataset.speaker==='a'?'0% 0%':'33.333% 0%';}));let vote=null;const status=root.querySelector('.dw-vote-status');root.querySelectorAll('[data-vote]').forEach(btn=>btn.addEventListener('click',()=>{vote=btn.dataset.vote;root.querySelectorAll('[data-vote]').forEach(b=>{b.setAttribute('aria-pressed',String(b===btn));b.classList.toggle('dw-selected',b===btn);});status.textContent='Επιλεγμένη πρόταση '+vote;}));root.querySelector('[data-confirm-vote]').addEventListener('click',()=>status.textContent=vote?'Προεπισκόπηση επιλογής: Πρόταση '+vote:'Επίλεξε πρώτα μία πρόταση.');if(globalThis.Tweak){const config={size:100};const tweak=new Tweak({container:focused,onChange:()=>{focused.querySelectorAll('.dw-paper p').forEach(p=>p.style.fontSize=(1.75*config.size/100)+'cqw');}});tweak.addSlider(config,'size',{label:'Μέγεθος κειμένου',min:90,max:115,step:5,unit:'%'});}})();
+</script>

@@ -20,6 +20,8 @@ namespace DemocracyWay.NewUI
             public int prytany,week,biographyIndex,prologueIndex,cityFunds,personalFunds;
             public CharacterMetrics metrics;public ResearchChoice[] choices;public CampaignState campaign;
             public EvaluationState evaluation;
+            // Ενιαίο σύστημα (additive — τα παλιά πεδία μένουν για συμβατότητα με το research.js):
+            public Agora.CityState polis;public Agora.PlayerState citizen;public AgoraCaseState agoraCase;
         }
         [Serializable] sealed class ResearchChoice
         {
@@ -39,7 +41,7 @@ namespace DemocracyWay.NewUI
                 if(state.evaluation!=null)state.evaluation.researchParticipantId=AccountBridge.ResearchParticipantId;
                 var instrument=JsonUtility.ToJson(JsonContent.Evaluation);
                 var choices=(state.choices??new List<ChoiceRecord>()).Select(c=>new ResearchChoice{stepId=c.stepId,choiceId=c.choiceId,institutionalLean=c.institutionalLean,metrics=c.metrics,personalFunds=c.personalFunds,cityFunds=c.cityFunds,cityMetrics=c.cityMetrics}).ToArray();
-                var data=new Packet{casesPerPrytany=CampaignRules.CasesPerPrytany,totalCases=CampaignRules.TotalCases,currentCaseId=JsonContent.Plan.prytanies[state.prytany-1].caseIds[state.week-1],contentVersion=state.contentVersion,activeSeconds=state.activeSeconds,runId=state.runId,phase=state.phase,prytany=state.prytany,week=state.week,biographyIndex=state.biographyIndex,prologueIndex=state.prologueIndex,cityFunds=state.cityFunds,personalFunds=state.personalFunds,metrics=state.metrics,choices=choices,campaign=state.campaign,caseContent=JsonUtility.ToJson(JsonContent.Campaign),evaluation=state.evaluation,evaluationContent=instrument};
+                var data=new Packet{casesPerPrytany=CampaignRules.CasesPerPrytany,totalCases=CampaignRules.TotalCases,currentCaseId=CampaignRules.CaseIdForTurn(CampaignRules.Turn(state)),contentVersion=state.contentVersion,activeSeconds=state.activeSeconds,runId=state.runId,phase=state.phase,prytany=state.prytany,week=state.week,biographyIndex=state.biographyIndex,prologueIndex=state.prologueIndex,cityFunds=state.cityFunds,personalFunds=state.personalFunds,metrics=state.metrics,choices=choices,campaign=state.campaign,caseContent="",evaluation=state.evaluation,evaluationContent=instrument,polis=state.polis,citizen=state.citizen,agoraCase=state.agoraCase};
                 DW_RecordCheckpoint(JsonUtility.ToJson(data));
             }
             catch(Exception e){Debug.LogWarning("Research event queued unsuccessfully: "+e.GetType().Name);}

@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c133e5b28c1dee742b549f71c0524867, type: 3}
+  m_Name: GameConfiguration
+  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.GameConfiguration
+  mainMenuMusic: {fileID: 8300000, guid: 1f8ea606e5c2f6246a77c33593f1c9b2, type: 3}
+  introductionMusic: {fileID: 8300000, guid: 1f8ea606e5c2f6246a77c33593f1c9b2, type: 3}
+  gameplayMusic: {fileID: 8300000, guid: 257e57bfc1d90e6448c8d15afea6073d, type: 3}
+  prytanyMusic:
+  - {fileID: 8300000, guid: 257e57bfc1d90e6448c8d15afea6073d, type: 3}
+  - {fileID: 8300000, guid: 1f4e819f2f1e45319c3e97af90e7a03d, type: 3}
+  - {fileID: 8300000, guid: 2430530f91e6465fbbd0b454ec3aa5c1, type: 3}
+  - {fileID: 8300000, guid: 17717941418f49c983346cd3e4ceb8e2, type: 3}
+  - {fileID: 8300000, guid: d20bb71a4b334fd49a3fecc94034961a, type: 3}
+  - {fileID: 8300000, guid: 6a4d6b7696b242ecbe083b17870437db, type: 3}
+  - {fileID: 8300000, guid: 9aeb11249bcc4c9c824f1976232ae809, type: 3}
+  - {fileID: 8300000, guid: ab8d965ea6a84ba19af03d6178cd76a3, type: 3}
+  - {fileID: 8300000, guid: 492fc476b9fa4303958537cc71def9fa, type: 3}
+  - {fileID: 8300000, guid: ce5a21cfaff140bab8f0778a33af2839, type: 3}
+  clickSound: {fileID: 8300000, guid: 89146beaed6daa44ca7b29e64f598903, type: 3}
+  hoverSound: {fileID: 8300000, guid: 680fb23eddc873f4eb34becb36a1c588, type: 3}
+  cursorTexture: {fileID: 2800000, guid: ed9a063583b17f1429835c028c660e33, type: 3}
+  cursorHotspot: {x: 3, y: 2}
+  contentSprites:
+  - id: UI/Tribes/TRErechtheis
+    sprite: {fileID: 21300000, guid: 9b883596fe80253f4a6acd085f5e803a, type: 3}
+  - id: UI/Tribes/TRAigeis
+    sprite: {fileID: 21300000, guid: b8b93d95dd4133463fd514b7cdfc0195, type: 3}
+  - id: UI/Tribes/TRPandionis
+    sprite: {fileID: 21300000, guid: bc047e75a1c2bf2d59238dfbebc0cfe2, type: 3}
+  - id: UI/Tribes/TRLeontis
+    sprite: {fileID: 21300000, guid: cdbae06fce78699b81a3f1f4091ab105, type: 3}
+  - id: UI/Tribes/TRAkamantis
+    sprite: {fileID: 21300000, guid: 86b485e2a346fe1edacdedf416a86f86, type: 3}
+  - id: UI/Tribes/TROineis
+    sprite: {fileID: 21300000, guid: 33bb754c7ac3d7f13b60a9c7023ec426, type: 3}
+  - id: UI/Tribes/TRKekropis
+    sprite: {fileID: 21300000, guid: bfcbf1e7cf85cbe987f676d1b474deb3, type: 3}
+  - id: UI/Tribes/TRHippothontis
+    sprite: {fileID: 21300000, guid: 593ab91926d4a62c87914c69ba96181c, type: 3}
+  - id: UI/Tribes/TRAiantis
+    sprite: {fileID: 21300000, guid: e82a6975f1319fa6d987a2a71803f4f0, type: 3}
+  - id: UI/Tribes/TRAntiochis
+    sprite: {fileID: 21300000, guid: 85e8e67100579c83cc575a41634982cd, type: 3}
+  - id: Backgrounds/BackgroundEndingHome
+    sprite: {fileID: 21300000, guid: d7c2d6b20ad95faf86540ee724904be5, type: 3}
+  - id: Backgrounds/BackgroundChildhood
+    sprite: {fileID: 21300000, guid: 825a7d8705d34ba9dc8e52148f9b661e, type: 3}
+  - id: Backgrounds/BackgroundAssembly
+    sprite: {fileID: 21300000, guid: 2adf7ab87046697b4a91d748fe1735a5, type: 3}
+  - id: Backgrounds/BackgroundOath
+    sprite: {fileID: 21300000, guid: 678c0b63a21fd647c16bfc0c6df04331, type: 3}
+  - id: Backgrounds/BackgroundEphebeNight
+    sprite: {fileID: 21300000, guid: 1260b6fa8aa3b7f1d53e8a7ea36b0f7c, type: 3}
+  - id: Backgrounds/BackgroundAgora
+    sprite: {fileID: 21300000, guid: 804dbe3b656acc6bb36b96c8bc4f738f, type: 3}
+  - id: Backgrounds/BackgroundBoule
+    sprite: {fileID: 21300000, guid: b7c43532a0dfeb86c573c9a814a445e1, type: 3}
+  agoraContent: {fileID: 11400000, guid: 8c25a14fc80fa3f4984c814f2a6d3668, type: 2}
+  library: {fileID: 11400000, guid: 0bfff5557083a37459911fe6a534211e, type: 2}

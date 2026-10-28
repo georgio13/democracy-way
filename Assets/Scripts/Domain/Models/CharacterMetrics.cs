@@ -47,10 +47,5 @@ namespace DemocracyWay.NewUI
             parrhesia = Mathf.Clamp(parrhesia, 0, 100);
             recognition = Mathf.Clamp(recognition, 0, 100);
         }
-
-        public string ToGreekLines()
-        {
-            return "Συνέπεια  " + consistency + "\nΗθική  " + ethics + "\nΑυθεντία  " + authority + "\nΠειθώ  " + persuasion + "\nΠαρρησία  " + parrhesia + "\nΑναγνωρισιμότητα  " + recognition;
-        }
     }
 }
