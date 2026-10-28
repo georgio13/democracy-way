@@ -19,6 +19,7 @@ namespace Agora.EditorTools
         {
             public int id;
             public string title, athPolRef, newsPeace, newsWar, ek1, speakerA, speechA, speakerB, speechB, ek3;
+            public string optionA, optionB, argumentA, argumentB;
             public string complaintCharge, complaintDefence, complaintVerdict;
         }
 
@@ -95,6 +96,10 @@ namespace Agora.EditorTools
                 if (texts.newsWar != null) c.newsWar = texts.newsWar.Trim();   // κενό = «ίδιο με ειρήνη», επιτρεπτό
                 c.ek1 = Keep(texts.ek1, c.ek1);
                 c.ek3 = Keep(texts.ek3, c.ek3);
+                c.optionA = Keep(texts.optionA, c.optionA);
+                c.optionB = Keep(texts.optionB, c.optionB);
+                c.argumentA = Keep(texts.argumentA, c.argumentA);
+                c.argumentB = Keep(texts.argumentB, c.argumentB);
                 if (c.speechA != null) c.speechA.text = Keep(texts.speechA, c.speechA.text);
                 if (c.speechB != null) c.speechB.text = Keep(texts.speechB, c.speechB.text);
                 warnings += CheckSpeaker(c, "Α", c.speechA, texts.speakerA);

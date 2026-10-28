@@ -44,7 +44,7 @@ namespace DemocracyWay.NewUI
         }
 
         public static bool ValidPhase(string id) => !string.IsNullOrEmpty(id) && (id == "demographics"
-            || id == "procedure-briefing" || id == "case-prep" || id == "case-trial" || id == "deliberation"
+            || id == "case-trial" || id == "deliberation"
             || id == "speech" || id == "vote" || id == "vote-result" || id == "week-report"
             || id == "week-transition" || id == "prytany-transition"
             || id == "initial-knowledge" || id == "initial-tendencies" || id == "final-tendencies"

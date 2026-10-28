@@ -62,7 +62,6 @@ namespace DemocracyWay.NewUI
                         RenderCampaign();
                     });
                 }
-            Bind("case-prep.back", () => GoCampaign("map-stela"));
         }
 
         void GoCampaign(string id)

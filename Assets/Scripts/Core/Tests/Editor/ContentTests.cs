@@ -47,6 +47,8 @@ namespace Agora.Tests
                 Assert.IsFalse(string.IsNullOrWhiteSpace(c.ek3), c.name + ".ek3");
                 Assert.IsFalse(string.IsNullOrWhiteSpace(c.speechA?.text), c.name + ".speechA");
                 Assert.IsFalse(string.IsNullOrWhiteSpace(c.speechB?.text), c.name + ".speechB");
+                Assert.IsFalse(string.IsNullOrWhiteSpace(c.argumentA), c.name + ".argumentA");
+                Assert.IsFalse(string.IsNullOrWhiteSpace(c.argumentB), c.name + ".argumentB");
                 Assert.IsNotNull(c.speechA.speaker, c.name + ".speakerA");
                 Assert.IsNotNull(c.speechB.speaker, c.name + ".speakerB");
             }
@@ -122,6 +124,9 @@ namespace Agora.Tests
             {
                 Assert.AreEqual(quality[i], logos[i].quality, "quality στη θέση " + i);
                 Assert.AreEqual(cost[i], logos[i].costDrachmas, "κόστος στη θέση " + i);
+                if (i == 0) continue;   // ο «χωρίς λογογράφο» δεν έχει ύφος
+                Assert.IsFalse(string.IsNullOrWhiteSpace(logos[i].openingTemplate), "openingTemplate στη θέση " + i);
+                Assert.IsFalse(string.IsNullOrWhiteSpace(logos[i].closingTemplate), "closingTemplate στη θέση " + i);
             }
         }
 

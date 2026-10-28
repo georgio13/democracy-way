@@ -71,6 +71,8 @@ namespace Agora
         [TextArea(3, 10)] public string ek1;        // πριν τους λόγους
         [TextArea(2, 4)] public string optionA;     // σύντομη περίληψη της πρότασης Α (για την Αγορά)
         [TextArea(2, 4)] public string optionB;     // σύντομη περίληψη της πρότασης Β (για την Αγορά)
+        [TextArea(2, 5)] public string argumentA;   // το κεντρικό επιχείρημα του λόγου του παίκτη υπέρ της Α
+        [TextArea(2, 5)] public string argumentB;   // το κεντρικό επιχείρημα του λόγου του παίκτη υπέρ της Β
         public Speech speechA;
         public Speech speechB;
         [TextArea(3, 10)] public string ek3;        // μετά το αποτέλεσμα

@@ -16,7 +16,6 @@ namespace DemocracyWay.NewUI
                 string key = binding.Key.ToLowerInvariant();
                 // Το πορτοφόλι μένει ορατό στον χάρτη και στις οθόνες όπου ξοδεύονται χρήματα.
                 bool keepFunds = key.StartsWith("map.", StringComparison.Ordinal)
-                    || key.StartsWith("case-prep.", StringComparison.Ordinal)
                     || key.StartsWith("speech.", StringComparison.Ordinal);
                 if (key.EndsWith(".banner")) { var banner = Get<GameObject>(binding.Key); if (banner != null) banner.SetActive(true); }
                 if (key.EndsWith(".footer") || key.Contains(".eyebrow") || key.EndsWith(".source") ||

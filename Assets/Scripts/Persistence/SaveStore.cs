@@ -12,7 +12,7 @@ namespace DemocracyWay.NewUI
     {
         public const int SlotCount = 4;
         public const string Format = "DemocracyWay.ApprovedUI";
-        public const int Version = 2;   // v2: προσθήκη Agora polis/citizen/agoraCase — τα v1 saves απορρίπτονται
+        public const int Version = 3;   // v3: ροή χάρτη — η υπόθεση ξεκινά στην Αγορά, επιλογές από τις οθόνες πόλης· τα v2 saves απορρίπτονται
 #if UNITY_EDITOR
         // Set only by isolated Editor integration tests; excluded from all player builds.
         public static string TestDirectory;
@@ -124,6 +124,11 @@ namespace DemocracyWay.NewUI
                 return false;
             if (state.polis == null || state.citizen == null || state.agoraCase == null)
                 return false;
+            // Ροή εβδομάδας: δεσμευμένη καταγγελία δεν συνυπάρχει με κριμένη υπόθεση· αγορασμένος λόγος δείχνει λογογράφο 1..3.
+            if (state.agoraCase.complaintPending && state.agoraCase.resolved)
+                return false;
+            if (state.agoraCase.speechBought && state.agoraCase.logoIndex < 1)
+                return false;
             foreach (int value in new[] { state.polis.treasury, state.polis.food, state.polis.readiness, state.polis.trust, state.polis.demosPower })
                 if (value < 0 || value > 100)
                     return false;
@@ -170,6 +175,7 @@ namespace DemocracyWay.NewUI
                 string payload = JsonUtility.ToJson(state);
                 var envelope = new SaveEnvelope
                 {
+                    version = Version,   // χωρίς αυτό ο φάκελος μένει στο default και το Read βλέπει «παλιά έκδοση → κενή θέση»
                     slot = slot,
                     title = state.playerName + " · Πρυτανεία " + state.prytany + " · Εβδομάδα " + state.week,
                     savedAtUtc = DateTime.UtcNow.ToString("O"),
