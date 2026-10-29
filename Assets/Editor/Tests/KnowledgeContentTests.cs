@@ -19,6 +19,15 @@ namespace DemocracyWay.NewUI.Tests
             Assert.AreEqual(all.Length, all.Select(q => q.id).Distinct().Count(), "μοναδικά ids");
         }
 
+        [Test] // Ενότητα 7.7: το τελικό τεστ έχει δική του εισαγωγή («Η θητεία σου τελείωσε…»), όχι αυτή του αρχικού.
+        public void FinalTestHasItsOwnIntro()
+        {
+            var e = JsonContent.Evaluation;
+            Assert.IsFalse(string.IsNullOrWhiteSpace(e.postKnowledgeInstructions));
+            Assert.AreNotEqual(e.knowledgeInstructions, e.postKnowledgeInstructions);
+            StringAssert.StartsWith("Η θητεία σου τελείωσε.", e.postKnowledgeInstructions);
+        }
+
         [Test] // Κάθε ερώτηση: 4 επιλογές με μοναδικά ids, η σωστή ανάμεσά τους· καμία ερώτηση για τον οστρακισμό.
         public void QuestionsAreWellFormed()
         {

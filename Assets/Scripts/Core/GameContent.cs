@@ -40,6 +40,8 @@ namespace Agora
         [Header("Κείμενα τελών (επίλογος — συμπληρώνονται από τον συγγραφέα)")]
         [TextArea(2, 8)] public string endingFamine, endingPropertyLimit, endingStasis, endingCounterfactual, endingGarrisonOnly;
         [TextArea(2, 8)] public string endingHypereides, endingDemades, endingHarpalusMan, endingLycurgus, endingAnonymous, endingStratocles;
+        [Tooltip("Υπερείδης/Δημάδης όταν το τέλος της πόλης είναι η φρουρά· τα endingHypereides/endingDemades είναι για το όριο των δύο χιλιάδων.")]
+        [TextArea(2, 8)] public string endingHypereidesGarrison, endingDemadesGarrison;
 
         public CaseData CaseAt(int prytany, int indexInPrytany) => cases[(prytany - 1) * 2 + indexInPrytany];
     }

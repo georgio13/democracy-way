@@ -9,7 +9,7 @@ namespace DemocracyWay.NewUI
     {
         // Σταθερό αναγνωριστικό των ερωτηματολογίων (δεν υπάρχει πια Protocol/έκδοση στο περιεχόμενο):
         // το χρειάζονται η τηλεμετρία και η εξαγωγή για να ταιριάζουν τις απαντήσεις με τις ερωτήσεις.
-        public const string CurrentInstrumentVersion = "campaign-final-meega-el-5";
+        public const string CurrentInstrumentVersion = "campaign-final-meega-el-6";   // βήμα 4: νέο τεστ γνώσεων (Κ9, Κ11) και εισαγωγή του τελικού τεστ
         static int[] Resize(int[] values, int length, int min, int max)
         {
             var result = Enumerable.Repeat(-1, length).ToArray();

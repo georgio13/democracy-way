@@ -33,6 +33,8 @@ namespace Agora
         public int speechPeithoMax = 70;            // ανώτατη Πειθώ
         public int logographerPoints = 3;           // + στον λόγο για την πλευρά που παραγγέλθηκε
         public int moodRange = 10;                  // διάθεση του πλήθους ∈ [−moodRange, +moodRange]
+        public int leanTowardAFrom = 56;            // «Πού γέρνει η πόλη»: γνωστό άθροισμα από εδώ και πάνω → προς Α
+        public int leanTowardBUpTo = 44;            // από εδώ και κάτω → προς Β· ενδιάμεσα αμφίρροπο
 
         [Header("Κανόνας δίκης (D ≥ guiltyThreshold → ένοχος)")]
         public int guiltyThreshold = 50;
@@ -67,6 +69,12 @@ namespace Agora
         public int stasisTrust = 35;
         public int enduresMinAll = 25;
         public int demosPowerMajority = 50;         // ο δήμος «κρατά»: ΙΔ ≥ αυτού
+
+        [Header("Τέλη παίκτη")]
+        public int sideSpeeches = 8;                // Υπερείδης/Δημάδης: λόγοι για μία πλευρά
+        public int harpalusBribes = 3;              // ο άνθρωπος του Αρπάλου
+        public int knownFame = 40;                  // Λυκούργος/Στρατοκλής: η πόλη σε ξέρει
+        public int trustedEthos = 50;               // Λυκούργος: και σε εμπιστεύεται
 
         public int PersuadeThreshold(Difficulty d) => d switch
         {

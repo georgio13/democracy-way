@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,12 +35,11 @@ namespace DemocracyWay.NewUI
 
         void WireCampaignButtons()
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i <= DemeSite; i++)
             {
                 int n = i;
                 Bind("map.institution." + i, () => OpenInstitution(n));
             }
-            Bind("map.deme", () => OpenInstitution(4));
             foreach (string id in new[] { "initial-knowledge", "initial-tendencies", "final-tendencies", "final-knowledge" })
                 for (int i = 0; i < 5; i++)
                 {
@@ -76,18 +76,19 @@ namespace DemocracyWay.NewUI
         void OpenInstitution(int site)
         {
             EnsureState();
-            if (site == AgoraSiteIndex && !AgoraCaseResolved)
+            EnsureAgoraReady();
+            if (site == AgoraActiveSite && !AgoraCaseResolved)
             {
-                if (State.marketVisitedTurn != CampaignRules.Turn(State))
+                if (!MarketVisited)
                 {
                     AskMarketVisit();   // ερευνητική ροή: πρώτα ενημέρωση στην Αγορά, μετά η συνεδρίαση
                     return;
                 }
-
-                BeginAgoraCase();
+                if (AgoraTrialPending) AgoraOpenTrial();   // η δίκη της εβδομάδας προηγείται της συνέλευσης
+                else BeginAgoraCase();
             }
             else
-                SetStatus("Δεν συνεδριάζει κάτι εδώ αυτή την εβδομάδα.");
+                SetStatus(W(CityText.NothingHere));
         }
 
         void AskMarketVisit()
@@ -104,6 +105,55 @@ namespace DemocracyWay.NewUI
         void FinishSurvey() { TryFinishEvaluationSurvey(); }
 
         static string Signed(int value) => value.ToString("+0;-0;0");
+
+        /// <summary>Πίνακας εβδομάδας: υπόθεση και χώρος, δίκη, ειρήνη ή πόλεμος, τι μένει να κάνει ο παίκτης.</summary>
+        string WeekBoardText()
+        {
+            var c = CurrentAgoraCase;
+            bool trial = WeekFlowRules.HasTrial(c);
+            var lines = new List<string> { W(WeekText.BoardCase, c.title, VenueLabel(c.venue)) };
+            lines.Add(trial ? W(WeekText.BoardTrial, ProcedureLabel(c.trial.procedure), c.trial.defendant.FullName, TrialVenueLabel(c.trial.venue)) : W(WeekText.BoardNoTrial));
+            lines.Add(W(State.polis.war ? WeekText.BoardWar : WeekText.BoardPeace));
+            lines.Add(W(trial && !State.citizen.sycophantFlag ? WeekText.BoardMovesTrial : WeekText.BoardMoves));
+            if (!MarketVisited) lines.Add(W(WeekText.BoardFirst));
+            return string.Join("\n\n", lines);
+        }
+
+        /// <summary>Η μεταβολή ανά πρυτανεία (ειρήνη ή πόλεμος) σε μία γραμμή: «Ταμείο +3 · Επισιτισμός +2 · Ετοιμότητα −3».</summary>
+        string DriftText(bool war)
+        {
+            var cfg = AgoraCfg;
+            return MetricLabel(Agora.Metric.Treasury) + " " + Signed(war ? cfg.warTreasury : cfg.peaceTreasury) + " · "
+                + MetricLabel(Agora.Metric.Food) + " " + Signed(war ? cfg.warFood : cfg.peaceFood) + " · "
+                + MetricLabel(Agora.Metric.Readiness) + " " + Signed(war ? cfg.warReadiness : cfg.peaceReadiness);
+        }
+
+        /// <summary>Αναφορά της πόλης στο τέλος της πρυτανείας: τι άλλαξε με κάθε απόφαση και τι έρχεται.</summary>
+        string PrytanyReportText()
+        {
+            var lines = new List<string>();
+            for (int week = 0; week < CampaignRules.CasesPerPrytany; week++)
+            {
+                int turn = (State.prytany - 1) * CampaignRules.CasesPerPrytany + week;
+                var record = Campaign.cases.FirstOrDefault(r => r != null && r.turn == turn && r.completed);
+                if (record == null) continue;
+                var c = AgoraContent.CaseAt(State.prytany, week);
+                bool passedA = record.majority == 0;
+                lines.Add(W(WeekText.ReportCase, c.title, passedA ? "Α" : "Β", DescribeAgoraEffects(passedA ? c.effectsA : c.effectsB)));
+                if (c.abolishesPayIfB && !passedA) lines.Add(W(WeekText.ReportPayStopped));
+            }
+            if (State.prytany < JsonContent.Settings.prytanyCount)
+            {
+                bool warNext = State.polis.war || WarStartsNext;
+                lines.Add(W(warNext ? WeekText.ReportWar : WeekText.ReportPeace, DriftText(warNext)));
+                if (State.polis.auditFinePending) lines.Add(W(WeekText.ReportAudit, AgoraCfg.auditFineTreasury));
+            }
+            return string.Join("\n\n", lines);
+        }
+
+        /// <summary>Αρχή του πολέμου (πρυτανεία 5): τι αλλάζει από εδώ και πέρα.</summary>
+        string WarNoticeText() =>
+            AgoraContent.warTransition + "\n\n" + W(WeekText.WarRules, DriftText(true), AgoraCfg.warEmergencyPoints);
 
         void PaintRow(string key, bool selected) => CivicUIFactory.PaintSelectable(Get<Button>(key), selected);
 
@@ -143,15 +193,19 @@ namespace DemocracyWay.NewUI
 
             if (id == "week-transition" || id == "prytany-transition")
             {
+                EnsureAgoraReady();
                 AgoraFunds();
-                CampaignText("heading", id == "week-transition" ? JsonContent.Copy("Copy_3e3295844f841450").TrimEnd() + " " + State.week + JsonContent.Copy("Copy_c9ca01a1fb6fd52c") : TribeName(State.currentTribe) + JsonContent.Copy("Copy_2ca1530bcc6160dd"));
-                CampaignText("body", id == "week-transition" ? JsonContent.Copy("Copy_1967453206a07b96") : JsonContent.Copy("Copy_aff5a1cc5552abdf"));
+                bool warPage = id == "prytany-transition" && WarStartsNext && State.warNoticeSeen;
+                CampaignText("heading", id == "week-transition" ? W(WeekText.BoardHeading, State.prytany, State.week)
+                    : warPage ? W(WeekText.WarHeading) : TribeName(State.currentTribe) + JsonContent.Copy("Copy_2ca1530bcc6160dd"));
+                CampaignText("body", id == "week-transition" ? WeekBoardText() : warPage ? WarNoticeText() : PrytanyReportText());
                 for (int i = 0; i < 5; i++)
                 {
                     var t = Get<PanelGraphic>(id + ".week." + i);
                     if (t != null)
                     {
-                        t.gameObject.SetActive(i < CampaignRules.CasesPerPrytany);
+                        // Στον πίνακα εβδομάδας η εβδομάδα γράφεται στον τίτλο· τα κουτάκια θα έπεφταν πάνω στο κείμενο.
+                        t.gameObject.SetActive(id != "week-transition" && i < CampaignRules.CasesPerPrytany);
                         t.color = i == State.week - 1 ? new Color32(171, 151, 99, 255) : new Color32(35, 61, 64, 255);
                     }
                 }
@@ -160,12 +214,14 @@ namespace DemocracyWay.NewUI
                     foreach (Transform child in transitionRoot.transform)
                         if (child.name.StartsWith("Handover ", System.StringComparison.Ordinal)) child.gameObject.SetActive(false);
                 CampaignText("source", GameSession.Slot < 0 ? JsonContent.Copy("Copy_72b41a8f13543b93") : JsonContent.Copy("Copy_e15e406bba032b98"));
-                CampaignLabel("primary", id == "week-transition" ? JsonContent.Copy("Copy_7825116e6db6a24f") : State.prytany == JsonContent.Settings.prytanyCount ? JsonContent.Copy("Copy_d654bb1a20dc6e0e") : JsonContent.Copy("Copy_df6d19377abefd11"));
+                CampaignLabel("primary", id == "week-transition" ? W(WeekText.BoardPrimary)
+                    : WarStartsNext && !State.warNoticeSeen ? W(WeekText.Continue)
+                    : State.prytany == JsonContent.Settings.prytanyCount ? JsonContent.Copy("Copy_d654bb1a20dc6e0e") : JsonContent.Copy("Copy_df6d19377abefd11"));
                 return;
             }
 
             if (id == "complete")
-                CampaignText("body", "Ολοκλήρωσες " + CampaignRules.TotalCases + " υποθέσεις σε " + JsonContent.Settings.prytanyCount + " πρυτανείες. Οι απαντήσεις σου αποθηκεύτηκαν.\n\nΟι απαντήσεις γνώσεων, τάσεων και εμπειρίας καταγράφονται χωριστά.");
+                CampaignText("body", W(EndText.CompleteBody, CampaignRules.TotalCases, JsonContent.Settings.prytanyCount));
         }
     }
 }

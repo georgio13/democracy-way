@@ -13,7 +13,7 @@ namespace DemocracyWay.NewUI
         public bool openFeedbackOptional = true;
         public string[] ratingLabels;
         public EvaluationQuestion[] onboarding, postTest;
-        public string knowledgeInstructions;
+        public string knowledgeInstructions, postKnowledgeInstructions;
         public EvaluationRating[] experience, participationIntention;
         public DemographicsContent demographics;
         public TendencyItem[] tendencies;

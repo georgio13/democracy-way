@@ -116,7 +116,8 @@ namespace DemocracyWay.NewUI
                 return;
             if (mapGuideConfirmation)
             {
-                State.mapGuideSeen = true;
+                if (placeCard != null) State.placesSeen.Add(placeCard);
+                else State.mapGuideSeen = true;
                 SaveCheckpoint();
                 CancelModal();
                 return;
@@ -216,6 +217,7 @@ namespace DemocracyWay.NewUI
             if (mapGuideConfirmation)
                 RestoreModalLayout();
             mapGuideConfirmation = false;
+            placeCard = null;
             SetActive("modal.root", false);
             if (modalBlockedGroup != null)
             {
@@ -247,6 +249,33 @@ namespace DemocracyWay.NewUI
             OpenModal(JsonContent.Copy("Copy_8f3c6a1e52d09b74"));
             SetText("modal.title", JsonContent.Copy("Copy_a52e7d90c3f1b486"));
             SetText("modal.banner", JsonContent.Copy("Copy_e1b94f27d60a3c85"));
+            SetText("modal.confirm.label", JsonContent.Copy("Copy_7c05d3b8e9a24f61"));
+            EnlargeModalForGuide();
+        }
+
+        string placeCard;   // το λήμμα του Οδηγού που δείχνει τώρα το παράθυρο (null = ο οδηγός του χάρτη)
+
+        /// <summary>Κάρτα πρώτης επίσκεψης (Agora_FINAL_DESIGN 7.4): μία φορά ανά χώρο, στο ίδιο παράθυρο
+        /// με τον οδηγό του χάρτη. Το κείμενο είναι το λήμμα του Οδηγού στο Ευρετήριο.</summary>
+        void ShowPlaceCardIfNeeded(string entryId)
+        {
+            if (modalOpen || State == null || lexicon == null)
+                return;
+            State.placesSeen ??= new List<string>();   // παλιά saves
+            if (State.placesSeen.Contains(entryId))
+                return;
+            var entry = lexicon.Find(entryId);
+            if (entry == null)
+                return;
+            mapGuideConfirmation = true;
+            placeCard = entryId;
+            pendingDelete = -1;
+            OpenModal(entry.text);
+            // Οι οθόνες της πόλης μπήκαν στο Canvas μετά το παράθυρο: χωρίς αυτό η κάρτα θα έμενε πίσω τους.
+            var modal = Get<GameObject>("modal.root");
+            if (modal != null) modal.transform.SetAsLastSibling();
+            SetText("modal.title", entry.title);
+            SetText("modal.banner", JsonContent.Copy(CityText.FirstVisit));
             SetText("modal.confirm.label", JsonContent.Copy("Copy_7c05d3b8e9a24f61"));
             EnlargeModalForGuide();
         }

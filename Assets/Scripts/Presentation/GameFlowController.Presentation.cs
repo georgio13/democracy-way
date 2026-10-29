@@ -36,7 +36,7 @@ namespace DemocracyWay.NewUI
             {
                 RenderMap();
                 RenderCampaignMap();
-                RenderCityMetricsHUD();
+                RenderMetricsHUD();
             }
             else if (IsCityScreen(currentScreen))
                 RenderCity();
@@ -303,9 +303,6 @@ namespace DemocracyWay.NewUI
             }
 
             SetInteractable(currentScreen + ".primary", selected != null);
-            var metricValues = SceneMetricSlots(CitizenPreview());
-            for (int i = 0; i < 6; i++)
-                SetText(currentScreen + ".metric." + i, SlotText(metricValues[i]));
             if (lastRenderedBioStep != step.id)
             {
                 Canvas.ForceUpdateCanvases();
@@ -322,8 +319,7 @@ namespace DemocracyWay.NewUI
             EnsureState();
             SetText("summary.name", State.playerName);
             SetText("summary.age", JsonContent.Copy("Copy_d27fcffa71ab967e") + State.playerAge + JsonContent.Copy("Copy_750d677c988d9482"));
-            SetText("summary.identity.0", "Φυλή: " + TribeName(State.tribeIndex) + "\nΔήμος: " + State.deme + "\nΤριττύα: " + TrittysLabel());
-            SetText("summary.identity.1", State.profession + "\n" + config.economicClasses[Mathf.Clamp(State.economicClassIndex, 0, config.economicClasses.Count - 1)]);
+            SetText("summary.identity.0", W(BioText.SummaryOrigin, TribeName(State.tribeIndex), State.deme, TrittysLabel()));
             SetText("summary.identity.2", (State.offices ?? "").Replace(" · ", "\n"));
             for (int i = 0; i < 3; i++)
             {
@@ -338,22 +334,23 @@ namespace DemocracyWay.NewUI
             SetImage("summary.emblem", config.tribes[State.tribeIndex].emblem);
             var citizen = CitizenPreview();
             SetText("summary.identity.1", State.profession + "\n" + config.economicClasses[Mathf.Clamp(State.economicClassIndex, 0, config.economicClasses.Count - 1)]
-                + "\nΠορτοφόλι: " + citizen.wallet + " δρ.");
-            var values = SceneMetricSlots(citizen);
-            for (int i = 0; i < values.Length; i++)
-            {
-                SetText("summary.metric." + i, SlotText(values[i]));
-                Slider bar = Get<Slider>("summary.metric." + i + ".bar");
-                if (bar != null)
-                    bar.SetValueWithoutNotify(Mathf.Lerp(bar.minValue, bar.maxValue, (values[i] ?? 0) / 100f));
-            }
+                + "\n" + W(BioText.SummaryWallet, citizen.wallet));
+            RenderPlayerMetrics("summary", citizen);
         }
 
-        /// <summary>Οι 6 θέσεις δεικτών της σκηνής (Συνέπεια, Ηθική, Αυθεντία, Πειθώ, Παρρησία, Αναγνωρισιμότητα):
-        /// από τους δείκτες του παίκτη ταιριάζουν μόνο η Ηθική και η Πειθώ. Το νέο HUD έρχεται στο βήμα 6.</summary>
-        static int?[] SceneMetricSlots(Agora.PlayerState c) => new int?[] { null, c.ethos, null, c.peitho, null, null };
-
-        static string SlotText(int? value) => value.HasValue ? value.Value.ToString() : "—";
+        /// <summary>Οι 4 θέσεις δεικτών της σκηνής (σύνοψη, προφίλ): Πειθώ, Φήμη, Ηθική, Δραχμές.
+        /// Οι τρεις πρώτοι έχουν μπάρα 0–100· οι Δραχμές όχι, γιατί δεν έχουν ταβάνι.</summary>
+        void RenderPlayerMetrics(string prefix, Agora.PlayerState c)
+        {
+            int[] values = { c.peitho, c.fame, c.ethos, c.wallet };
+            for (int i = 0; i < values.Length; i++)
+            {
+                SetText(prefix + ".metric." + i, values[i].ToString());
+                Slider bar = i < 3 ? Get<Slider>(prefix + ".metric." + i + ".bar") : null;
+                if (bar != null)
+                    bar.SetValueWithoutNotify(Mathf.Lerp(bar.minValue, bar.maxValue, Mathf.Clamp01(values[i] / 100f)));
+            }
+        }
 
         private void RenderPrytany()
         {
@@ -452,7 +449,7 @@ namespace DemocracyWay.NewUI
             SetText("profile.heading", State.playerName);
             SetText("profile.name", State.playerName);
             SetText("profile.age", State.playerAge + JsonContent.Copy("Copy_b0ff9eb7a58bf3d6") + State.profession
-                + " · " + State.citizen.wallet + " δρ.");
+                + " · " + W(BioText.ProfileWallet, State.citizen.wallet));
             SetText("profile.origin", State.deme + " · " + TribeName(State.tribeIndex));
             SetImage("profile.emblem", config.tribes[State.tribeIndex].emblem);
             string[] identity =
@@ -468,15 +465,7 @@ namespace DemocracyWay.NewUI
             for (int i = 0; i < 2; i++)
                 SetText("profile.office." + i, i < offices.Length ? offices[i] : "—");
             // Το προφίλ δείχνει τον ζωντανό πολίτη του ενιαίου συστήματος, όχι τις παγωμένες μετρικές της βιογραφίας.
-            EnsureAgoraReady();
-            var metrics = SceneMetricSlots(State.citizen);
-            for (int i = 0; i < 6; i++)
-            {
-                SetText("profile.metric." + i, SlotText(metrics[i]));
-                Slider bar = Get<Slider>("profile.metric." + i + ".bar");
-                if (bar != null)
-                    bar.SetValueWithoutNotify(metrics[i] ?? 0);
-            }
+            RenderPlayerMetrics("profile", State.citizen);
         }
 
         private string TribeName(int index)

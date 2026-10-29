@@ -405,5 +405,54 @@ class PullPrivacyTests(unittest.TestCase):
         self.assertNotIn('auth-uid', json.dumps(records))
 
 
+class AgoraExportTests(unittest.TestCase):
+    """Βήμα 9: τα γεγονότα του παιχνιδιού (ψηφοφορία, δίκη, πρυτανεία, τέλος) γίνονται πίνακες."""
+    setUp = ExportTests.setUp
+    run_export = ExportTests.run_export
+    rows = ExportTests.rows
+
+    def agora_event(self, name, second, **data):
+        meta = {'researchParticipantId': 'person-1', 'researchConsent': True, 'instrumentVersion': VERSION,
+                'bank': 'bank-1', 'bankHash': 'bank-hash', 'synthetic': True, 'knowledgeFormOrder': 'AB',
+                'eventSequence': second, 'agoraEvent': name, 'campaignLayout': {'casesPerPrytany': 2, 'totalCases': 20}, 'data': {'runId': 'run-1', 'case': 5, 'prytany': 3, 'week': 1, **data}}
+        return {'type': 'agora_' + name, 'eventId': 'agora-' + name + '-' + str(second), 'session': 'run-1',
+                'nodeId': 'case-5', 'answer': -1, 'prytany': 3, 'week': 1, 't': f'2026-10-20T11:00:{second:02d}Z',
+                'sourceRef': json.dumps(meta, ensure_ascii=False)}
+
+    def test_agora_votes_trials_prytanies_and_endings_are_tables(self):
+        """Βήμα 9: κάθε γραμμή της ανάλυσης σε στήλη· οι 9 δείκτες ανά πρυτανεία· τα τέλη με knowledgeFormOrder."""
+        events = [self.agora_event('case_result', 1, total=61, passedA=True, vote='A', spokeFor='A',
+                                   lines='Base:55,Pressure:-5,Speech:6,Mood:5', mood=5),
+                  self.agora_event('trial', 2, accuser=True, total=58, guilty=True, lines='Evidence:58,Accusation:6,Mood:-6'),
+                  self.agora_event('prytany_end', 3, peitho=36, fame=18, ethos=57, wallet=210, T=52, Ep=47, Et=33, Em=61, ID=50),
+                  self.agora_event('game_end', 4, cityEnding='GarrisonOnly', personalEnding='Demades', knowledgeFormOrder='AB')]
+        summary, quality = self.run_export(events)
+        self.assertEqual([], quality['errors'])
+        vote = self.rows('agora_votes')[0]
+        self.assertEqual(('55', '-5', '6', '5'), (vote['line_Base'], vote['line_Pressure'], vote['line_Speech'], vote['line_Mood']))
+        self.assertEqual(('61', 'True', 'A', '5'), (vote['total'], vote['passedA'], vote['vote'], vote['case_id']))
+        trial = self.rows('agora_trials')[0]
+        self.assertEqual(('58', '6', 'True'), (trial['line_Evidence'], trial['line_Accusation'], trial['guilty']))
+        prytany = self.rows('agora_prytanies')[0]
+        self.assertEqual(['52', '47', '33', '61', '50', '36', '18', '57', '210'],
+                         [prytany[k] for k in ('T', 'Ep', 'Et', 'Em', 'ID', 'peitho', 'fame', 'ethos', 'wallet')])
+        ending = self.rows('agora_endings')[0]
+        self.assertEqual(('GarrisonOnly', 'Demades', 'AB'), (ending['cityEnding'], ending['personalEnding'], ending['knowledgeFormOrder']))
+        self.assertEqual(1, summary['agora_votes_rows'])
+        self.assertEqual('4', vote['turn'], 'πρυτανεία 3, εβδομάδα 1, 2 υποθέσεις ανά πρυτανεία')
+        self.assertNotIn('runId', vote, 'το runId είναι ήδη η στήλη session')
+
+    def test_broken_analysis_lines_are_an_error(self):
+        _, quality = self.run_export([self.agora_event('case_result', 1, total=50, lines='Base:fifty')])
+        self.assertIn('invalid-analysis-lines', [e['kind'] for e in quality['errors']])
+
+    def test_pull_keeps_agora_data_and_shown_order(self):
+        result = minimise_metadata({'shownOrder': 'c,a,d,b', 'knowledgeFormOrder': 'AB', 'agoraEvent': 'case_result',
+                                    'data': {'total': 61, 'lines': 'Base:55', 'unknown': 'x', 'nested': {'a': 1}}})
+        self.assertEqual('c,a,d,b', result['shownOrder'])
+        self.assertEqual('AB', result['knowledgeFormOrder'])
+        self.assertEqual({'total': 61, 'lines': 'Base:55'}, result['data'])
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

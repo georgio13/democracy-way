@@ -16,7 +16,7 @@ from statistics import mean, median
 
 P = Path(__file__).resolve().parent
 METRICS = ('consistency', 'ethics', 'authority', 'persuasion', 'parrhesia', 'recognition')
-CITY_METRICS = ('food', 'trust', 'readiness', 'war')
+CITY_METRICS = ('food', 'trust', 'readiness', 'war', 'treasury', 'demosPower', 'garrison')
 STATE_FIELDS = ('treasury', 'personalTreasury', *METRICS)
 EMAIL = re.compile(r'\b[^\s<>@]+@[^\s<>@]+\.[^\s<>@]+\b')
 RATING_EVENTS = ('experience_rating', 'participation_intention')
@@ -78,6 +78,24 @@ def pseudonym(value):
 def research_participant(event, meta):
     return pseudonym(meta.get('researchParticipantId') or
                      (meta.get('evaluation') or {}).get('researchParticipantId') or event.get('session', ''))
+
+
+AGORA_TABLES = {'agora_case_result': 'agora_votes', 'agora_trial': 'agora_trials',
+                'agora_prytany_end': 'agora_prytanies', 'agora_game_end': 'agora_endings'}
+
+
+def analysis_lines(text):
+    """«Base:54,Pressure:5,Mood:-3» → {'Base': 54, 'Pressure': 5, 'Mood': -3}· None αν είναι χαλασμένο."""
+    if not text:
+        return {}
+    lines = {}
+    for part in str(text).split(','):
+        term, _, value = part.partition(':')
+        try:
+            lines[term.strip()] = int(value)
+        except ValueError:
+            return None
+    return lines
 
 
 def write_csv(path, rows, fallback):
@@ -205,6 +223,7 @@ def analyse(input_file, output_folder, content_file=P / 'EvaluationContent.json'
         unique[key] = (order, event, meta, synthetic)
 
     rows, knowledge, rating_rows, decisions, points, feedback, case_knowledge = [], [], [], [], [], [], []
+    agora = {name: [] for name in AGORA_TABLES.values()}
     unknown_versions = set()
     tendency_rows = []
     demographic_rows = []
@@ -272,7 +291,19 @@ def analyse(input_file, output_folder, content_file=P / 'EvaluationContent.json'
                     errors.append({'kind': 'incorrect-correctness-flag', 'event_id': common['event_id']})
                 knowledge.append({**common, 'question_id': item_id, 'construct': question['construct'],
                                   'answer_index': answer, 'correct_index': question['correctIndex'],
-                                  'correct': correct, 'source_ref': question.get('sourceRef', '')})
+                                  'correct': correct, 'source_ref': question.get('sourceRef', ''),
+                                  'shown_order': meta.get('shownOrder', ''),
+                                  'knowledge_form_order': meta.get('knowledgeFormOrder', '')})
+        if kind in AGORA_TABLES:
+            # Γεγονότα του παιχνιδιού (βήμα 9): μία γραμμή ανά ψηφοφορία/δίκη/πρυτανεία/τέλος, οι γραμμές της ανάλυσης σε στήλες.
+            data = meta.get('data') if isinstance(meta.get('data'), dict) else {}
+            lines = analysis_lines(data.get('lines', ''))
+            if lines is None:
+                errors.append({'kind': 'invalid-analysis-lines', 'event_id': common['event_id']})
+                lines = {}
+            agora[AGORA_TABLES[kind]].append({**common, 'case_id': data.get('case', ''),
+                **{k: v for k, v in data.items() if k not in ('lines', 'runId', 'case', 'prytany', 'week') and not isinstance(v, (dict, list))},
+                **{'line_' + term: value for term, value in lines.items()}})
         if kind == 'demographic_response':
             demographic_id = meta.get('itemId', event.get('nodeId','').removeprefix('demographic:'))
             demographic = next((q for q in ((content or {}).get('demographics') or {}).get('questions',[]) if q['id']==demographic_id), None)
@@ -555,6 +586,10 @@ def analyse(input_file, output_folder, content_file=P / 'EvaluationContent.json'
         ('item_summary', item_summaries, ['cohort_id', 'item_id', 'n']),
         ('dimension_summary', dimension_summaries, ['cohort_id', 'construct']),
         ('cohorts', cohort_summaries, ['cohort_id', 'instrument_version', 'synthetic']),
+        ('agora_votes', agora['agora_votes'], ['session', 'prytany', 'week', 'case_id', 'total', 'passedA', 'spokeFor', 'vote']),
+        ('agora_trials', agora['agora_trials'], ['session', 'prytany', 'week', 'case_id', 'accuser', 'total', 'guilty']),
+        ('agora_prytanies', agora['agora_prytanies'], ['session', 'prytany', 'T', 'Ep', 'Et', 'Em', 'ID', 'peitho', 'fame', 'ethos', 'wallet']),
+        ('agora_endings', agora['agora_endings'], ['session', 'cityEnding', 'personalEnding', 'knowledgeFormOrder']),
     ):
         write_csv(out / (name + '.csv'), cleaned(items), columns)
     for version, content_hash in sorted(unknown_versions):
@@ -583,6 +618,7 @@ def analyse(input_file, output_folder, content_file=P / 'EvaluationContent.json'
         'abstention_ballots': sum(r['abstention'] for r in decisions),
         'excluded_observation_decisions': sum(r['observation'] and r['stance'] == 'vote' for r in decisions),
         'case_knowledge_responses': len(case_knowledge),
+        **{name + '_rows': len(items) for name, items in agora.items()},
         'cohorts': cohort_summaries, 'ratings_by_item': item_summaries,
         'dimensions_descriptive': dimension_summaries,
         'knowledge_missing_data': 'Mid-campaign evaluation has no post-test. Missing/N/A are never zero. Eight actual answers in both administrations are required for a descriptive score difference.',

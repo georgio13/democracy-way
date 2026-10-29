@@ -32,6 +32,7 @@ namespace Agora
     {
         public List<VoteLine> lines = new List<VoteLine>();
         public int total, mood;
+        public int pressureValue;           // η τιμή του δείκτη πίεσης τη στιγμή της ψήφου (για την ανάλυση)
         public bool passedA;
     }
 
@@ -77,7 +78,7 @@ namespace Agora
 
         public static VoteBreakdown Vote(VoteInput v, GameConfig cfg, int mood)
         {
-            var r = new VoteBreakdown { mood = mood, total = v.baseSupport };
+            var r = new VoteBreakdown { mood = mood, total = v.baseSupport, pressureValue = v.pressureValue };
             r.lines.Add(new VoteLine { term = VoteTerm.Base, value = v.baseSupport });
             AddLine(r, VoteTerm.Pressure, v.pressureValue < cfg.pressureBelow ? Toward(v.pressureFavors, cfg.pressurePoints) : 0);
             AddLine(r, VoteTerm.War, v.war && v.emergency ? -cfg.warEmergencyPoints : 0);
@@ -88,6 +89,15 @@ namespace Agora
             AddLine(r, VoteTerm.Mood, mood);
             r.passedA = r.total >= cfg.passThreshold;
             return r;
+        }
+
+        /// <summary>«Πού γέρνει η πόλη»: ο ίδιος κανόνας με διάθεση 0, ώστε η γραμμή της Αγοράς να λέει ό,τι θα υπολογίσει η ψηφοφορία.</summary>
+        public static int KnownSum(VoteInput v, GameConfig cfg) => Vote(v, cfg, 0).total;
+
+        public static CityLeaning Leaning(VoteInput v, GameConfig cfg)
+        {
+            int known = KnownSum(v, cfg);
+            return known >= cfg.leanTowardAFrom ? CityLeaning.TowardA : known <= cfg.leanTowardBUpTo ? CityLeaning.TowardB : CityLeaning.Contested;
         }
 
         public static TrialBreakdown Trial(TrialInput t, GameConfig cfg, System.Random rng) => Trial(t, cfg, Mood(rng, cfg));
@@ -122,6 +132,96 @@ namespace Agora
             if (value == 0) return;
             r.lines.Add(new VoteLine { term = term, value = value });
             r.total += value;
+        }
+
+        // ---------- Οι κινήσεις του παίκτη ----------
+
+        /// <summary>Πειθώ σε αξιωματούχο: πετυχαίνει αν Πειθώ ≥ δυσκολία. Το κουμπί το δείχνει εκ των προτέρων.</summary>
+        public static bool CanPersuade(int peitho, Difficulty difficulty, GameConfig cfg) => peitho >= cfg.PersuadeThreshold(difficulty);
+
+        /// <summary>Δωροδοκία: 30 δρ., Ηθική −10· 1 στις 3 τη μαθαίνει η αγορά (Φήμη −5, Εμπιστοσύνη −3).</summary>
+        public static bool Bribe(PlayerState pl, CityState city, GameConfig cfg, System.Random rng, out bool exposed)
+        {
+            exposed = false;
+            if (pl.wallet < cfg.bribeCost) return false;
+            pl.wallet -= cfg.bribeCost;
+            pl.ethos = PlayerState.Clamp(pl.ethos - cfg.bribeEthosLoss);
+            pl.bribes++;
+            exposed = rng.Next(cfg.bribeExposureOneIn) == 0;
+            if (exposed)
+            {
+                pl.fame = PlayerState.Clamp(pl.fame - cfg.bribeExposureFameLoss);
+                city.Add(Metric.Trust, -cfg.bribeExposureTrustLoss);
+            }
+            return true;
+        }
+
+        /// <summary>Λογογράφος: 40 δρ., χωρίς επιστροφή.</summary>
+        public static bool BuyLogographer(PlayerState pl, GameConfig cfg)
+        {
+            if (pl.wallet < cfg.logographerCost) return false;
+            pl.wallet -= cfg.logographerCost;
+            return true;
+        }
+
+        // ---------- Δίκη: συνέπειες ----------
+
+        /// <summary>Η πλευρά της συνέλευσης που κερδίζει τους πόντους της δίκης: η καταδίκη ευνοεί τη μία, η αθώωση την άλλη.</summary>
+        public static Side TrialFavors(TrialData trial, bool guilty)
+            => guilty ? trial.convictionFavors : trial.convictionFavors == Side.A ? Side.B : Side.A;
+
+        /// <summary>Μόνο ο κατήγορος: καταδίκη Φήμη +5, Ηθική +3· αθώωση Φήμη −3· κάτω από το ένα πέμπτο πρόστιμο 50 δρ. και συκοφάντης.</summary>
+        public static void ApplyTrialToAccuser(PlayerState pl, GameConfig cfg, TrialBreakdown r)
+        {
+            if (r.guilty)
+            {
+                pl.fame = PlayerState.Clamp(pl.fame + cfg.fameConviction);
+                pl.ethos = PlayerState.Clamp(pl.ethos + cfg.ethosConviction);
+            }
+            else pl.fame = PlayerState.Clamp(pl.fame + cfg.fameAcquittal);
+            if (r.sycophant)
+            {
+                pl.wallet = Math.Max(0, pl.wallet - cfg.accuserFine);
+                pl.sycophantFlag = true;
+            }
+        }
+
+        /// <summary>Ο ομιλητής μιας πλευράς: αν ο κατηγορούμενος καταδικάστηκε και ήταν ομιλητής, μιλά ο αναπληρωτής του.</summary>
+        public static OfficialData SpeakerOf(CaseData c, Side side, bool convicted)
+        {
+            var speaker = (side == Side.A ? c.speechA : c.speechB)?.speaker;
+            var t = c.trial;
+            return convicted && t != null && t.exists && t.defendant == speaker && t.replacementSpeaker != null ? t.replacementSpeaker : speaker;
+        }
+
+        // ---------- Ψηφοφορία: είσοδος και συνέπειες για τον παίκτη ----------
+
+        public static VoteInput BuildVoteInput(CaseData c, CityState city, PlayerState pl, Side trialFavors, Side officialFavors, Side speechFor, Side logographerFor)
+            => new VoteInput
+            {
+                baseSupport = c.baseSupport, pressureValue = PressureValue(c, city), pressureFavors = c.pressureFavors,
+                emergency = c.emergencyB, war = city.war, areopagus = c.affectedByAreopagus && city.areopagusRestored,
+                trialFavors = trialFavors, officialFavors = officialFavors,
+                speechFor = speechFor, peitho = pl.peitho, logographerFor = logographerFor
+            };
+
+        /// <summary>Μετά την ψηφοφορία. Η ψήφος του παίκτη ΔΕΝ αλλάζει το αποτέλεσμα — μετρά μόνο αν συμφωνεί με τον λόγο του.</summary>
+        public static void ApplyPlayerAfterVote(PlayerState pl, GameConfig cfg, Side spokeFor, Side vote, bool passedA)
+        {
+            if (spokeFor != Side.None)
+            {
+                pl.silentStreak = 0;
+                pl.peitho = Mathf.Min(cfg.speechPeithoMax, pl.peitho + cfg.peithoPerSpeech);
+                pl.fame = PlayerState.Clamp(pl.fame + cfg.fameSpeech);
+                if ((spokeFor == Side.A) == passedA) pl.fame = PlayerState.Clamp(pl.fame + cfg.fameWin);
+                if (spokeFor == Side.A) pl.spokeForA++; else pl.spokeForB++;
+                if (vote != Side.None && vote != spokeFor) pl.ethos = PlayerState.Clamp(pl.ethos + cfg.ethosVoteAgainstSpeech);
+            }
+            else
+            {
+                pl.silentStreak++;
+                if (pl.silentStreak >= cfg.silencesBeforeLoss) pl.fame = PlayerState.Clamp(pl.fame + cfg.fameSecondSilence);
+            }
         }
 
         // ---------- Πρυτανεία ----------

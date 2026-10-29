@@ -9,9 +9,6 @@ namespace DemocracyWay.NewUI
 {
     public sealed partial class GameFlowController
     {
-        readonly Dictionary<string, TMP_Text> biographyIdentityLabels = new Dictionary<string, TMP_Text>();
-        readonly Dictionary<string, TMP_Text> biographyPlayerLabels = new Dictionary<string, TMP_Text>();
-
         string TrittysLabel()
         {
             var step = config.biography.FirstOrDefault(s => s.selectionKind == "trittys");
@@ -23,33 +20,19 @@ namespace DemocracyWay.NewUI
             (c.requireClass < 0 || c.requireClass == State.economicClassIndex) &&
             (string.IsNullOrEmpty(c.requireTrittys) || c.requireTrittys == State.trittysId)).ToList();
 
-        void EnsureBiographyOptions(int count)
+        /// <summary>«600 δραχμές · +250 σε κάθε πρυτανεία» — από το GameConfig, όχι γραμμένο στο κείμενο.</summary>
+        string ClassMoneyLine(int economicClassIndex)
         {
-            var original = Get<Button>(currentScreen + ".option.0");
-            if (original == null) return;
-            for (int i = 0; i < count; i++)
-            {
-                string key = currentScreen + ".option." + i;
-                if (Get<Button>(key) != null) continue;
-                var clone = Instantiate(original, original.transform.parent);
-                clone.name = "Authored biography choice " + i;
-                clone.onClick.RemoveAllListeners();
-                int index = i;
-                clone.onClick.AddListener(() => ChooseBio(index));
-                targets[key] = clone;
-                var label = clone.GetComponentsInChildren<TMP_Text>(true).FirstOrDefault(t => t.name == "Label") ?? clone.GetComponentInChildren<TMP_Text>(true);
-                targets[key + ".label"] = label;
-                Transform selected = clone.transform.Find("Selected");
-                if (selected != null) targets[key + ".selected"] = selected.gameObject;
-            }
+            var (wallet, income) = AgoraCfg.ClassMoney(SocialClassOf(economicClassIndex));
+            return W(BioText.ClassMoney, wallet, income);
         }
 
         void RenderAuthoredBiography()
         {
             var step = CurrentBioStep();
             if (step == null) return;
+            // Οι θέσεις επιλογών υπάρχουν στη σκηνή (το μεγαλύτερο βήμα, η φυλή, θέλει 10 — έλεγχος στα tests).
             var choices = VisibleBioChoices(step);
-            EnsureBiographyOptions(choices.Count);
             SetText(currentScreen + ".title", step.title);
             SetText(currentScreen + ".body", step.body);
             SetText(currentScreen + ".step", step.year);
@@ -94,8 +77,6 @@ namespace DemocracyWay.NewUI
                 var choice = choices[i];
                 // Decisions are read as dialogue. Their effects belong in the indicators,
                 // rather than numerical hints attached to an answer.
-                SetText(key + ".label", choice.text);
-                SetActive(key + ".metrics", false);
                 bool chosen = selected != null && selected.choiceId == choice.id;
                 SetActive(key + ".selected", chosen);
                 var shape = button.GetComponent<PanelGraphic>();
@@ -103,6 +84,11 @@ namespace DemocracyWay.NewUI
                 var label = Get<TMP_Text>(key + ".label");
                 if (label != null)
                 {
+                    // Οι επιλογές τάξης λένε τι χρήματα φέρνουν· οι υπόλοιπες διαβάζονται ως διάλογος.
+                    label.richText = choice.economicClassIndex >= 0;
+                    label.text = choice.economicClassIndex >= 0
+                        ? choice.text + "\n<size=80%>" + ClassMoneyLine(choice.economicClassIndex) + "</size>"
+                        : choice.text;
                     CivicUIFactory.Fill(label.rectTransform, new Vector2(86, 7), new Vector2(18, 7));
                     label.enableAutoSizing = true; label.fontSizeMin = 18; label.fontSizeMax = 24;
                     label.alignment = TextAlignmentOptions.MidlineLeft;
@@ -133,12 +119,12 @@ namespace DemocracyWay.NewUI
                 }
             }
             int milestone = State.biographyIndex < 4 ? 0 : State.biographyIndex == 4 ? 1 : State.biographyIndex == 5 ? 2 : State.biographyIndex < 9 ? 3 : 4;
-            string[] years = { "Πριν από το 352", "352 π.Χ.", "338 π.Χ.", "334–332 π.Χ.", "322 π.Χ." };
+            string[] years = { BioText.Year0, BioText.Year1, BioText.Year2, BioText.Year3, BioText.Year4 };
             RestoreAuthoredBiographyTimeline();
-            for (int i = 0; i < 5; i++) { SetActive(currentScreen + ".milestone." + i, i == milestone); SetText(currentScreen + ".milestone." + i + ".label", years[i]); }
+            for (int i = 0; i < 5; i++) { SetActive(currentScreen + ".milestone." + i, i == milestone); SetText(currentScreen + ".milestone." + i + ".label", W(years[i])); }
             SetInteractable(currentScreen + ".primary", selected != null);
-            RenderBiographyIdentity(step);
-            LayoutAuthoredBiographyMetrics();
+            RenderBiographyIdentity();
+            RenderBiographyCitizen(step);
             lastRenderedBioStep = step.id;
         }
 
@@ -177,36 +163,20 @@ namespace DemocracyWay.NewUI
             body.overflowMode = TextOverflowModes.Overflow;
         }
 
-        void LayoutAuthoredBiographyMetrics()
+        /// <summary>Το πάνελ «Ο πολίτης σου» (αντικείμενο σκηνής): οι 4 δείκτες του παίκτη όπως θα μπει στην
+        /// εκστρατεία (αρχικές τιμές + δέλτα βιογραφίας) και τι άλλαξε η επιλογή αυτού του βήματος.</summary>
+        void RenderBiographyCitizen(BiographyStep step)
         {
-            if (!roots.TryGetValue(currentScreen, out var root)) return;
-            var labels = root.GetComponentsInChildren<TMP_Text>(true);
-            for (int i = 0; i < 6; i++)
-            {
-                var label = labels.FirstOrDefault(x => x.name == "Metric label " + i);
-                if (label != null)
-                {
-                    label.gameObject.SetActive(false);
-                }
-                var value = Get<TMP_Text>(currentScreen + ".metric." + i);
-                if (value != null) value.gameObject.SetActive(false);
-            }
-            if (!biographyPlayerLabels.TryGetValue(currentScreen, out var playerText))
-            {
-                var panel = CivicUIFactory.Panel(root.transform, "Biography player indicators", new Color32(28, 52, 56, 242));
-                CivicUIFactory.Box(panel.rectTransform, 85, 922, 850, 118);
-                playerText = CivicUIFactory.Text(panel.transform, "Player values and changes", "", Get<TMP_Text>(currentScreen + ".body").font, 22, new Color32(239, 229, 203, 255));
-                CivicUIFactory.Fill(playerText.rectTransform, new Vector2(22, 8), new Vector2(22, 8));
-                playerText.enableAutoSizing = true; playerText.fontSizeMin = 17; playerText.fontSizeMax = 22;
-                biographyPlayerLabels[currentScreen] = playerText;
-            }
-            // Ένα σύστημα δεικτών: ο πολίτης όπως θα μπει στην εκστρατεία (αρχικές τιμές + δέλτα βιογραφίας).
+            var text = Get<TMP_Text>(currentScreen + ".citizen-metrics");
+            if (text == null) return;
             var citizen = CitizenPreview();
-            var selected = State.choices.LastOrDefault(c => c.stepId == CurrentBioStep()?.id);
-            string delta = selected != null ? MetricDeltas(selected.metrics) : "";
-            playerText.text = "<b>Ο πολίτης σου</b> · Πειθώ " + citizen.peitho + " · Φήμη " + citizen.fame + " · Ηθική " + citizen.ethos
-                + "\nΠορτοφόλι " + citizen.wallet + " δρ."
-                + (string.IsNullOrEmpty(delta) ? "" : "\n<color=#D6BA7F>Η επιλογή σου: " + delta + "</color>");
+            var record = State.choices.LastOrDefault(c => c.stepId == step.id);
+            string delta = record == null ? ""
+                : record.economicClassIndex >= 0 ? ClassMoneyLine(record.economicClassIndex)
+                : MetricDeltas(record.metrics);
+            text.text = "<b>" + W(BioText.CitizenHeading) + "</b>\n"
+                + W(BioText.CitizenMetrics, citizen.peitho, citizen.fame, citizen.ethos, citizen.wallet)
+                + (string.IsNullOrEmpty(delta) ? "" : "\n<color=#D6BA7F>" + W(BioText.YourChoice, delta) + "</color>");
         }
 
         void RestoreAuthoredBiographyTimeline()
@@ -217,35 +187,29 @@ namespace DemocracyWay.NewUI
             timeline.gameObject.SetActive(true);
             CivicUIFactory.Box(timeline, 108, 54, 1704, 134.4f);
             foreach (Transform child in timeline) child.gameObject.SetActive(true);
-            string[] captions = { "Οικογένεια", "Γέννηση", "Η πόλη", "Όρκος και θητεία", "Αξιώματα" };
+            string[] captions = { BioText.Chapter0, BioText.Chapter1, BioText.Chapter2, BioText.Chapter3, BioText.Chapter4 };
             foreach (var caption in timeline.GetComponentsInChildren<TMP_Text>(true))
                 for (int i = 0; i < captions.Length; i++)
-                    if (caption.name == "Chapter " + i) caption.text = captions[i];
+                    if (caption.name == "Chapter " + i) caption.text = W(captions[i]);
         }
 
         // Η πόλη δεν εμφανίζεται πουθενά στη βιογραφία — η δημιουργία χαρακτήρα δεν την αγγίζει (METRICS_UNIFY).
 
-        void RenderBiographyIdentity(BiographyStep step)
+        /// <summary>Το πάνελ ταυτότητας (αντικείμενο σκηνής): ό,τι έχει αποφασιστεί ως τώρα, «—» για τα υπόλοιπα.</summary>
+        void RenderBiographyIdentity()
         {
-            if (!biographyIdentityLabels.TryGetValue(currentScreen, out var text))
-            {
-                var panel = CivicUIFactory.Panel(roots[currentScreen].transform, "Citizen identity", new Color32(28, 52, 56, 242));
-                CivicUIFactory.Box(panel.rectTransform, 85, 578, 850, 220);
-                var font = Get<TMP_Text>(currentScreen + ".body").font;
-                text = CivicUIFactory.Text(panel.transform, "Identity details", "", font, 24, new Color32(239, 229, 203, 255));
-                CivicUIFactory.Fill(text.rectTransform, new Vector2(26, 18), new Vector2(26, 18));
-                text.enableAutoSizing = true; text.fontSizeMin = 18; text.fontSizeMax = 22;
-                biographyIdentityLabels[currentScreen] = text;
-            }
+            var text = Get<TMP_Text>(currentScreen + ".citizen-identity");
+            if (text == null) return;
             bool Has(string id) => State.choices.Exists(c => c.stepId == id);
-            string age = State.biographyIndex < 4 ? "Πριν από τη γέννηση" : State.biographyIndex == 4 ? "Γέννηση" : State.biographyIndex == 5 ? "14 ετών" : State.biographyIndex == 6 ? "18 ετών" : State.biographyIndex == 7 ? "18–20 ετών" : State.biographyIndex == 8 ? "20–29 ετών" : "30 ετών";
-            text.text = "<b>" + (Has("birth-name") ? State.playerName : "Η οικογένειά σου") + "</b> · " + age
-                + "\nΦυλή: " + (Has("heritage-tribe") ? TribeName(State.tribeIndex) : "—")
-                + "\nΤριττύς: " + (Has("heritage-trittys") ? TrittysLabel() : "—")
-                + "\nΔήμος: " + (Has("heritage-deme") ? State.deme : "—")
-                + "\nΟικονομική τάξη: " + (Has("heritage-class") ? config.economicClasses[State.economicClassIndex] : "—")
-                + "\nΕπάγγελμα: " + (Has("adult-profession") ? State.profession : "—")
-                + "\nΑξιώματα: " + (Has("council-lottery") ? State.offices : "—");
+            string[] ages = { BioText.AgeBeforeBirth, BioText.AgeBirth, BioText.Age14, BioText.Age18, BioText.Age18to20, BioText.Age20to29, BioText.Age30 };
+            string age = W(ages[Mathf.Clamp(State.biographyIndex - 3, 0, ages.Length - 1)]);
+            text.text = "<b>" + (Has("birth-name") ? State.playerName : W(BioText.IdentityFamily)) + "</b> · " + age
+                + "\n" + W(BioText.IdentityTribe, Has("heritage-tribe") ? TribeName(State.tribeIndex) : "—")
+                + "\n" + W(BioText.IdentityTrittys, Has("heritage-trittys") ? TrittysLabel() : "—")
+                + "\n" + W(BioText.IdentityDeme, Has("heritage-deme") ? State.deme : "—")
+                + "\n" + W(BioText.IdentityClass, Has("heritage-class") ? config.economicClasses[State.economicClassIndex] : "—")
+                + "\n" + W(BioText.IdentityProfession, Has("adult-profession") ? State.profession : "—")
+                + "\n" + W(BioText.IdentityOffices, Has("council-lottery") ? State.offices : "—");
         }
     }
 }

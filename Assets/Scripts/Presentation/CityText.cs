@@ -1,0 +1,83 @@
+namespace DemocracyWay.NewUI
+{
+    /// <summary>Τα ids των κειμένων των οθονών της πόλης, της δίκης και της συνέλευσης στο ContentLibrary.</summary>
+    static class CityText
+    {
+        public const string LeanLine = "Copy_25c04a69c3a54d75";   // Τι λένε στην Αγορά: {0}
+        public const string LeanA = "Copy_0abacf50683df3db";   // Η πόλη γέρνει προς την πρόταση Α.
+        public const string LeanContested = "Copy_7e8ef43885e12308";   // Αμφίρροπο. Μία φωνή μπορεί να το κρίνει.
+        public const string LeanB = "Copy_9cb2e7d361ad0eca";   // Η πόλη γέρνει προς την πρόταση Β.
+        public const string MarketHeading = "Copy_acbd69c078a96e25";   // Η Αγορά — Ανταποκρίσεις
+        public const string MarketPage = "Copy_948129a2634ee28d";   // Αγορά
+        public const string MarketDate = "Copy_5c62625e39771cc7";   // Πρυτανεία {0} · Εβδομάδα {1}
+        public const string OfficesHeading = "Copy_7e0f1b1a5083021a";   // Αξιωματούχοι
+        public const string CardThisWeek = "Copy_6b62f546d6eaac58";   // Αυτή την εβδομάδα — {0}
+        public const string StanceA = "Copy_0efa8604261b81de";   // υπέρ της πρότασης Α
+        public const string StanceB = "Copy_07aca5dd272fe23e";   // υπέρ της πρότασης Β
+        public const string StanceUndecided = "Copy_eba1618c4b071724";   // αναποφάσιστος
+        public const string CanPersuade = "Copy_5ad3ae1cea325a73";   // Μπορείς να τον πείσεις (Πειθώ {0})
+        public const string AcceptsMoney = "Copy_06f429eba78062ac";   // Δέχεται χρήματα
+        public const string InBase = "Copy_1f2940a1fa158ede";   // Η θέση του είναι ήδη μέσα στη Βάση
+        public const string NoOffice = "Copy_3d0f3a2e0b79058f";   // Χωρίς αξίωμα
+        public const string Meet = "Copy_65e3be936f315d46";   // Γνωριμία ›
+        public const string DetailLabelMethod = "Copy_e42ff1b8342818ad";   // Τρόπος ανάδειξης
+        public const string DetailLabelStance = "Copy_8fe424abcc380e27";   // Θέση στην υπόθεση
+        public const string DetailLabelOffice = "Copy_d47ad7f0e83f3b33";   // Αξίωμα
+        public const string DetailLabelMove = "Copy_f7b36402250123af";   // Κίνηση
+        public const string MovePersuadeBribe = "Copy_aa48e75e98ed08cf";   // Πειθώ ή δωροδοκία
+        public const string MovePersuade = "Copy_16f257517212071c";   // Πειθώ
+        public const string MoveNone = "Copy_1f4f88ada3e7e88d";   // Καμία
+        public const string PersuadeTag = "Copy_2eccb710ffec31c8";   // Πειθώ · δημόσιο επιχείρημα
+        public const string PersuadeTitle = "Copy_30526a0b0717091c";   // Ζήτησε τη στήριξή του.
+        public const string PersuadeBody = "Copy_968d983f7bdec5b5";   // Πετυχαίνει αν η Πειθώ σου φτάνει τη δυσκολία του ({0}). Η πρόταση που θα στηρίξει παίρνει +{1} στην ψηφοφορία.
+        public const string BribeTag = "Copy_b91f99c17a1d9086";   // Δωροδοκία · ιδιωτικό αντάλλαγμα
+        public const string BribeTitle = "Copy_6b01d30ac63b3dc3";   // Πρότεινε χρήματα.
+        public const string BribeBody = "Copy_e2e0fd60120a1111";   // Κοστίζει {0} δρ. και Ηθική −{1}. Πετυχαίνει πάντα (+{2}), αλλά 1 στις {3} φορές το μαθαίνει η αγορά.
+        public const string NoBribeBody = "Copy_e46c0a0e00264676";   // Ο {0} δεν δέχεται χρήματα.
+        public const string NotUndecidedBody = "Copy_9f8ac442c4574066";   // Μόνο ο αναποφάσιστος της εβδομάδας δέχεται κίνηση.
+        public const string LogographersHeading = "Copy_5ebae404a12467ce";   // Λογογράφοι της πόλης
+        public const string ComplaintsPage = "Copy_bb21346dea7b3627";   // Καταγγελίες
+        public const string ComplaintsBanner = "Copy_15cb069f22b6034c";   // Η δίκη της εβδομάδας
+        public const string EvidenceHeading = "Copy_87e3479f4aaec38f";   // ΣΤΟΙΧΕΙΑ
+        public const string RiskHeading = "Copy_b852c55419626fb8";   // Ο ΚΙΝΔΥΝΟΣ
+        public const string DecisionAccuse = "Copy_63604a79c76ec966";   // Θα γίνεις κατήγορος;
+        public const string DecisionInform = "Copy_b4317f8f4b775a18";   // Θα γίνεις μηνυτής;
+        public const string DecisionAccuseIntro = "Copy_f0888fc71024d8f0";   // Η δίκη γίνεται έτσι κι αλλιώς. Αν κατηγορήσεις εσύ, ο λόγος σου μετράει στην ετυμηγορία.
+        public const string DecisionInformIntro = "Copy_fab4b2b2efe72f0c";   // Η έρευνα γίνεται έτσι κι αλλιώς. Ως μηνυτής δίνεις πληροφορίες· εδώ ο λόγος δεν μετράει.
+        public const string DecisionTaken = "Copy_37d93b30732bbc3f";   // Η απόφασή σου
+        public const string TrialAccuserRole = "Copy_7b3322b29209cee5";   // Είσαι ο κατήγορος: ο λόγος σου μετράει στην ετυμηγορία.
+        public const string TrialJudgeRole = "Copy_9c17e065a40e9d58";   // Δεν κατηγορείς: είσαι ένας από τους κληρωτούς δικαστές. Η ψήφος σου είναι μία στις εκατοντάδες και δεν αλλάζει την ετυμηγορία.
+        public const string TrialWatchRole = "Copy_1021afbd52b999d2";   // Ο Άρειος Πάγος ερευνά και ανακοινώνει το πόρισμά του· εσύ παρακολουθείς.
+        public const string JudgeGuilty = "Copy_1394b1a0ebc1f9d3";   // Ένοχος
+        public const string JudgeAcquit = "Copy_eb8ccaa69721b7bd";   // Αθώος
+        public const string HearVerdict = "Copy_74d5ae243a027d76";   // Η ετυμηγορία
+        public const string YourJudgeVote = "Copy_3fa91dd81056ffa4";   // Ψήφισες: {0}.
+        public const string ForA = "Copy_dc4bf033039f5e15";   // Υπέρ της πρότασης Α
+        public const string ForB = "Copy_b8952cdb6e1d88d6";   // Υπέρ της πρότασης Β
+        public const string ToPlatform = "Copy_895367fe8d8ea257";   // Προς το βήμα
+        public const string VoteHeading = "Copy_175fd4b665b01728";   // Ψηφοφορία
+        public const string YouSpokeFor = "Copy_160223fea593a004";   // Μίλησες υπέρ της {0}.
+        public const string YouWereSilent = "Copy_74d04f1b104d2ff1";   // Δεν μίλησες. Η ψήφος σου είναι το μόνο αποτύπωμά σου σε αυτή την υπόθεση.
+        public const string SpeechHeading = "Copy_ec2e6b8bb9a2c60c";   // Το βήμα είναι δικό σου
+        public const string SpeechBody = "Copy_ed1996ecd19f8856";   // Μπορείς να μιλήσεις για όποια πλευρά θες — ή να μείνεις σιωπηλός.
+        public const string SpeakA = "Copy_690f179053546c79";   // Μιλώ υπέρ της Α
+        public const string SpeakB = "Copy_a6d2d1e35b8ce302";   // Μιλώ υπέρ της Β
+        public const string Silence = "Copy_c9fdfd6c459d503b";   // Σιωπώ
+        public const string ResultHeading = "Copy_4b4b17e8bd849e99";   // Ἔδοξε τῷ δήμῳ: πρόταση {0}
+        public const string ProposalWon = "Copy_c26ec8140821a6c1";   // Πρόταση {0} — επικράτησε
+        public const string Proposal = "Copy_293cec9718d9a015";   // Πρόταση {0}
+        public const string Wallet = "Copy_5cf3835c36cfa139";   // Πορτοφόλι {0} δρ.
+        public const string SpokeAndVoted = "Copy_369d84f2e5f75ddb";   // Μίλησες υπέρ της {0} · ψήφισες {1}
+        public const string SilentAndVoted = "Copy_05dcc9b819a5178a";   // Δεν μίλησες · ψήφισες {0}
+        public const string ReportHeading = "Copy_c87df440c18b91c6";   // Απολογισμός
+        public const string ReportBody = "Copy_61578746d3ee35f2";   // {0}  Επικράτησε η πρόταση {1}. Ψήφισες {2}. {3}  {4}
+        public const string ReportSpoke = "Copy_4685583c9dbbbfb4";   // Μίλησες δημόσια.
+        public const string ReportSilent = "Copy_31123621df49e4b3";   // Δεν ζήτησες τον λόγο.
+        public const string ReportCity = "Copy_2af8aba09d810079";   // Ταμείο {0} · Επισιτισμός {1} · Ετοιμότητα {2} · Εμπιστοσύνη {3} · Ισχύς του Δήμου {4}
+        public const string ReportPlayer = "Copy_97e4397331bd059a";   // Πειθώ {0} · Φήμη {1} · Ηθική {2}
+        public const string EndPrytany = "Copy_f5091cb4904184cd";   // Τέλος πρυτανείας
+        public const string NextWeek = "Copy_beb6be3d92109b6e";   // Επόμενη εβδομάδα
+        public const string NothingHere = "Copy_82741979af7b2185";   // Δεν συνεδριάζει κάτι εδώ αυτή την εβδομάδα.
+        public const string FirstVisit = "Copy_bc0fa4cb19366791";   // Πρώτη επίσκεψη
+    }
+}

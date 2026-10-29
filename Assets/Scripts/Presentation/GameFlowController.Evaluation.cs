@@ -31,7 +31,7 @@ namespace DemocracyWay.NewUI
 
         EvaluationState Evaluation => EvaluationRules.Ensure(State, EvaluationData);
 
-        /// <summary>Μετά την τελική συμμετοχή: πρώτα τα δημογραφικά (αν λείπουν), μετά το MEEGA+.</summary>
+        /// <summary>Μετά τα τέλη (που έρχονται μετά την τελική συμμετοχή): πρώτα τα δημογραφικά (αν λείπουν), μετά το MEEGA+.</summary>
         string AfterFinalQuestionnaires => DemographicsRules.Ensure(State, EvaluationData.demographics).completed ? "final-survey" : "demographics";
         EvaluationPoint EvaluationPointNow() => EvaluationRules.Point(State, CampaignRules.CaseIdForTurn(CampaignRules.Turn(State)), State.contentVersion.ToString());
 
@@ -78,7 +78,7 @@ namespace DemocracyWay.NewUI
                 if (post ? Evaluation.finalTendencyComplete : Evaluation.baselineTendencyComplete)
                 {
                     if (!EvaluationRules.AnswerParticipation(State, EvaluationData, post, answer + 1, EvaluationPointNow())) return true;
-                    if (post && Evaluation.finalParticipationComplete) { GoCampaign(AfterFinalQuestionnaires); return true; }
+                    if (post && Evaluation.finalParticipationComplete) { GoCampaign("ending-city"); return true; }   // τα τέλη μετά τα ερωτηματολόγια στάσεων
                     if (!post && Evaluation.baselineParticipationComplete) { StartPrologueAfterBaseline(); return true; }
                 }
                 else if (!EvaluationRules.AnswerTendency(State, EvaluationData, post, answer + 1, EvaluationPointNow())) return true;
@@ -131,7 +131,7 @@ namespace DemocracyWay.NewUI
             bool participation = tendency && (finalTendency ? e.finalTendencyComplete : e.baselineTendencyComplete);
             if (participation && (finalTendency ? e.finalParticipationComplete : e.baselineParticipationComplete))
             {
-                if (finalTendency) GoCampaign(AfterFinalQuestionnaires);
+                if (finalTendency) GoCampaign("ending-city");
                 else StartPrologueAfterBaseline();
                 return true;
             }
@@ -187,7 +187,7 @@ namespace DemocracyWay.NewUI
                 case "initial-knowledge":
                     key = "knowledge-pre"; title = "Αρχικές γνώσεις"; instructions = d.knowledgeInstructions; index = e.baselineIndex; done = e.baselineComplete; return true;
                 case "final-knowledge":
-                    key = "knowledge-post"; title = "Τελικές γνώσεις"; instructions = d.knowledgeInstructions; index = e.postIndex; done = e.postComplete; return true;
+                    key = "knowledge-post"; title = "Τελικές γνώσεις"; instructions = string.IsNullOrWhiteSpace(d.postKnowledgeInstructions) ? d.knowledgeInstructions : d.postKnowledgeInstructions; index = e.postIndex; done = e.postComplete; return true;
                 case "initial-tendencies":
                     if (!e.baselineTendencyComplete) { key = "tendencies-pre"; title = "Αρχικές τάσεις"; instructions = d.tendencyInstructions; index = e.baselineTendencyIndex; }
                     else { key = "participation-pre"; title = "Αρχική συμμετοχή"; instructions = d.participationInstructions; index = e.baselineParticipationIndex; done = e.baselineParticipationComplete; }

@@ -107,8 +107,6 @@ namespace DemocracyWay.NewUI
                 return;
             }
 
-            foreach (var city in world.parent.GetComponentsInChildren<RectTransform>(true).Where(r => r.name == "City indicators"))
-                CivicUIFactory.Box(city, value ? 340 : 690, 154, value ? 620 : 720, 64);
             float q = 1.2f, w = value ? 1060 : 1600;
             world.sizeDelta = new Vector2(w * q, 900 * q);
             RectTransform caseHeader = world.Find("Active weekly case") as RectTransform;
@@ -124,12 +122,14 @@ namespace DemocracyWay.NewUI
 
             funds.anchoredPosition = new Vector2((value ? 370 : 704) * q, -34 * q);
             tools.anchoredPosition = new Vector2((w - 92) * q, -238 * q);
+            // Θέσεις: Εκκλησία, Βουλή, Άρειος Πάγος, Ηλιαία, Συνέλευση του δήμου (μόνο για την υπόθεση 1).
             float[] xs = value ? new[]
             {
                 .23f,
                 .49f,
                 .73f,
-                .72f
+                .72f,
+                .45f
             }
 
             : new[]
@@ -137,14 +137,16 @@ namespace DemocracyWay.NewUI
                 .24f,
                 .52f,
                 .76f,
-                .75f
+                .75f,
+                .47f
             };
             float[] ys = value ? new[]
             {
                 450f,
                 522f,
                 297f,
-                675f
+                675f,
+                334f
             }
 
             : new[]
@@ -152,9 +154,10 @@ namespace DemocracyWay.NewUI
                 441f,
                 522f,
                 297f,
-                648f
+                648f,
+                334f
             };
-            for (int i = 0; i < sites.Length; i++)
+            for (int i = 0; i < sites.Length && i < xs.Length; i++)
                 sites[i].anchoredPosition = new Vector2((w * xs[i] - 110) * q, -(ys[i] - 88) * q);
             if (value)
                 Render();
@@ -195,10 +198,26 @@ namespace DemocracyWay.NewUI
             return b.ToString().Normalize();
         }
 
+        /// <summary>Η τέταρτη καρτέλα: κάρτες πρώτης επίσκεψης και «Πώς κρίνονται τα πράγματα».</summary>
+        public const int GuideGroup = 3;
+
+        static string CategoryName(int group, bool heading) => group switch
+        {
+            0 => heading ? "Θεσμοί και έννοιες" : "Θεσμοί",
+            1 => "Αξιώματα",
+            GuideGroup => "Οδηγός",
+            _ => "Διαδικασίες"
+        };
+
+        /// <summary>Ένα λήμμα με βάση το id του (για τις κάρτες πρώτης επίσκεψης).</summary>
+        public Entry Find(string entryId) => content != null ? content.entries.FirstOrDefault(e => e != null && e.id == entryId) : null;
+
         static string Safe(string s) => (s ?? "").Replace("<", "‹").Replace(">", "›");
         int Group(Entry e)
         {
             string c = Normalize(e.category);
+            if (c == "οδηγος")
+                return 3;
             if (c.Contains("διαδικασ") || c.Contains("ελεγχ") || c.Contains("δικαι") || c.Contains("πολιτοτητα"))
                 return 2;
             if (c.Contains("αξιωμα"))
@@ -243,7 +262,7 @@ namespace DemocracyWay.NewUI
             var b = new StringBuilder();
             if (catalogue)
             {
-                b.Append("<size=28>" + (category == 0 ? "Θεσμοί και έννοιες" : category == 1 ? "Αξιώματα" : "Διαδικασίες") + "</size>\n\n");
+                b.Append("<size=28>" + CategoryName(category, true) + "</size>\n\n");
                 foreach (int i in list)
                     b.Append("<link=\"" + i + "\"><color=#34564B>" + Safe(entries[i].title) + "  ›</color></link>\n<size=14>" + Safe(entries[i].category) + "</size>\n\n");
                 if (list.Count == 0)
@@ -258,16 +277,17 @@ namespace DemocracyWay.NewUI
                 if (boule)
                     title = "Βουλή των\nΠεντακοσίων";
                 b.Append("<size=34.8>" + title + "</size>\n\n<color=#AD9869>────────────────────────</color>\n\n");
-                if (fullEntry)
+                if (fullEntry || category == GuideGroup)   // τα λήμματα του Οδηγού είναι σύντομα: πάντα ολόκληρα
                     b.Append(Safe(e.text));
                 else if (boule)
                     b.Append("Η Βουλή αποτελείται από 500 πολίτες, πενήντα από κάθε φυλή, που υπηρετούν για ένα έτος.\n\nΠροετοιμάζει τα ζητήματα που θα συζητήσει η Εκκλησία του Δήμου και ασκεί αρμοδιότητες εποπτείας της διοίκησης.\n\n<size=16.8><color=#73815A>ΣΤΗ ΔΙΚΗ ΣΟΥ ΥΠΟΘΕΣΗ</color></size>\n\nΩς βουλευτής μπορείς να ζητήσεις στοιχεία, να μιλήσεις και να ψηφίσεις. Η απόφαση παραμένει συλλογική.\n\n");
                 else
                     b.Append(Safe(e.text.Split(new[] { "\n\n" }, StringSplitOptions.None)[0]));
                 // Bibliographic provenance remains in the data and research audit, outside the reader UI.
-                footer.text = e.title.Substring(0, 1) + " · " + (category == 0 ? "Θεσμοί" : category == 1 ? "Αξιώματα" : "Διαδικασίες");
+                footer.text = e.title.Substring(0, 1) + " · " + CategoryName(category, false);
             }
 
+            full.gameObject.SetActive(catalogue || category != GuideGroup);
             full.GetComponentInChildren<TMP_Text>().text = fullEntry ? "Σύνοψη ‹" : "Πλήρες λήμμα ›";
             body.text = b.ToString();
             Canvas.ForceUpdateCanvases();

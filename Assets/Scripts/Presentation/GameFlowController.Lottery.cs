@@ -65,7 +65,7 @@ namespace DemocracyWay.NewUI
         {
             if (modalOpen || drawingLottery || State == null || State.phase != "lottery" || State.currentTribe < 0)
                 return;
-            State.phase = "map-stela";
+            State.phase = "week-transition";   // ο πίνακας της πρώτης εβδομάδας, μετά ο χάρτης
             if (!SaveCheckpoint())
                 return;
             Show(State.phase);

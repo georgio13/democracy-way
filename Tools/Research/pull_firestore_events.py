@@ -31,7 +31,7 @@ EVENT_FIELDS = (
     "persuasion", "parrhesia", "recognition", "orientation", "stance", "sourceRef",
 )
 METRICS = ("consistency", "ethics", "authority", "persuasion", "parrhesia", "recognition")
-CITY_METRICS = ("food", "trust", "readiness", "war")
+CITY_METRICS = ("food", "trust", "readiness", "war", "treasury", "demosPower", "garrison")
 POINT_FIELDS = ("prytany", "week", "turn", "completedCases", "caseId", "lastCompletedCaseId",
                 "contentVersion", "activeSeconds", "phase", "utc", "casesPerPrytany", "totalCases")
 META_FIELDS = (
@@ -43,6 +43,16 @@ META_FIELDS = (
     "demographicVersion", "demographicKind", "demographicOptionId", "demographicValue",
     "prompt", "orientation", "reverse", "analysisWeight", "tendencyVersion", "knowledgeVersion",
     "feedback", "openFeedback", "questionnaireSchemaVersion", "instrumentHash", "eventSequence", "syntheticScenario",
+    "shownOrder", "knowledgeFormOrder", "agoraEvent",
+)
+# Τα δεδομένα των γεγονότων του παιχνιδιού (AgoraFirestoreTelemetry, βήμα 9): ψηφοφορία, δίκη, πρυτανεία, τέλος, κινήσεις.
+AGORA_FIELDS = (
+    "case", "prytany", "week", "total", "passedA", "vote", "spokeFor", "lines", "mood", "pressureMetric", "pressureValue",
+    "logographer", "logographerBought", "officialFavors", "officialBribed", "trialFavors",
+    "accuser", "guilty", "sycophant", "venue", "evidence", "judgeVote",
+    "peitho", "fame", "ethos", "wallet", "T", "Ep", "Et", "Em", "ID", "war", "garrison", "payAbolished",
+    "cityEnding", "personalEnding", "knowledgeFormOrder", "spokeForA", "spokeForB", "bribes", "excluded",
+    "for", "cost", "target", "side", "exposed", "defendant",
 )
 POLITICAL_FIELDS = (
     "ruleVersion", "approach", "base", "foodContext", "trustContext", "fundsContext", "speaker",
@@ -114,6 +124,8 @@ def minimise_metadata(meta):
         result["campaignLayout"] = selected(meta["campaignLayout"], ("casesPerPrytany", "totalCases"))
     if isinstance(meta.get("answers"), list):
         result["answers"] = [primitive(value) for value in meta["answers"][:4] if isinstance(value,str)]
+    if isinstance(meta.get("data"), dict):
+        result["data"] = selected(meta["data"], AGORA_FIELDS)
     return result
 
 

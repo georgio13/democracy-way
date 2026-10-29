@@ -32,6 +32,8 @@ namespace DemocracyWay.NewUI
         public int week = 1;
         public int marketVisitedTurn = -1;   // ο γύρος που ο παίκτης επισκέφθηκε την Αγορά — προϋπόθεση για την υπόθεση
         public bool mapGuideSeen;            // ο οδηγός του χάρτη δείχνεται μία φορά, μετά την πρώτη κλήρωση
+        public bool warNoticeSeen;           // η σελίδα «Ο πόλεμος ξεκινά» μετά την αναφορά της πρυτανείας 4
+        public List<string> placesSeen = new List<string>();   // κάρτες πρώτης επίσκεψης που έχουν δειχτεί (ids λημμάτων του Οδηγού)
         public int currentTribe = -1;
         public List<int> drawnTribes = new List<int>();
         public CampaignState campaign = new CampaignState();

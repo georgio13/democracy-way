@@ -7,8 +7,6 @@ namespace DemocracyWay.NewUI
 {
     public sealed partial class GameFlowController
     {
-        TMP_Text cityMetricsHUD;
-
         void CleanPresentation()
         {
             foreach (var binding in targets.ToArray())
@@ -54,23 +52,57 @@ namespace DemocracyWay.NewUI
             }
         }
 
-        void RenderCityMetricsHUD()
+        static readonly Color MetricCell = new Color32(22, 43, 47, 255);
+        static readonly Color MetricPressing = new Color32(122, 42, 36, 255);
+
+        /// <summary>Το HUD του χάρτη (αντικείμενο σκηνής): οι 4 μετρικές του παίκτη και οι 5 της πόλης, όλες ορατές.
+        /// Δείκτης της πόλης κάτω από το όριο της πίεσης βάφεται κόκκινος και γράφει «Πιέζει τις ψηφοφορίες».</summary>
+        void RenderMetricsHUD()
         {
-            if (cityMetricsHUD == null)
+            EnsureAgoraReady();
+            var cfg = AgoraCfg;
+            var p = State.citizen;
+            var c = State.polis;
+            int income = p.income, pay = c.payAbolished ? 0 : cfg.assemblyPayPerPrytany;
+            Metric("peitho", HudText.LabelPeitho, p.peitho.ToString(), false,
+                string.Format(JsonContent.Copy(HudText.HintPeitho), cfg.speechPeithoDivisor, cfg.peithoPerSpeech, cfg.speechPeithoMax));
+            Metric("fame", HudText.LabelFame, p.fame.ToString(), false,
+                string.Format(JsonContent.Copy(HudText.HintFame), cfg.fameSpeech, cfg.fameWin, cfg.fameConviction, Signed(cfg.fameSecondSilence), Signed(cfg.fameAcquittal), cfg.bribeExposureFameLoss));
+            Metric("ethos", HudText.LabelEthos, p.ethos.ToString(), false,
+                string.Format(JsonContent.Copy(HudText.HintEthos), cfg.ethosConviction, cfg.bribeEthosLoss, Signed(cfg.ethosVoteAgainstSpeech)));
+            Metric("drachmas", HudText.LabelDrachmas, p.wallet + " δρ.", false,
+                string.Format(JsonContent.Copy(HudText.HintDrachmas), income, pay, cfg.logographerCost, cfg.bribeCost, cfg.accuserFine));
+            Metric("treasury", HudText.LabelTreasury, c.treasury.ToString(), c.treasury < cfg.pressureBelow,
+                string.Format(JsonContent.Copy(HudText.HintTreasury), Signed(cfg.peaceTreasury), Signed(cfg.warTreasury)));
+            Metric("food", HudText.LabelFood, c.food.ToString(), c.food < cfg.pressureBelow,
+                string.Format(JsonContent.Copy(HudText.HintFood), Signed(cfg.peaceFood), Signed(cfg.warFood), cfg.famineFood));
+            Metric("readiness", HudText.LabelReadiness, c.readiness.ToString(), c.readiness < cfg.pressureBelow,
+                string.Format(JsonContent.Copy(HudText.HintReadiness), Signed(cfg.peaceReadiness), Signed(cfg.warReadiness), cfg.famineReadiness));
+            Metric("trust", HudText.LabelTrust, c.trust.ToString(), c.trust < cfg.pressureBelow,
+                string.Format(JsonContent.Copy(HudText.HintTrust), cfg.bribeExposureTrustLoss, cfg.stasisTrust, cfg.demosPowerMajority));
+            // Η Ισχύς του Δήμου δεν είναι δείκτης πίεσης: δεν βάφεται ποτέ κόκκινη.
+            Metric("demos", HudText.LabelDemos, c.demosPower.ToString(), false,
+                string.Format(JsonContent.Copy(HudText.HintDemos), cfg.coupDemosPower, cfg.demosPowerMajority, cfg.enduresMinAll));
+        }
+
+        void Metric(string id, string labelId, string value, bool pressing, string hint)
+        {
+            string key = "map.metric." + id;
+            SetText(key + ".label", JsonContent.Copy(labelId));
+            SetText(key + ".value", value);
+            var cell = Get<PanelGraphic>(key);
+            if (cell != null) cell.color = pressing ? MetricPressing : MetricCell;
+            var note = Get<TMP_Text>(key + ".note");
+            if (note != null)
             {
-                var panel = CivicUIFactory.Panel(roots["map-stela"].transform, "City indicators", new Color32(30, 56, 60, 244));
-                CivicUIFactory.Box(panel.rectTransform, 690, 154, 720, 64);
-                var font = Get<TMP_Text>("map.funds")?.font ?? Get<TMP_Text>("map.identity")?.font;
-                cityMetricsHUD = CivicUIFactory.Text(panel.transform, "City indicators values", "", font, 24, new Color32(238, 227, 199, 255));
-                CivicUIFactory.Fill(cityMetricsHUD.rectTransform, new Vector2(18, 7), new Vector2(18, 7));
-                cityMetricsHUD.enableAutoSizing = true; cityMetricsHUD.fontSizeMin = 18; cityMetricsHUD.fontSizeMax = 24;
-                cityMetricsHUD.alignment = TextAlignmentOptions.Center;
-                targets["map.city-metrics"] = cityMetricsHUD;
+                note.gameObject.SetActive(pressing);
+                note.text = JsonContent.Copy(HudText.PressNote);
             }
-            // Οι 4 ορατοί δείκτες της πόλης — το ΙΔ δεν εμφανίζεται ποτέ (spec ΣΤ.6).
-            cityMetricsHUD.text = "Ταμείο " + State.polis.treasury + "/100  ·  Επισιτισμός " + State.polis.food + "/100"
-                + "\nΕτοιμότητα " + State.polis.readiness + "/100  ·  Εμπιστοσύνη " + State.polis.trust + "/100"
-                + (State.polis.war ? "  ·  Πόλεμος" : "");
+            var tooltip = cell != null ? cell.GetComponent<MetricHint>() : null;
+            if (tooltip != null)
+                tooltip.text = pressing
+                    ? hint + "\n\n" + string.Format(JsonContent.Copy(HudText.HintPressure), AgoraCfg.pressureBelow, AgoraCfg.pressurePoints)
+                    : hint;
         }
     }
 }

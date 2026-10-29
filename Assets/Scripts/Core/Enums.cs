@@ -37,6 +37,9 @@ namespace Agora
 
     public enum TrialVenue { Heliaia, Areopagus }
 
+    /// <summary>«Πού γέρνει η πόλη» (ενότητα 7.2): από ό,τι είναι ήδη γνωστό, χωρίς τη διάθεση του πλήθους.</summary>
+    public enum CityLeaning { TowardA, Contested, TowardB }
+
     /// <summary>Τα στοιχεία μιας δίκης όπως τα βλέπει ο παίκτης πριν αποφασίσει.</summary>
     public enum EvidenceStrength { Weak, Doubtful, Strong }
 
