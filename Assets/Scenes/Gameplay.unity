@@ -97355,7 +97355,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1803205275}
   - component: {fileID: 1803205277}
-  - component: {fileID: 1803205276}
   m_Layer: 0
   m_Name: Treasuries
   m_TagString: Untagged
@@ -97390,30 +97389,6 @@ RectTransform:
   m_AnchoredPosition: {x: 760, y: -40.800003}
   m_SizeDelta: {x: 482.40002, y: 100.8}
   m_Pivot: {x: 0, y: 1}
---- !u!114 &1803205276
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1803205274}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e1fdd5346811d54eb59b8408811f90a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DemocracyWay.NewUI.PanelGraphic
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.08235294, g: 0.17254902, b: 0.19607843, a: 0.92156863}
-  m_RaycastTarget: 0
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  silhouette: 0
-  cut: 15.6
-  border: 1.2
-  borderColor: {r: 0.7019608, g: 0.6117647, b: 0.42745098, a: 1}
 --- !u!222 &1803205277
 CanvasRenderer:
   m_ObjectHideFlags: 0
