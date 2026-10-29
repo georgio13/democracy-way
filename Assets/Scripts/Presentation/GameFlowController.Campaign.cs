@@ -179,6 +179,24 @@ namespace DemocracyWay.NewUI
 
         void RenderCampaignMap() => RenderAgoraMap();
 
+        /// <summary>Πίνακας εβδομάδας / αναφορά πρυτανείας / αρχή του πολέμου: τα κουτιά της σκηνής είναι κεντραρισμένα
+        /// κάθετα, άρα ένα μεγάλο κείμενο «ανέβαινε» πάνω στον τίτλο. Το κείμενο ξεκινά κάτω από τον τίτλο, φτάνει ως την
+        /// υποσημείωση και μικραίνει μόνο αν δεν χωρά.</summary>
+        void LayoutTransitionText(string id)
+        {
+            var heading = Get<TMP_Text>(id + ".heading");
+            var body = Get<TMP_Text>(id + ".body");
+            var source = Get<TMP_Text>(id + ".source");
+            if (heading == null || body == null) return;
+            heading.enableAutoSizing = true; heading.fontSizeMin = 32f; heading.fontSizeMax = 51.6f;
+            float top = -heading.rectTransform.anchoredPosition.y + heading.rectTransform.sizeDelta.y + 16f;
+            float bottom = source != null ? -source.rectTransform.anchoredPosition.y - 16f : top + 300f;
+            body.rectTransform.anchoredPosition = new Vector2(body.rectTransform.anchoredPosition.x, -top);
+            body.rectTransform.sizeDelta = new Vector2(body.rectTransform.sizeDelta.x, Mathf.Max(120f, bottom - top));
+            body.verticalAlignment = VerticalAlignmentOptions.Top;
+            body.enableAutoSizing = true; body.fontSizeMin = 18f; body.fontSizeMax = 27.6f;
+        }
+
         void RenderCampaign()
         {
             string id = currentScreen;
@@ -214,6 +232,7 @@ namespace DemocracyWay.NewUI
                     foreach (Transform child in transitionRoot.transform)
                         if (child.name.StartsWith("Handover ", System.StringComparison.Ordinal)) child.gameObject.SetActive(false);
                 CampaignText("source", GameSession.Slot < 0 ? JsonContent.Copy("Copy_72b41a8f13543b93") : JsonContent.Copy("Copy_e15e406bba032b98"));
+                LayoutTransitionText(id);
                 CampaignLabel("primary", id == "week-transition" ? W(WeekText.BoardPrimary)
                     : WarStartsNext && !State.warNoticeSeen ? W(WeekText.Continue)
                     : State.prytany == JsonContent.Settings.prytanyCount ? JsonContent.Copy("Copy_d654bb1a20dc6e0e") : JsonContent.Copy("Copy_df6d19377abefd11"));

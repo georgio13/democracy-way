@@ -35,7 +35,11 @@ namespace DemocracyWay.NewUI
         public const string BribeBody = "Copy_e2e0fd60120a1111";   // Κοστίζει {0} δρ. και Ηθική −{1}. Πετυχαίνει πάντα (+{2}), αλλά 1 στις {3} φορές το μαθαίνει η αγορά.
         public const string NoBribeBody = "Copy_e46c0a0e00264676";   // Ο {0} δεν δέχεται χρήματα.
         public const string NotUndecidedBody = "Copy_9f8ac442c4574066";   // Μόνο ο αναποφάσιστος της εβδομάδας δέχεται κίνηση.
-        public const string LogographersHeading = "Copy_5ebae404a12467ce";   // Λογογράφοι της πόλης
+        public const string LogographersHeading = "Copy_5ebae404a12467ce";   // Λογογράφος
+        public const string LogoIntro = "Copy_832acd2483cb5da8";   // Ο Δείναρχος ο Κορίνθιος είναι μέτοικος· ως ξένος δεν μπορεί να μιλήσει ο ίδιος, γι' αυτό γράφει λόγους για άλλους. Ένας λόγος την εβδομάδα: υπέρ της Α, υπέρ της Β ή για την κατηγορία σου.
+        public const string LogoCardA = "Copy_4863399ef23ef1a0";   // Ένας λόγος υπέρ της πρότασης Α, έτοιμος για το βήμα. Τον εκφωνείς εσύ· αν μιλήσεις για τη Β ή σωπάσεις, ο λόγος χάνεται.
+        public const string LogoCardB = "Copy_8717b340475e529d";   // Ένας λόγος υπέρ της πρότασης Β, έτοιμος για το βήμα. Τον εκφωνείς εσύ· αν μιλήσεις για την Α ή σωπάσεις, ο λόγος χάνεται.
+        public const string LogoCardTrial = "Copy_717039e15fd31b56";   // Η κατηγορία σου για τη δίκη της εβδομάδας στην Ηλιαία. Μετρά μόνο αν είσαι ο κατήγορος.
         public const string ComplaintsPage = "Copy_bb21346dea7b3627";   // Καταγγελίες
         public const string ComplaintsBanner = "Copy_15cb069f22b6034c";   // Η δίκη της εβδομάδας
         public const string EvidenceHeading = "Copy_87e3479f4aaec38f";   // ΣΤΟΙΧΕΙΑ

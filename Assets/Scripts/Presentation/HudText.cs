@@ -25,7 +25,7 @@ namespace DemocracyWay.NewUI
         public const string HintPressure = "Copy_d1a07c49931d003f";   // Κάτω από {0} πιέζει τις ψηφοφορίες που εξαρτώνται από αυτόν τον δείκτη: {1} στην πλευρά που ορίζει η υπόθεση.
         public const string IconLexicon = "Copy_3e7d75e64b3aa552";   // Ευρετήριο
         public const string IconMarket = "Copy_2668b0b66eadad63";   // Αγορά
-        public const string IconLogographers = "Copy_9db86f299f8b9094";   // Λογογράφοι
+        public const string IconLogographers = "Copy_9db86f299f8b9094";   // Λογογράφος
         public const string IconComplaints = "Copy_28c4a594b0a78e41";   // Καταγγελίες
         public const string IconOfficials = "Copy_faeafc3a0b4893a1";   // Αξιωματούχοι
     }

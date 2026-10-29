@@ -82,6 +82,7 @@ namespace DemocracyWay.NewUI
             });
             // Η Αγορά ανοίγει πάντα στη φρέσκια είδηση της εβδομάδας, με τη λίστα στην κορυφή.
             marketSelected = Mathf.Clamp(CampaignRules.Turn(State), 0, AgoraContent.cases.Count - 1);
+            marketReadingShown = -1;   // και το κείμενο δεξιά από την αρχή του
             Show("market");
             if (marketScroll != null) marketScroll.verticalNormalizedPosition = 1f;
             ShowPlaceCardIfNeeded(GuideMarket);
@@ -205,10 +206,12 @@ namespace DemocracyWay.NewUI
             var lean = Get<TMP_Text>("market.read");
             if (body == null || quote == null || after == null) return;
             var quotePanel = quote.rectTransform.parent as RectTransform;
-            // topY: αμέσως κάτω από τον τίτλο (heading: y 181.2 + ύψος κειμένου ~65) — το 308 άφηνε
-            // μεγάλο κενό ΚΑΙ στρίμωχνε τη στήλη τόσο που το πλαίσιο των προτάσεων έχανε τον Β ομιλητή.
-            const float left = 628.8f, width = 936f, topY = 252f, bottomY = 724f, gap = 14f;
-            const float quotePad = 56f, quoteInset = 52.8f;
+            // Τα κείμενα ζουν μέσα σε κυλιόμενη περιοχή (market.read-scroll): στοιβάζονται από την κορυφή της,
+            // με σταθερό, ευανάγνωστο μέγεθος, και ό,τι δεν χωρά διαβάζεται με κύλιση — όχι με μικρότερα γράμματα.
+            var scroll = Get<ScrollRect>("market.read-scroll");
+            const float gap = 14f, quotePad = 56f, quoteInset = 52.8f;
+            const float left = 0f, topY = 0f;
+            float width = scroll != null ? scroll.viewport.rect.width : 908f;
             var labels = new[] { body, quote, after, unread, lean };
             var heights = new float[labels.Length];
             for (int i = 0; i < labels.Length; i++)
@@ -216,24 +219,11 @@ namespace DemocracyWay.NewUI
                 var label = labels[i];
                 if (label == null || string.IsNullOrEmpty(label.text)) continue;
                 label.textWrappingMode = TextWrappingModes.Normal;
-                // Σταθερό, ευανάγνωστο μέγεθος — το ύψος του κουτιού ακολουθεί το κείμενο.
                 label.enableAutoSizing = false;
                 label.fontSize = i == 0 ? 23f : 21f;
                 float w = label == quote ? width - quoteInset : width;
                 // Το πλαίσιο προτάσεων παίρνει έξτρα buffer ώστε να μη χάνεται η τελευταία γραμμή (Β ομιλητής).
                 heights[i] = label.GetPreferredValues(label.text, w, 0).y + (label == quote ? 18f : 6f);
-            }
-            float total = heights.Sum() + (heights[1] > 0 ? quotePad : 0) + (labels.Length - 1) * gap;
-            float available = bottomY - topY;
-            float squeeze = total > available ? available / total : 1f;
-            for (int i = 0; i < labels.Length; i++)
-            {
-                var label = labels[i];
-                if (label == null || heights[i] <= 0) continue;
-                heights[i] *= squeeze;
-                // Αν παρ' όλα αυτά δεν χωρά, η γραμματοσειρά μικραίνει αυτόματα — αλλά όχι κάτω από 18.
-                label.enableAutoSizing = squeeze < 1f;
-                if (squeeze < 1f) { label.fontSizeMin = 18f; label.fontSizeMax = i == 0 ? 23f : 21f; }
             }
             float y = topY;
             void Place(RectTransform rect, float height)
@@ -260,7 +250,15 @@ namespace DemocracyWay.NewUI
                 label.gameObject.SetActive(height > 0);
                 if (height > 0) Place(label.rectTransform, height);
             }
+            if (scroll != null)
+            {
+                scroll.content.sizeDelta = new Vector2(0f, y);
+                // Νέα είδηση → από την αρχή της.
+                if (marketReadingShown != marketSelected) { scroll.verticalNormalizedPosition = 1f; marketReadingShown = marketSelected; }
+            }
         }
+
+        int marketReadingShown = -1;
 
         /// <summary>Μία φορά ανά κείμενο: ο χειριστής κλικ που ανοίγει το ευρετήριο στη λέξη που πατήθηκε.
         /// AddComponent χειριστή σε υπάρχον αντικείμενο σκηνής — όχι δημιουργία UI (ίδιο μοτίβο με LexiconPanel).</summary>
@@ -320,6 +318,16 @@ namespace DemocracyWay.NewUI
             }
         }
 
+        /// <summary>Ελληνικά κεφαλαία χωρίς τόνους («Δείναρχος» → «ΔΕΙΝΑΡΧΟΣ», όχι «ΔΕΊΝΑΡΧΟΣ»)· τα διαλυτικά μένουν.</summary>
+        static string GreekUpper(string text)
+        {
+            var b = new System.Text.StringBuilder();
+            foreach (char c in (text ?? "").Normalize(System.Text.NormalizationForm.FormD))
+                if (c != '́' && c != '̀' && c != '͂') b.Append(c);   // οξεία, βαρεία, περισπωμένη
+            // Το ToUpperInvariant της Unity αφήνει το τελικό «ς» μικρό («ΔΕΙΝΑΡΧΟς»): γίνεται «Σ» ρητά.
+            return b.ToString().Normalize(System.Text.NormalizationForm.FormC).ToUpperInvariant().Replace('ς', 'Σ');
+        }
+
         void RenderLogographerRoster()
         {
             EnsureAgoraReady();
@@ -328,17 +336,20 @@ namespace DemocracyWay.NewUI
             var logo = AgoraContent.logographers.FirstOrDefault(l => l != null);
             string name = logo != null ? logo.displayName : "";
             CampaignText("heading", W(CityText.LogographersHeading));
+            // Ποιος είναι ο λογογράφος λέγεται μία φορά, στην εισαγωγή· οι κάρτες λένε τι κάνει η κάθε παραγγελία.
+            CampaignText("intro", W(CityText.LogoIntro));
             // Η κορδέλα κάθε κάρτας γράφει τον λογογράφο: ο ίδιος άνθρωπος, τρεις παραγγελίες.
-            for (int i = 0; i < 3; i++) SetChildText("logographers.card." + i, "Perk/Perk label", name.ToUpperInvariant());
+            for (int i = 0; i < 3; i++) SetChildText("logographers.card." + i, "Perk/Perk label", GreekUpper(name));
             bool canBuy = WeekFlowRules.CanBuyLogographer(s, State.citizen, AgoraCfg);
             string[] titles = { W(WeekText.LogoForA), W(WeekText.LogoForB), W(WeekText.LogoForTrial) };
+            string[] descriptions = { W(CityText.LogoCardA), W(CityText.LogoCardB), W(CityText.LogoCardTrial) };
             for (int i = 0; i < 3; i++)
             {
                 bool trialCard = i == 2;
                 bool trialAllowed = WeekFlowRules.CanOrderForTrial(s, c);
                 SetActive("logographers.card." + i, true);
                 FillLogographerCard(i, titles[i],
-                    trialCard && !trialAllowed ? W(WeekText.LogoTrialOnly) : logo != null ? logo.bio : "",
+                    trialCard && !trialAllowed ? W(WeekText.LogoTrialOnly) : descriptions[i],
                     W(WeekText.LogoPrice, AgoraCfg.logographerCost), W(WeekText.LogoBonus, AgoraCfg.logographerPoints));
                 bool show = canBuy && (!trialCard || trialAllowed);
                 SetActive("logographers.buy." + i, show);
