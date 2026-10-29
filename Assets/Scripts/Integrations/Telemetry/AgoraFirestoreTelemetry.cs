@@ -9,7 +9,7 @@ namespace DemocracyWay.NewUI
 {
     /// <summary>
     /// Πύλη γεγονότων έρευνας (case_result, game_end κ.λπ.) προς το Firestore. Ίδια πολιτική με το
-    /// ResearchTelemetry: τίποτα δεν φεύγει χωρίς ResearchConsent, και η ταυτότητα λογαριασμού
+    /// ResearchTelemetry: φεύγει μόνο για συνδεδεμένο λογαριασμό (ResearchConsent, πλέον πάντα ενεργό), και η ταυτότητα λογαριασμού
     /// (email/uid) δεν περνά ποτέ αυτό το σύνορο — μόνο το ανώνυμο ResearchParticipantId.
     /// Εκτός WebGL τα γεγονότα γράφονται στην Console.
     /// Η σελίδα φιλοξενίας ορίζει window.DWResearch.agoraEvent(json) — βλ. AgoraTelemetry.jslib.

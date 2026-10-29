@@ -41,8 +41,8 @@
   async function loadProfile(c){let profile;
     try{profile=values(await cloud(c,'players/'+c.auth.uid));}
     catch(error){if(error.status!==404)throw error;
-      // Neither account creation nor a missing profile implies research consent.
-      profile={researchParticipantId:randomId(),researchConsent:false,consentVersion,consentUtc:new Date().toISOString()};
+      // Δεν υπάρχει πια ερώτηση συμμετοχής: κάθε λογαριασμός καταγράφεται για την έρευνα.
+      profile={researchParticipantId:randomId(),researchConsent:true,consentVersion,consentUtc:new Date().toISOString()};
       try{await cloud(c,'players?documentId='+encodeURIComponent(c.auth.uid),'POST',fields(profile));}
       catch(createError){if(createError.status!==409)throw createError;profile=values(await cloud(c,'players/'+c.auth.uid));}}
     if(!/^[a-f0-9]{32}$/.test(profile.researchParticipantId))throw new Error('PROFILE_REQUIRED');
@@ -65,10 +65,10 @@
   function publish(){send('OnAccountState',JSON.stringify({busy:state.busy,status:state.status,error:state.error,email:state.email,resolved:state.resolved}));}
   function setStatus(text,error=false){state.status=text;state.error=error;publish();}
   function setBusy(value){state.busy=value;publish();}
-  function researchContext(){if(window.DWResearch)window.DWResearch.setAccountContext(state.auth&&state.profile?{namespace:state.auth.uid,researchParticipantId:state.profile.researchParticipantId,allowed:state.profile.researchConsent}:null);}
+  function researchContext(){if(window.DWResearch)window.DWResearch.setAccountContext(state.auth&&state.profile?{namespace:state.auth.uid,researchParticipantId:state.profile.researchParticipantId,allowed:true}:null);}
   async function finishLogin(){const c=current();if(!c)throw new Error('INVALID_LOGIN_CREDENTIALS');
     state.profile=await loadProfile(c);await pump(c);state.slots=await loadSlots(c);state.ready=true;researchContext();
-    const packet={uid:c.auth.uid,researchParticipantId:state.profile.researchParticipantId,researchConsent:state.profile.researchConsent,slots:state.slots};
+    const packet={uid:c.auth.uid,researchParticipantId:state.profile.researchParticipantId,researchConsent:true,slots:state.slots};
     setStatus('Συγχρονίζονται οι αποθηκεύσεις…');send('OnAccountReady',JSON.stringify(packet));return packet;}
   async function operation(action,pending){if(state.busy)return null;setBusy(true);setStatus(pending);
     try{return await action();}catch(error){state.ready=false;setStatus(safeMessage(error.message),true);return null;}finally{setBusy(false);}}

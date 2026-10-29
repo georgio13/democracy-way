@@ -23,7 +23,7 @@ namespace DemocracyWay.NewUI
             if (!string.IsNullOrEmpty(e.instrumentVersion) && e.instrumentVersion != content.instrumentVersion)
             {
                 var archived = new EvaluationSurveyArchive { instrumentVersion = e.instrumentVersion, administrationVersion = e.administrationVersion,
-                    submissionId = e.submissionId, openFeedback = e.openFeedback, completed = e.completed,
+                    submissionId = e.submissionId, openFeedback = e.openFeedback, weaknessesFeedback = e.weaknessesFeedback, commentsFeedback = e.commentsFeedback, completed = e.completed,
                     experienceItemIds = e.experienceItemIds, intentionItemIds = e.intentionItemIds,
                     experienceAnswers = e.experienceAnswers, intentionAnswers = e.intentionAnswers,
                     offerPoint = e.offerPoint, startPoint = e.startPoint, submitPoint = e.submitPoint };
@@ -165,11 +165,16 @@ namespace DemocracyWay.NewUI
             if (intention || !Ready(e) || e.completed || index < 0 || index >= content.experience.Length || !ValidRating(content.experience[index], value)) return false;
             e.experienceAnswers[index] = value; return true;
         }
-        public static bool SetFeedback(GameState state, EvaluationContent content, string feedback)
+        /// <summary>Οι τρεις ανοιχτές ερωτήσεις του MEEGA+: δυνατά σημεία (openFeedback), αδύνατα σημεία, άλλο σχόλιο ή πρόταση.</summary>
+        public enum Feedback { Strengths, Weaknesses, Comments }
+        public static bool SetFeedback(GameState state, EvaluationContent content, string feedback, Feedback kind = Feedback.Strengths)
         {
             var e = Ensure(state, content); feedback = (feedback ?? "").Trim();
             if (!Ready(e) || e.completed || feedback.Length > Math.Min(1000, content.openFeedbackMaxLength)) return false;
-            e.openFeedback = feedback; return true;
+            if (kind == Feedback.Weaknesses) e.weaknessesFeedback = feedback;
+            else if (kind == Feedback.Comments) e.commentsFeedback = feedback;
+            else e.openFeedback = feedback;
+            return true;
         }
         public static bool Submit(GameState state, EvaluationContent content, EvaluationPoint point)
         {

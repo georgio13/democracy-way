@@ -42,7 +42,7 @@ META_FIELDS = (
     "submissionId", "group", "section", "instrumentSection", "officialItemId", "allowNotApplicable",
     "demographicVersion", "demographicKind", "demographicOptionId", "demographicValue",
     "prompt", "orientation", "reverse", "analysisWeight", "tendencyVersion", "knowledgeVersion",
-    "feedback", "openFeedback", "questionnaireSchemaVersion", "instrumentHash", "eventSequence", "syntheticScenario",
+    "feedback", "openFeedback", "feedbackKind", "questionnaireSchemaVersion", "instrumentHash", "eventSequence", "syntheticScenario",
     "shownOrder", "knowledgeFormOrder", "agoraEvent",
 )
 # Τα δεδομένα των γεγονότων του παιχνιδιού (AgoraFirestoreTelemetry, βήμα 9): ψηφοφορία, δίκη, πρυτανεία, τέλος, κινήσεις.

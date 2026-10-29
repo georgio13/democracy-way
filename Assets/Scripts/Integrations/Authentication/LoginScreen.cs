@@ -49,7 +49,7 @@ namespace DemocracyWay.NewUI
             email.onSubmit.AddListener(_ => Submit()); password.onSubmit.AddListener(_ => Submit());
             profileBack.onClick.AddListener(AccountBridge.CloseAccount);
             signOut.onClick.AddListener(() => { email.text = password.text = ""; AccountBridge.SignOut(); });
-            researchPreferences.onClick.AddListener(() => { view = View.Research; AccountBridge.ClearStatus(); Refresh(); });
+            researchPreferences.gameObject.SetActive(false);   // η ρύθμιση συμμετοχής στην έρευνα αφαιρέθηκε
             researchYes.onClick.AddListener(() => ResearchDecision(true));
             researchNo.onClick.AddListener(() => ResearchDecision(false));
             AccountBridge.StateChanged += Refresh;
@@ -151,7 +151,7 @@ namespace DemocracyWay.NewUI
             messagePanel.color = AccountBridge.HasError ? new Color32(71, 34, 40, 255) : new Color32(29, 55, 61, 255);
             messagePanel.borderColor = AccountBridge.HasError ? new Color32(197, 107, 92, 255) : Gold;
             messagePanel.SetVerticesDirty();
-            profileText.text = AccountBridge.Email + "\n\nΗ πρόοδός σου αποθηκεύεται ιδιωτικά στον λογαριασμό σου.\n\nΕρευνητική καταγραφή: " + (AccountBridge.ResearchConsent ? "ενεργή" : "ανενεργή") + ".";
+            profileText.text = AccountBridge.Email + "\n\nΗ πρόοδός σου αποθηκεύεται ιδιωτικά στον λογαριασμό σου.";
             researchPreferences.GetComponentInChildren<TMP_Text>().text = "Ρύθμιση ερευνητικής συμμετοχής";
             foreach (var button in GetComponentsInChildren<Button>(true)) button.interactable = !AccountBridge.IsBusy;
             email.interactable = password.interactable = !AccountBridge.IsBusy;

@@ -12,7 +12,8 @@ namespace DemocracyWay.NewUI
         EvaluationContent evaluationData;
         readonly HashSet<string> evaluationQuizLayouts = new HashSet<string>();
         readonly List<Button[]> evaluationRatingRows = new List<Button[]>();
-        TMP_InputField evaluationFeedback;
+        // Οι τρεις ανοιχτές ερωτήσεις του MEEGA+: δυνατά σημεία, αδύνατα σημεία, άλλο σχόλιο ή πρόταση.
+        readonly List<(TMP_InputField field, EvaluationRules.Feedback kind)> evaluationFeedbackFields = new List<(TMP_InputField, EvaluationRules.Feedback)>();
         GameObject evaluationSurveyPanel, evaluationDialog;
         Button evaluationSubmitButton, evaluationDialogConfirm, evaluationDialogCancel;
         TMP_Text evaluationSurveyProgress, evaluationDialogTitle, evaluationDialogBody;
@@ -272,10 +273,10 @@ namespace DemocracyWay.NewUI
                     CivicUIFactory.PaintSelectable(button, values[row] == value + 1);
                     button.interactable = !evaluation.completed;
                 }
-            if (evaluationFeedback != null)
+            foreach (var (field, kind) in evaluationFeedbackFields)
             {
-                if (!evaluationFeedback.isFocused) evaluationFeedback.SetTextWithoutNotify(evaluation.openFeedback ?? "");
-                evaluationFeedback.readOnly = evaluation.completed;
+                if (!field.isFocused) field.SetTextWithoutNotify(FeedbackText(evaluation, kind) ?? "");
+                field.readOnly = evaluation.completed;
             }
             int answered = values.Count(x => x >= 0);
             evaluationSurveyProgress.text = evaluation.completed ? "Οι απαντήσεις σου αποθηκεύτηκαν." : answered + " από " + values.Length + " απαντήσεις";
@@ -339,24 +340,10 @@ namespace DemocracyWay.NewUI
                 }
                 evaluationRatingRows.Add(buttons); y += rowHeight + 16;
             }
-            var feedbackTitle = CivicUIFactory.Text(evaluationSurveyContent, "Optional feedback title", EvaluationData.openFeedbackPrompt ?? "Προαιρετικά: τι σε δυσκόλεψε ή τι θα άλλαζες;", font, 26, CivicUIFactory.Ink);
-            CivicUIFactory.Box(feedbackTitle.rectTransform, 22, y + 16, width - 44, 80); y += 104;
-            var feedbackPanel = CivicUIFactory.Panel(evaluationSurveyContent, "Optional feedback", CivicUIFactory.Paper);
-            CivicUIFactory.Box(feedbackPanel.rectTransform, 12, y, width - 24, 190);
-            var viewport = CivicUIFactory.Rect(feedbackPanel.transform, "Text viewport");
-            CivicUIFactory.Fill(viewport, new Vector2(20, 14), new Vector2(20, 14)); viewport.gameObject.AddComponent<RectMask2D>();
-            var feedbackText = CivicUIFactory.Text(viewport, "Feedback text", "", font, 25, CivicUIFactory.Ink); CivicUIFactory.Fill(feedbackText.rectTransform, Vector2.zero, Vector2.zero);
-            feedbackText.alignment = TextAlignmentOptions.TopLeft; feedbackText.richText = false; feedbackText.raycastTarget = false;
-            var placeholder = CivicUIFactory.Text(viewport, "Feedback placeholder", "Μην συμπεριλάβεις όνομα, email ή άλλα προσωπικά στοιχεία.", font, 24, new Color(.25f, .25f, .25f, .7f));
-            CivicUIFactory.Fill(placeholder.rectTransform, Vector2.zero, Vector2.zero); placeholder.alignment = TextAlignmentOptions.TopLeft; placeholder.raycastTarget = false;
-            evaluationFeedback = feedbackPanel.gameObject.AddComponent<TMP_InputField>();
-            evaluationFeedback.textViewport = viewport; evaluationFeedback.textComponent = feedbackText; evaluationFeedback.placeholder = placeholder;
-            evaluationFeedback.targetGraphic = feedbackPanel; evaluationFeedback.lineType = TMP_InputField.LineType.MultiLineNewline;
-            evaluationFeedback.characterLimit = Math.Min(1000, EvaluationData.openFeedbackMaxLength > 0 ? EvaluationData.openFeedbackMaxLength : 1000);
-            evaluationFeedback.navigation = new Navigation { mode = Navigation.Mode.None };
-            evaluationFeedback.onEndEdit.AddListener(value => { if (EvaluationRules.SetFeedback(State, EvaluationData, value)) SaveCheckpoint(); });
-            targets["evaluation.feedback"] = evaluationFeedback;
-            y += 220;
+            // Τρία προαιρετικά ελεύθερα πεδία, το ένα κάτω από το άλλο, με την ίδια εμφάνιση.
+            y = FeedbackField(EvaluationData.openFeedbackPrompt ?? "Προαιρετικά: τι σε δυσκόλεψε ή τι θα άλλαζες;", EvaluationRules.Feedback.Strengths, "evaluation.feedback", font, width, y);
+            y = FeedbackField(EvaluationData.weaknessesFeedbackPrompt, EvaluationRules.Feedback.Weaknesses, "evaluation.feedback.weaknesses", font, width, y);
+            y = FeedbackField(EvaluationData.commentsFeedbackPrompt, EvaluationRules.Feedback.Comments, "evaluation.feedback.comments", font, width, y);
             evaluationSurveyContent.sizeDelta = new Vector2(0, y + 8);
             evaluationSurveyProgress = CivicUIFactory.Text(rect, "Answered statement count", "", font, 24, CivicUIFactory.Paper);
             var progressRect = evaluationSurveyProgress.rectTransform; progressRect.anchorMin = progressRect.anchorMax = new Vector2(.04f, .065f); progressRect.pivot = new Vector2(0, .5f); progressRect.anchoredPosition = Vector2.zero; progressRect.sizeDelta = new Vector2(900, 54);
@@ -366,12 +353,42 @@ namespace DemocracyWay.NewUI
             Canvas.ForceUpdateCanvases(); evaluationSurveyScroll.verticalNormalizedPosition = 1;
         }
 
+        static string FeedbackText(EvaluationState e, EvaluationRules.Feedback kind) =>
+            kind == EvaluationRules.Feedback.Weaknesses ? e.weaknessesFeedback : kind == EvaluationRules.Feedback.Comments ? e.commentsFeedback : e.openFeedback;
+
+        /// <summary>Ένα προαιρετικό ελεύθερο πεδίο (τίτλος + πλαίσιο κειμένου) στη στήλη του ερωτηματολογίου· επιστρέφει το νέο y.
+        /// Χωρίς κείμενο ερώτησης στο περιεχόμενο, το πεδίο δεν φτιάχνεται.</summary>
+        float FeedbackField(string promptText, EvaluationRules.Feedback kind, string key, TMP_FontAsset font, float width, float y)
+        {
+            if (string.IsNullOrWhiteSpace(promptText)) return y;
+            var feedbackTitle = CivicUIFactory.Text(evaluationSurveyContent, "Optional feedback title " + kind, promptText, font, 26, CivicUIFactory.Ink);
+            CivicUIFactory.Box(feedbackTitle.rectTransform, 22, y + 16, width - 44, 80); y += 104;
+            var feedbackPanel = CivicUIFactory.Panel(evaluationSurveyContent, "Optional feedback " + kind, CivicUIFactory.Paper);
+            CivicUIFactory.Box(feedbackPanel.rectTransform, 12, y, width - 24, 190);
+            var viewport = CivicUIFactory.Rect(feedbackPanel.transform, "Text viewport");
+            CivicUIFactory.Fill(viewport, new Vector2(20, 14), new Vector2(20, 14)); viewport.gameObject.AddComponent<RectMask2D>();
+            var feedbackText = CivicUIFactory.Text(viewport, "Feedback text", "", font, 25, CivicUIFactory.Ink); CivicUIFactory.Fill(feedbackText.rectTransform, Vector2.zero, Vector2.zero);
+            feedbackText.alignment = TextAlignmentOptions.TopLeft; feedbackText.richText = false; feedbackText.raycastTarget = false;
+            var placeholder = CivicUIFactory.Text(viewport, "Feedback placeholder", "Μην συμπεριλάβεις όνομα, email ή άλλα προσωπικά στοιχεία.", font, 24, new Color(.25f, .25f, .25f, .7f));
+            CivicUIFactory.Fill(placeholder.rectTransform, Vector2.zero, Vector2.zero); placeholder.alignment = TextAlignmentOptions.TopLeft; placeholder.raycastTarget = false;
+            var field = feedbackPanel.gameObject.AddComponent<TMP_InputField>();
+            field.textViewport = viewport; field.textComponent = feedbackText; field.placeholder = placeholder;
+            field.targetGraphic = feedbackPanel; field.lineType = TMP_InputField.LineType.MultiLineNewline;
+            field.characterLimit = Math.Min(1000, EvaluationData.openFeedbackMaxLength > 0 ? EvaluationData.openFeedbackMaxLength : 1000);
+            field.navigation = new Navigation { mode = Navigation.Mode.None };
+            field.onEndEdit.AddListener(value => { if (EvaluationRules.SetFeedback(State, EvaluationData, value, kind)) SaveCheckpoint(); });
+            targets[key] = field;
+            evaluationFeedbackFields.Add((field, kind));
+            return y + 220;
+        }
+
         bool TryFinishEvaluationSurvey()
         {
             if (EvaluationData == null || !EvaluationRules.HasPoint(Evaluation.startPoint)) return false;
             if (!Evaluation.completed)
             {
-                if (evaluationFeedback != null && !EvaluationRules.SetFeedback(State, EvaluationData, evaluationFeedback.text)) return true;
+                foreach (var (field, kind) in evaluationFeedbackFields)
+                    if (!EvaluationRules.SetFeedback(State, EvaluationData, field.text, kind)) return true;
                 if (!EvaluationRules.Submit(State, EvaluationData, EvaluationPointNow())) return true;
             }
             if (!SaveCheckpoint()) return true;

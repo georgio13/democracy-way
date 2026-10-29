@@ -76,7 +76,8 @@ const save = {
   citizen: { wallet: 210, peitho: 36, fame: 18, ethos: 57 },
   polis: { treasury: 52, food: 47, readiness: 33, trust: 61, demosPower: 50, war: false, garrison: false },
   campaign: { cases: [], cityEnding: '', personalEnding: '' },
-  evaluation: { instrumentVersion: instrument.instrumentVersion, baselinePoint: point, baselineAnswers: [2], baselineOptionOrders: ['c,a,d,b'], baselineComplete: true },
+  evaluation: { instrumentVersion: instrument.instrumentVersion, baselinePoint: point, baselineAnswers: [2], baselineOptionOrders: ['c,a,d,b'], baselineComplete: true,
+    completed: true, startPoint: point, submitPoint: point, openFeedback: 'Οι δίκες', weaknessesFeedback: 'Πολύ κείμενο', commentsFeedback: 'Περισσότερες δίκες' },
   evaluationContent: JSON.stringify(instrument),
 };
 const agoraEvent = (event, data) => JSON.stringify({ event, participantId: participant, utc: '2026-10-29T10:05:00.0000000Z', data: { runId, case: 5, prytany: 3, week: 1, ...data } });
@@ -108,6 +109,9 @@ if (end && (end.outcome !== 'GarrisonOnly:Demades' || end.ref.knowledgeFormOrder
 const knowledge = byType('initial_knowledge')[0];
 if (!knowledge || knowledge.ref.shownOrder !== 'c,a,d,b') fail('γνώσεις: σειρά επιλογών');
 if (new Set(sent.map(s => s.id)).size !== sent.length) fail('διπλά eventId');
+// Τα τρία προαιρετικά σχόλια μετά το MEEGA+, το καθένα με το είδος του.
+const kinds = byType('evaluation_feedback').map(f => f.ref.feedbackKind + ':' + f.ref.feedback).sort().join(' | ');
+if (kinds !== 'comments:Περισσότερες δίκες | strengths:Οι δίκες | weaknesses:Πολύ κείμενο') fail('σχόλια: ' + kinds);
 
 // Χωρίς συγκατάθεση δεν φεύγει τίποτα.
 const before = sent.length;

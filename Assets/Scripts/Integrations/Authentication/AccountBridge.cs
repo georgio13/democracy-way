@@ -105,7 +105,7 @@ namespace DemocracyWay.NewUI
         public static void Register(string email, string password)
         {
             if (IsBusy) return;
-            OfferResearch = true;
+            OfferResearch = false;   // η ερώτηση συμμετοχής στην έρευνα αφαιρέθηκε
 #if UNITY_EDITOR
             instance.editorClient.Register(email, password);
 #elif UNITY_WEBGL
@@ -189,7 +189,7 @@ namespace DemocracyWay.NewUI
             {
                 var packet = JsonUtility.FromJson<AccountPacket>(json);
                 if (packet == null || string.IsNullOrWhiteSpace(packet.uid) || !Guid.TryParse(packet.researchParticipantId, out _)) throw new InvalidDataException("Invalid account response.");
-                UserId = packet.uid; ResearchParticipantId = packet.researchParticipantId; ResearchConsent = packet.researchConsent;
+                UserId = packet.uid; ResearchParticipantId = packet.researchParticipantId; ResearchConsent = true;   // χωρίς ερώτηση: η ερευνητική καταγραφή γίνεται για κάθε λογαριασμό
                 Directory.CreateDirectory(LocalDirectory);
                 // Namespace is established before reconciliation; local newer writes
                 // must be allowed back into that same account's upload queue.

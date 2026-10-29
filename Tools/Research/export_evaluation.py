@@ -351,7 +351,8 @@ def analyse(input_file, output_folder, content_file=P / 'EvaluationContent.json'
                                 'normalized_minus2_plus2': normalized, 'response_status': status})
         if kind == 'evaluation_feedback':
             text = meta.get('feedback', meta.get('openFeedback', ''))
-            feedback.append({**common, 'feedback': clean_text(text)[:1000]})
+            # Οι τρεις ανοιχτές ερωτήσεις του MEEGA+: strengths, weaknesses, comments (παλιά γεγονότα χωρίς είδος: open).
+            feedback.append({**common, 'feedback_kind': meta.get('feedbackKind', 'open'), 'feedback': clean_text(text)[:1000]})
         if kind == 'case_knowledge':
             answer = event.get('answer', -1)
             correct_index = meta.get('correctIndex', -1)
@@ -402,7 +403,7 @@ def analyse(input_file, output_folder, content_file=P / 'EvaluationContent.json'
     rating_rows = final_answers(rating_rows, 'item_id')
     final_feedback = {}
     for row in sorted(feedback, key=lambda r: (r['timestamp_utc'], r['event_sequence'] if type(r['event_sequence']) is int else r['_order'], r['_order'])):
-        final_feedback[response_key(row)] = row
+        final_feedback[response_key(row) + (row['feedback_kind'],)] = row   # ένα ανά πεδίο, όχι ένα συνολικά
     feedback = list(final_feedback.values())
     # Stable submission IDs prevent a retried checkpoint from becoming a second person.
     completion = {}
@@ -582,7 +583,7 @@ def analyse(input_file, output_folder, content_file=P / 'EvaluationContent.json'
         ('decisions', decisions, ['case_id', 'orientation_eligible']),
         ('case_knowledge', case_knowledge, ['case_id', 'question_id', 'answer_index', 'correct']),
         ('assessment_points', points, ['type', 'completed_cases']),
-        ('sessions', sessions, ['session', 'paired_complete']), ('feedback', feedback, ['assessment_id', 'feedback']),
+        ('sessions', sessions, ['session', 'paired_complete']), ('feedback', feedback, ['assessment_id', 'feedback_kind', 'feedback']),
         ('item_summary', item_summaries, ['cohort_id', 'item_id', 'n']),
         ('dimension_summary', dimension_summaries, ['cohort_id', 'construct']),
         ('cohorts', cohort_summaries, ['cohort_id', 'instrument_version', 'synthetic']),

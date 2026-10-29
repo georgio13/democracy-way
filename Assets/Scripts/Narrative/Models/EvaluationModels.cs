@@ -9,6 +9,7 @@ namespace DemocracyWay.NewUI
         public string instrumentVersion, language, offerTitle, offerBody, offerNow, offerLater;
         public string questionnaireStatus, knowledgeDesignNote;
         public string questionnaireInstructions, openFeedbackPrompt;
+        public string weaknessesFeedbackPrompt, commentsFeedbackPrompt;   // οι άλλες δύο ανοιχτές ερωτήσεις του MEEGA+ (το openFeedbackPrompt είναι τα δυνατά σημεία)
         public int openFeedbackMaxLength = 1000;
         public bool openFeedbackOptional = true;
         public string[] ratingLabels;
@@ -73,6 +74,7 @@ namespace DemocracyWay.NewUI
         public bool baselineParticipationComplete, finalParticipationComplete;
         public EvaluationPoint baselineParticipationPoint, finalParticipationPoint;
         public string submissionId, openFeedback;
+        public string weaknessesFeedback, commentsFeedback;   // «τρία αδύνατα σημεία», «άλλο σχόλιο ή πρόταση»
         public string[] experienceItemIds, intentionItemIds;
         public string[] instructionsSeen = Array.Empty<string>();   // π.χ. "knowledge-pre": οι οδηγίες δείχνονται μία φορά ανά ερωτηματολόγιο
         public bool synthetic;
@@ -95,7 +97,7 @@ namespace DemocracyWay.NewUI
     [Serializable]
     public sealed class EvaluationSurveyArchive
     {
-        public string instrumentVersion, administrationVersion, submissionId, openFeedback;
+        public string instrumentVersion, administrationVersion, submissionId, openFeedback, weaknessesFeedback, commentsFeedback;
         public string[] experienceItemIds, intentionItemIds;
         public int[] experienceAnswers, intentionAnswers;
         public EvaluationPoint offerPoint, startPoint, submitPoint;

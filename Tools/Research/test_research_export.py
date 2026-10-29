@@ -301,6 +301,17 @@ class ExportTests(unittest.TestCase):
         self.assertEqual('', session['gain_points_8'])
         self.assertIsNone(summary['mean_paired_gain_points_8'])
 
+    def test_three_feedback_fields_are_kept_separately(self):
+        """Δυνατά / αδύνατα σημεία / σχόλια: τρεις γραμμές, όχι μία (παλιά κρατιόταν μόνο το τελευταίο σχόλιο)."""
+        records = complete_events() + [
+            event('evaluation_feedback', second=6, feedback='Οι δίκες', feedbackKind='strengths'),
+            event('evaluation_feedback', second=7, feedback='Πολύ κείμενο', feedbackKind='weaknesses'),
+            event('evaluation_feedback', second=8, feedback='Περισσότερες δίκες', feedbackKind='comments'),
+            event('evaluation_feedback', second=9, feedback='Παλιό σχόλιο', submission='submission-0')]
+        self.run_export(records)
+        rows = {r['feedback_kind']: r['feedback'] for r in self.rows('feedback')}
+        self.assertEqual({'strengths': 'Οι δίκες', 'weaknesses': 'Πολύ κείμενο', 'comments': 'Περισσότερες δίκες', 'open': 'Παλιό σχόλιο'}, rows)
+
     def test_feedback_redacts_email_and_escapes_spreadsheet_formula(self):
         records = complete_events() + [event('evaluation_feedback', second=6, feedback='=MAIL participant@example.org')]
         summary, quality = self.run_export(records)

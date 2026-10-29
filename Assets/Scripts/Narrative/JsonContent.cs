@@ -103,7 +103,7 @@ namespace DemocracyWay.NewUI
                 result.participation = participation.items; result.participationInstructions = participation.instructions; result.participationRatingLabels = participation.ratingLabels;
                 result.ratingLabels = meega.ratingLabels;
                 result.questionnaireInstructions = meega.questionnaireInstructions;
-                result.openFeedbackPrompt = meega.openFeedbackPrompt; result.openFeedbackMaxLength = meega.openFeedbackMaxLength;
+                result.openFeedbackPrompt = meega.openFeedbackPrompt; result.weaknessesFeedbackPrompt = meega.weaknessesFeedbackPrompt; result.commentsFeedbackPrompt = meega.commentsFeedbackPrompt; result.openFeedbackMaxLength = meega.openFeedbackMaxLength;
                 return result;
             }
         }
@@ -123,6 +123,7 @@ namespace DemocracyWay.NewUI
     [Serializable] public sealed class MeegaFile
     {
         public string questionnaireInstructions, openFeedbackPrompt;
+        public string weaknessesFeedbackPrompt, commentsFeedbackPrompt;
         public int openFeedbackMaxLength = 1000;
         public string[] ratingLabels;
         public EvaluationRating[] experience;
